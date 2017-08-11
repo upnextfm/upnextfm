@@ -8,4 +8,4 @@ trim_trailing_whitespace = true
 
 [*.{php,js,css,scss,yml,json}]
 indent_style = space
-indent_size = 4
+indent_size = 2

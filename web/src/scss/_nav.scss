@@ -9,5 +9,15 @@
 }
 
 .up-brand {
-    height: 28px;
+  display: block;
+  margin-top: 8px;
+  margin-left: 4px;
+
+  img {
+    height: 19px;
+  }
+}
+
+.up-btn-login {
+  margin-left: auto;
 }

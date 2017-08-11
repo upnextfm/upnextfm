@@ -1,3 +1,8 @@
 export default {
-    auth: {}
+  auth: {
+    username:        '',
+    isAuthenticated: false,
+    isFetching:      false,
+    errorMessage:    ''
+  }
 };

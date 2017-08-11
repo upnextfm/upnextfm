@@ -1,9 +1,9 @@
 import * as types from '../actions/actionTypes';
 import initialState from '../store/initialState';
-//import Auth from 'api/Auth';
+import Auth from '../api/Auth';
 
 const is = Object.assign({}, initialState.auth);
-//is.isAuthenticated = Auth.isAuthenticated();
+is.isAuthenticated = Auth.isAuthenticated();
 
 export default function authReducer(state = is, action = {}) {
   switch (action.type) {
@@ -15,6 +15,7 @@ export default function authReducer(state = is, action = {}) {
       });
     case types.LOGIN_COMPLETE:
       return Object.assign({}, state, {
+        username:        action.username,
         errorMessage:    '',
         isFetching:      false,
         isAuthenticated: true

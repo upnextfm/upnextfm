@@ -1,5 +1,5 @@
 import * as types from './actionTypes';
-//import Auth from 'api/Auth';
+import Auth from '../api/Auth';
 
 /**
  *
@@ -14,12 +14,14 @@ export function loginBegin() {
 /**
  *
  * @param {{token: string}} resp
+ * @param {string} username
  * @returns {{type: LOGIN_COMPLETE, token: *, isFetching: boolean, isAuthenticated: boolean}}
  */
-export function loginComplete(resp) {
+export function loginComplete(resp, username) {
   return {
     type:  types.LOGIN_COMPLETE,
-    token: resp.token
+    token: resp.token,
+    username
   };
 }
 
@@ -43,10 +45,9 @@ export function loginError(message) {
 export function login(creds) {
   return (dispatch) => {
     dispatch(loginBegin());
-
     return Auth.login(creds)
       .then((resp) => {
-        dispatch(loginComplete(resp));
+        dispatch(loginComplete(resp, creds.username));
       })
       .catch((error) => {
         dispatch(loginError(error));
