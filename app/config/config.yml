@@ -74,3 +74,49 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+# FOSUser Bundle Configuration
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+    from_email:
+        address: "%mailer_user%"
+        sender_name: "%mailer_user%"
+
+# JWTAuthenticationBundle Configuration
+lexik_jwt_authentication:
+    private_key_path: '%jwt_private_key_path%'
+    public_key_path:  '%jwt_public_key_path%'
+    pass_phrase:      '%jwt_key_pass_phrase%'
+    token_ttl:        '%jwt_token_ttl%'
+
+# GesdinetJWTRefreshTokenBundle Configuration
+gesdinet_jwt_refresh_token:
+    ttl: 604800
+    firewall: api_refresh_token
+
+# Nelmio CORS
+nelmio_cors:
+    defaults:
+        allow_origin:   ["%cors_allow_origin%"]
+        allow_methods:  ["POST", "PUT", "GET", "DELETE", "OPTIONS"]
+        allow_headers:  ["content-type", "authorization"]
+        expose_headers: ["link"]
+        max_age:        3600
+    paths:
+        '^/': ~
+
+# Redis Configuration
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: redis://localhost
+        session:
+            type: predis
+            alias: session
+            dsn: redis://localhost
+    session:
+        client: session
