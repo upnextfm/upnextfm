@@ -51,6 +51,12 @@
         ],
         "post-update-cmd": [
             "@symfony-scripts"
+        ],
+        "lint": [
+            "phpcs --standard=PSR2 src"
+        ],
+        "lint-fix": [
+            "phpcbf --standard=PSR2 src"
         ]
     },
     "config": {
