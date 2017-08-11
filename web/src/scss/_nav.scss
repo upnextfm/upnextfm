@@ -1,3 +1,12 @@
-.navbar-brand img {
-    height: 40px;
+@import "vars";
+
+.up-nav {
+    color: #FFF !important;
+    height: 42px !important;
+    padding: $padding-std !important;
+    background-color: #000 !important;
+}
+
+.up-brand {
+    height: 28px;
 }

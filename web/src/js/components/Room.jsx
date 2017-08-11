@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { objectKeyFilter } from '../utils/objects';
+import Nav from './Nav';
 
 class Room extends React.Component {
   static propTypes = {
@@ -12,7 +13,8 @@ class Room extends React.Component {
 
     return (
       <div {...objectKeyFilter(props, Room.propTypes)}>
-        Welcome to {name}!
+        <Nav />
+        <p>Welcome to {name}!</p>
       </div>
     );
   }
