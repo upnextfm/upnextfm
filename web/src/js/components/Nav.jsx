@@ -8,7 +8,7 @@ class Nav extends React.Component {
       <AppBar position="static" color="default">
         <Toolbar className="up-nav">
           <a href="/">
-            <img src="/images/logo-brand.png" className="up-brand" />
+            <img src="/images/logo-brand.png" className="up-brand" alt="Logo" />
           </a>
         </Toolbar>
       </AppBar>
