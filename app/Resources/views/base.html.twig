@@ -2,12 +2,17 @@
 <html>
     <head>
         <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1" name="viewport">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+            <link href="{{ asset('build/css/app.css') }}" rel="stylesheet" />
+        {% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('build/js/app.js') }}"></script>
+        {% endblock %}
     </body>
 </html>

@@ -1,18 +1,5 @@
 {% extends 'base.html.twig' %}
 {% block title %}Under Construction - Upnext{% endblock %}
-{% block stylesheets %}
-    <style>
-        body{
-            color:#FFF;
-            background:#3a3c42;
-            text-align: center;
-        }
-
-        a {
-            color: #FFF;
-        }
-    </style>
-{% endblock %}
 {% block body %}
     <img id=logo src=/images/logo.png style=width:90%>
     <h1>We Are Under Construction</h1>
@@ -22,6 +9,7 @@
     </h4>
 {% endblock %}
 {% block javascripts %}
+    {{ parent() }}
     <script src=https://cdn.rawgit.com/namuol/cheet.js/master/cheet.min.js></script>
     <script>
         cheet("U U D D L R L R b a", function() {
