@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ name }} - Upnext{% endblock %}
+{% block body %}
+    <div id="mount" data-room="{{ name }}"></div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/js/room.js') }}"></script>
+{% endblock %}

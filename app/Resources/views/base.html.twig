@@ -6,11 +6,16 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
+            <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet" />
+            <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
             <link href="{{ asset('build/css/app.css') }}" rel="stylesheet" />
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% include "_layout/nav.html.twig" %}
+        <div class="container-fluid">
+            {% block body %}{% endblock %}
+        </div>
         {% block javascripts %}
             <script src="{{ asset('build/js/app.js') }}"></script>
         {% endblock %}

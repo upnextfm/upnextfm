@@ -9,6 +9,7 @@ Encore
   .setPublicPath('/build')
 
   .addEntry('js/app', './web/src/js/app.jsx')
+  .addEntry('js/room', './web/src/js/room.jsx')
   .addStyleEntry('css/app', './web/src/scss/app.scss')
   .enableReactPreset()
   .enableSassLoader()
@@ -19,13 +20,6 @@ Encore
 ;
 
 let config = Encore.getWebpackConfig();
-
-// Cuts down on the size of highlight.js.
-config.plugins.push(new webpack.ContextReplacementPlugin(
-  /highlight\.js\/lib\/languages$/,
-  new RegExp(`^./(${['javascript', 'php', 'bash', 'yaml', 'xml', 'twig', 'java'].join('|')})$`)
-));
 //config.plugins.push(new BundleAnalyzerPlugin());
 
-// export the final configuration
 module.exports = config;
