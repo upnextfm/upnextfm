@@ -5,6 +5,7 @@ import Grid from 'material-ui/Grid';
 import { roomSetName } from 'actions/roomActions';
 import { objectKeyFilter } from 'utils/objects';
 import LoginDialog from 'components/Dialogs/LoginDialog';
+import RegisterDialog from 'components/Dialogs/RegisterDialog';
 import Nav from 'components/Nav';
 import ChatContainer from 'components/ChatContainer';
 import VideoContainer from 'components/VideoContainer';
@@ -13,6 +14,7 @@ class Room extends React.Component {
   static propTypes = {
     name:     PropTypes.string.isRequired,
     auth:     PropTypes.object,
+    register: PropTypes.object,
     room:     PropTypes.object,
     nav:      PropTypes.object,
     dispatch: PropTypes.func
@@ -42,6 +44,7 @@ class Room extends React.Component {
           </Grid>
         </div>
         <LoginDialog />
+        <RegisterDialog />
       </div>
     );
   }

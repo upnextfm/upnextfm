@@ -17,5 +17,5 @@ export function roomInputChange(inputValue) {
 export function roomInputSend() {
   return {
     type: types.ROOM_INPUT_SEND
-  }
+  };
 }

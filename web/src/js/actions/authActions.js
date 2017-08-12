@@ -2,104 +2,95 @@ import * as types from 'actions/actionTypes';
 import Auth from 'api/Auth';
 
 /**
- *
- * @returns {{type: LOGIN_BEGIN, creds: *, isFetching: boolean, isAuthenticated: boolean}}
+ * @returns {{type: string}}
  */
-export function loginBegin() {
+export function authLoginBegin() {
   return {
-    type: types.LOGIN_BEGIN
+    type: types.AUTH_LOGIN_BEGIN
   };
 }
 
 /**
- *
  * @param {{token: string}} resp
  * @param {string} username
- * @returns {{type: LOGIN_COMPLETE, token: *, isFetching: boolean, isAuthenticated: boolean}}
+ * @returns {{type: string, token: *, username: string}}
  */
-export function loginComplete(resp, username) {
+export function authLoginComplete(resp, username) {
   return {
-    type:  types.LOGIN_COMPLETE,
+    type:  types.AUTH_LOGIN_COMPLETE,
     token: resp.token,
     username
   };
 }
 
 /**
- *
  * @param {string} message
- * @returns {{type: LOGIN_FAILURE, message: *, isFetching: boolean, isAuthenticated: boolean}}
+ * @returns {{type: string, message: *}}
  */
-export function loginError(message) {
+export function authLoginError(message) {
   return {
-    type: types.LOGIN_FAILURE,
+    type: types.AUTH_LOGIN_FAILURE,
     message
   };
 }
 
 /**
- *
  * @param {{username: string, password: string}} creds
  * @returns {Function}
  */
-export function login(creds) {
+export function authLogin(creds) {
   return (dispatch) => {
-    dispatch(loginBegin());
+    dispatch(authLoginBegin());
     return Auth.login(creds)
       .then((resp) => {
-        dispatch(loginComplete(resp, creds.username));
+        dispatch(authLoginComplete(resp, creds.username));
       })
       .catch((error) => {
-        dispatch(loginError(error));
+        dispatch(authLoginError(error));
       });
   };
 }
 
 /**
- *
- * @returns {{type: LOGOUT_BEGIN, isFetching: boolean, isAuthenticated: boolean}}
+ * @returns {{type: string}}
  */
-export function logoutBegin() {
+export function authLogoutBegin() {
   return {
-    type: types.LOGOUT_BEGIN
+    type: types.AUTH_LOGOUT_BEGIN
   };
 }
 
 /**
- *
- * @returns {{type: LOGOUT_COMPLETE, isFetching: boolean, isAuthenticated: boolean}}
+ * @returns {{type: string}}
  */
-export function logoutComplete() {
+export function authLogoutComplete() {
   return {
-    type: types.LOGOUT_COMPLETE
+    type: types.AUTH_LOGOUT_COMPLETE
   };
 }
 
 /**
- *
  * @returns {Function}
  */
-export function logout() {
+export function authLogout() {
   return (dispatch) => {
-    dispatch(logoutBegin());
+    dispatch(authLogoutBegin());
     Auth.logout();
-    dispatch(logoutComplete());
+    dispatch(authLogoutComplete());
   };
 }
 
 /**
- *
- * @returns {{type: *}}
+ * @returns {{type: string}}
  */
-export function authToggleDialog() {
+export function authToggleLoginDialog() {
   return {
-    type: types.AUTH_TOGGLE_DIALOG
+    type: types.AUTH_TOGGLE_LOGIN_DIALOG
   };
 }
 
 /**
- *
- * @returns {{type: *}}
+ * @returns {{type: string}}
  */
 export function authReset() {
   return {

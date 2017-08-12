@@ -1,10 +1,16 @@
 export default {
   auth: {
-    username:        '',
-    isDialogOpen:    false,
-    isAuthenticated: false,
-    isSubmitting:    false,
-    errorMessage:    ''
+    username:          '',
+    isLoginDialogOpen: false,
+    isAuthenticated:   false,
+    isSubmitting:      false,
+    error:             null
+  },
+  register: {
+    isRegisterDialogOpen: false,
+    isRegistered:         false,
+    isSubmitting:         false,
+    error:                null
   },
   nav: {
     isDrawerOpen: false

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { authToggleDialog, authReset, login } from 'actions/authActions';
+import { authToggleLoginDialog, authReset, authLogin } from 'actions/authActions';
 import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
 import { LinearProgress } from 'material-ui/Progress';
 import Button from 'material-ui/Button';
@@ -28,7 +28,7 @@ class LoginDialog extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.isSubmitting !== this.props.isSubmitting && this.props.isAuthenticated) {
-      this.props.dispatch(authToggleDialog());
+      this.props.dispatch(authToggleLoginDialog());
     }
   }
 
@@ -52,7 +52,7 @@ class LoginDialog extends Component {
     }
     this.setState({ passwordError: false });
 
-    this.props.dispatch(login({ username, password }));
+    this.props.dispatch(authLogin({ username, password }));
   };
 
   handleRequestClose = () => {
@@ -66,15 +66,15 @@ class LoginDialog extends Component {
   };
 
   render() {
-    const { isDialogOpen, isSubmitting, errorMessage } = this.props;
+    const { isLoginDialogOpen, isSubmitting, error } = this.props;
     const { username, password, usernameError, passwordError } = this.state;
 
     return (
-      <Dialog open={isDialogOpen} onRequestClose={this.handleRequestClose}>
+      <Dialog open={isLoginDialogOpen} onRequestClose={this.handleRequestClose}>
         <DialogContent>
-          {errorMessage && (
+          {error && (
             <DialogContentText>
-              {errorMessage}
+              {error}
             </DialogContentText>
           )}
           <TextField

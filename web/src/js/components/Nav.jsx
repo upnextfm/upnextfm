@@ -7,7 +7,8 @@ import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import { navToggleDrawer } from 'actions/navActions';
-import { authToggleDialog, logout } from 'actions/authActions';
+import { authToggleLoginDialog, authLogout } from 'actions/authActions';
+import { registerToggleDialog } from 'actions/registerActions';
 import NavDrawer from 'components/NavDrawer';
 
 class Nav extends React.Component {
@@ -33,10 +34,14 @@ class Nav extends React.Component {
 
   handleClickLogin = () => {
     if (this.props.auth.isAuthenticated) {
-      this.props.dispatch(logout());
+      this.props.dispatch(authLogout());
     } else {
-      this.props.dispatch(authToggleDialog());
+      this.props.dispatch(authToggleLoginDialog());
     }
+  };
+
+  handleClickRegister = () => {
+    this.props.dispatch(registerToggleDialog());
   };
 
   render() {
@@ -57,9 +62,14 @@ class Nav extends React.Component {
               Logout
             </Button>
           ) : (
-            <Button className="up-btn-login" color="contrast" onClick={this.handleClickLogin}>
-              Login
-            </Button>
+            <span className="up-btn-login">
+              <Button className="up-btn-login" color="contrast" onClick={this.handleClickRegister}>
+                Register
+              </Button>
+              <Button className="up-btn-login" color="contrast" onClick={this.handleClickLogin}>
+                Login
+              </Button>
+            </span>
           )}
         </Toolbar>
         <NavDrawer />

@@ -1,10 +1,14 @@
-export const LOGIN_BEGIN         = 'LOGIN_BEGIN';
-export const LOGIN_COMPLETE      = 'LOGIN_COMPLETE';
-export const LOGIN_FAILURE       = 'LOGIN_FAILURE';
-export const LOGOUT_BEGIN        = 'LOGOUT_BEGIN';
-export const LOGOUT_COMPLETE     = 'LOGOUT_COMPLETE';
-export const AUTH_TOGGLE_DIALOG  = 'AUTH_TOGGLE_DIALOG';
-export const AUTH_RESET          = 'AUTH_RESET';
+export const AUTH_LOGIN_BEGIN            = 'AUTH_LOGIN_BEGIN';
+export const AUTH_LOGIN_COMPLETE         = 'AUTH_LOGIN_COMPLETE';
+export const AUTH_LOGIN_FAILURE          = 'AUTH_LOGIN_FAILURE';
+export const AUTH_LOGOUT_BEGIN           = 'AUTH_LOGOUT_BEGIN';
+export const AUTH_LOGOUT_COMPLETE        = 'AUTH_LOGOUT_COMPLETE';
+export const AUTH_TOGGLE_LOGIN_DIALOG    = 'AUTH_TOGGLE_LOGIN_DIALOG';
+export const AUTH_TOGGLE_REGISTER_DIALOG = 'AUTH_TOGGLE_REGISTER_DIALOG';
+export const AUTH_RESET                  = 'AUTH_RESET';
+
+export const REGISTER_TOGGLE_DIALOG  = 'REGISTER_TOGGLE_DIALOG';
+export const REGISTER_RESET          = 'REGISTER_RESET';
 
 export const NAV_TOGGLE_DRAWER   = 'NAV_TOGGLE_DRAWER';
 
