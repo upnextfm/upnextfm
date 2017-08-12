@@ -10,27 +10,31 @@ export default function authReducer(state = is, action = {}) {
     case types.LOGIN_BEGIN:
       return Object.assign({}, state, {
         errorMessage:    '',
-        isFetching:      true,
+        isSubmitting:    true,
         isAuthenticated: false
       });
     case types.LOGIN_COMPLETE:
       return Object.assign({}, state, {
         username:        action.username,
         errorMessage:    '',
-        isFetching:      false,
+        isSubmitting:    false,
         isAuthenticated: true
       });
     case types.LOGIN_FAILURE:
       return Object.assign({}, state, {
-        isFetching:      false,
+        isSubmitting:    false,
         isAuthenticated: false,
         errorMessage:    action.message
       });
     case types.LOGOUT_COMPLETE:
       return Object.assign({}, state, {
         errorMessage:    '',
-        isFetching:      true,
+        isSubmitting:    false,
         isAuthenticated: false
+      });
+    case types.AUTH_TOGGLE_DIALOG:
+      return Object.assign({}, state, {
+        isDialogOpen: !state.isDialogOpen
       });
     default: return state;
   }

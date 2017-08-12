@@ -1,8 +1,9 @@
 export default {
   auth: {
     username:        '',
+    isDialogOpen:    false,
     isAuthenticated: false,
-    isFetching:      false,
+    isSubmitting:    false,
     errorMessage:    ''
   },
   nav: {

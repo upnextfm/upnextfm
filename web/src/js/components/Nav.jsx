@@ -7,6 +7,7 @@ import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import { navToggleDrawer } from 'actions/navActions';
+import { authToggleDialog, logout } from 'actions/authActions';
 import NavDrawer from 'components/NavDrawer';
 
 class Nav extends React.Component {
@@ -26,8 +27,16 @@ class Nav extends React.Component {
     };
   }
 
-  handleMenuClick = () => {
+  handleClickMenu = () => {
     this.props.dispatch(navToggleDrawer());
+  };
+
+  handleClickLogin = () => {
+    if (this.props.auth.isAuthenticated) {
+      this.props.dispatch(logout());
+    } else {
+      this.props.dispatch(authToggleDialog());
+    }
   };
 
   render() {
@@ -36,7 +45,7 @@ class Nav extends React.Component {
     return (
       <AppBar position="static" color="default">
         <Toolbar className="up-nav">
-          <IconButton color="contrast" aria-label="Menu" onClick={this.handleMenuClick}>
+          <IconButton color="contrast" aria-label="Menu" onClick={this.handleClickMenu}>
             <MenuIcon />
           </IconButton>
           <a href="/" className="up-brand">
@@ -44,11 +53,11 @@ class Nav extends React.Component {
           </a>
           {auth.isAuthenticated
           ? (
-            <Button className="up-btn-login" color="contrast">
+            <Button className="up-btn-login" color="contrast" onClick={this.handleClickLogin}>
               Logout
             </Button>
           ) : (
-            <Button className="up-btn-login" color="contrast">
+            <Button className="up-btn-login" color="contrast" onClick={this.handleClickLogin}>
               Login
             </Button>
           )}

@@ -86,3 +86,13 @@ export function logout() {
     dispatch(logoutComplete());
   };
 }
+
+/**
+ *
+ * @returns {{type: *}}
+ */
+export function authToggleDialog() {
+  return {
+    type: types.AUTH_TOGGLE_DIALOG
+  };
+}

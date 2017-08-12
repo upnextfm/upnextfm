@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import YouTube from 'react-youtube';
 import { connect } from 'react-redux';
 import { objectKeyFilter } from 'utils/objects';
-import { login } from 'actions/authActions';
+import LoginDialog from 'components/Dialogs/LoginDialog';
 import Nav from 'components/Nav';
 
 class Room extends React.Component {
@@ -17,10 +17,6 @@ class Room extends React.Component {
   static defaultProps = {
     dispatch: () => {}
   };
-
-  componentDidMount() {
-    this.props.dispatch(login({ username: 'headzoo', password: '123456' }));
-  }
 
   render() {
     const { auth, ...props } = this.props;
@@ -42,6 +38,7 @@ class Room extends React.Component {
             <YouTube videoId="BC2dRkm8ATU" opts={opts} />
           </div>
         </div>
+        <LoginDialog />
       </div>
     );
   }

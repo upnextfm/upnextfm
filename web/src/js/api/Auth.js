@@ -156,6 +156,7 @@ class Auth {
    * @returns {boolean}
    */
   logout() {
+    console.info(this.getToken());
     this.creds = null;
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_KEY);
