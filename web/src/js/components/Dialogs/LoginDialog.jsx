@@ -19,15 +19,22 @@ class LoginDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: ''
+      username:      '',
+      password:      '',
+      usernameError: false,
+      passwordError: false
     };
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.isSubmitting !== this.props.isSubmitting && this.props.isAuthenticated) {
       this.props.dispatch(authToggleDialog());
-      this.setState({ username: '', password: '' });
+      this.setState({
+        username:      '',
+        password:      '',
+        usernameError: false,
+        passwordError: false
+      });
     }
   }
 
@@ -38,7 +45,20 @@ class LoginDialog extends Component {
   };
 
   handleSubmit = () => {
-    this.props.dispatch(login(this.state));
+    const username = this.state.username.trim();
+    const password = this.state.password.trim();
+    if (!username) {
+      this.setState({ usernameError: true });
+      return;
+    }
+    this.setState({ usernameError: false });
+    if (!password) {
+      this.setState({ passwordError: true });
+      return;
+    }
+    this.setState({ passwordError: false });
+
+    this.props.dispatch(login({ username, password }));
   };
 
   handleRequestClose = () => {
@@ -47,7 +67,7 @@ class LoginDialog extends Component {
 
   render() {
     const { isDialogOpen, isSubmitting, errorMessage } = this.props;
-    const { username, password } = this.state;
+    const { username, password, usernameError, passwordError } = this.state;
 
     return (
       <Dialog open={isDialogOpen} onRequestClose={this.handleRequestClose}>
@@ -62,15 +82,17 @@ class LoginDialog extends Component {
             name="username"
             value={username}
             onChange={this.handleChangeInput}
+            error={usernameError}
             fullWidth
             autoFocus
           />
           <TextField
             label="Password"
             name="password"
+            type="password"
             value={password}
             onChange={this.handleChangeInput}
-            type="password"
+            error={passwordError}
             fullWidth
           />
           <div style={{ marginTop: 30 }}>
@@ -80,10 +102,10 @@ class LoginDialog extends Component {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleRequestClose} color="primary">
+          <Button onClick={this.handleRequestClose}>
             Cancel
           </Button>
-          <Button onClick={this.handleSubmit} color="primary">
+          <Button onClick={this.handleSubmit}>
             Login
           </Button>
         </DialogActions>

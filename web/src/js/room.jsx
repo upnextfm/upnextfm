@@ -2,21 +2,25 @@ import 'utils/polyfills';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { MuiThemeProvider } from 'material-ui/styles';
-import createMuiTheme from 'material-ui/styles/theme';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import createPalette from 'material-ui/styles/palette';
 import store from 'store/store';
 import Room from 'components/Room';
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  palette: createPalette({
+    type: 'dark'
+  })
+});
 const mount = document.getElementById('mount');
 const name  = mount.getAttribute('data-room');
 
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <Provider store={store}>
+  <Provider store={store}>
+    <MuiThemeProvider theme={theme}>
       <Room name={name} />
-    </Provider>
-  </MuiThemeProvider>
+    </MuiThemeProvider>
+  </Provider>
   ,
   mount
 );
