@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { authToggleDialog, login } from 'actions/authActions';
+import { authToggleDialog, authReset, login } from 'actions/authActions';
 import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
 import { LinearProgress } from 'material-ui/Progress';
 import Button from 'material-ui/Button';
@@ -29,12 +29,6 @@ class LoginDialog extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.isSubmitting !== this.props.isSubmitting && this.props.isAuthenticated) {
       this.props.dispatch(authToggleDialog());
-      this.setState({
-        username:      '',
-        password:      '',
-        usernameError: false,
-        passwordError: false
-      });
     }
   }
 
@@ -62,7 +56,13 @@ class LoginDialog extends Component {
   };
 
   handleRequestClose = () => {
-    this.props.dispatch(authToggleDialog());
+    this.props.dispatch(authReset());
+    this.setState({
+      username:      '',
+      password:      '',
+      usernameError: false,
+      passwordError: false
+    });
   };
 
   render() {

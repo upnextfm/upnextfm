@@ -4,5 +4,6 @@ export const LOGIN_FAILURE       = 'LOGIN_FAILURE';
 export const LOGOUT_BEGIN        = 'LOGOUT_BEGIN';
 export const LOGOUT_COMPLETE     = 'LOGOUT_COMPLETE';
 export const AUTH_TOGGLE_DIALOG  = 'AUTH_TOGGLE_DIALOG';
+export const AUTH_RESET          = 'AUTH_RESET';
 
 export const NAV_TOGGLE_DRAWER   = 'NAV_TOGGLE_DRAWER';

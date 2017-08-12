@@ -96,3 +96,13 @@ export function authToggleDialog() {
     type: types.AUTH_TOGGLE_DIALOG
   };
 }
+
+/**
+ *
+ * @returns {{type: *}}
+ */
+export function authReset() {
+  return {
+    type: types.AUTH_RESET
+  };
+}

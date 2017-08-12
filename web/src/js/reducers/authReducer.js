@@ -36,6 +36,8 @@ export default function authReducer(state = is, action = {}) {
       return Object.assign({}, state, {
         isDialogOpen: !state.isDialogOpen
       });
+    case types.AUTH_RESET:
+      return Object.assign({}, is);
     default: return state;
   }
 }
