@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { authToggleLoginDialog, authReset, authLogin } from 'actions/authActions';
 import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
 import { LinearProgress } from 'material-ui/Progress';
+import Slide from 'material-ui/transitions/Slide';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 
@@ -70,7 +71,7 @@ class LoginDialog extends Component {
     const { username, password, usernameError, passwordError } = this.state;
 
     return (
-      <Dialog open={isLoginDialogOpen} onRequestClose={this.handleRequestClose}>
+      <Dialog open={isLoginDialogOpen} transition={Slide} onRequestClose={this.handleRequestClose}>
         <DialogContent>
           {error && (
             <DialogContentText>

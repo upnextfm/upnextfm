@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { registerToggleDialog, registerReset } from 'actions/registerActions';
 import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
+import { registerToggleDialog, registerReset } from 'actions/registerActions';
 import { FormControlLabel } from 'material-ui/Form';
 import { LinearProgress } from 'material-ui/Progress';
+import Slide from 'material-ui/transitions/Slide';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
@@ -106,7 +107,7 @@ class RegisterDialog extends Component {
     } = this.state;
 
     return (
-      <Dialog open={isDialogOpen} onRequestClose={this.handleRequestClose}>
+      <Dialog open={isDialogOpen} transition={Slide} onRequestClose={this.handleRequestClose}>
         <DialogContent>
           {error && (
             <DialogContentText>
