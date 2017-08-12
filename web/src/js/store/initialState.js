@@ -8,5 +8,9 @@ export default {
   },
   nav: {
     isDrawerOpen: false
+  },
+  room: {
+    name:       '',
+    inputValue: ''
   }
 };

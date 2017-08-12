@@ -2,12 +2,12 @@
   display: flex;
   flex-flow: column;
   height: calc(100% - 42px);
-}
-@media (min-width: 960px) {
-  .up-room {
+
+  @media (min-width: 960px) {
     flex-flow: row!important;
   }
 }
+
 .up-room__chat {
   width: 100%;
   height: 100%;
@@ -35,6 +35,15 @@
   border: 1px solid blue;
   flex-grow: 1;
   max-height: 40px;
+
+  input {
+    width: 100%;
+    height: 40px;
+    border: 0;
+    outline: 0;
+    color: #FFF;
+    background-color: transparent;
+  }
 }
 
 .up-room__video {

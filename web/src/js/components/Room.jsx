@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
+import { roomSetName } from 'actions/roomActions';
 import { objectKeyFilter } from 'utils/objects';
 import LoginDialog from 'components/Dialogs/LoginDialog';
 import Nav from 'components/Nav';
@@ -12,6 +13,7 @@ class Room extends React.Component {
   static propTypes = {
     name:     PropTypes.string.isRequired,
     auth:     PropTypes.object,
+    room:     PropTypes.object,
     nav:      PropTypes.object,
     dispatch: PropTypes.func
   };
@@ -20,9 +22,13 @@ class Room extends React.Component {
     dispatch: () => {}
   };
 
+  constructor(props) {
+    super(props);
+    props.dispatch(roomSetName(props.name));
+  }
+
   render() {
     const { auth, ...props } = this.props;
-
 
     return (
       <div {...objectKeyFilter(props, Room.propTypes)}>
