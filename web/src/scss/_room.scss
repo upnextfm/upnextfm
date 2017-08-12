@@ -5,11 +5,36 @@
 }
 
 .up-room__chat {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.up-room__chat__users {
   border: 1px solid red;
-  width: 60%;
+  flex-grow: 1;
+}
+
+.up-room__chat__messages {
+  border: 1px solid green;
+  display: flex;
+  flex-flow: column;
+  flex-grow: 4;
+}
+
+.up-room__chat__scroll {
+  border: 1px solid yellow;
+  flex-grow: 4;
+}
+
+.up-room__chat__input {
+  border: 1px solid blue;
+  flex-grow: 1;
+  max-height: 40px;
 }
 
 .up-room__video {
-  border: 1px solid green;
-  width: 40%;
+  border: 1px solid purple;
+  width: 100%;
+  height: 100%;
 }

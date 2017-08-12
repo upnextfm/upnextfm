@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import YouTube from 'react-youtube';
 import { connect } from 'react-redux';
+import Grid from 'material-ui/Grid';
 import { objectKeyFilter } from 'utils/objects';
 import LoginDialog from 'components/Dialogs/LoginDialog';
 import Nav from 'components/Nav';
+import ChatContainer from 'components/ChatContainer';
+import VideoContainer from 'components/VideoContainer';
 
 class Room extends React.Component {
   static propTypes = {
@@ -20,23 +22,18 @@ class Room extends React.Component {
 
   render() {
     const { auth, ...props } = this.props;
-    const opts = {
-      width:      '100%',
-      playerVars: {
-        autoplay: 0
-      }
-    };
+
 
     return (
       <div {...objectKeyFilter(props, Room.propTypes)}>
         <Nav auth={auth} />
         <div className="up-room">
-          <div className="up-room__chat">
-            Chat
-          </div>
-          <div className="up-room__video">
-            <YouTube videoId="BC2dRkm8ATU" opts={opts} />
-          </div>
+          <Grid item xs={12} sm={12} md={7}>
+            <ChatContainer />
+          </Grid>
+          <Grid item xs={12} sm={12} md={5}>
+            <VideoContainer />
+          </Grid>
         </div>
         <LoginDialog />
       </div>
