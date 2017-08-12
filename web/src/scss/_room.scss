@@ -1,6 +1,9 @@
 .up-room {
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
+  @media (min-width: 960px) {
+    flex-flow: row;
+  }
   height: calc(100% - 42px);
 }
 
