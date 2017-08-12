@@ -1,6 +1,6 @@
-import * as types from '../actions/actionTypes';
-import initialState from '../store/initialState';
-import Auth from '../api/Auth';
+import * as types from 'actions/actionTypes';
+import initialState from 'store/initialState';
+import Auth from 'api/Auth';
 
 const is = Object.assign({}, initialState.auth);
 is.isAuthenticated = Auth.isAuthenticated();

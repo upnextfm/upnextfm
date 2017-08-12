@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import YouTube from 'react-youtube';
-import { objectKeyFilter } from '../utils/objects';
-import { login } from '../actions/authActions';
-import Nav from './Nav';
+import { connect } from 'react-redux';
+import { objectKeyFilter } from 'utils/objects';
+import { login } from 'actions/authActions';
+import Nav from 'components/Nav';
 
 class Room extends React.Component {
   static propTypes = {

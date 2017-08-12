@@ -1,4 +1,4 @@
-import * as endpoints from './endpoints';
+import * as endpoints from 'api/endpoints';
 
 const TOKEN_KEY     = 'token';
 const REFRESH_KEY   = 'refresh_token';

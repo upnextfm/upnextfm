@@ -1,5 +1,5 @@
-import * as types from './actionTypes';
-import Auth from '../api/Auth';
+import * as types from 'actions/actionTypes';
+import Auth from 'api/Auth';
 
 /**
  *
