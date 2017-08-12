@@ -1,0 +1,15 @@
+.up-room {
+  display: flex;
+  flex-flow: row;
+  height: calc(100% - 42px);
+}
+
+.up-room__chat {
+  border: 1px solid red;
+  width: 60%;
+}
+
+.up-room__video {
+  border: 1px solid green;
+  width: 40%;
+}

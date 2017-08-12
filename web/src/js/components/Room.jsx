@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import YouTube from 'react-youtube';
 import { objectKeyFilter } from '../utils/objects';
 import { login } from '../actions/authActions';
 import Nav from './Nav';
@@ -17,12 +18,25 @@ class Room extends React.Component {
   }
 
   render() {
-    const { name, auth, ...props } = this.props;
+    const { auth, ...props } = this.props;
+    const opts = {
+      width:      '100%',
+      playerVars: {
+        autoplay: 0
+      }
+    };
 
     return (
       <div {...objectKeyFilter(props, Room.propTypes)}>
         <Nav auth={auth} />
-        <p>Welcome to {name}!</p>
+        <div className="up-room">
+          <div className="up-room__chat">
+            Chat
+          </div>
+          <div className="up-room__video">
+            <YouTube videoId="BC2dRkm8ATU" opts={opts} />
+          </div>
+        </div>
       </div>
     );
   }

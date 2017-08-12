@@ -1,4 +1,8 @@
-body{
+body, html, #mount, #mount > div {
+  height: 100%;
+}
+
+body {
     color:#FFF;
     background:#3a3c42;
     text-align: center;
