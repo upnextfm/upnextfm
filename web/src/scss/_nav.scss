@@ -9,10 +9,14 @@
 }
 
 .up-brand {
-  display: block;
+  display: none;
   margin-top: 8px;
   margin-left: 4px;
 
+  @media (min-width: 370px) {
+    display: block;
+  }
+  
   img {
     height: 19px;
   }
