@@ -4,5 +4,8 @@ export default {
     isAuthenticated: false,
     isFetching:      false,
     errorMessage:    ''
+  },
+  nav: {
+    isDrawerOpen: false
   }
 };

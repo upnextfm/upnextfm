@@ -10,7 +10,12 @@ class Room extends React.Component {
   static propTypes = {
     name:     PropTypes.string.isRequired,
     auth:     PropTypes.object,
+    nav:      PropTypes.object,
     dispatch: PropTypes.func
+  };
+
+  static defaultProps = {
+    dispatch: () => {}
   };
 
   componentDidMount() {

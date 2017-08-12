@@ -21,3 +21,12 @@
 .up-btn-login {
   margin-left: auto;
 }
+
+.up-drawer {
+  width: 250px;
+  flex: initial;
+
+  ul li div {
+    flex: none;
+  }
+}

@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
 import auth from 'reducers/authReducer';
+import nav from 'reducers/navReducer';
 
 const rootReducer = combineReducers({
-  auth
+  auth,
+  nav
 });
 
 export default rootReducer;
