@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
 import { registerToggleDialog, registerReset } from 'actions/registerActions';
-import { FormControlLabel } from 'material-ui/Form';
-import { LinearProgress } from 'material-ui/Progress';
-import Slide from 'material-ui/transitions/Slide';
-import Button from 'material-ui/Button';
+import { FormControl, FormControlLabel } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
+import FormDialog from 'components/Dialogs/FormDialog';
 
 const FORM_STATE = {
   username:       '',
@@ -83,10 +80,10 @@ class RegisterDialog extends Component {
     }
     this.setState({ tosError: false });
 
-    //this.props.dispatch(authLogin({ username, password }));
+    // this.props.dispatch(authLogin({ username, password }));
   };
 
-  handleRequestClose = () => {
+  handleClose = () => {
     this.props.dispatch(registerReset());
     this.setState(FORM_STATE);
   };
@@ -107,48 +104,63 @@ class RegisterDialog extends Component {
     } = this.state;
 
     return (
-      <Dialog open={isDialogOpen} transition={Slide} onRequestClose={this.handleRequestClose}>
-        <DialogContent>
-          {error && (
-            <DialogContentText>
-              {error}
-            </DialogContentText>
-          )}
+      <FormDialog
+        submitText="Register"
+        error={error}
+        open={isDialogOpen}
+        submitting={isSubmitting}
+        onSubmit={this.handleSubmit}
+        onClose={this.handleClose}
+      >
+        <FormControl disabled={isSubmitting} fullWidth>
           <TextField
             label="Username"
             name="username"
             value={username}
-            onChange={this.handleChangeInput}
             error={usernameError}
+            onChange={this.handleChangeInput}
+            required
             fullWidth
             autoFocus
           />
+        </FormControl>
+        <FormControl disabled={isSubmitting} fullWidth>
           <TextField
             label="Email"
             name="email"
+            type="email"
             value={email}
-            onChange={this.handleChangeInput}
             error={emailError}
+            onChange={this.handleChangeInput}
+            required
             fullWidth
           />
+        </FormControl>
+        <FormControl disabled={isSubmitting} fullWidth>
           <TextField
             label="Password"
             name="password"
             type="password"
             value={password}
-            onChange={this.handleChangeInput}
             error={passwordError}
+            onChange={this.handleChangeInput}
+            required
             fullWidth
           />
+        </FormControl>
+        <FormControl disabled={isSubmitting} fullWidth>
           <TextField
             label="Password Verify"
             name="password2"
             type="password"
             value={password2}
-            onChange={this.handleChangeInput}
             error={password2Error}
+            onChange={this.handleChangeInput}
+            required
             fullWidth
           />
+        </FormControl>
+        <FormControl disabled={isSubmitting} fullWidth>
           <FormControlLabel
             label="Agree to Terms of Service"
             control={
@@ -157,24 +169,12 @@ class RegisterDialog extends Component {
                 checked={tos}
                 error={tosError}
                 onChange={this.handleChangeInput}
+                required
               />
             }
           />
-          <div style={{ marginTop: 30 }}>
-            {isSubmitting && (
-              <LinearProgress />
-            )}
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleRequestClose}>
-            Cancel
-          </Button>
-          <Button onClick={this.handleSubmit}>
-            Register
-          </Button>
-        </DialogActions>
-      </Dialog>
+        </FormControl>
+      </FormDialog>
     );
   }
 }

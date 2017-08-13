@@ -9,14 +9,14 @@ export default function authReducer(state = is, action = {}) {
   switch (action.type) {
     case types.AUTH_LOGIN_BEGIN:
       return Object.assign({}, state, {
-        errorMessage:    '',
+        error:           '',
         isSubmitting:    true,
         isAuthenticated: false
       });
     case types.AUTH_LOGIN_COMPLETE:
       return Object.assign({}, state, {
         username:        action.username,
-        errorMessage:    '',
+        error:           '',
         isSubmitting:    false,
         isAuthenticated: true
       });
@@ -24,11 +24,11 @@ export default function authReducer(state = is, action = {}) {
       return Object.assign({}, state, {
         isSubmitting:    false,
         isAuthenticated: false,
-        errorMessage:    action.message
+        error:           action.error
       });
     case types.AUTH_LOGOUT_COMPLETE:
       return Object.assign({}, state, {
-        errorMessage:    '',
+        error:           '',
         isSubmitting:    false,
         isAuthenticated: false
       });

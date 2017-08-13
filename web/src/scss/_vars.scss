@@ -1,1 +1,7 @@
 $padding-std: 8px;
+
+$color-error: red;
+
+.up-error {
+  color: $color-error !important;
+}

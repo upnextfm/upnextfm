@@ -24,13 +24,13 @@ export function authLoginComplete(resp, username) {
 }
 
 /**
- * @param {string} message
+ * @param {string} error
  * @returns {{type: string, message: *}}
  */
-export function authLoginError(message) {
+export function authLoginError(error) {
   return {
     type: types.AUTH_LOGIN_FAILURE,
-    message
+    error
   };
 }
 

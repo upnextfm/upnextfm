@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { authToggleLoginDialog, authReset, authLogin } from 'actions/authActions';
-import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
-import { LinearProgress } from 'material-ui/Progress';
-import Slide from 'material-ui/transitions/Slide';
-import Button from 'material-ui/Button';
+import FormControl from 'material-ui/Form/FormControl';
 import TextField from 'material-ui/TextField';
+import FormDialog from 'components/Dialogs/FormDialog';
 
 class LoginDialog extends Component {
   static propTypes = {
@@ -56,7 +54,7 @@ class LoginDialog extends Component {
     this.props.dispatch(authLogin({ username, password }));
   };
 
-  handleRequestClose = () => {
+  handleClose = () => {
     this.props.dispatch(authReset());
     this.setState({
       username:      '',
@@ -71,46 +69,35 @@ class LoginDialog extends Component {
     const { username, password, usernameError, passwordError } = this.state;
 
     return (
-      <Dialog open={isLoginDialogOpen} transition={Slide} onRequestClose={this.handleRequestClose}>
-        <DialogContent>
-          {error && (
-            <DialogContentText>
-              {error}
-            </DialogContentText>
-          )}
+      <FormDialog
+        submitText="Login"
+        error={error}
+        open={isLoginDialogOpen}
+        submitting={isSubmitting}
+        onSubmit={this.handleSubmit}
+        onClose={this.handleClose}
+      >
+        <FormControl disabled={isSubmitting} fullWidth>
           <TextField
             label="Username"
             name="username"
             value={username}
-            onChange={this.handleChangeInput}
             error={usernameError}
-            fullWidth
+            onChange={this.handleChangeInput}
             autoFocus
           />
+        </FormControl>
+        <FormControl disabled={isSubmitting} fullWidth>
           <TextField
             label="Password"
             name="password"
             type="password"
             value={password}
-            onChange={this.handleChangeInput}
             error={passwordError}
-            fullWidth
+            onChange={this.handleChangeInput}
           />
-          <div style={{ marginTop: 30 }}>
-            {isSubmitting && (
-              <LinearProgress />
-            )}
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleRequestClose}>
-            Cancel
-          </Button>
-          <Button onClick={this.handleSubmit}>
-            Login
-          </Button>
-        </DialogActions>
-      </Dialog>
+        </FormControl>
+      </FormDialog>
     );
   }
 }
