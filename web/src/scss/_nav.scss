@@ -20,6 +20,12 @@
 
 .up-btn-login {
   margin-left: auto;
+
+  @media (max-width: 360px) {
+    min-width: 54px !important;
+    padding: 11px 0 !important;
+    font-size: 12px !important;
+  }
 }
 
 .up-drawer {
