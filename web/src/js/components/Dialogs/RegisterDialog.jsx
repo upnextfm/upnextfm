@@ -167,7 +167,6 @@ class RegisterDialog extends Component {
               <Checkbox
                 name="tos"
                 checked={tos}
-                error={tosError}
                 onChange={this.handleChangeInput}
                 required
               />

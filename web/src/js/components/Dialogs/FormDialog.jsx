@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { objectKeyFilter } from 'utils/objects';
 import { authToggleLoginDialog, authReset, authLogin } from 'actions/authActions';
 import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
@@ -10,7 +9,7 @@ import FormControl from 'material-ui/Form/FormControl';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 
-class FormDialog extends Component {
+export default class FormDialog extends Component {
   static propTypes = {
     open:         PropTypes.bool,
     isSubmitting: PropTypes.bool,
@@ -63,9 +62,3 @@ class FormDialog extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return Object.assign({}, state.auth);
-}
-
-export default connect(mapStateToProps)(FormDialog);
