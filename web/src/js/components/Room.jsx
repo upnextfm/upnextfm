@@ -42,7 +42,7 @@ class Room extends React.Component {
           </Grid>
           <Grid item xs={12} sm={12} md={5}>
             <VideoContainer />
-            <PlaylistContainer />
+			<PlaylistContainer />
           </Grid>
         </div>
         <LoginDialog />
