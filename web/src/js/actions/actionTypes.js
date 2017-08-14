@@ -9,6 +9,9 @@ export const AUTH_RESET                  = 'AUTH_RESET';
 
 export const REGISTER_TOGGLE_DIALOG  = 'REGISTER_TOGGLE_DIALOG';
 export const REGISTER_RESET          = 'REGISTER_RESET';
+export const REGISTER_BEGIN          = 'REGISTER_BEGIN';
+export const REGISTER_ERROR          = 'REGISTER_ERROR';
+export const REGISTER_COMPLETE       = 'REGISTER_COMPLETE';
 
 export const NAV_TOGGLE_DRAWER   = 'NAV_TOGGLE_DRAWER';
 

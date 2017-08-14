@@ -156,7 +156,6 @@ class Auth {
    * @returns {boolean}
    */
   logout() {
-    console.info(this.getToken());
     this.creds = null;
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_KEY);
@@ -165,6 +164,49 @@ class Auth {
     this.trigger();
 
     return true;
+  }
+
+  /**
+   *
+   * @param {{username: string, email: string, password: string}} details
+   * @returns {*|Promise.<T>}
+   */
+  register(details) {
+    const config = {
+      method:  'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(details)
+    };
+
+    let ok = false;
+    return fetch(endpoints.REGISTER, config)
+      .then((resp) => {
+        ok = resp.ok;
+        return resp.json();
+      })
+      .then((resp) => {
+        if (!ok) {
+          throw Error(resp.error);
+        }
+
+        this.creds = {
+          username: details.username,
+          password: details.password
+        };
+        localStorage.setItem(TOKEN_KEY, resp.token);
+        localStorage.setItem(REFRESH_KEY, resp.refresh_token);
+        localStorage.setItem(USERNAME_KEY, details.username);
+        this.startInterval();
+        this.trigger();
+
+        return resp;
+      })
+      .catch((error) => {
+        this.logout();
+        throw error;
+      });
   }
 
   /**

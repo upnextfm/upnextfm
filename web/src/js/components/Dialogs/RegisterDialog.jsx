@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { registerToggleDialog, registerReset } from 'actions/registerActions';
+import { register, registerToggleDialog, registerReset } from 'actions/registerActions';
 import { FormControl, FormControlLabel } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
@@ -74,13 +74,18 @@ class RegisterDialog extends Component {
       return;
     }
     this.setState({ password2Error: false });
+    if (password !== password2) {
+      this.setState({ passwordError: true });
+      return;
+    }
+
     if (!tos) {
       this.setState({ tosError: true });
       return;
     }
     this.setState({ tosError: false });
 
-    // this.props.dispatch(authLogin({ username, password }));
+    this.props.dispatch(register({ username, email, password }));
   };
 
   handleClose = () => {

@@ -4,12 +4,14 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import createPalette from 'material-ui/styles/palette';
+import orange from 'material-ui/colors/orange';
 import store from 'store/store';
 import Room from 'components/Room';
 
 const theme = createMuiTheme({
   palette: createPalette({
-    type: 'dark'
+    type:    'dark',
+    primary: orange
   })
 });
 const mount = document.getElementById('mount');

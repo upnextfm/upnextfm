@@ -50,7 +50,7 @@ class Nav extends React.Component {
     return (
       <AppBar position="static" color="default">
         <Toolbar className="up-nav">
-          <IconButton color="contrast" aria-label="Menu" onClick={this.handleClickMenu}>
+          <IconButton aria-label="Menu" onClick={this.handleClickMenu}>
             <MenuIcon />
           </IconButton>
           <a href="/" className="up-brand">
@@ -58,15 +58,15 @@ class Nav extends React.Component {
           </a>
           {auth.isAuthenticated
           ? (
-            <Button className="up-btn-login" color="contrast" onClick={this.handleClickLogin}>
+            <Button className="up-btn-login" onClick={this.handleClickLogin}>
               Logout
             </Button>
           ) : (
             <span className="up-btn-login">
-              <Button className="up-btn-login" color="contrast" onClick={this.handleClickRegister}>
+              <Button className="up-btn-login" onClick={this.handleClickRegister}>
                 Register
               </Button>
-              <Button className="up-btn-login" color="contrast" onClick={this.handleClickLogin}>
+              <Button className="up-btn-login" onClick={this.handleClickLogin}>
                 Login
               </Button>
             </span>

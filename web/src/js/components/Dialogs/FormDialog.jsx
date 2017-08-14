@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { objectKeyFilter } from 'utils/objects';
-import { authToggleLoginDialog, authReset, authLogin } from 'actions/authActions';
-import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
 import { CircularProgress } from 'material-ui/Progress';
+import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
 import Slide from 'material-ui/transitions/Slide';
-import FormControl from 'material-ui/Form/FormControl';
-import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 
 export default class FormDialog extends Component {
@@ -40,7 +37,7 @@ export default class FormDialog extends Component {
         <DialogContent>
           {error && (
             <DialogContentText className="up-error">
-              {error}
+              {error.message}
             </DialogContentText>
           )}
           {children}
