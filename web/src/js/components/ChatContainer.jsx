@@ -28,8 +28,7 @@ class ChatContainer extends React.Component {
     const { dispatch, inputValue } = this.props;
 
     return (
-      <Paper elevation = {4} className = "up-room__paper_container">
-      <div className="up-room__chat">
+      <Paper elevation = {4} className = "up-room__paper_container up-room__chat">
         <div className="up-room__chat__users">
           Users
         </div>
@@ -47,7 +46,6 @@ class ChatContainer extends React.Component {
             />
           </div>
         </div>
-      </div>
       </Paper>
     );
   }
