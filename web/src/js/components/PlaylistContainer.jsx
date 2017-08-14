@@ -8,11 +8,9 @@ class PlaylistContainer extends React.Component {
     };
 
     return (
-      <div className="up-room__playlist">
-        <Paper elevation = {4} className = "up-room__paper_container">
-          <div><p>PLAYLIST GOES HERE</p></div>
-        </Paper>
-      </div>
+      <Paper elevation = {4} className = "up-room__paper_container up-room__playlist">
+        <div><p>PLAYLIST GOES HERE</p></div>
+      </Paper>
     );
   }
 }
