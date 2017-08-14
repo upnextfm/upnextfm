@@ -12,10 +12,12 @@ class VideoContainer extends React.Component {
     };
 
     return (
-      <Paper elevation = {4} className = "up-room__paper_container up-room__video">
-        <YouTube videoId="NegV-ts35cY" opts={opts} />
-        <div className = "up-room__video_buttons"><p>BUTTONS GO HERE</p></div>
-      </Paper>
+      <div className="up-room__video">
+        <Paper elevation = {4} className = "up-room__paper_container">
+          <YouTube videoId="NegV-ts35cY" opts={opts} />
+          <div className = "up-room__video_buttons"><p>BUTTONS GO HERE</p></div>
+        </Paper>
+      </div>
     );
   }
 }
