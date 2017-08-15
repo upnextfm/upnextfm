@@ -5,7 +5,7 @@ import Playlist from 'components/Playlist';
 class VideoContainer extends React.Component {
   render() {
     return (
-      <div className="up-room__video up-paper-container">
+      <div className="up-room__video">
         <VideoPlayer />
         <Playlist />
       </div>
