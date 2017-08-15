@@ -5,7 +5,7 @@ class PlaylistContainer extends React.Component {
   render() {
     return (
       <Paper elevation={4} className="up-room__playlist up-paper-container">
-        <div><p>PLAYLIST GOES HERE</p></div>
+        <div><p>PLAYLIST</p></div>
       </Paper>
     );
   }
