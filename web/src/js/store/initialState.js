@@ -32,6 +32,7 @@ export default {
     messages: [
       {
         id:      1,
+        date:    new Date(),
         message: 'Well, you just kind of copied and pasted from the other components, so ...',
         user:    {
           username: 'headzoo',
@@ -42,6 +43,7 @@ export default {
       },
       {
         id:      2,
+        date:    new Date(),
         message: 'alright, i\'m at the cobble together stage',
         user:    {
           username: 'az4521',
@@ -52,6 +54,7 @@ export default {
       },
       {
         id:      3,
+        date:    new Date(),
         message: 'It\'s all good',
         user:    {
           username: 'headzoo',
@@ -62,6 +65,7 @@ export default {
       },
       {
         id:      4,
+        date:    new Date(),
         message: 'should i cram buttons into the containers or try and make seperate classes for them?',
         user:    {
           username: 'az4521',

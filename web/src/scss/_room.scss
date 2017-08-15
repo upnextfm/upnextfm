@@ -52,7 +52,7 @@
   }
 
   .up-room-user {
-    min-width: 120px;
+    min-width: 105px;
   }
 
   .up-avatar {
@@ -61,8 +61,15 @@
   }
 
   .up-room-message__message {
-
+    display: block;
   }
+}
+
+.up-room-message__date {
+  display: block;
+  color: #808080;
+  margin-right: $padding-std * 2;
+  font-size: 0.8rem;
 }
 
 .up-room__chat__input {
