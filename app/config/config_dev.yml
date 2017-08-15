@@ -39,3 +39,14 @@ monolog:
 
 #swiftmailer:
 #    delivery_addresses: ['me@example.com']
+
+## ########################################################################
+## Websockets
+## ########################################################################
+gos_web_socket:
+    server:
+        port: 8081
+        host: dev.upnext.fm
+        router:
+            resources:
+                - "%kernel.root_dir%/config/pubsub.yml"
