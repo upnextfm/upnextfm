@@ -86,13 +86,16 @@
 
 .up-room__video-buttons {
   border: 1px solid cyan;
-  margin-top: $padding-std;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
   padding: $padding-std;
 }
 
 .up-room__playlist {
 	border: 1px solid brown;
   padding: $padding-std;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .up-room-user {
