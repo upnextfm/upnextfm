@@ -14,9 +14,9 @@
     "watch": "bin/encore dev --watch",
     "build": "bin/encore production",
     "deploy": "ssh ubuntu@upnext.fm 'cd /var/www/upnext.fm && npm run pull'",
+    "pull": "git pull && npm run build && bin/console cache:clear --no-warmup",
     "lint": "eslint ./web/src/js --cache --cache-location=.cache/eslint --ext .js,.jsx",
-    "lint:fix": "npm run lint -- --fix",
-    "pull": "git pull && npm run build && bin/console cache:clear --no-warmup"
+    "lint:fix": "npm run lint -- --fix"
   },
   "keywords": [],
   "author": "",
