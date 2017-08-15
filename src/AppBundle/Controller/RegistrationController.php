@@ -1,52 +1,51 @@
 <?php
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Api\Response;
+use AppBundle\Entity\User;
 
 class RegistrationController extends Controller
 {
   /**
-   * @Route("/api/register", name="register")
+   * @Route("/api/register", name="register", methods={"POST"})
    *
+   * @param Request $request
    * @return Response
    */
-  public function registerAction()
+  public function registerAction(Request $request)
   {
-    $data = $this->getJsonRequest();
-    if (empty($data["username"]) || empty($data["email"]) || empty($data["password"])) {
-      return $this->createJsonResponse(["error" => "Missing field."], 400);
+    $username = $request->request->get("username");
+    $password = $request->request->get("password");
+    $email    = $request->request->get("email");
+    if (empty($username) || empty($email) || empty($password)) {
+      return new Response(["error" => "Missing field."], 400);
     }
 
     $em   = $this->getDoctrine()->getManager();
     $repo = $em->getRepository("AppBundle:User");
-    $user = $repo->findByUsername($data["username"]);
-    if ($user) {
-      return $this->createJsonResponse(["error" => "Username taken."], 401);
+    if ($repo->findByUsername($username)) {
+      return new Response(["error" => "Username taken."], 401);
     }
-    $user = $repo->findByEmail($data["email"]);
-    if ($user) {
-      return $this->createJsonResponse(["error" => "Email already in use."], 401);
+    if ($repo->findByEmail($email)) {
+      return new Response(["error" => "Email already in use."], 401);
     }
 
-    $user     = new User();
-    $factory  = $this->get("security.encoder_factory");
-    $encoder  = $factory->getEncoder($user);
-    $password = $encoder->encodePassword($data["password"], null);
-
-    $user->setUsername($data["username"]);
-    $user->setUsernameCanonical($data["username"]);
-    $user->setEmail($data["email"]);
-    $user->setEmailCanonical($data["email"]);
+    $user    = new User();
+    $factory = $this->get("security.encoder_factory");
+    $encoder = $factory->getEncoder($user);
+    $user->setUsername($username);
+    $user->setUsernameCanonical($username);
+    $user->setEmail($email);
+    $user->setEmailCanonical($email);
     $user->setEnabled(true);
     $user->setLastLogin(new \DateTime());
-    $user->setPassword($password);
-
+    $user->setPassword($encoder->encodePassword($password, null));
     $em->persist($user);
     $em->flush();
 
-    $authenticationSuccessHandler = $this->get('lexik_jwt_authentication.handler.authentication_success');
-    return $authenticationSuccessHandler->handleAuthenticationSuccess($user);
+    $handler = $this->get('lexik_jwt_authentication.handler.authentication_success');
+    return $handler->handleAuthenticationSuccess($user);
   }
 }
