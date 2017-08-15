@@ -4,4 +4,4 @@ acme_topic:
         callback: 'room.topic'
     requirements:
           room:
-              pattern: "[\w]+"
+              pattern: "[\\w]+"
