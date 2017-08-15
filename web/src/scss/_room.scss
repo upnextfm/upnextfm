@@ -82,7 +82,8 @@
 .up-room__video {
   //border: 1px solid purple;
   height: 100%;
-  padding-right: 8px;
+  margin-top: $padding-std;
+  padding-right: $padding-std;
 }
 
 .up-room__video-buttons {
