@@ -88,18 +88,25 @@
 .up-room__chat__input {
   //border: 1px solid blue;
   flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
   max-height: 40px;
 
   input {
-    width: 100%;
+    flex-grow: 1;
     height: 40px;
-    border: 0;
     outline: 0;
     color: #FFF;
     padding: 0 $padding-std;
     font-size: 1rem;
+    border: 0;
     background-color: transparent;
   }
+}
+
+.up-room-btn-send {
+  margin-top: -34px;
+  margin-right: $padding-std;
 }
 
 .up-room__video {
