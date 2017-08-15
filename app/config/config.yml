@@ -3,11 +3,15 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
 
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+## ########################################################################
+## Parameters
+## ########################################################################
 parameters:
     locale: en
 
+## ########################################################################
+## Framework
+## ########################################################################
 framework:
     #esi: ~
     #translator: { fallbacks: ['%locale%'] }
@@ -34,12 +38,16 @@ framework:
     php_errors:
         log: true
 
-# Twig Configuration
+## ########################################################################
+## Twig
+## ########################################################################
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
 
-# Doctrine Configuration
+## ########################################################################
+## Doctrine
+## ########################################################################
 doctrine:
     dbal:
         driver: pdo_mysql
@@ -61,13 +69,18 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
+## ########################################################################
+## Doctrine Migrations
+## ########################################################################
 doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"
     namespace: Application\Migrations
     table_name: migration_versions
     name: Application Migrations
 
-# Swiftmailer Configuration
+## ########################################################################
+## Swiftmailer
+## ########################################################################
 swiftmailer:
     transport: '%mailer_transport%'
     host: '%mailer_host%'
@@ -75,7 +88,9 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
-# FOSUser Bundle Configuration
+## ########################################################################
+## FOSUser
+## ########################################################################
 fos_user:
     db_driver: orm
     firewall_name: main
@@ -84,19 +99,25 @@ fos_user:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
 
-# JWTAuthenticationBundle Configuration
+## ########################################################################
+## JWTAuthenticationBundle
+## ########################################################################
 lexik_jwt_authentication:
     private_key_path: '%jwt_private_key_path%'
     public_key_path:  '%jwt_public_key_path%'
     pass_phrase:      '%jwt_key_pass_phrase%'
     token_ttl:        '%jwt_token_ttl%'
 
-# GesdinetJWTRefreshTokenBundle Configuration
+## ########################################################################
+## GesdinetJWTRefreshTokenBundle
+## ########################################################################
 gesdinet_jwt_refresh_token:
     ttl: 604800
     firewall: api_refresh_token
 
-# Nelmio CORS
+## ########################################################################
+## CORS
+## ########################################################################
 nelmio_cors:
     defaults:
         allow_origin:   ["%cors_allow_origin%"]
@@ -107,7 +128,9 @@ nelmio_cors:
     paths:
         '^/': ~
 
-# Redis Configuration
+## ########################################################################
+## Redis
+## ########################################################################
 snc_redis:
     clients:
         default:
@@ -121,7 +144,9 @@ snc_redis:
     session:
         client: session
 
-# Websocket Configuration
+## ########################################################################
+## Websockets
+## ########################################################################
 gos_web_socket:
     server:
         port: 8081
