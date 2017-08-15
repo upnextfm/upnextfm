@@ -49,8 +49,11 @@
 .up-room__video {
   border: 1px solid purple;
   width: 100%;
+  height: 50%;
 }
-
+.up-room__yt-player:first-child {
+  height: calc(100% - 42px)
+}
 .up-room__video_buttons {
   border: 1px solid cyan;
   width: 100%;
@@ -58,7 +61,7 @@
 }
 
 .up-room__playlist {
-	height: calc(100% - 424px);
+	height: 50%;
 	width: 100%;
 	border: 1px solid brown
 }

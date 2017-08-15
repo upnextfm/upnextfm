@@ -13,9 +13,9 @@ class VideoContainer extends React.Component {
 
     return (
       <div className="up-room__video">
-        <Paper elevation={4} className="up-room__paper_container">
-          <YouTube videoId="NegV-ts35cY" opts={opts} />
-          <div className="up-room__video_buttons"><p>BUTTONS GO HERE</p></div>
+        <Paper elevation = {4} className = "up-room__paper_container">
+          <YouTube videoId="NegV-ts35cY" opts={opts} className="up-room__yt-player" />
+          <div className = "up-room__video_buttons"><p>BUTTONS GO HERE</p></div>
         </Paper>
       </div>
     );
