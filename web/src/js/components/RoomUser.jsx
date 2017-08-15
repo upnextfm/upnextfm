@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserPropType } from 'utils/props';
 import Avatar from 'material-ui/Avatar';
 
 const RoomUser = ({ user, ...props }) => (
@@ -9,5 +10,9 @@ const RoomUser = ({ user, ...props }) => (
     </div>
   </div>
 );
+
+RoomUser.propTypes = {
+  user: UserPropType.isRequired
+};
 
 export default RoomUser;

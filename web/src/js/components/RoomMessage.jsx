@@ -1,6 +1,7 @@
 import React from 'react';
-import { ListItem } from 'material-ui/List';
 import Moment from 'react-moment';
+import { ListItem } from 'material-ui/List';
+import { UserPropType, MessagePropType } from 'utils/props';
 import RoomUser from 'components/RoomUser';
 
 const RoomMessage = ({ message, user, ...props }) => (
@@ -13,5 +14,10 @@ const RoomMessage = ({ message, user, ...props }) => (
 
   </ListItem>
 );
+
+RoomMessage.propTypes = {
+  message: MessagePropType.isRequired,
+  user:    UserPropType.isRequired
+};
 
 export default RoomMessage;

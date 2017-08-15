@@ -19,14 +19,14 @@ export default {
     {
       username: 'headzoo',
       avatar:   'https://api.adorable.io/avatars/50/sean%40upnext.fm',
-      profile:  '/u/headzoo',
-      role:     'user'
+      profile:  'https://upnext.fm/u/headzoo',
+      roles:    ['user']
     },
     {
       username: 'az4521',
       avatar:   'https://api.adorable.io/avatars/50/az4521%40upnext.fm',
-      profile:  '/u/az4521',
-      role:     'user'
+      profile:  'https://upnext.fm/u/az4521',
+      roles:    ['user']
     }
   ],
   room: {
@@ -36,25 +36,25 @@ export default {
     messages:   [
       {
         id:      1,
-        date:    new Date(),
+        date:    (new Date()).toString(),
         from:    'headzoo',
         message: 'Well, you just kind of copied and pasted from the other components, so ...'
       },
       {
         id:      2,
-        date:    new Date(),
+        date:    (new Date()).toString(),
         from:    'az4521',
         message: 'alright, i\'m at the cobble together stage'
       },
       {
         id:      3,
-        date:    new Date(),
+        date:    (new Date()).toString(),
         from:    'headzoo',
         message: 'It\'s all good'
       },
       {
         id:      4,
-        date:    new Date(),
+        date:    (new Date()).toString(),
         from:    'az4521',
         message: 'should i cram buttons into the containers or try and make seperate classes for them?'
       }

@@ -18,7 +18,7 @@
 
 .up-room__chat__users {
   //border: 1px solid red;
-  flex-grow: 1 !important;
+  flex-grow: 2 !important;
   padding: 0 !important;
 
   li {
@@ -35,7 +35,7 @@
   //border: 1px solid green;
   display: flex;
   flex-flow: column;
-  flex-grow: 4;
+  flex-grow: 3 !important;
 }
 
 .up-room__chat__messages {
