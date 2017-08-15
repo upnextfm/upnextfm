@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Hidden from 'material-ui/Hidden';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Button from 'material-ui/Button';
@@ -56,23 +57,25 @@ class Nav extends React.Component {
           <a href="/" className="up-brand">
             <img src="/images/logo-brand.png" alt="Logo" />
           </a>
-          {auth.isAuthenticated
-          ? (
-            <Button className="up-btn-login" onClick={this.handleClickLogin}>
-              Logout
-            </Button>
-          ) : (
-            <span className="up-btn-login">
-              <Button className="up-btn-login" onClick={this.handleClickRegister}>
-                Register
-              </Button>
+          <Hidden xsDown>
+            {auth.isAuthenticated
+            ? (
               <Button className="up-btn-login" onClick={this.handleClickLogin}>
-                Login
+                Logout
               </Button>
-            </span>
-          )}
+            ) : (
+              <span className="up-btn-login">
+                <Button className="up-btn-login" onClick={this.handleClickRegister}>
+                  Register
+                </Button>
+                <Button className="up-btn-login" onClick={this.handleClickLogin}>
+                  Login
+                </Button>
+              </span>
+            )}
+          </Hidden>
         </Toolbar>
-        <NavDrawer />
+        <NavDrawer auth={auth} onClickLogin={this.handleClickLogin} onClickRegister={this.handleClickRegister} />
       </AppBar>
     );
   }

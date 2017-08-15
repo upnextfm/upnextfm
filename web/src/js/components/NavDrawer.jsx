@@ -7,6 +7,7 @@ import Divider from 'material-ui/Divider';
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
 import StarIcon from 'material-ui-icons/Star';
+import CompareArrows from 'material-ui-icons/CompareArrows';
 import SendIcon from 'material-ui-icons/Send';
 import MailIcon from 'material-ui-icons/Mail';
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -15,13 +16,18 @@ import { navToggleDrawer } from 'actions/navActions';
 
 class NavDrawer extends React.Component {
   static propTypes = {
-    isDrawerOpen: PropTypes.bool,
-    dispatch:     PropTypes.func
+    auth:            PropTypes.object.isRequired,
+    isDrawerOpen:    PropTypes.bool,
+    dispatch:        PropTypes.func,
+    onClickLogin:    PropTypes.func,
+    onClickRegister: PropTypes.func
   };
 
   static defaultProps = {
     isDrawerOpen: false,
-    dispatch:     () => {}
+    dispatch:        () => {},
+    onClickLogin:    () => {},
+    onClickRegister: () => {}
   };
 
   handleToggle = () => {
@@ -29,6 +35,39 @@ class NavDrawer extends React.Component {
   };
 
   renderList() {
+    const { auth, onClickLogin, onClickRegister } = this.props;
+
+    let authListItems = null;
+    if (auth.isAuthenticated) {
+      authListItems = (
+        <div>
+          <ListItem onClick={onClickLogin} button>
+            <ListItemIcon>
+              <CompareArrows />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItem>
+        </div>
+      );
+    } else {
+      authListItems = (
+        <div>
+          <ListItem onClick={onClickLogin} button>
+            <ListItemIcon>
+              <CompareArrows />
+            </ListItemIcon>
+            <ListItemText primary="Login" />
+          </ListItem>
+          <ListItem onClick={onClickRegister} button>
+            <ListItemIcon>
+              <StarIcon />
+            </ListItemIcon>
+            <ListItemText primary="Register" />
+          </ListItem>
+        </div>
+      );
+    }
+
     const mailFolderListItems = (
       <div>
         <ListItem button>
@@ -83,6 +122,10 @@ class NavDrawer extends React.Component {
 
     return (
       <div className="up-drawer">
+        <List disablePadding>
+          {authListItems}
+        </List>
+        <Divider />
         <List disablePadding>
           {mailFolderListItems}
         </List>
