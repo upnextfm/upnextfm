@@ -1,7 +1,9 @@
 # Learn more about services, parameters and containers at
 # https://symfony.com/doc/current/service_container.html
 parameters:
-    #parameter_name: value
+    api.request_listener.class: AppBundle\EventListener\RequestListener
+    api.response_listener.class: AppBundle\EventListener\ResponseListener
+    api.exception_listener.class: AppBundle\EventListener\ExceptionListener
 
 services:
     encoder_json:
@@ -15,3 +17,33 @@ services:
       arguments:
         - ["@normalizer_object"]
         - ["@encoder_json"]
+
+    ## ########################################################################
+    ## API Request Listener
+    ## ########################################################################
+    api.request_listener:
+        class: "%api.request_listener.class%"
+        arguments:
+          - "@serializer_json"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    ## ########################################################################
+    ## API Response Listener
+    ## ########################################################################
+    api.response_listener:
+        class: "%api.response_listener.class%"
+        arguments:
+          - "@serializer_json"
+        tags:
+            - { name: kernel.event_listener, event: kernel.view, method: onKernelView }
+
+    ## ########################################################################
+    ## API Exception Listener
+    ## ########################################################################
+    api.exception_listener:
+        class: "%api.exception_listener.class%"
+        arguments:
+          - "@serializer_json"
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
