@@ -12,7 +12,7 @@ class VideoContainer extends React.Component {
     };
 
     return (
-      <Paper elevation={4} className="up-room__video up-paper_container">
+      <Paper elevation={4} className="up-room__video up-paper-container">
         <YouTube videoId="NegV-ts35cY" opts={opts} className="up-room__yt-player" />
         <div className="up-room__video_buttons">
           <p>BUTTONS GO HERE</p>

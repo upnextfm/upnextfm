@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { roomInputChange, roomInputSend } from 'actions/roomActions';
-import Paper from 'material-ui/Paper';
 import UsersContainer from 'components/UsersContainer';
+import MessagesContainer from 'components/MessagesContainer';
 
 class ChatContainer extends React.Component {
   static propTypes = {
@@ -30,13 +30,11 @@ class ChatContainer extends React.Component {
     const { dispatch, inputValue } = this.props;
 
     return (
-      <Paper elevation={4} className="up-room__chat up-paper_container">
+      <div className="up-room__chat">
         <UsersContainer />
-        <div className="up-room__chat__messages">
-          <div className="up-room__chat__scroll">
-            Messages
-          </div>
-          <div className="up-room__chat__input">
+        <div className="up-room__chat__messages-container">
+          <MessagesContainer />
+          <div className="up-room__chat__input up-paper-container">
             <input
               type="text"
               value={inputValue}
@@ -46,7 +44,7 @@ class ChatContainer extends React.Component {
             />
           </div>
         </div>
-      </Paper>
+      </div>
     );
   }
 }
