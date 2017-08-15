@@ -9,7 +9,7 @@ class ChatContainer extends React.Component {
     return (
       <div className="up-room__chat">
         <Users />
-        <div className="up-room__chat__messages-container">
+        <div className="up-room__chat__messages-container up-paper-container">
           <Messages />
           <MessageInput />
         </div>

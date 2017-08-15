@@ -1,10 +1,12 @@
+@import "vars";
+
 body, html, #mount, #mount > div {
   height: 100%;
 }
 
 body {
-    color: #FFF;
-    background: #222;
+    color: $color-fg;
+    background: $color-bg;
     text-align: center;
     font-family: 'Roboto', sans-serif;
 }

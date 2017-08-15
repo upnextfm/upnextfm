@@ -87,26 +87,29 @@
 
 .up-room__chat__input {
   //border: 1px solid blue;
-  flex-grow: 1;
   display: flex;
+  padding: $padding-std;
   justify-content: space-between;
-  max-height: 40px;
+  border-top: 1px solid $color-bg;
 
   input {
     flex-grow: 1;
-    height: 40px;
     outline: 0;
-    color: #FFF;
-    padding: 0 $padding-std;
-    font-size: 1rem;
     border: 0;
-    background-color: transparent;
+    color: $color-fg;
+    font-size: 1rem;
+    padding: 0 $padding-std;
+    background-color: $color-bg;
+    border-radius: $border-radius-sm;
   }
-}
 
-.up-room-btn-send {
-  margin-top: -34px;
-  margin-right: $padding-std;
+  button {
+    color: $color-dim;
+
+    &:hover {
+      color: $color-fg;
+    }
+  }
 }
 
 .up-room__video {

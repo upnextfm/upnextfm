@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Button from 'material-ui/Button';
+import IconButton from 'material-ui/IconButton';
 import Send from 'material-ui-icons/Send';
+import AttachFile from 'material-ui-icons/AttachFile';
 import { roomInputChange, roomInputSend } from 'actions/roomActions';
 
 class MessageInput extends React.Component {
@@ -20,9 +21,14 @@ class MessageInput extends React.Component {
     }, 1000);
   }
 
+  send = () => {
+    this.props.dispatch(roomInputSend());
+    this.inputRef.focus();
+  };
+
   handleKeyDownInput = (e) => {
     if (e.keyCode === 13) {
-      this.props.dispatch(roomInputSend());
+      this.send();
     }
   };
 
@@ -30,7 +36,7 @@ class MessageInput extends React.Component {
     const { inputValue, dispatch } = this.props;
 
     return (
-      <div className="up-room__chat__input up-paper-container">
+      <div className="up-room__chat__input">
         <input
           type="text"
           value={inputValue}
@@ -38,16 +44,20 @@ class MessageInput extends React.Component {
           onChange={(e) => { dispatch(roomInputChange(e.target.value)); }}
           ref={(ref) => { this.inputRef = ref; }}
         />
-        <Button
-          color="accent"
-          className="up-room-btn-send"
+        <IconButton
+          title="Attach File"
+          aria-label="Attach File"
+          onClick={() => { this.send(); }}
+        >
+          <AttachFile />
+        </IconButton>
+        <IconButton
           title="Send"
           aria-label="Send"
-          onClick={() => { dispatch(roomInputSend()); }}
-          fab
+          onClick={() => { this.send(); }}
         >
           <Send />
-        </Button>
+        </IconButton>
       </div>
     );
   }

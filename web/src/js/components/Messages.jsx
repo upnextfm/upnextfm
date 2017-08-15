@@ -15,7 +15,7 @@ class Messages extends React.Component {
     const { room, users } = this.props;
 
     return (
-      <List className="up-room__chat__messages up-paper-container">
+      <List className="up-room__chat__messages">
         {room.messages.map(message => (
           <RoomMessage
             key={message.id}
