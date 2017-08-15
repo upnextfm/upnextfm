@@ -101,7 +101,6 @@ class RegisterDialog extends Component {
       password2,
       email,
       tos,
-      tosError,
       usernameError,
       emailError,
       passwordError,
