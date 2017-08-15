@@ -15,3 +15,8 @@ services:
       arguments:
         - ["@normalizer_object"]
         - ["@encoder_json"]
+
+    app.topic.room:
+        class: AppBundle\Topic\RoomTopic
+        tags:
+            - { name: gos_web_socket.topic }
