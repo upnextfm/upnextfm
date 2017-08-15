@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { roomInputChange, roomInputSend } from 'actions/roomActions';
 import Paper from 'material-ui/Paper';
+import UsersContainer from 'components/UsersContainer';
 
 class ChatContainer extends React.Component {
   static propTypes = {
@@ -29,24 +30,20 @@ class ChatContainer extends React.Component {
     const { dispatch, inputValue } = this.props;
 
     return (
-      <Paper elevation={4} className="up-room__paper_container">
-        <div className="up-room__chat">
-          <div className="up-room__chat__users">
-          Users
-        </div>
-          <div className="up-room__chat__messages">
-            <div className="up-room__chat__scroll">
+      <Paper elevation={4} className="up-room__chat up-paper_container">
+        <UsersContainer />
+        <div className="up-room__chat__messages">
+          <div className="up-room__chat__scroll">
             Messages
           </div>
-            <div className="up-room__chat__input">
-              <input
-                type="text"
-                value={inputValue}
-                onKeyDown={this.handleKeyDownInput}
-                onChange={(e) => { dispatch(roomInputChange(e.target.value)); }}
-                ref={(ref) => { this.inputRef = ref; }}
-              />
-            </div>
+          <div className="up-room__chat__input">
+            <input
+              type="text"
+              value={inputValue}
+              onKeyDown={this.handleKeyDownInput}
+              onChange={(e) => { dispatch(roomInputChange(e.target.value)); }}
+              ref={(ref) => { this.inputRef = ref; }}
+            />
           </div>
         </div>
       </Paper>
