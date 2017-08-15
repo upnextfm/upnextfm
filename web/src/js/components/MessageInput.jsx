@@ -40,6 +40,7 @@ class MessageInput extends React.Component {
         <input
           type="text"
           value={inputValue}
+          placeholder="Write message"
           onKeyDown={this.handleKeyDownInput}
           onChange={(e) => { dispatch(roomInputChange(e.target.value)); }}
           ref={(ref) => { this.inputRef = ref; }}
