@@ -8,7 +8,7 @@ use AppBundle\Api\Response;
 /**
  * Converts controller responses into JSON responses.
  */
-class ResponseListener extends EventListener
+class ControllerResponseListener extends EventListener
 {
   /**
    * @param GetResponseForControllerResultEvent $event
