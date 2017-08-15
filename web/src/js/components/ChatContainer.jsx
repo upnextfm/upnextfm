@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { roomInputChange, roomInputSend } from 'actions/roomActions';
-import UsersContainer from 'components/UsersContainer';
-import MessagesContainer from 'components/MessagesContainer';
+import Users from 'components/Users';
+import Messages from 'components/Messages';
 
 class ChatContainer extends React.Component {
   static propTypes = {
@@ -31,9 +31,9 @@ class ChatContainer extends React.Component {
 
     return (
       <div className="up-room__chat">
-        <UsersContainer />
+        <Users />
         <div className="up-room__chat__messages-container">
-          <MessagesContainer />
+          <Messages />
           <div className="up-room__chat__input up-paper-container">
             <input
               type="text"

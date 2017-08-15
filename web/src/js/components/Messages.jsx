@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import List from 'material-ui/List';
 import RoomMessage from 'components/RoomMessage';
 
-class MessagesContainer extends React.Component {
+class Messages extends React.Component {
   static propTypes = {
     messages: PropTypes.array
   };
@@ -24,4 +24,4 @@ function mapStateToProps(state) {
   return Object.assign({}, state.room);
 }
 
-export default connect(mapStateToProps)(MessagesContainer);
+export default connect(mapStateToProps)(Messages);

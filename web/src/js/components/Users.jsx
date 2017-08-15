@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import List, { ListItem } from 'material-ui/List';
 import RoomUser from 'components/RoomUser';
 
-class UsersContainer extends React.Component {
+class Users extends React.Component {
   static propTypes = {
     users: PropTypes.array
   };
@@ -26,4 +26,4 @@ function mapStateToProps(state) {
   return Object.assign({}, state.room);
 }
 
-export default connect(mapStateToProps)(UsersContainer);
+export default connect(mapStateToProps)(Users);

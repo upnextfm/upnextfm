@@ -9,7 +9,7 @@ import RegisterDialog from 'components/Dialogs/RegisterDialog';
 import Nav from 'components/Nav';
 import ChatContainer from 'components/ChatContainer';
 import VideoContainer from 'components/VideoContainer';
-import PlaylistContainer from 'components/PlaylistContainer';
+
 
 class Room extends React.Component {
   static propTypes = {
@@ -42,7 +42,6 @@ class Room extends React.Component {
           </Grid>
           <Grid item xs={12} sm={12} md={5}>
             <VideoContainer />
-            <PlaylistContainer />
           </Grid>
         </div>
         <LoginDialog />
