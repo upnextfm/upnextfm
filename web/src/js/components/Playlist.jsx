@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 class PlaylistContainer extends React.Component {
   render() {
@@ -10,4 +11,8 @@ class PlaylistContainer extends React.Component {
   }
 }
 
-export default PlaylistContainer;
+function mapStateToProps(state) {
+  return Object.assign({}, state.room);
+}
+
+export default connect(mapStateToProps)(PlaylistContainer);

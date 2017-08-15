@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 class VideoButtons extends React.Component {
   render() {
@@ -10,4 +11,8 @@ class VideoButtons extends React.Component {
   }
 }
 
-export default VideoButtons;
+function mapStateToProps(state) {
+  return Object.assign({}, state.room);
+}
+
+export default connect(mapStateToProps)(VideoButtons);

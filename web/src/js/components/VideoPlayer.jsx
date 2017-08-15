@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import YouTube from 'react-youtube';
 
 class VideoPlayer extends React.Component {
@@ -16,4 +17,8 @@ class VideoPlayer extends React.Component {
   }
 }
 
-export default VideoPlayer;
+function mapStateToProps(state) {
+  return Object.assign({}, state.room);
+}
+
+export default connect(mapStateToProps)(VideoPlayer);
