@@ -1,17 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Drawer from 'material-ui/Drawer';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
 import StarIcon from 'material-ui-icons/Star';
 import CompareArrows from 'material-ui-icons/CompareArrows';
 import SendIcon from 'material-ui-icons/Send';
-import MailIcon from 'material-ui-icons/Mail';
-import DeleteIcon from 'material-ui-icons/Delete';
-import ReportIcon from 'material-ui-icons/Report';
+import AccountCircle from 'material-ui-icons/AccountCircle';
+import Face from 'material-ui-icons/Face';
+import Favorite from 'material-ui-icons/Favorite';
+import Help from 'material-ui-icons/Help';
+import Info from 'material-ui-icons/Info';
 import { navToggleDrawer } from 'actions/navActions';
 
 class NavDrawer extends React.Component {
@@ -46,6 +48,24 @@ class NavDrawer extends React.Component {
               <CompareArrows />
             </ListItemIcon>
             <ListItemText primary="Logout" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <Face />
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <Favorite />
+            </ListItemIcon>
+            <ListItemText primary="Favorites" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <AccountCircle />
+            </ListItemIcon>
+            <ListItemText primary="Account" />
           </ListItem>
         </div>
       );
@@ -97,25 +117,19 @@ class NavDrawer extends React.Component {
       </div>
     );
 
-    const otherMailFolderListItems = (
+    const aboutListItems = (
       <div>
         <ListItem button>
           <ListItemIcon>
-            <MailIcon />
+            <Info />
           </ListItemIcon>
-          <ListItemText primary="All mail" />
+          <ListItemText primary="About Us" />
         </ListItem>
         <ListItem button>
           <ListItemIcon>
-            <DeleteIcon />
+            <Help />
           </ListItemIcon>
-          <ListItemText primary="Trash" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <ReportIcon />
-          </ListItemIcon>
-          <ListItemText primary="Spam" />
+          <ListItemText primary="Help" />
         </ListItem>
       </div>
     );
@@ -127,11 +141,7 @@ class NavDrawer extends React.Component {
         </List>
         <Divider />
         <List disablePadding>
-          {mailFolderListItems}
-        </List>
-        <Divider />
-        <List disablePadding>
-          {otherMailFolderListItems}
+          {aboutListItems}
         </List>
       </div>
     );
