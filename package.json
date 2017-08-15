@@ -12,6 +12,7 @@
   "scripts": {
     "test": "jest",
     "watch": "bin/encore dev --watch",
+    "server": "bin/console gos:websocket:server",
     "build": "bin/encore production",
     "deploy": "ssh ubuntu@upnext.fm 'cd /var/www/upnext.fm && npm run pull'",
     "pull": "git pull && npm run build && bin/console cache:clear --no-warmup",
