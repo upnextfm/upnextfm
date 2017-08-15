@@ -3,21 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
 import { roomSetName } from 'actions/roomActions';
-import { objectKeyFilter } from 'utils/objects';
 import LoginDialog from 'components/Dialogs/LoginDialog';
 import RegisterDialog from 'components/Dialogs/RegisterDialog';
 import Nav from 'components/Nav';
 import ChatContainer from 'components/ChatContainer';
 import VideoContainer from 'components/VideoContainer';
 
-
 class Room extends React.Component {
   static propTypes = {
     name:     PropTypes.string.isRequired,
-    auth:     PropTypes.object,
-    register: PropTypes.object,
-    room:     PropTypes.object,
-    nav:      PropTypes.object,
+    auth:     PropTypes.object.isRequired,
     dispatch: PropTypes.func
   };
 
@@ -31,10 +26,10 @@ class Room extends React.Component {
   }
 
   render() {
-    const { auth, ...props } = this.props;
+    const { auth } = this.props;
 
     return (
-      <div {...objectKeyFilter(props, Room.propTypes)}>
+      <div>
         <Nav auth={auth} />
         <div className="up-room">
           <Grid item xs={12} sm={12} md={7}>
