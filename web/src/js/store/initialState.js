@@ -18,13 +18,13 @@ export default {
   users: [
     {
       username: 'headzoo',
-      avatar:   'https://headzoo.r.worldssl.net/images/me.jpg',
+      avatar:   'https://api.adorable.io/avatars/50/sean%40upnext.fm',
       profile:  '/u/headzoo',
       role:     'user'
     },
     {
       username: 'az4521',
-      avatar:   'https://api.adorable.io/avatars/285/az4521%40headzoo.io',
+      avatar:   'https://api.adorable.io/avatars/50/az4521%40upnext.fm',
       profile:  '/u/az4521',
       role:     'user'
     }
