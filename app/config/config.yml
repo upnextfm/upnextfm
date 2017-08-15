@@ -44,6 +44,8 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    globals:
+      ws_uri: wss://upnext.fm:8080
 
 ## ########################################################################
 ## Doctrine

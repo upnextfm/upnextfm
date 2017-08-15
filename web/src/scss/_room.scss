@@ -18,7 +18,8 @@
 
 .up-room__chat__users {
   //border: 1px solid red;
-  flex-grow: 1;
+  width: 15% !important;
+  flex-grow: 1 !important;
   padding: 0 !important;
 
   li {

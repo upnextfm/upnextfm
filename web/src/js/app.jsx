@@ -1,6 +1,6 @@
 console.info('App!');
 
-const webSocket = WS.connect('wss://upnext.fm:8080');
+const webSocket = WS.connect(_WS_URI);
 webSocket.on('socket/connect', (session) => {
   console.info('Successfully Connected!');
 
