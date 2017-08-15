@@ -26,6 +26,7 @@
         "doctrine/orm": "^2.5",
         "friendsofsymfony/user-bundle": "~2.0",
         "gesdinet/jwt-refresh-token-bundle": "^0.2.1",
+        "gos/web-socket-bundle": "^1.8",
         "incenteev/composer-parameter-handler": "^2.0",
         "lexik/jwt-authentication-bundle": "^2.4",
         "nelmio/cors-bundle": "^1.4",
