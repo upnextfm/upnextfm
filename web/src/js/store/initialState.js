@@ -72,6 +72,12 @@ export default {
       }
     ]
   },
+  video: {
+
+  },
+  playlist: {
+
+  },
   nav: {
     isDrawerOpen: false
   }

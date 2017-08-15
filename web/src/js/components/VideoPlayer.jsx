@@ -18,7 +18,7 @@ class VideoPlayer extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return Object.assign({}, state.room);
+  return Object.assign({}, state.video);
 }
 
 export default connect(mapStateToProps)(VideoPlayer);

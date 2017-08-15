@@ -12,7 +12,7 @@ class VideoButtons extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return Object.assign({}, state.room);
+  return Object.assign({}, state.playlist);
 }
 
 export default connect(mapStateToProps)(VideoButtons);
