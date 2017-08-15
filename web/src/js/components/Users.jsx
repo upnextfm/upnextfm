@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import List, { ListItem } from 'material-ui/List';
+import Hidden from 'material-ui/Hidden';
 import RoomUser from 'components/RoomUser';
 
 class Users extends React.Component {
@@ -11,13 +12,15 @@ class Users extends React.Component {
 
   render() {
     return (
-      <List className="up-room__chat__users up-paper-container">
-        {this.props.users.map(user => (
-          <ListItem key={user.username} button>
-            <RoomUser user={user} />
-          </ListItem>
-        ))}
-      </List>
+      <Hidden xsDown>
+        <List className="up-room__chat__users up-paper-container">
+          {this.props.users.map(user => (
+            <ListItem key={user.username} button>
+              <RoomUser user={user} />
+            </ListItem>
+          ))}
+        </List>
+      </Hidden>
     );
   }
 }
