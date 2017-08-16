@@ -2,10 +2,10 @@
 namespace AppBundle\Topic;
 
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
-use Ratchet\ConnectionInterface;
-use Ratchet\Wamp\Topic;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\Wamp\WampConnection;
+use Ratchet\ConnectionInterface;
+use Ratchet\Wamp\Topic;
 
 class RoomTopic implements TopicInterface
 {
@@ -31,7 +31,7 @@ class RoomTopic implements TopicInterface
   {
     //this will broadcast the message to ALL subscribers of this topic.
     $topic->broadcast([
-      'cmd' => 'joined',
+      'cmd' => Commands::JOIN,
       'msg' => $connection->resourceId . " has joined " . $topic->getId()
     ]);
   }
@@ -48,11 +48,10 @@ class RoomTopic implements TopicInterface
   {
     //this will broadcast the message to ALL subscribers of this topic.
     $topic->broadcast([
-      'cmd' => 'left',
+      'cmd' => Commands::LEAVE,
       'msg' => $connection->resourceId . " has left " . $topic->getId()
     ]);
   }
-
 
   /**
    * This will receive any Publish requests for this topic.
@@ -69,7 +68,7 @@ class RoomTopic implements TopicInterface
   {
     //echo $request->getAttributes()->get('room');
     $topic->broadcast([
-      'cmd' => 'sent',
+      'cmd' => Commands::SEND,
       'msg' => [
         "id"      => rand(100, 500),
         "date"    => $event["date"],

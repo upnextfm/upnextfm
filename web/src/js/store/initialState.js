@@ -36,25 +36,25 @@ export default {
     messages:   [
       {
         id:      1,
-        date:    (new Date()).toString(),
+        date:    new Date(),
         from:    'headzoo',
         message: 'Well, you just kind of copied and pasted from the other components, so ...'
       },
       {
         id:      2,
-        date:    (new Date()).toString(),
+        date:    new Date(),
         from:    'az4521',
         message: 'alright, i\'m at the cobble together stage'
       },
       {
         id:      3,
-        date:    (new Date()).toString(),
+        date:    new Date(),
         from:    'headzoo',
         message: 'It\'s all good'
       },
       {
         id:      4,
-        date:    (new Date()).toString(),
+        date:    new Date(),
         from:    'az4521',
         message: 'should i cram buttons into the containers or try and make seperate classes for them?'
       }

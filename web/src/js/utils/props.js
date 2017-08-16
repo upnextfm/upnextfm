@@ -9,7 +9,7 @@ export const UserPropType = PropTypes.shape({
 
 export const MessagePropType = PropTypes.shape({
   id:      PropTypes.number,
-  date:    PropTypes.string,
+  date:    PropTypes.instanceOf(Date),
   from:    PropTypes.string,
   message: PropTypes.string
 });

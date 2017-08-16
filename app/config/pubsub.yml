@@ -1,4 +1,4 @@
-acme_topic:
+room_topic:
     channel: app/room/{room}
     handler:
         callback: 'room.topic'
