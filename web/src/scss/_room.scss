@@ -3,7 +3,7 @@
 .up-room {
   display: flex;
   flex-flow: column;
-  height: calc(100% - 50px);
+  height: calc(100% - ( #{$nav-height} + ( #{$padding-std} * 2 )));
   margin: $padding-std;
 
   @media (min-width: 960px) {

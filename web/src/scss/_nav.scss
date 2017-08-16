@@ -2,8 +2,8 @@
 
 .up-nav {
     color: #FFF !important;
-    height: 42px !important;
-    min-height: 42px !important;
+    height: $nav-height !important;
+    min-height: $nav-height !important;
     padding: $padding-std !important;
     background-color: #263238 !important;
 }
