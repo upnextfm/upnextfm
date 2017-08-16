@@ -19,6 +19,14 @@ services:
         - ["@encoder_json"]
 
     ## ########################################################################
+    ## Session
+    ## ########################################################################
+    app.session.handler:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\WriteCheckSessionHandler
+        arguments:
+            - "@snc_redis.session.handler"
+
+    ## ########################################################################
     ## API Request Listener
     ## ########################################################################
     api.request_listener:
@@ -54,7 +62,22 @@ services:
     app.topic.room:
         class: AppBundle\Topic\RoomTopic
         arguments:
+          - "@gos_web_socket.websocket.client_manipulator"
           - "@lexik_jwt_authentication.security.guard.jwt_token_authenticator"
           - "@fos_user.user_provider.username"
+          - "@?monolog.logger.websocket"
         tags:
           - { name: gos_web_socket.topic }
+
+    ## ########################################################################
+    ## Websocket Authentication Provider
+    ## ########################################################################
+    gos_web_socket.websocket_authentification.provider:
+        class: AppBundle\Auth\WebsocketAuthenticationProvider
+        arguments:
+            - "@security.token_storage"
+            - "%gos_web_socket.firewall%"
+            - "@gos_web_socket.client_storage"
+            - "@lexik_jwt_authentication.security.guard.jwt_token_authenticator"
+            - "@fos_user.user_provider.username"
+            - "@?monolog.logger.websocket"

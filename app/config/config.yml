@@ -29,7 +29,7 @@ framework:
   trusted_hosts: ~
   session:
     # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
-    handler_id: snc_redis.session.handler
+    handler_id: app.session.handler
   fragments: ~
   http_method_override: true
   assets:
@@ -99,8 +99,8 @@ fos_user:
 lexik_jwt_authentication:
   private_key_path: '%jwt_private_key_path%'
   public_key_path:  '%jwt_public_key_path%'
-  pass_phrase:    '%jwt_key_pass_phrase%'
-  token_ttl:    '%jwt_token_ttl%'
+  pass_phrase:      '%jwt_key_pass_phrase%'
+  token_ttl:        '%jwt_token_ttl%'
 
 ## ########################################################################
 ## GesdinetJWTRefreshTokenBundle
@@ -137,6 +137,7 @@ snc_redis:
       dsn: "%snc_redis_clients_session_dsn%"
   session:
     client: session
+    locking: false
 
 ## ########################################################################
 ## Websockets
@@ -148,4 +149,5 @@ gos_web_socket:
     router:
       resources:
         - "%kernel.root_dir%/config/pubsub.yml"
-
+  client:
+    firewall: main

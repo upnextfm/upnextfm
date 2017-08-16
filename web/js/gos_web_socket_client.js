@@ -30,7 +30,7 @@ var WS = (function()
     GosSocket.prototype.connect = function () {
         var that = this;
 
-        ab.connect(this._uri,
+        ab.connect(this._uri + '?token=' + localStorage.getItem('token'),
 
             //Function on connect
             function(session){

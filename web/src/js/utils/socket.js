@@ -1,3 +1,5 @@
+import Auth from 'api/Auth';
+
 export const CHAN_ROOM = 'app/room';
 export const CMD_SEND  = 'send';
 export const CMD_SENT  = 'sent';
@@ -22,6 +24,7 @@ export default webSocket;
  * @returns {Promise}
  */
 export function publish(chan, payload) {
+  payload.token = Auth.getToken();
   session.publish(chan, payload);
   return new Promise((resolve) => {
     resolve();

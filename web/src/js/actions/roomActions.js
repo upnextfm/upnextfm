@@ -1,6 +1,5 @@
 import * as types from 'actions/actionTypes';
 import * as socket from 'utils/socket';
-import Auth from 'api/Auth';
 
 export function roomSend() {
   return (dispatch, getState, { publish }) => {
@@ -10,10 +9,9 @@ export function roomSend() {
         type: types.ROOM_SEND
       });
       publish(`${socket.CHAN_ROOM}/${room.name}`, {
-        token: Auth.getToken(),
-        cmd:   socket.CMD_SEND,
-        date:  (new Date()).toString(),
-        msg:   room.inputValue
+        cmd:  socket.CMD_SEND,
+        date: (new Date()).toString(),
+        msg:  room.inputValue
       });
     }
   };
