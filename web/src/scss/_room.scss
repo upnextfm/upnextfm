@@ -127,7 +127,8 @@
   height: 0;
   overflow: hidden;
   position: relative;
-  padding-bottom: calc( #{$padding-std} + 56.25%);
+  padding-bottom: 56.25%;
+  border-radius: 2px;
 }
 
 .up-room__video-player {
