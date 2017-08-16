@@ -30,7 +30,10 @@ class RoomTopic implements TopicInterface
   public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
   {
     //this will broadcast the message to ALL subscribers of this topic.
-    $topic->broadcast(['msg' => $connection->resourceId . " has joined " . $topic->getId()]);
+    $topic->broadcast([
+      'cmd' => 'joined',
+      'msg' => $connection->resourceId . " has joined " . $topic->getId()
+    ]);
   }
 
   /**
@@ -44,7 +47,10 @@ class RoomTopic implements TopicInterface
   public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
   {
     //this will broadcast the message to ALL subscribers of this topic.
-    $topic->broadcast(['msg' => $connection->resourceId . " has left " . $topic->getId()]);
+    $topic->broadcast([
+      'cmd' => 'left',
+      'msg' => $connection->resourceId . " has left " . $topic->getId()
+    ]);
   }
 
 
@@ -61,15 +67,15 @@ class RoomTopic implements TopicInterface
    */
   public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
   {
-    /*
-        $topic->getId() will contain the FULL requested uri, so you can proceed based on that
-
-        if ($topic->getId() === 'acme/channel/shout')
-            //shout something to all subs.
-    */
     //echo $request->getAttributes()->get('room');
     $topic->broadcast([
-      'msg' => $event,
+      'cmd' => 'sent',
+      'msg' => [
+        "id"      => rand(100, 500),
+        "date"    => date("Y-m-d H:i:s"),
+        "from"    => "headzoo",
+        "message" => $event["msg"]
+      ],
     ]);
   }
 }

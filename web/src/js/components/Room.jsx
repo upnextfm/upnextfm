@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
-import { roomSetName } from 'actions/roomActions';
+import { roomJoin } from 'actions/roomActions';
 import LoginDialog from 'components/Dialogs/LoginDialog';
 import RegisterDialog from 'components/Dialogs/RegisterDialog';
 import Nav from 'components/Nav';
@@ -22,7 +22,9 @@ class Room extends React.Component {
 
   constructor(props) {
     super(props);
-    props.dispatch(roomSetName(props.name));
+    setTimeout(() => {
+      props.dispatch(roomJoin(props.name));
+    }, 1000);
   }
 
   render() {

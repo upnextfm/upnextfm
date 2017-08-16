@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import IconButton from 'material-ui/IconButton';
 import Send from 'material-ui-icons/Send';
 import AttachFile from 'material-ui-icons/AttachFile';
-import { roomInputChange, roomInputSend } from 'actions/roomActions';
+import { roomInputChange, roomSend } from 'actions/roomActions';
 
 class MessageInput extends React.Component {
   static propTypes = {
@@ -22,7 +22,7 @@ class MessageInput extends React.Component {
   }
 
   send = () => {
-    this.props.dispatch(roomInputSend());
+    this.props.dispatch(roomSend());
     this.inputRef.focus();
   };
 

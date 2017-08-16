@@ -15,6 +15,9 @@ export const REGISTER_COMPLETE       = 'REGISTER_COMPLETE';
 
 export const NAV_TOGGLE_DRAWER   = 'NAV_TOGGLE_DRAWER';
 
-export const ROOM_SET_NAME     = 'ROOM_SET_NAME';
+export const ROOM_JOIN         = 'ROOM_JOIN';
+export const ROOM_LEAVE        = 'ROOM_LEAVE';
+export const ROOM_SEND         = 'ROOM_SEND';
+export const ROOM_PAYLOAD      = 'ROOM_PAYLOAD';
 export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
-export const ROOM_INPUT_SEND   = 'ROOM_INPUT_SEND';
+
