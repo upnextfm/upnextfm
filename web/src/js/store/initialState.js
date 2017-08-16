@@ -56,7 +56,7 @@ export default {
         id:      4,
         date:    new Date(),
         from:    'az4521',
-        message: 'should i cram buttons into the containers or try and make seperate classes for them?'
+        message: 'i updated the layout of the room a bit, now the video always stretches to be 16:9, and the playlist box takes up the remaining space. also the buttons added to the button container now wrap around and make a second row.'
       }
     ]
   },

@@ -22,6 +22,8 @@
   flex-grow: 2 !important;
   padding: 0 !important;
   overflow: hidden !important;
+  min-width: 15%;
+
   li {
     padding: ($padding-std / 2) $padding-std !important;
   }
@@ -47,19 +49,18 @@
 .up-room-message {
   padding: ($padding-std / 2) $padding-std !important;
   align-items: flex-start !important;
-  flex-wrap: wrap;
 
   &:hover {
     background-color: #444;
   }
 
   .up-room-user {
-    min-width: 105px;
+    min-width: 115px;
   }
 
   .up-avatar {
-    width: 1.25rem !important;
-    height: 1.25rem !important;
+    width: 30px !important;
+    height: 30px !important;
   }
 }
 
@@ -67,23 +68,14 @@
   display: block;
   text-align: left;
   line-height: 1.2rem;
-
-  @media (max-width: 385px) {
-    flex-basis: 100%;
-    padding: $padding-std 0;
-  }
+  padding: $padding-std 0;
 }
 
 .up-room-message__date {
-  display: block;
   color: #808080;
-  margin-right: $padding-std * 2;
   font-size: 0.8rem;
   line-height: 1.2rem;
-
-  @media (max-width: 385px) {
-    margin-left: auto;
-  }
+  margin-right: $padding-std * 2;
 }
 
 .up-room__chat__input {
@@ -162,6 +154,6 @@
   align-items: center;
 
   .up-avatar {
-    margin-right: $padding-std;
+    margin-right: $padding-std * 2;
   }
 }

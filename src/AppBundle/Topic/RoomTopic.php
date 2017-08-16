@@ -1,14 +1,38 @@
 <?php
 namespace AppBundle\Topic;
 
+use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
+use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\Wamp\WampConnection;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class RoomTopic implements TopicInterface
 {
+  /**
+   * @var JWTTokenAuthenticator
+   */
+  protected $jwt;
+
+  /**
+   * @var UserProviderInterface
+   */
+  protected $userProvider;
+
+  /**
+   * @param JWTTokenAuthenticator $jwt
+   * @param UserProviderInterface $userProvider
+   */
+  public function __construct(JWTTokenAuthenticator $jwt, UserProviderInterface $userProvider)
+  {
+    $this->jwt          = $jwt;
+    $this->userProvider = $userProvider;
+  }
+
   /**
    * Like RPC is will use to prefix the channel
    *
@@ -66,6 +90,13 @@ class RoomTopic implements TopicInterface
    */
   public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
   {
+    /*
+    $httpRequest = new Request();
+    $httpRequest->headers->set('Authorization', 'Bearer ' . $event["token"]);
+    $creds = $this->jwt->getCredentials($httpRequest);
+    $user = $this->jwt->getUser($creds, $this->userProvider);
+    print_r($user);
+*/
     //echo $request->getAttributes()->get('room');
     $topic->broadcast([
       'cmd' => Commands::SEND,

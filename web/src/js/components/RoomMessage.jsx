@@ -6,12 +6,13 @@ import RoomUser from 'components/RoomUser';
 
 const RoomMessage = ({ message, user, ...props }) => (
   <ListItem className="up-room-message" {...props}>
-    <RoomUser user={user} />
-    <Moment date={message.date} format="HH:mm" className="up-room-message__date" />
+    <div>
+      <RoomUser user={user} />
+      <Moment date={message.date} format="HH:mm" className="up-room-message__date" />
+    </div>
     <div className="up-room-message__message">
       {message.message}
     </div>
-
   </ListItem>
 );
 

@@ -5,6 +5,7 @@ export const CMD_SENT  = 'sent';
 let session = null;
 const webSocket = WS.connect(_WS_URI); // eslint-disable-line no-undef
 webSocket.on('socket/connect', (s) => {
+  console.info('Connected');
   session = s;
 });
 
