@@ -9,8 +9,9 @@ export function roomSend() {
         type: types.ROOM_SEND
       });
       publish(`${socket.CHAN_ROOM}/${room.name}`, {
-        cmd: socket.CMD_SEND,
-        msg: room.inputValue
+        cmd:  socket.CMD_SEND,
+        date: (new Date()).toString(),
+        msg:  room.inputValue
       });
     }
   };

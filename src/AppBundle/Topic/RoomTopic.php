@@ -72,7 +72,7 @@ class RoomTopic implements TopicInterface
       'cmd' => 'sent',
       'msg' => [
         "id"      => rand(100, 500),
-        "date"    => date("Y-m-d H:i:s"),
+        "date"    => $event["date"],
         "from"    => "headzoo",
         "message" => $event["msg"]
       ],
