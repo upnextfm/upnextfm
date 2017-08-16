@@ -117,10 +117,24 @@
   height: 100%;
   padding-right: $padding-std;
   padding-left: $padding-std;
+  display: flex;
+  flex-direction: column;
+}
+
+.up-room__video > span {
+  margin: $padding-std 0;
+  height: 0;
+  overflow: hidden;
+  position: relative;
+  padding-bottom: calc( #{$padding-std} + 56.25%);
 }
 
 .up-room__video-player {
-  margin-top: $padding-std;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .up-room__video-buttons {
@@ -128,13 +142,16 @@
   margin-left: 0 !important;
   margin-right: 0 !important;
   text-align: left;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .up-room__playlist {
-	//border: 1px solid brown;
+  //border: 1px solid brown;
   padding: $padding-std;
   margin-left: 0 !important;
   margin-right: 0 !important;
+  flex-grow: 1
 }
 
 .up-room-user {
