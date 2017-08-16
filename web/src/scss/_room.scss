@@ -88,7 +88,7 @@
 .up-room__chat__input {
   //border: 1px solid blue;
   display: flex;
-  padding: $padding-std;
+  padding: $padding-std * 2;
   justify-content: space-between;
   border-top: 1px solid $color-bg;
 
@@ -99,7 +99,7 @@
     border: 0;
     color: $color-fg;
     font-size: 1rem;
-    padding: 0 $padding-std;
+    padding: 0 $padding-std * 2;
     background-color: $color-bg;
     border-radius: $border-radius-sm;
   }
