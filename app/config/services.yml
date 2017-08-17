@@ -57,15 +57,33 @@ services:
           - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     ## ########################################################################
-    ## Websocket Room Topic
+    ## Websocket Parent Topic
     ## ########################################################################
-    app.topic.room:
-        class: AppBundle\Topic\RoomTopic
+    app.topic.parent:
         arguments:
           - "@gos_web_socket.websocket.client_manipulator"
           - "@lexik_jwt_authentication.security.guard.jwt_token_authenticator"
           - "@fos_user.user_provider.username"
+          - "@gos_web_socket.websocket_authentification.provider"
           - "@?monolog.logger.websocket"
+        abstract: true
+        private: true
+
+    ## ########################################################################
+    ## Websocket Auth Topic
+    ## ########################################################################
+    app.topic.auth:
+        class: AppBundle\Topic\AuthTopic
+        parent: app.topic.parent
+        tags:
+          - { name: gos_web_socket.topic }
+
+    ## ########################################################################
+    ## Websocket Room Topic
+    ## ########################################################################
+    app.topic.room:
+        class: AppBundle\Topic\RoomTopic
+        parent: app.topic.parent
         tags:
           - { name: gos_web_socket.topic }
 

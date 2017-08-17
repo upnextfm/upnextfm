@@ -1,7 +1,12 @@
 room_topic:
-    channel: app/room/{room}
-    handler:
-        callback: 'room.topic'
-    requirements:
-          room:
-              pattern: "[\\w]+"
+  channel: app/room/{room}
+  handler:
+    callback: "room.topic"
+  requirements:
+    room:
+      pattern: "[\\w]+"
+
+auth_topic:
+  channel: app/auth
+  handler:
+    callback: "auth.topic"

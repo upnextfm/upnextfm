@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Topic;
 
+use Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProviderInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
@@ -31,6 +32,11 @@ abstract class AbstractTopic implements TopicInterface
   protected $userProvider;
 
   /**
+   * @var WebsocketAuthenticationProviderInterface
+   */
+  protected $authenticationProvider;
+
+  /**
    * @var LoggerInterface
    */
   protected $logger;
@@ -39,18 +45,21 @@ abstract class AbstractTopic implements TopicInterface
    * @param ClientManipulatorInterface $clientManipulator
    * @param JWTTokenAuthenticator $tokenAuthenticator
    * @param UserProviderInterface $userProvider
+   * @param WebsocketAuthenticationProviderInterface $authenticationProvider
    * @param LoggerInterface $logger
    */
   public function __construct(
     ClientManipulatorInterface $clientManipulator,
     JWTTokenAuthenticator $tokenAuthenticator,
     UserProviderInterface $userProvider,
+    WebsocketAuthenticationProviderInterface $authenticationProvider,
     LoggerInterface $logger)
   {
-    $this->clientManipulator  = $clientManipulator;
-    $this->tokenAuthenticator = $tokenAuthenticator;
-    $this->userProvider       = $userProvider;
-    $this->logger             = $logger;
+    $this->clientManipulator      = $clientManipulator;
+    $this->tokenAuthenticator     = $tokenAuthenticator;
+    $this->userProvider           = $userProvider;
+    $this->authenticationProvider = $authenticationProvider;
+    $this->logger                 = $logger;
   }
 
   /**
@@ -83,6 +92,19 @@ abstract class AbstractTopic implements TopicInterface
       'cmd' => Commands::LEAVE,
       'msg' => $connection->resourceId . " has left " . $topic->getId()
     ]);*/
+  }
+
+  /**
+   * Authenticates the user
+   *
+   * @param ConnectionInterface $connection
+   * @param string $token
+   * @return \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
+   */
+  protected function authenticate(ConnectionInterface $connection, $token)
+  {
+    $connection->WebSocket->request->getQuery()->set("token", $token);
+    return $this->authenticationProvider->authenticate($connection);
   }
 
   /**

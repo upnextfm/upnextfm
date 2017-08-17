@@ -1,12 +1,11 @@
 <?php
 namespace AppBundle\Topic;
 
-use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 
-class RoomTopic extends AbstractTopic
+class AuthTopic extends AbstractTopic
 {
   /**
    * Like RPC is will use to prefix the channel
@@ -15,7 +14,7 @@ class RoomTopic extends AbstractTopic
    */
   public function getName()
   {
-    return "room.topic";
+    return "auth.topic";
   }
 
   /**
@@ -31,19 +30,8 @@ class RoomTopic extends AbstractTopic
    */
   public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
   {
-    $user = $this->getUser($connection, $event);
-    if (!($user instanceof UserInterface)) {
-      return;
+    if ($event["cmd"] === Commands::AUTH) {
+      $this->authenticate($connection, $event["token"]);
     }
-
-    $topic->broadcast([
-      'cmd' => Commands::SEND,
-      'msg' => [
-        "id"      => rand(100, 500),
-        "date"    => $event["date"],
-        "from"    => $user->getUsername(),
-        "message" => $event["msg"]
-      ],
-    ]);
   }
 }

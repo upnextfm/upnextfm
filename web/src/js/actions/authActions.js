@@ -1,4 +1,5 @@
 import * as types from 'actions/actionTypes';
+import * as socket from 'utils/socket';
 import Auth from 'api/Auth';
 
 /**
@@ -39,10 +40,13 @@ export function authLoginError(error) {
  * @returns {Function}
  */
 export function authLogin(creds) {
-  return (dispatch) => {
+  return (dispatch, getState, { publish }) => {
     dispatch(authLoginBegin());
     return Auth.login(creds)
       .then((resp) => {
+        publish(socket.CHAN_AUTH, {
+          cmd: socket.CMD_AUTH
+        });
         dispatch(authLoginComplete(resp, creds.username));
       })
       .catch((error) => {

@@ -1,6 +1,8 @@
 import Auth from 'api/Auth';
 
 export const CHAN_ROOM = 'app/room';
+export const CHAN_AUTH = 'app/auth';
+export const CMD_AUTH  = 'auth';
 export const CMD_SEND  = 'send';
 export const CMD_SENT  = 'sent';
 
