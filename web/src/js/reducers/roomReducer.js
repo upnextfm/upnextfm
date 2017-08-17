@@ -1,5 +1,4 @@
 import * as types from 'actions/actionTypes';
-import * as socket from 'utils/socket';
 import initialState from 'store/initialState';
 
 export default function roomReducer(state = initialState.room, action = {}) {
@@ -30,7 +29,7 @@ export default function roomReducer(state = initialState.room, action = {}) {
       });
     case types.ROOM_PAYLOAD:
       switch (action.payload.cmd) {
-        case socket.CMD_SEND:
+        case types.CMD_SEND:
           const messages = state.messages;
           const message  = action.payload.msg;
           message.date   = new Date(message.date);

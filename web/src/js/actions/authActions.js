@@ -1,7 +1,5 @@
 import * as types from 'actions/actionTypes';
-import * as socket from 'utils/socket';
 import { roomJoin } from 'actions/roomActions';
-import Auth from 'api/Auth';
 
 /**
  * @returns {{type: string}}
@@ -41,12 +39,12 @@ export function authLoginError(error) {
  * @returns {Function}
  */
 export function authLogin(creds) {
-  return (dispatch, getState, { publish }) => {
+  return (dispatch, getState, api) => {
     dispatch(authLoginBegin());
-    return Auth.login(creds)
+    return api.auth.login(creds)
       .then((resp) => {
-        publish(socket.CHAN_AUTH, {
-          cmd: socket.CMD_AUTH
+        api.socket.publish(types.CHAN_AUTH, {
+          cmd: types.CMD_AUTH
         });
         const room = getState().room;
         if (room.name !== '') {
@@ -82,9 +80,9 @@ export function authLogoutComplete() {
  * @returns {Function}
  */
 export function authLogout() {
-  return (dispatch) => {
+  return (dispatch, getState, api) => {
     dispatch(authLogoutBegin());
-    Auth.logout();
+    api.auth.logout();
     dispatch(authLogoutComplete());
   };
 }

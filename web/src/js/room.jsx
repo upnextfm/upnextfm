@@ -23,7 +23,7 @@ const name  = mount.getAttribute('data-room');
 ReactDOM.render(
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
-      <Room name={name} />
+      <Room name={name} socketURI={_WS_URI} />
     </MuiThemeProvider>
   </Provider>
   ,

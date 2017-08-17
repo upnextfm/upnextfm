@@ -1,9 +1,8 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { publish, subscribe, unsubscribe } from 'utils/socket';
+import * as api from 'api';
 import rootReducer from '../reducers/rootReducer';
 
 export default function configureStore() {
-  const thunkMiddleware = thunk.withExtraArgument({ publish, subscribe, unsubscribe });
-  return createStore(rootReducer, applyMiddleware(thunkMiddleware));
+  return createStore(rootReducer, applyMiddleware(thunk.withExtraArgument(api)));
 }
