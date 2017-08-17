@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ name }}{% endblock %}
 {% block body %}
-    <div id="mount" data-room="{{ name }}"></div>
+    <div id="mount" data-room="{{ name }}">
+        <div style="display:flex;align-items:center;justify-content:center;">
+            <img src="{{ asset('images/loader.gif') }}" />
+        </div>
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
