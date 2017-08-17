@@ -1,16 +1,15 @@
 import * as types from 'actions/actionTypes';
-import * as socket from 'utils/socket';
 import { usersRepoAdd, usersRepoRemove } from 'actions/usersActions';
 
 export function roomSend() {
-  return (dispatch, getState, { publish }) => {
+  return (dispatch, getState, api) => {
     const room = getState().room;
     if (room.name !== '') {
       dispatch({
         type: types.ROOM_SEND
       });
-      publish(`${socket.CHAN_ROOM}/${room.name}`, {
-        cmd:  socket.CMD_SEND,
+      api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
+        cmd:  types.CMD_SEND,
         date: (new Date()).toString(),
         msg:  room.inputValue
       });
@@ -34,34 +33,34 @@ export function roomPayload(payload, uri) {
 }
 
 export function roomLeave() {
-  return (dispatch, getState, { unsubscribe }) => {
+  return (dispatch, getState, api) => {
     const room = getState().room;
     if (room.name !== '') {
       dispatch({
         type: types.ROOM_LEAVE
       });
-      unsubscribe(`${socket.CHAN_ROOM}/${room.name}`);
+      api.socket.unsubscribe(`${types.CHAN_ROOM}/${room.name}`);
     }
   };
 }
 
 export function roomJoin(name) {
-  return (dispatch, getState, { subscribe }) => {
+  return (dispatch, getState, api) => {
     dispatch(roomLeave());
     dispatch({
       type: types.ROOM_JOIN,
       name
     });
-    subscribe(`${socket.CHAN_ROOM}/${name}`, (uri, payload) => {
-      console.info(payload);
+
+    api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
       switch (payload.cmd) {
-        case socket.CMD_JOIN:
+        case types.CMD_JOIN:
           dispatch(usersRepoAdd(payload.user));
           break;
-        case socket.CMD_LEAVE:
+        case types.CMD_LEAVE:
           dispatch(usersRepoRemove(payload.username));
           break;
-        case socket.CMD_USERS:
+        case types.CMD_USERS:
           dispatch(roomUsers(payload.users));
           break;
         default:

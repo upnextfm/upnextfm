@@ -19,6 +19,7 @@
       }
     ],
     "no-unreachable": 0,
+    "arrow-body-style": 0,
     "no-underscore-dangle": 0,
     "react/no-find-dom-node": 0,
     "react/no-multi-comp": 0,

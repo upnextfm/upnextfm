@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
+import * as api from 'api';
 import { roomJoin } from 'actions/roomActions';
 import LoginDialog from 'components/Dialogs/LoginDialog';
 import RegisterDialog from 'components/Dialogs/RegisterDialog';
@@ -11,20 +12,21 @@ import VideoContainer from 'components/VideoContainer';
 
 class Room extends React.Component {
   static propTypes = {
-    name:     PropTypes.string.isRequired,
-    auth:     PropTypes.object.isRequired,
-    dispatch: PropTypes.func
+    name:      PropTypes.string.isRequired,
+    socketURI: PropTypes.string.isRequired,
+    auth:      PropTypes.object.isRequired,
+    dispatch:  PropTypes.func
   };
 
   static defaultProps = {
     dispatch: () => {}
   };
 
-  constructor(props) {
-    super(props);
-    setTimeout(() => {
-      props.dispatch(roomJoin(props.name));
-    }, 1000);
+  componentDidMount() {
+    api.socket.connect(this.props.socketURI)
+      .then(() => {
+        this.props.dispatch(roomJoin(this.props.name));
+      });
   }
 
   render() {
