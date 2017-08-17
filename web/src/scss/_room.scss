@@ -6,8 +6,8 @@
   height: calc(100% - ( #{$nav-height} + ( #{$padding-std} * 2 )));
   margin: $padding-std;
 
-  @media (min-width: 960px) {
-    flex-flow: row!important;
+  @media (min-width: $break-lg) {
+    flex-flow: row !important;
   }
 }
 

@@ -1,5 +1,4 @@
 import * as types from 'actions/actionTypes';
-import * as socket from 'utils/socket';
 
 export function usersAdd(user) {
   return {
