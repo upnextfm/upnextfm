@@ -112,7 +112,7 @@ abstract class AbstractTopic implements TopicInterface
    * @param array $event
    * @return UserInterface
    */
-  protected function getUser(ConnectionInterface $connection, array $event)
+  protected function getUser(ConnectionInterface $connection, array $event = [])
   {
     if (empty($event["token"])) {
       return $this->clientManipulator->getClient($connection);

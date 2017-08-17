@@ -1,5 +1,7 @@
 import * as types from 'actions/actionTypes';
+import * as socket from 'utils/socket';
 import { authLoginComplete } from 'actions/authActions';
+import { roomJoin } from 'actions/roomActions';
 import Auth from 'api/Auth';
 
 /**
@@ -54,10 +56,17 @@ export function registerComplete(resp) {
  * @returns {Function}
  */
 export function register(details) {
-  return (dispatch) => {
+  return (dispatch, getState, { publish }) => {
     dispatch(registerBegin());
     return Auth.register(details)
       .then((resp) => {
+        publish(socket.CHAN_AUTH, {
+          cmd: socket.CMD_AUTH
+        });
+        const room = getState().room;
+        if (room.name !== '') {
+          dispatch(roomJoin(room.name));
+        }
         dispatch(registerComplete(resp));
         dispatch(authLoginComplete(resp, details.username));
       })

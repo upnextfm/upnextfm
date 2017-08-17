@@ -4,7 +4,8 @@ export const CHAN_ROOM = 'app/room';
 export const CHAN_AUTH = 'app/auth';
 export const CMD_AUTH  = 'auth';
 export const CMD_SEND  = 'send';
-export const CMD_SENT  = 'sent';
+export const CMD_JOIN  = 'join';
+export const CMD_LEAVE = 'leave';
 
 let session = null;
 const webSocket = WS.connect(_WS_URI); // eslint-disable-line no-undef

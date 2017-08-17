@@ -21,3 +21,5 @@ export const ROOM_SEND         = 'ROOM_SEND';
 export const ROOM_PAYLOAD      = 'ROOM_PAYLOAD';
 export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
 
+export const USERS_ADD    = 'USERS_ADD';
+export const USERS_REMOVE = 'USERS_REMOVE';

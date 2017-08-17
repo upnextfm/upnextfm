@@ -1,5 +1,6 @@
 import * as types from 'actions/actionTypes';
 import * as socket from 'utils/socket';
+import { roomJoin } from 'actions/roomActions';
 import Auth from 'api/Auth';
 
 /**
@@ -47,6 +48,10 @@ export function authLogin(creds) {
         publish(socket.CHAN_AUTH, {
           cmd: socket.CMD_AUTH
         });
+        const room = getState().room;
+        if (room.name !== '') {
+          dispatch(roomJoin(room.name));
+        }
         dispatch(authLoginComplete(resp, creds.username));
       })
       .catch((error) => {

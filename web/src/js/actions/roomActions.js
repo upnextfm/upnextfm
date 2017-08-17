@@ -1,5 +1,6 @@
 import * as types from 'actions/actionTypes';
 import * as socket from 'utils/socket';
+import { usersAdd, usersRemove } from 'actions/usersActions';
 
 export function roomSend() {
   return (dispatch, getState, { publish }) => {
@@ -45,7 +46,17 @@ export function roomJoin(name) {
       name
     });
     subscribe(`${socket.CHAN_ROOM}/${name}`, (uri, payload) => {
-      dispatch(roomPayload(payload, uri));
+      switch (payload.cmd) {
+        case socket.CMD_JOIN:
+          dispatch(usersAdd(payload.user));
+          break;
+        case socket.CMD_LEAVE:
+          dispatch(usersRemove(payload.username));
+          break;
+        default:
+          dispatch(roomPayload(payload, uri));
+          break;
+      }
     });
   };
 }
