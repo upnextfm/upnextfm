@@ -12,7 +12,7 @@ class VideoPlayer extends React.Component {
     };
 
     return (
-      <YouTube videoId="NegV-ts35cY" opts={opts} className="up-room__video-player" />
+      <YouTube videoId="MD8flUkymrM" opts={opts} className="up-room__video-player" />
     );
   }
 }
