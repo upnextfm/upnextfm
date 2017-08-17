@@ -29,7 +29,7 @@
   min-width: 15%;
 
   @media (max-width: $break-sm - 1) {
-    margin: 0!important;
+    margin: $padding-std 0!important;
     min-width: 0!important;
     width: 0!important;
   }
