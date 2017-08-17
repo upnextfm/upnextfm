@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Topic;
 
+use AppBundle\Entity\ChatLog;
+use AppBundle\Entity\Room;
 use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
@@ -33,6 +35,9 @@ class RoomTopic extends AbstractTopic
     if (!($user instanceof UserInterface)) {
       return;
     }
+
+    // Create the room if it doesn't already exist.
+    $this->getRoom($request->getAttributes()->get("room"), $user);
 
     $username = $user->getUsername();
     $topic->broadcast([
@@ -89,29 +94,90 @@ class RoomTopic extends AbstractTopic
   /**
    * This will receive any Publish requests for this topic.
    *
-   * @param ConnectionInterface $connection
+   * @param ConnectionInterface $conn
    * @param Topic $topic
-   * @param WampRequest $request
+   * @param WampRequest $req
    * @param $event
    * @param array $exclude
    * @param array $eligible
    * @return mixed|void
    */
-  public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
+  public function onPublish(
+    ConnectionInterface $conn,
+    Topic $topic,
+    WampRequest $req,
+    $event,
+    array $exclude,
+    array $eligible)
   {
-    $user = $this->getUser($connection);
+    $user = $this->getUser($conn);
     if (!($user instanceof UserInterface)) {
       return;
     }
+    $room = $this->getRoom($req->getAttributes()->get("room"), $user);
+    if (!$room || $room->isDeleted()) {
+      return;
+    }
+
+    switch($event["cmd"]) {
+      case Commands::SEND:
+        $this->handleSend($conn, $topic, $req, $room, $user, $event);
+        break;
+    }
+  }
+
+  /**
+   * @param ConnectionInterface $conn
+   * @param Topic $topic
+   * @param WampRequest $req
+   * @param Room $room
+   * @param UserInterface $user
+   * @param array $event
+   */
+  protected function handleSend(
+    ConnectionInterface $conn,
+    Topic $topic,
+    WampRequest $req,
+    Room $room,
+    UserInterface $user,
+    array $event)
+  {
+
+    $msg = trim($event["msg"]);
+    if (empty($msg)) {
+      return;
+    }
+
+    $chatLog = new ChatLog($room, $user, $msg);
+    $this->em->merge($chatLog);
+    $this->em->flush();
 
     $topic->broadcast([
       'cmd' => Commands::SEND,
       'msg' => [
-        "id"      => rand(100, 500),
+        "id"      => $chatLog->getId(),
         "date"    => $event["date"],
         "from"    => $user->getUsername(),
-        "message" => $event["msg"]
+        "message" => $msg
       ],
     ]);
+  }
+
+  /**
+   * @param string $roomName
+   * @param UserInterface $user
+   * @return Room
+   */
+  protected function getRoom($roomName, UserInterface $user = null)
+  {
+    $repo = $this->em->getRepository("AppBundle:Room");
+    $room = $repo->findByName($roomName);
+    if (!$room && $user !== null) {
+      $room = new Room($roomName, $user);
+      $this->em->merge($room);
+      $this->em->flush();
+    }
+
+    return $room;
   }
 }

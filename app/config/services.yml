@@ -65,6 +65,7 @@ services:
           - "@lexik_jwt_authentication.security.guard.jwt_token_authenticator"
           - "@fos_user.user_provider.username"
           - "@gos_web_socket.websocket_authentification.provider"
+          - "@doctrine.orm.default_entity_manager"
           - "@?monolog.logger.websocket"
         abstract: true
         private: true

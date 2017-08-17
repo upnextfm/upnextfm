@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Topic;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProviderInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
@@ -37,6 +38,11 @@ abstract class AbstractTopic implements TopicInterface
   protected $authenticationProvider;
 
   /**
+   * @var EntityManagerInterface
+   */
+  protected $em;
+
+  /**
    * @var LoggerInterface
    */
   protected $logger;
@@ -46,6 +52,7 @@ abstract class AbstractTopic implements TopicInterface
    * @param JWTTokenAuthenticator $tokenAuthenticator
    * @param UserProviderInterface $userProvider
    * @param WebsocketAuthenticationProviderInterface $authenticationProvider
+   * @param EntityManagerInterface $em
    * @param LoggerInterface $logger
    */
   public function __construct(
@@ -53,6 +60,7 @@ abstract class AbstractTopic implements TopicInterface
     JWTTokenAuthenticator $tokenAuthenticator,
     UserProviderInterface $userProvider,
     WebsocketAuthenticationProviderInterface $authenticationProvider,
+    EntityManagerInterface $em,
     LoggerInterface $logger)
   {
     $this->clientManipulator      = $clientManipulator;
@@ -60,6 +68,7 @@ abstract class AbstractTopic implements TopicInterface
     $this->userProvider           = $userProvider;
     $this->authenticationProvider = $authenticationProvider;
     $this->logger                 = $logger;
+    $this->em                     = $em;
   }
 
   /**
