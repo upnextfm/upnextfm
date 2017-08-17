@@ -9,7 +9,7 @@ import RoomUser from 'components/RoomUser';
 class Users extends React.Component {
   static propTypes = {
     room:  PropTypes.object,
-    users: PropTypes.array
+    users: PropTypes.object
   };
 
   render() {
@@ -20,7 +20,7 @@ class Users extends React.Component {
         <List className="up-room__chat__users up-paper-container">
           {room.users.map(username => (
             <ListItem key={username} button>
-              <RoomUser user={usersFindByUsername(users, username)} />
+              <RoomUser user={usersFindByUsername(users.repo, username)} />
             </ListItem>
           ))}
         </List>

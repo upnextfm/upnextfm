@@ -22,5 +22,5 @@ export const ROOM_PAYLOAD      = 'ROOM_PAYLOAD';
 export const ROOM_USERS        = 'ROOM_USERS';
 export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
 
-export const USERS_ADD    = 'USERS_ADD';
-export const USERS_REMOVE = 'USERS_REMOVE';
+export const USERS_REPO_ADD    = 'USERS_REPO_ADD';
+export const USERS_REPO_REMOVE = 'USERS_REPO_REMOVE';

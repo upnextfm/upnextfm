@@ -8,7 +8,7 @@ import RoomMessage from 'components/RoomMessage';
 class Messages extends React.Component {
   static propTypes = {
     room:  PropTypes.object,
-    users: PropTypes.array
+    users: PropTypes.object
   };
 
   render() {
@@ -20,7 +20,7 @@ class Messages extends React.Component {
           <RoomMessage
             key={message.id}
             message={message}
-            user={usersFindByUsername(users, message.from)}
+            user={usersFindByUsername(users.repo, message.from)}
           />
         ))}
       </List>

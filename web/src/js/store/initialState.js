@@ -15,20 +15,22 @@ export default {
     isSubmitting:         false,
     error:                null
   },
-  users: [
-    {
-      username: 'headzoo',
-      avatar:   'https://api.adorable.io/avatars/50/sean%40upnext.fm',
-      profile:  'https://upnext.fm/u/headzoo',
-      roles:    ['user']
-    },
-    {
-      username: 'az4521',
-      avatar:   'https://api.adorable.io/avatars/50/az4521%40upnext.fm',
-      profile:  'https://upnext.fm/u/az4521',
-      roles:    ['user']
-    }
-  ],
+  users: {
+    repo: [
+      {
+        username: 'headzoo',
+        avatar:   'https://api.adorable.io/avatars/50/sean%40upnext.fm',
+        profile:  'https://upnext.fm/u/headzoo',
+        roles:    ['user']
+      },
+      {
+        username: 'az4521',
+        avatar:   'https://api.adorable.io/avatars/50/az4521%40upnext.fm',
+        profile:  'https://upnext.fm/u/az4521',
+        roles:    ['user']
+      }
+    ]
+  },
   room: {
     name:       '',
     inputValue: '',

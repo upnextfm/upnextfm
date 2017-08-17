@@ -13,15 +13,19 @@ function indexOfUsername(users, username) {
 
 export default function usersReducer(state = initialState.users, action = {}) {
   switch (action.type) {
-    case types.USERS_ADD:
-      if (indexOfUsername(state, action.user.username) === -1) {
-        state.push(action.user);
+    case types.USERS_REPO_ADD:
+      if (indexOfUsername(state.repo, action.user.username) === -1) {
+        const newState = Object.assign({}, state);
+        newState.repo.push(action.user);
+        return newState;
       }
       return state;
-    case types.USERS_REMOVE:
-      const index = indexOfUsername(state, action.username);
+    case types.USERS_REPO_REMOVE:
+      const index = indexOfUsername(state.repo, action.username);
       if (index !== -1) {
-        state.splice(index, 1);
+        const newState = Object.assign({}, state);
+        newState.repo.splice(index, 1);
+        return newState;
       }
       return state;
     default:
