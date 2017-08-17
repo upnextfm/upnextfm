@@ -1,0 +1,38 @@
+@import "vars";
+
+.up-grid {
+  display: flex;
+
+  @media (max-width: $break-sm) {
+    display: block;
+  }
+
+  .up-col {
+    flex: 1;
+
+    @media (max-width: $break-sm) {
+      width: 100%;
+    }
+  }
+}
+
+.up-grid--gutter {
+  margin-bottom: $padding-std;
+
+  .up-col {
+    margin: 0 $padding-std;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    @media (max-width: $break-sm) {
+      margin: 0 0;
+    }
+  }
+}
+

@@ -3,7 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <meta content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1" name="viewport">
-        <title>{% block title %}UpNext{% endblock %}</title>
+        <title>
+            {% block title %}{% endblock %}{% if block('title') %} - {% endif %}UpNext
+        </title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
             <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">

@@ -14,3 +14,10 @@ body {
 a {
     color: #FFF;
 }
+
+.up-container {
+  width: 100%;
+  max-width: $break-xl;
+  margin: 0 auto;
+  padding: 0 $padding-std;
+}
