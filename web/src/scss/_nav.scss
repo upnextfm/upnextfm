@@ -19,6 +19,9 @@
 
 .up-btn-login {
   margin-left: auto;
+  @media (max-width: $break-sm - 1) {
+    display:none;
+  }
 }
 
 .up-drawer {
