@@ -1,9 +1,3 @@
-$green: #008744;
-$blue: #0057e7;
-$red: #d62d20;
-$yellow: #ffa700;
-$white: #eee;
-
 $width: 100px;
 
 .loader {
@@ -19,13 +13,12 @@ $width: 100px;
  width: $width;
 }
 
-
 .path {
+  stroke: #ffab40;
   stroke-dasharray: 1,200;
   stroke-dashoffset: 0;
   animation:
    dash 1.5s ease-in-out infinite,
-   color 6s ease-in-out infinite
   ;
   stroke-linecap: round;
 }
@@ -48,18 +41,4 @@ $width: 100px;
   stroke-dasharray: 89,200;
   stroke-dashoffset: -124;
  }
-}
-@keyframes color{
-  100%, 0%{
-    stroke: $red;
-  }
-  40%{
-    stroke: $blue;
-  }
-  66%{
-    stroke: $green;
-  }
-  80%, 90%{
-    stroke: $yellow;
-  }
 }

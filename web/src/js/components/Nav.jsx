@@ -57,8 +57,7 @@ class Nav extends React.Component {
           <a href="/" className="up-brand">
             <img src="/images/logo-brand.png" alt="Logo" />
           </a>
-          <Hidden xsDown>
-            {auth.isAuthenticated
+          {auth.isAuthenticated
             ? (
               <Button className="up-btn-login" onClick={this.handleClickLogin}>
                 Logout
@@ -72,8 +71,8 @@ class Nav extends React.Component {
                   Login
                 </Button>
               </span>
-            )}
-          </Hidden>
+            )
+          }
         </Toolbar>
         <NavDrawer auth={auth} onClickLogin={this.handleClickLogin} onClickRegister={this.handleClickRegister} />
       </AppBar>
