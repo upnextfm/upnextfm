@@ -123,6 +123,7 @@ class Auth {
     const config = {
       method:  'POST',
       headers: {
+        'Accept':       'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: `username=${encodeURIComponent(creds.username)}&password=${encodeURIComponent(creds.password)}`
@@ -175,6 +176,7 @@ class Auth {
     const config = {
       method:  'POST',
       headers: {
+        'Accept':       'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(details)
