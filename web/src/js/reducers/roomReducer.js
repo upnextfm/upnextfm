@@ -20,6 +20,14 @@ export default function roomReducer(state = initialState.room, action = {}) {
       return Object.assign({}, state, {
         inputValue: ''
       });
+    case types.ROOM_USERS:
+      const users = [];
+      action.users.forEach((user) => {
+        users.push(user.username);
+      });
+      return Object.assign({}, state, {
+        users
+      });
     case types.ROOM_PAYLOAD:
       switch (action.payload.cmd) {
         case socket.CMD_SEND:

@@ -6,6 +6,7 @@ export const CMD_AUTH  = 'auth';
 export const CMD_SEND  = 'send';
 export const CMD_JOIN  = 'join';
 export const CMD_LEAVE = 'leave';
+export const CMD_USERS = 'users';
 
 let session = null;
 const webSocket = WS.connect(_WS_URI); // eslint-disable-line no-undef

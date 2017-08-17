@@ -44,6 +44,25 @@ class RoomTopic extends AbstractTopic
         "roles"    => ["user"]
       ]
     ]);
+
+    $users = [];
+    foreach($topic as $client) {
+      $user = $this->getUser($client);
+      if ($user instanceof UserInterface) {
+        $username = $user->getUsername();
+        $users[] = [
+          "username" => $username,
+          "avatar"   => "https://api.adorable.io/avatars/50/${username}%40upnext.fm",
+          "profile"  => "https://upnext.fm/u/${username}",
+          "roles"    => ["user"]
+        ];
+      }
+    }
+
+    $connection->event($topic->getId(), [
+      "cmd"   => Commands::USERS,
+      "users" => $users
+    ]);
   }
 
   /**

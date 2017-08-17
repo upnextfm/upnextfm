@@ -7,4 +7,5 @@ class Commands
   const SEND = 'send';
   const JOIN = 'join';
   const LEAVE = 'leave';
+  const USERS = 'users';
 }

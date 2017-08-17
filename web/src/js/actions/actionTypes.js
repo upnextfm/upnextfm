@@ -19,6 +19,7 @@ export const ROOM_JOIN         = 'ROOM_JOIN';
 export const ROOM_LEAVE        = 'ROOM_LEAVE';
 export const ROOM_SEND         = 'ROOM_SEND';
 export const ROOM_PAYLOAD      = 'ROOM_PAYLOAD';
+export const ROOM_USERS        = 'ROOM_USERS';
 export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
 
 export const USERS_ADD    = 'USERS_ADD';

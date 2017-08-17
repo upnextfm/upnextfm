@@ -18,6 +18,13 @@ export function roomSend() {
   };
 }
 
+export function roomUsers(users) {
+  return {
+    type: types.ROOM_USERS,
+    users
+  };
+}
+
 export function roomPayload(payload, uri) {
   return {
     type: types.ROOM_PAYLOAD,
@@ -46,12 +53,16 @@ export function roomJoin(name) {
       name
     });
     subscribe(`${socket.CHAN_ROOM}/${name}`, (uri, payload) => {
+      console.info(payload);
       switch (payload.cmd) {
         case socket.CMD_JOIN:
           dispatch(usersAdd(payload.user));
           break;
         case socket.CMD_LEAVE:
           dispatch(usersRemove(payload.username));
+          break;
+        case socket.CMD_USERS:
+          dispatch(roomUsers(payload.users));
           break;
         default:
           dispatch(roomPayload(payload, uri));
