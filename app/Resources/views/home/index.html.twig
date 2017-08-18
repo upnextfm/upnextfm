@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="up-construction">
+        <div>
+            <img id=logo src=/images/logo-sm.png />
+            <p>We Are Under Construction</p>
+            <p>Returning Soon&trade;</p>
+            <p>
+                <a href="/chat">Chat here</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src=https://cdn.rawgit.com/namuol/cheet.js/master/cheet.min.js></script>
+    <script>
+        cheet("U U D D L R L R b a", function() {
+            document.getElementById("logo").src="/images/logo_pn.png";
+        });
+    </script>
+{% endblock %}
