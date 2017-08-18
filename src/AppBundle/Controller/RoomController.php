@@ -15,7 +15,8 @@ class RoomController extends Controller
   public function indexAction($name)
   {
     return $this->render(":room:index.html.twig", [
-        "name" => $name
+      "hide_navbar" => true,
+      "name" => $name
     ]);
   }
 }

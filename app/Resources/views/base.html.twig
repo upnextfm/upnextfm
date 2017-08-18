@@ -9,11 +9,14 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
             <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-            <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+            <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
             <link href="{{ asset('build/css/app.css') }}" rel="stylesheet" />
         {% endblock %}
     </head>
     <body>
+        {% if hide_navbar is not defined  %}
+            {% include ":_layout:nav.html.twig" %}
+        {% endif %}
         {% block body %}{% endblock %}
         {% block javascripts %}
             <script>
