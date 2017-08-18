@@ -11,6 +11,25 @@
   align-items: center;
 }
 
+.up-nav__toggle {
+  flex: 0 0 auto;
+  width: 48px;
+  cursor: pointer;
+  color: #FFF;
+  border: 0;
+  outline: 0;
+  height: 48px;
+  display: inline-flex;
+  padding: 0;
+  font-size: 24px;
+  text-align: center;
+  transition: background-color 150ms cubic-bezier(0.4, 0.0, 0.2, 1) 0ms;
+  align-items: center;
+  border-radius: 50%;
+  justify-content: center;
+  background-color: transparent;
+}
+
 .up-brand {
   margin-top: 8px;
   margin-left: 4px;
@@ -19,13 +38,6 @@
   img {
     height: 19px;
   }
-}
-
-.up-nav__toggle {
-  border: 0;
-  outline: 0;
-  color: #FFF;
-  background-color: transparent;
 }
 
 .up-btn-login {
