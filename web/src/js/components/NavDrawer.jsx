@@ -103,7 +103,7 @@ class NavDrawer extends React.Component {
     );
 
     return (
-      <div className="up-drawer">
+      <div className="up-room-drawer">
         <List disablePadding>
           {authListItems}
         </List>

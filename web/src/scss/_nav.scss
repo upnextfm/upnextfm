@@ -44,8 +44,8 @@
   margin-left: auto;
 }
 
-.up-drawer {
-  width: 250px;
+.up-room-drawer {
+  width: $drawer-width;
   flex: initial;
 
   ul li div {
