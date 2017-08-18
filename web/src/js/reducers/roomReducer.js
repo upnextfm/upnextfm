@@ -1,6 +1,5 @@
 import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
-import { usersIndexOfUsername } from 'utils/users';
 
 /**
  * Adds a user to the room users list
@@ -10,12 +9,12 @@ import { usersIndexOfUsername } from 'utils/users';
  * @returns {*}
  */
 function joined(state, action) {
-  if (usersIndexOfUsername(state.users, action.user.username) === -1) {
-    const newState = Object.assign({}, state);
-    newState.users.push(action.user);
-    return newState;
+  const username = action.user.username;
+  const newState = Object.assign({}, state);
+  if (newState.users.indexOf(username) === -1) {
+    newState.users.push(username);
   }
-  return state;
+  return newState;
 }
 
 /**
@@ -26,13 +25,12 @@ function joined(state, action) {
  * @returns {*}
  */
 function parted(state, action) {
-  const index = usersIndexOfUsername(state.users, action.username);
-  if (index !== -1) {
-    const newState = Object.assign({}, state);
-    newState.users.splice(index, 1);
-    return newState;
-  }
-  return state;
+  const username = action.username;
+  const newState = Object.assign({}, state);
+  newState.users = newState.users.filter((un) => {
+    return un !== username;
+  });
+  return newState;
 }
 
 /**

@@ -43,10 +43,10 @@ class RoomTopic extends AbstractTopic
     $repoFound = [];
     $repoUsers = [];
     foreach($messages as $message) {
-      $user = $message->getUser();
-      if ($user && !in_array($user->getUsername(), $repoFound)) {
+      $u = $message->getUser();
+      if ($u && !in_array($u->getUsername(), $repoFound)) {
         $repoUsers[] = $this->serializeUser($message->getUser());
-        $repoFound[] = $user->getUsername();
+        $repoFound[] = $u->getUsername();
       }
     }
 
