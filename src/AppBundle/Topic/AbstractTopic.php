@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Topic;
 
+use AppBundle\Entity\ChatLog;
 use Doctrine\ORM\EntityManagerInterface;
 use Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProviderInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
@@ -150,5 +151,24 @@ abstract class AbstractTopic implements TopicInterface
       "profile"  => "https://upnext.fm/u/${username}",
       "roles"    => $user->getRoles()
     ];
+  }
+
+  /**
+   * @param ChatLog[] $messages
+   * @return array
+   */
+  protected function serializeMessages($messages)
+  {
+    $serialized = [];
+    foreach($messages as $message) {
+      $serialized[] = [
+        "id"      => $message->getId(),
+        "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
+        "from"    => $message->getUser()->getUsername(),
+        "message" => $message->getMessage()
+      ];
+    }
+
+    return $serialized;
   }
 }

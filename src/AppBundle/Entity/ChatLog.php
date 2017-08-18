@@ -27,7 +27,7 @@ class ChatLog
   /**
    * @var \AppBundle\Entity\Room
    *
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Room")
+   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Room", fetch="EAGER")
    * @ORM\JoinColumns({
    *   @ORM\JoinColumn(name="room_id", referencedColumnName="id")
    * })
@@ -37,7 +37,7 @@ class ChatLog
   /**
    * @var \AppBundle\Entity\User
    *
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", fetch="EAGER")
    * @ORM\JoinColumns({
    *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
    * })

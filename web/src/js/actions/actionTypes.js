@@ -21,15 +21,17 @@ export const ROOM_NAME         = 'ROOM_NAME';
 export const ROOM_SEND         = 'ROOM_SEND';
 export const ROOM_PAYLOAD      = 'ROOM_PAYLOAD';
 export const ROOM_USERS        = 'ROOM_USERS';
+export const ROOM_MESSAGES     = 'ROOM_MESSAGES';
 export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
 
 export const USERS_REPO_ADD    = 'USERS_REPO_ADD';
 export const USERS_REPO_REMOVE = 'USERS_REPO_REMOVE';
 
-export const CHAN_ROOM  = 'app/room';
-export const CHAN_AUTH  = 'app/auth';
-export const CMD_AUTH   = 'auth';
-export const CMD_SEND   = 'send';
-export const CMD_JOINED = 'joined';
-export const CMD_PARTED = 'parted';
-export const CMD_USERS  = 'users';
+export const CHAN_ROOM    = 'app/room';
+export const CHAN_AUTH    = 'app/auth';
+export const CMD_AUTH     = 'auth';
+export const CMD_SEND     = 'send';
+export const CMD_JOINED   = 'joined';
+export const CMD_PARTED   = 'parted';
+export const CMD_USERS    = 'users';
+export const CMD_MESSAGES = 'messages';

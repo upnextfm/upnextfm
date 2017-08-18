@@ -36,6 +36,18 @@ export function roomUsers(users) {
 
 /**
  *
+ * @param {Array} messages
+ * @returns {{type: *, messages: *}}
+ */
+export function roomMessages(messages) {
+  return {
+    type: types.ROOM_MESSAGES,
+    messages
+  };
+}
+
+/**
+ *
  * @param {*} payload
  * @param {string} uri
  * @returns {{type: string, payload: *, uri: *}}
@@ -97,6 +109,9 @@ export function roomJoin(name) {
           break;
         case types.CMD_USERS:
           dispatch(roomUsers(payload.users));
+          break;
+        case types.CMD_MESSAGES:
+          dispatch(roomMessages(payload.messages));
           break;
         default:
           dispatch(roomPayload(payload, uri));

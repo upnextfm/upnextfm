@@ -53,6 +53,24 @@ function users(state, action) {
 }
 
 /**
+ * Sets the recent room messages
+ *
+ * @param {*} state
+ * @param {{type: string, messages: Array}} action
+ * @returns {*}
+ */
+function messages(state, action) {
+  const newMessages = [];
+  action.messages.forEach((message) => {
+    message.date = new Date(message.date);
+    newMessages.push(message);
+  });
+  return Object.assign({}, state, {
+    messages: newMessages
+  });
+}
+
+/**
  *
  * @param {*} state
  * @param {{type: string, payload: *}} action
@@ -101,6 +119,8 @@ export default function roomReducer(state = initialState.room, action = {}) {
       return parted(state, action);
     case types.ROOM_USERS:
       return users(state, action);
+    case types.ROOM_MESSAGES:
+      return messages(state, action);
     case types.ROOM_PAYLOAD:
       return payload(state, action);
     default:

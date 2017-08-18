@@ -36,8 +36,9 @@ class RoomTopic extends AbstractTopic
       return;
     }
 
-    // Create the room if it doesn't already exist.
-    $this->getRoom($request->getAttributes()->get("room"), $user);
+    $room     = $this->getRoom($request->getAttributes()->get("room"), $user);
+    $repo     = $this->em->getRepository("AppBundle:ChatLog");
+    $messages = $repo->findRecent($room, 20);
 
     $users = [];
     foreach($topic as $client) {
@@ -50,6 +51,10 @@ class RoomTopic extends AbstractTopic
     $topic->broadcast([
       "cmd"  => Commands::JOINED,
       "user" => $this->serializeUser($user)
+    ]);
+    $connection->event($topic->getId(), [
+      "cmd"      => Commands::MESSAGES,
+      "messages" => $this->serializeMessages($messages)
     ]);
     $connection->event($topic->getId(), [
       "cmd"   => Commands::USERS,
