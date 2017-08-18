@@ -9,7 +9,7 @@ import { usersIndexOfUsername } from 'utils/users';
  * @param {{type: string, user: *}} action
  * @returns {*}
  */
-function join(state, action) {
+function joined(state, action) {
   if (usersIndexOfUsername(state.users, action.user.username) === -1) {
     const newState = Object.assign({}, state);
     newState.users.push(action.user);
@@ -25,8 +25,8 @@ function join(state, action) {
  * @param {{type: string, username: string}} action
  * @returns {*}
  */
-function leave(state, action) {
-  const index = usersIndexOfUsername(state.repo, action.username);
+function parted(state, action) {
+  const index = usersIndexOfUsername(state.users, action.username);
   if (index !== -1) {
     const newState = Object.assign({}, state);
     newState.users.splice(index, 1);
@@ -44,8 +44,8 @@ function leave(state, action) {
  */
 function users(state, action) {
   const newUsers = [];
-  action.users.forEach((user) => {
-    newUsers.push(user.username);
+  action.users.forEach((username) => {
+    newUsers.push(username);
   });
   return Object.assign({}, state, {
     users: newUsers
@@ -95,10 +95,10 @@ export default function roomReducer(state = initialState.room, action = {}) {
       return Object.assign({}, state, {
         inputValue: ''
       });
-    case types.ROOM_JOIN:
-      return join(state, action);
-    case types.ROOM_LEAVE:
-      return leave(state, action);
+    case types.ROOM_JOINED:
+      return joined(state, action);
+    case types.ROOM_PARTED:
+      return parted(state, action);
     case types.ROOM_USERS:
       return users(state, action);
     case types.ROOM_PAYLOAD:

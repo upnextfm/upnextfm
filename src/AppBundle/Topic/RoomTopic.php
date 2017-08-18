@@ -39,31 +39,18 @@ class RoomTopic extends AbstractTopic
     // Create the room if it doesn't already exist.
     $this->getRoom($request->getAttributes()->get("room"), $user);
 
-    $username = $user->getUsername();
-    $topic->broadcast([
-      "cmd"  => Commands::JOIN,
-      "user" => [
-        "username" => $username,
-        "avatar"   => "https://robohash.org/${username}?set=set3",
-        "profile"  => "https://upnext.fm/u/${username}",
-        "roles"    => ["user"]
-      ]
-    ]);
-
     $users = [];
     foreach($topic as $client) {
-      $user = $this->getUser($client);
-      if ($user instanceof UserInterface) {
-        $username = $user->getUsername();
-        $users[] = [
-          "username" => $username,
-          "avatar"   => "https://robohash.org/${username}?set=set3",
-          "profile"  => "https://upnext.fm/u/${username}",
-          "roles"    => ["user"]
-        ];
+      $u = $this->getUser($client);
+      if ($u instanceof UserInterface) {
+        $users[] = $u->getUsername();
       }
     }
 
+    $topic->broadcast([
+      "cmd"  => Commands::JOINED,
+      "user" => $this->serializeUser($user)
+    ]);
     $connection->event($topic->getId(), [
       "cmd"   => Commands::USERS,
       "users" => $users
@@ -86,7 +73,7 @@ class RoomTopic extends AbstractTopic
     }
 
     $topic->broadcast([
-      "cmd"  => Commands::LEAVE,
+      "cmd"      => Commands::PARTED,
       "username" => $user->getUsername()
     ]);
   }

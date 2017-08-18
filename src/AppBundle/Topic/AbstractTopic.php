@@ -136,4 +136,19 @@ abstract class AbstractTopic implements TopicInterface
 
     return $this->tokenAuthenticator->getUser($creds, $this->userProvider);
   }
+
+  /**
+   * @param UserInterface $user
+   * @return array
+   */
+  protected function serializeUser(UserInterface $user)
+  {
+    $username = $user->getUsername();
+    return [
+      "username" => $username,
+      "avatar"   => "https://robohash.org/${username}?set=set3",
+      "profile"  => "https://upnext.fm/u/${username}",
+      "roles"    => $user->getRoles()
+    ];
+  }
 }

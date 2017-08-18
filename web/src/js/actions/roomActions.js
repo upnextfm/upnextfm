@@ -81,15 +81,19 @@ export function roomJoin(name) {
     api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
       console.info(payload);
       switch (payload.cmd) {
-        case types.CMD_JOIN:
+        case types.CMD_JOINED:
           dispatch(usersRepoAdd(payload.user));
           dispatch({
-            type: types.ROOM_JOIN,
+            type: types.ROOM_JOINED,
             user: payload.user
           });
           break;
-        case types.CMD_LEAVE:
+        case types.CMD_PARTED:
           dispatch(usersRepoRemove(payload.username));
+          dispatch({
+            type:     types.ROOM_PARTED,
+            username: payload.username
+          });
           break;
         case types.CMD_USERS:
           dispatch(roomUsers(payload.users));
