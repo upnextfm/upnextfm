@@ -1,22 +1,32 @@
 import * as types from 'actions/actionTypes';
 import { usersRepoAdd, usersRepoRemove } from 'actions/usersActions';
 
+/**
+ *
+ * @returns {Function}
+ */
 export function roomSend() {
   return (dispatch, getState, api) => {
     const room = getState().room;
     if (room.name !== '') {
-      dispatch({
-        type: types.ROOM_SEND
-      });
       api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
         cmd:  types.CMD_SEND,
         date: (new Date()).toString(),
         msg:  room.inputValue
       });
     }
+
+    dispatch({
+      type: types.ROOM_SEND
+    });
   };
 }
 
+/**
+ *
+ * @param {Array} users
+ * @returns {{type: string, users: *}}
+ */
 export function roomUsers(users) {
   return {
     type: types.ROOM_USERS,
@@ -24,6 +34,12 @@ export function roomUsers(users) {
   };
 }
 
+/**
+ *
+ * @param {*} payload
+ * @param {string} uri
+ * @returns {{type: string, payload: *, uri: *}}
+ */
 export function roomPayload(payload, uri) {
   return {
     type: types.ROOM_PAYLOAD,
@@ -32,30 +48,45 @@ export function roomPayload(payload, uri) {
   };
 }
 
+/**
+ *
+ * @returns {Function}
+ */
 export function roomLeave() {
   return (dispatch, getState, api) => {
     const room = getState().room;
     if (room.name !== '') {
       dispatch({
-        type: types.ROOM_LEAVE
+        type: types.ROOM_NAME,
+        name: ''
       });
       api.socket.unsubscribe(`${types.CHAN_ROOM}/${room.name}`);
     }
   };
 }
 
+/**
+ *
+ * @param {string} name
+ * @returns {Function}
+ */
 export function roomJoin(name) {
   return (dispatch, getState, api) => {
     dispatch(roomLeave());
     dispatch({
-      type: types.ROOM_JOIN,
+      type: types.ROOM_NAME,
       name
     });
 
     api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
+      console.info(payload);
       switch (payload.cmd) {
         case types.CMD_JOIN:
           dispatch(usersRepoAdd(payload.user));
+          dispatch({
+            type: types.ROOM_JOIN,
+            user: payload.user
+          });
           break;
         case types.CMD_LEAVE:
           dispatch(usersRepoRemove(payload.username));
@@ -71,6 +102,11 @@ export function roomJoin(name) {
   };
 }
 
+/**
+ *
+ * @param {string} inputValue
+ * @returns {{type: string, inputValue: *}}
+ */
 export function roomInputChange(inputValue) {
   return {
     type: types.ROOM_INPUT_CHANGE,

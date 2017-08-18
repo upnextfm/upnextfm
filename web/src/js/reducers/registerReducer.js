@@ -1,6 +1,13 @@
 import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
 
+/**
+ * Register reducer
+ *
+ * @param {*} state
+ * @param {*} action
+ * @returns {*}
+ */
 export default function registerReducer(state = initialState.register, action = {}) {
   switch (action.type) {
     case types.REGISTER_TOGGLE_DIALOG:

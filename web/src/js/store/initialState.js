@@ -15,22 +15,6 @@ export default {
     isSubmitting:         false,
     error:                null
   },
-  users: {
-    repo: [
-      {
-        username: 'headzoo',
-        avatar:   'https://api.adorable.io/avatars/50/sean%40upnext.fm',
-        profile:  'https://upnext.fm/u/headzoo',
-        roles:    ['user']
-      },
-      {
-        username: 'az4521',
-        avatar:   'https://api.adorable.io/avatars/50/az4521%40upnext.fm',
-        profile:  'https://upnext.fm/u/az4521',
-        roles:    ['user']
-      }
-    ]
-  },
   room: {
     name:       '',
     inputValue: '',
@@ -59,6 +43,22 @@ export default {
         date:    new Date(),
         from:    'az4521',
         message: 'i updated the layout of the room a bit, now the video always stretches to be 16:9, and the playlist box takes up the remaining space. also the buttons added to the button container now wrap around and make a second row.'
+      }
+    ]
+  },
+  users: {
+    repo: [
+      {
+        username: 'headzoo',
+        avatar:   'https://api.adorable.io/avatars/50/sean%40upnext.fm',
+        profile:  'https://upnext.fm/u/headzoo',
+        roles:    ['user']
+      },
+      {
+        username: 'az4521',
+        avatar:   'https://api.adorable.io/avatars/50/az4521%40upnext.fm',
+        profile:  'https://upnext.fm/u/az4521',
+        roles:    ['user']
       }
     ]
   },

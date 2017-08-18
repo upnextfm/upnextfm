@@ -5,6 +5,13 @@ import Auth from 'api/Auth';
 const is = Object.assign({}, initialState.auth);
 is.isAuthenticated = Auth.isAuthenticated();
 
+/**
+ * Auth reducer
+ *
+ * @param {*} state
+ * @param {*} action
+ * @returns {*}
+ */
 export default function authReducer(state = is, action = {}) {
   switch (action.type) {
     case types.AUTH_LOGIN_BEGIN:

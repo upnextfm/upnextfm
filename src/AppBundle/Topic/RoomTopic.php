@@ -149,7 +149,7 @@ class RoomTopic extends AbstractTopic
     }
 
     $chatLog = new ChatLog($room, $user, $msg);
-    $this->em->merge($chatLog);
+    $chatLog = $this->em->merge($chatLog);
     $this->em->flush();
 
     $topic->broadcast([
