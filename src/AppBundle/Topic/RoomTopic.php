@@ -120,19 +120,23 @@ class RoomTopic extends AbstractTopic
     array $exclude,
     array $eligible)
   {
-    $user = $this->getUser($conn);
-    if (is_string($user)) {
-      return;
-    }
-    $room = $this->getRoom($req->getAttributes()->get("room"), $user);
-    if (!$room || $room->isDeleted()) {
-      return;
-    }
+    try {
+      $user = $this->getUser($conn);
+      if (is_string($user)) {
+        return;
+      }
+      $room = $this->getRoom($req->getAttributes()->get("room"), $user);
+      if (!$room || $room->isDeleted()) {
+        return;
+      }
 
-    switch($event["cmd"]) {
-      case RoomCommands::SEND:
-        $this->handleSend($conn, $topic, $req, $room, $user, $event);
-        break;
+      switch ($event["cmd"]) {
+        case RoomCommands::SEND:
+          $this->handleSend($conn, $topic, $req, $room, $user, $event);
+          break;
+      }
+    } catch (\Exception $e) {
+      $this->logger->error($e->getMessage());
     }
   }
 
