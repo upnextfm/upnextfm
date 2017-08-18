@@ -40,6 +40,11 @@ class RoomTopic extends AbstractTopic
     $repo     = $this->em->getRepository("AppBundle:ChatLog");
     $messages = $repo->findRecent($room, 20);
 
+
+    foreach($messages as $message) {
+
+    }
+
     $users = [];
     foreach($topic as $client) {
       $u = $this->getUser($client);

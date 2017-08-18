@@ -161,12 +161,14 @@ abstract class AbstractTopic implements TopicInterface
   {
     $serialized = [];
     foreach($messages as $message) {
-      $serialized[] = [
-        "id"      => $message->getId(),
-        "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
-        "from"    => $message->getUser()->getUsername(),
-        "message" => $message->getMessage()
-      ];
+      if ($message) {
+        $serialized[] = [
+          "id"      => $message->getId(),
+          "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
+          "from"    => $message->getUser()->getUsername(),
+          "message" => $message->getMessage()
+        ];
+      }
     }
 
     return $serialized;
