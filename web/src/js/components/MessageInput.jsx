@@ -48,6 +48,7 @@ class MessageInput extends React.Component {
         <IconButton
           title="Attach File"
           aria-label="Attach File"
+          style={{ marginLeft: 6 }}
           onClick={() => { this.send(); }}
         >
           <AttachFile />

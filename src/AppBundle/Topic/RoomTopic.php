@@ -121,7 +121,7 @@ class RoomTopic extends AbstractTopic
     array $eligible)
   {
     $user = $this->getUser($conn);
-    if (!($user instanceof UserInterface)) {
+    if (is_string($user)) {
       return;
     }
     $room = $this->getRoom($req->getAttributes()->get("room"), $user);
@@ -158,10 +158,11 @@ class RoomTopic extends AbstractTopic
       return;
     }
 
+
     $chatLog = new ChatLog($room, $user, $msg);
     $chatLog = $this->em->merge($chatLog);
     $this->em->flush();
-
+    dump($chatLog->getUser()->getId());
     $topic->broadcast([
       'cmd' => RoomCommands::SEND,
       'msg' => [

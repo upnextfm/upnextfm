@@ -131,17 +131,23 @@ abstract class AbstractTopic implements TopicInterface
   protected function getUser(ConnectionInterface $connection, array $event = [])
   {
     if (empty($event["token"])) {
-      return $this->clientManipulator->getClient($connection);
+      $user = $this->clientManipulator->getClient($connection);
+    } else {
+      $request = new Request();
+      $request->headers->set('Authorization', 'Bearer ' . $event["token"]);
+      $creds = $this->tokenAuthenticator->getCredentials($request);
+      if (!$creds) {
+        $user = $this->clientManipulator->getClient($connection);
+      } else {
+        $user = $this->tokenAuthenticator->getUser($creds, $this->userProvider);
+      }
     }
 
-    $request = new Request();
-    $request->headers->set('Authorization', 'Bearer ' . $event["token"]);
-    $creds = $this->tokenAuthenticator->getCredentials($request);
-    if (!$creds) {
-      return $this->clientManipulator->getClient($connection);
+    if ($user instanceof UserInterface) {
+      $user = $this->em->getRepository("AppBundle:User")->findByUsername($user->getUsername());
     }
 
-    return $this->tokenAuthenticator->getUser($creds, $this->userProvider);
+    return $user;
   }
 
   /**
@@ -167,14 +173,12 @@ abstract class AbstractTopic implements TopicInterface
   {
     $serialized = [];
     foreach($messages as $message) {
-      if ($message && $message->getUser()) {
-        $serialized[] = [
-          "id"      => $message->getId(),
-          "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
-          "from"    => $message->getUser()->getUsername(),
-          "message" => $message->getMessage()
-        ];
-      }
+      $serialized[] = [
+        "id"      => $message->getId(),
+        "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
+        "from"    => $message->getUser()->getUsername(),
+        "message" => $message->getMessage()
+      ];
     }
 
     return $serialized;
