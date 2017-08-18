@@ -1,5 +1,5 @@
 import * as types from 'actions/actionTypes';
-import { usersRepoAdd, usersRepoRemove } from 'actions/usersActions';
+import { usersRepoAdd, usersRepoAddMulti, usersRepoRemove } from 'actions/usersActions';
 
 /**
  *
@@ -106,6 +106,9 @@ export function roomJoin(name) {
             type:     types.ROOM_PARTED,
             username: payload.username
           });
+          break;
+        case types.CMD_REPO_USERS:
+          dispatch(usersRepoAddMulti(payload.users));
           break;
         case types.CMD_USERS:
           dispatch(roomUsers(payload.users));

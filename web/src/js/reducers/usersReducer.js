@@ -19,6 +19,19 @@ function addRepoUser(state, action) {
 }
 
 /**
+ * Adds multiple to user repo
+ *
+ * @param {*} state
+ * @param {{type: string, users: *}} action
+ * @returns {*}
+ */
+function addRepoUsers(state, action) {
+  return Object.assign({}, state, {
+    repo: action.users
+  });
+}
+
+/**
  * Removes a user from user repo
  *
  * @param {*} state
@@ -46,6 +59,8 @@ export default function usersReducer(state = initialState.users, action = {}) {
   switch (action.type) {
     case types.USERS_REPO_ADD:
       return addRepoUser(state, action);
+    case types.USERS_REPO_ADD_MULTI:
+      return addRepoUsers(state, action);
     case types.USERS_REPO_REMOVE:
       return removeRepoUser(state, action);
     default:

@@ -30,7 +30,7 @@ class AuthTopic extends AbstractTopic
    */
   public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $event, array $exclude, array $eligible)
   {
-    if ($event["cmd"] === Commands::AUTH) {
+    if ($event["cmd"] === RoomCommands::AUTH) {
       $this->authenticate($conn, $event["token"]);
     }
   }

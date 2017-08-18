@@ -39,10 +39,15 @@ class RoomTopic extends AbstractTopic
     $room     = $this->getRoom($request->getAttributes()->get("room"), $user);
     $repo     = $this->em->getRepository("AppBundle:ChatLog");
     $messages = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
-    $messages = array_reverse($this->serializeMessages($messages));
 
+    $repoFound = [];
+    $repoUsers = [];
     foreach($messages as $message) {
-
+      $user = $message->getUser();
+      if ($user && !in_array($user->getUsername(), $repoFound)) {
+        $repoUsers[] = $this->serializeUser($message->getUser());
+        $repoFound[] = $user->getUsername();
+      }
     }
 
     $users = [];
@@ -50,19 +55,27 @@ class RoomTopic extends AbstractTopic
       $u = $this->getUser($client);
       if ($u instanceof UserInterface) {
         $users[] = $u->getUsername();
+        if (!in_array($u->getUsername(), $repoFound)) {
+          $repoUsers[] = $this->serializeUser($u);
+          $repoFound[] = $u->getUsername();
+        }
       }
     }
 
     $topic->broadcast([
-      "cmd"  => Commands::JOINED,
+      "cmd"  => RoomCommands::JOINED,
       "user" => $this->serializeUser($user)
     ]);
     $connection->event($topic->getId(), [
-      "cmd"      => Commands::MESSAGES,
-      "messages" => $messages
+      "cmd"      => RoomCommands::MESSAGES,
+      "messages" => array_reverse($this->serializeMessages($messages))
     ]);
     $connection->event($topic->getId(), [
-      "cmd"   => Commands::USERS,
+      "cmd"   => RoomCommands::REPO_USERS,
+      "users" => $repoUsers
+    ]);
+    $connection->event($topic->getId(), [
+      "cmd"   => RoomCommands::USERS,
       "users" => $users
     ]);
   }
@@ -83,7 +96,7 @@ class RoomTopic extends AbstractTopic
     }
 
     $topic->broadcast([
-      "cmd"      => Commands::PARTED,
+      "cmd"      => RoomCommands::PARTED,
       "username" => $user->getUsername()
     ]);
   }
@@ -117,7 +130,7 @@ class RoomTopic extends AbstractTopic
     }
 
     switch($event["cmd"]) {
-      case Commands::SEND:
+      case RoomCommands::SEND:
         $this->handleSend($conn, $topic, $req, $room, $user, $event);
         break;
     }
@@ -150,7 +163,7 @@ class RoomTopic extends AbstractTopic
     $this->em->flush();
 
     $topic->broadcast([
-      'cmd' => Commands::SEND,
+      'cmd' => RoomCommands::SEND,
       'msg' => [
         "id"      => $chatLog->getId(),
         "date"    => $event["date"],
