@@ -50,13 +50,13 @@ export default {
     repo: [
       {
         username: 'headzoo',
-        avatar:   'https://api.adorable.io/avatars/50/sean%40upnext.fm',
+        avatar:   'https://robohash.org/headzoo?set=set3',
         profile:  'https://upnext.fm/u/headzoo',
         roles:    ['user']
       },
       {
         username: 'az4521',
-        avatar:   'https://api.adorable.io/avatars/50/az4521%40upnext.fm',
+        avatar:   'https://robohash.org/az4521?set=set3',
         profile:  'https://upnext.fm/u/az4521',
         roles:    ['user']
       }

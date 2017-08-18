@@ -44,7 +44,7 @@ class RoomTopic extends AbstractTopic
       "cmd"  => Commands::JOIN,
       "user" => [
         "username" => $username,
-        "avatar"   => "https://api.adorable.io/avatars/50/${username}%40upnext.fm",
+        "avatar"   => "https://robohash.org/${username}?set=set3",
         "profile"  => "https://upnext.fm/u/${username}",
         "roles"    => ["user"]
       ]
@@ -57,7 +57,7 @@ class RoomTopic extends AbstractTopic
         $username = $user->getUsername();
         $users[] = [
           "username" => $username,
-          "avatar"   => "https://api.adorable.io/avatars/50/${username}%40upnext.fm",
+          "avatar"   => "https://robohash.org/${username}?set=set3",
           "profile"  => "https://upnext.fm/u/${username}",
           "roles"    => ["user"]
         ];
