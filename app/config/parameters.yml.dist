@@ -24,3 +24,5 @@ parameters:
     jwt_public_key_path:  "%kernel.root_dir%/../var/jwt/public.pem"
     jwt_key_pass_phrase:  "12345"
     jwt_token_ttl:        3600
+
+    app_room_recent_messages_count: 50

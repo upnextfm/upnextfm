@@ -38,7 +38,7 @@ class RoomTopic extends AbstractTopic
 
     $room     = $this->getRoom($request->getAttributes()->get("room"), $user);
     $repo     = $this->em->getRepository("AppBundle:ChatLog");
-    $messages = $repo->findRecent($room, 20);
+    $messages = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
     $messages = array_reverse($this->serializeMessages($messages));
 
     foreach($messages as $message) {

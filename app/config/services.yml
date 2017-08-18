@@ -61,11 +61,7 @@ services:
     ## ########################################################################
     app.topic.parent:
         arguments:
-          - "@gos_web_socket.websocket.client_manipulator"
-          - "@lexik_jwt_authentication.security.guard.jwt_token_authenticator"
-          - "@fos_user.user_provider.username"
-          - "@gos_web_socket.websocket_authentification.provider"
-          - "@doctrine.orm.default_entity_manager"
+          - "@service_container"
           - "@?monolog.logger.websocket"
         abstract: true
         private: true
