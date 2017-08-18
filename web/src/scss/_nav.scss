@@ -1,11 +1,11 @@
 @import "vars";
 
 .up-nav {
-    color: #FFF !important;
-    height: $nav-height !important;
-    min-height: $nav-height !important;
-    padding: $padding-std !important;
-    background-color: #263238 !important;
+  color: #FFF !important;
+  height: $nav-height !important;
+  min-height: $nav-height !important;
+  padding: $padding-std !important;
+  background-color: #263238 !important;
 }
 
 .up-brand {
@@ -19,9 +19,6 @@
 
 .up-btn-login {
   margin-left: auto;
-  @media (max-width: $break-sm - 1) {
-    display:none;
-  }
 }
 
 .up-drawer {

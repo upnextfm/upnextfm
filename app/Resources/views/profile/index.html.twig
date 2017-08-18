@@ -1,6 +1,7 @@
 {% extends "base.html.twig" %}
 {% block title %}{{ user.username }}{% endblock %}
 {% block body %}
+	{% include ":_layout:nav.html.twig" %}
 	<div class="up-profile">
 		<div class="up-profile__bio">
 			<div class="up-profile__bio__user">
