@@ -1,8 +1,50 @@
 <nav class="up-nav">
-    <button class="up-nav__toggle">
+    <button id="up-nav-toggle" class="up-nav__toggle">
         <i class="material-icons">menu</i>
     </button>
     <a href="/" class="up-brand">
         <img src="{{ asset('images/logo-brand.png') }}" />
     </a>
 </nav>
+<div id="up-nav-slider" class="up-drawer">
+    <nav>
+        <ul>
+            <li>
+                <a href="#" class="up-drawer__item">
+                    <span>Menu 1</span>
+                </a>
+                <a href="#" class="up-drawer__item">
+                    <span>Menu 2</span>
+                </a>
+                <a href="#" class="up-drawer__item">
+                    <span>Menu 3</span>
+                </a>
+            </li>
+            <li class="up-drawer__divider"></li>
+            <li>
+                <a href="{{ path('about') }}" class="up-drawer__item">
+                    <i class="material-icons">info</i>
+                    <span>About Us</span>
+                </a>
+                <a href="{{ path('help') }}" class="up-drawer__item">
+                    <i class="material-icons">help</i>
+                    <span>Help</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="up-drawer__overlay"></div>
+</div>
+<script>
+    var slider = document.getElementById('up-nav-slider');
+    var toggle = document.getElementById('up-nav-toggle');
+    toggle.addEventListener('click', function() {
+        slider.classList.toggle('up-opened');
+    });
+    document.addEventListener('click', function(e) {
+        if (e.target.nodeName === 'A' || e.target.classList.contains('material-icons')) {
+            return;
+        }
+        slider.classList.toggle('up-opened');
+    });
+</script>
