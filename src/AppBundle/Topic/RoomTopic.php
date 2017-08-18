@@ -39,7 +39,7 @@ class RoomTopic extends AbstractTopic
     $room     = $this->getRoom($request->getAttributes()->get("room"), $user);
     $repo     = $this->em->getRepository("AppBundle:ChatLog");
     $messages = $repo->findRecent($room, 20);
-
+    $messages = array_reverse($this->serializeMessages($messages));
 
     foreach($messages as $message) {
 
@@ -59,7 +59,7 @@ class RoomTopic extends AbstractTopic
     ]);
     $connection->event($topic->getId(), [
       "cmd"      => Commands::MESSAGES,
-      "messages" => $this->serializeMessages($messages)
+      "messages" => $messages
     ]);
     $connection->event($topic->getId(), [
       "cmd"   => Commands::USERS,
