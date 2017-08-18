@@ -1,14 +1,31 @@
 {% extends "base.html.twig" %}
 {% block title %}{{ user.username }}{% endblock %}
 {% block body %}
-    <div class="up-profile up-container">
-        <div class="up-grid up-grid--gutter">
-            <div class="up-col">
-                Bio
-            </div>
-            <div class="up-col">
-                Playlist
-            </div>
-        </div>
+	<div class="up-profile">
+		<div class="up-profile__bio">
+			<div class="up-profile__bio__user">
+				<img class="up-profile__bio__user__picture" src = "https://api.adorable.io/avatars/256/{{ user.username }}@upnext.fm.png" />
+				<div class="up-profile__bio__user__name">
+					{{ user.username }}
+				</div>
+			</div>
+			<div class="up-profile__bio__text">
+				<p>bio goes here</p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi volutpat ullamcorper tincidunt. Proin vitae ultrices ante. Aliquam pellentesque nisl id turpis pharetra luctus a id purus. Quisque sed mauris orci. Ut egestas vehicula nisi, placerat dictum nibh ultricies a. Nam luctus nisl neque, a molestie odio rutrum vel. Etiam dapibus ullamcorper lacinia. Aliquam erat volutpat. Sed sapien risus, lacinia eu urna nec, euismod tempor nunc. Curabitur aliquet eros lobortis tincidunt elementum.
+
+			</div>
+		</div>
+		<div class="up-profile__playlist">
+			<!-- do like a for loop here or something -->
+			<div class="up-profile__playlsit__song">
+				<div class="up-profile__playlist__song-title">
+					ASDFGHJKL
+					<!-- Title here -->
+				</div>
+				<div class="up-profile__playlist__song-thumbnail">
+					<img />
+					<!-- thumb goes here -->
+				</div>
+			</div>
+		</div>
     </div>
 {% endblock %}
