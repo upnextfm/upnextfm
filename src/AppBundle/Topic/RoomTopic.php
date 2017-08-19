@@ -27,7 +27,7 @@ class RoomTopic extends AbstractTopic
     try {
       $user = $this->getUser($connection);
       if (!($user instanceof UserInterface)) {
-        return;
+        $user = null;
       }
 
       $room = $this->getRoom($request->getAttributes()->get("room"), $user);
@@ -56,10 +56,6 @@ class RoomTopic extends AbstractTopic
         }
       }
 
-      $topic->broadcast([
-        "cmd"  => RoomCommands::JOINED,
-        "user" => $this->serializeUser($user)
-      ]);
       $connection->event($topic->getId(), [
         "cmd"      => RoomCommands::MESSAGES,
         "messages" => array_reverse($this->serializeMessages($messages))
@@ -72,6 +68,12 @@ class RoomTopic extends AbstractTopic
         "cmd"   => RoomCommands::USERS,
         "users" => $users
       ]);
+      if ($user !== null) {
+        $topic->broadcast([
+          "cmd"  => RoomCommands::JOINED,
+          "user" => $this->serializeUser($user)
+        ]);
+      }
     } catch (\Exception $e) {
       $this->logger->error($e->getMessage());
     }

@@ -13,6 +13,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class VideoTopic extends AbstractTopic
 {
   /**
+   * @var array
+   */
+  protected $playing = [];
+
+  /**
    * {@inheritdoc}
    */
   public function getName()
