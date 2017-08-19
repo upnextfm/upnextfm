@@ -29,6 +29,7 @@
         "gos/web-socket-bundle": "^1.8",
         "incenteev/composer-parameter-handler": "^2.0",
         "lexik/jwt-authentication-bundle": "^2.4",
+        "madcoda/php-youtube-api": "^1.2",
         "nelmio/cors-bundle": "^1.4",
         "predis/predis": "^1.0",
         "presta/sitemap-bundle": "^1.5",

@@ -86,14 +86,21 @@ class VideoTopic extends AbstractTopic
     $video = $this->em->getRepository("AppBundle:Video")
       ->findByCodename($event["codename"], $event["provider"]);
     if (!$video) {
+      $service = $this->container->get("app.service.video");
+      $info    = $service->getInfo($event["codename"], $event["provider"]);
+      if (!$info) {
+        $this->logger->error("Failed to fetch video info.", $event);
+        return;
+      }
+
       $video = new Video();
       $video->setCodename($event["codename"]);
       $video->setProvider($event["provider"]);
       $video->setCreatedByUser($user);
       $video->setCreatedInRoom($room);
-      $video->setTitle("");
+      $video->setTitle($info->getTitle());
+      $video->setSeconds($info->getSeconds());
       $video->setNumPlays(0);
-      $video->setSeconds(0);
     }
     $video->setDateLastPlayed(new \DateTime());
     $video->incrNumPlays();

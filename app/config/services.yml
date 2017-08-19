@@ -113,3 +113,21 @@ services:
             - "@lexik_jwt_authentication.security.guard.jwt_token_authenticator"
             - "@fos_user.user_provider.username"
             - "@?monolog.logger.websocket"
+
+    ## ########################################################################
+    ## YouTube Service
+    ## ########################################################################
+    madcoda.youtube.youtube:
+      class: Madcoda\Youtube\Youtube
+      arguments:
+        - { key: "%app_service_youtube_api_key%" }
+
+    ## ########################################################################
+    ## Video Info Service
+    ## ########################################################################
+    app.service.video:
+      class: AppBundle\Service\Video
+      arguments:
+        - "@monolog.logger"
+      calls:
+        - [setYoutube, ["@madcoda.youtube.youtube"]]
