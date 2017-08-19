@@ -49,6 +49,8 @@
   overflow: hidden !important;
   background-color: #383D4B;
   padding-top: 0 !important;
+  z-index: 2;
+  box-shadow: 2px 0 2px rgba(0, 0, 0, 0.25);
 
   @include media-xs {
     max-width: 58px;
@@ -76,7 +78,7 @@
 }
 
 .up-room-panel__messages {
-  padding: $padding-std !important;
+
 }
 
 /******************************************************************************
