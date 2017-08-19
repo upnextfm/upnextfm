@@ -1,11 +1,12 @@
 @import "vars";
+@import "mixins";
 
 .up-room {
   display: flex;
   flex-flow: column;
   height: calc(100% - #{$nav-height});
 
-  @media (min-width: $break-lg) {
+  @include media-lg {
     flex-flow: row !important;
   }
 }
@@ -21,13 +22,10 @@
   flex-grow: 2 !important;
   overflow: hidden !important;
   background-color: #383D4B;
+  padding-top: 0 !important;
 
-  @media only screen and (max-width: $break-sm) {
-    max-width: 48px;
-  }
-
-  ul {
-    padding-top: 0 !important;
+  @include media-xs {
+    max-width: 58px;
   }
 
   li {
@@ -37,10 +35,15 @@
   .up-avatar {
     width: 40px !important;
     height: 40px !important;
+
+    @include media-xs {
+      width: 100% !important;
+      height: auto !important;
+    }
   }
 
   .up-username {
-    @media only screen and (max-width: $break-sm) {
+    @include media-xs {
       display: none;
     }
   }

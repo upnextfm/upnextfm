@@ -1,4 +1,5 @@
 @import "vars";
+@import "mixins";
 
 input:-webkit-autofill,
 textarea:-webkit-autofill,
@@ -45,7 +46,7 @@ textarea {
   padding: 2rem 4rem;
   border-radius: $border-radius-sm;
 
-  @media (max-width: $break-sm) {
+  @include media-sm {
     margin: 1rem;
     padding: 2rem;
   }

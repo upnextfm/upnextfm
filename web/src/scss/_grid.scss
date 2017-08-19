@@ -1,16 +1,17 @@
 @import "vars";
+@import "mixins";
 
 .up-grid {
   display: flex;
 
-  @media (max-width: $break-sm) {
+  @include media-sm {
     display: block;
   }
 
   .up-col {
     flex: 1;
 
-    @media (max-width: $break-sm) {
+    @include media-sm {
       width: 100%;
     }
   }
@@ -30,7 +31,7 @@
       margin-right: 0;
     }
 
-    @media (max-width: $break-sm) {
+    @include media-sm {
       margin: 0 0;
     }
   }
