@@ -1,6 +1,7 @@
 import * as types from 'actions/actionTypes';
 import { usersRepoAdd, usersRepoAddMulti, usersRepoRemove } from 'actions/usersActions';
 import { authToggleLoginDialog } from 'actions/authActions';
+import { playlistSubscribe } from 'actions/playlistActions';
 
 /**
  *
@@ -93,6 +94,7 @@ export function roomJoin(name) {
       type: types.ROOM_NAME,
       name
     });
+    dispatch(playlistSubscribe());
 
     api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
 

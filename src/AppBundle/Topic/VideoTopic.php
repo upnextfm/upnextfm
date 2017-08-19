@@ -28,6 +28,31 @@ class VideoTopic extends AbstractTopic
   /**
    * {@inheritdoc}
    */
+  public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+  {
+    $user = $this->getUser($connection);
+    if (!($user instanceof UserInterface)) {
+      $user = null;
+    }
+    $room = $this->getRoom($request->getAttributes()->get("room"), $user);
+    if (!$room) {
+      $this->logger->error("Room not found or created.");
+      return;
+    }
+
+    if (isset($this->playing[$room->getId()])) {
+      $video = $this->playing[$room->getId()];
+      $connection->event($topic->getId(), [
+        "cmd"      => VideoCommands::START,
+        "codename" => $video->getCodename(),
+        "provider" => $video->getProvider()
+      ]);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function onPublish(
     ConnectionInterface $conn,
     Topic $topic,
@@ -110,6 +135,7 @@ class VideoTopic extends AbstractTopic
     $video->setDateLastPlayed(new \DateTime());
     $video->incrNumPlays();
     $this->em->persist($video);
+    $this->playing[$room->getId()] = $video;
 
     $videoLog = new VideoLog($video, $room, $user);
     $this->em->merge($videoLog);
