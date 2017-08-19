@@ -17,12 +17,18 @@
 }
 
 .up-room__chat__users {
-  //border: 1px solid red;
-  width: 20%;
+  max-width: 20%;
   flex-grow: 2 !important;
   overflow: hidden !important;
-  padding-top: 0 !important;
   background-color: #383D4B;
+
+  @media only screen and (max-width: $break-sm) {
+    max-width: 48px;
+  }
+
+  ul {
+    padding-top: 0 !important;
+  }
 
   li {
     padding: ($padding-std / 2) $padding-std !important;
@@ -32,18 +38,21 @@
     width: 40px !important;
     height: 40px !important;
   }
+
+  .up-username {
+    @media only screen and (max-width: $break-sm) {
+      display: none;
+    }
+  }
 }
 
 .up-room__chat__messages-container {
-  //border: 1px solid green;
-  width: 80%;
   display: flex;
   flex-flow: column;
   flex-grow: 3 !important;
 }
 
 .up-room__chat__messages {
-  //border: 1px solid yellow;
   padding: $padding-std !important;
 }
 
@@ -80,7 +89,6 @@
 }
 
 .up-room__chat__input {
-  //border: 1px solid blue;
   display: flex;
   padding: $padding-std * 2;
   justify-content: space-between;
@@ -109,7 +117,6 @@
 }
 
 .up-room__video {
-  //border: 1px solid purple;
   height: 100%;
   padding-right: $padding-std;
   padding-left: $padding-std;
@@ -135,7 +142,6 @@
 }
 
 .up-room__video-buttons {
-  //border: 1px solid cyan;
   margin-left: 0 !important;
   margin-right: 0 !important;
   text-align: left;
@@ -145,7 +151,6 @@
 }
 
 .up-room__playlist {
-  //border: 1px solid brown;
   padding: $padding-std;
   margin-left: 0 !important;
   margin-right: 0 !important;

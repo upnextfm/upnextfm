@@ -16,15 +16,26 @@ class Users extends React.Component {
     const { room, users } = this.props;
 
     return (
-      <Hidden xsDown>
-        <List className="up-room__chat__users">
-          {room.users.map(username => (
-            <ListItem key={username} button>
-              <RoomUser user={usersFindByUsername(users.repo, username)} />
-            </ListItem>
-          ))}
-        </List>
-      </Hidden>
+      <div className="up-room__chat__users">
+        <Hidden xsDown>
+          <List>
+            {room.users.map(username => (
+              <ListItem key={username} button>
+                <RoomUser user={usersFindByUsername(users.repo, username)} />
+              </ListItem>
+            ))}
+          </List>
+        </Hidden>
+        <Hidden smUp>
+          <List>
+            {room.users.map(username => (
+              <ListItem key={username} button>
+                <RoomUser user={usersFindByUsername(users.repo, username)} />
+              </ListItem>
+            ))}
+          </List>
+        </Hidden>
+      </div>
     );
   }
 }
