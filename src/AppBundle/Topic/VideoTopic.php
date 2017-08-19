@@ -1,21 +1,22 @@
 <?php
 namespace AppBundle\Topic;
 
+use Gos\Bundle\WebSocketBundle\Router\WampRequest;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Ratchet\ConnectionInterface;
+use Ratchet\Wamp\Topic;
 use AppBundle\Entity\Room;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Video;
 use AppBundle\Entity\VideoLog;
-use Gos\Bundle\WebSocketBundle\Router\WampRequest;
-use Ratchet\ConnectionInterface;
-use Ratchet\Wamp\Topic;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Predis\Client as Redis;
 
 class VideoTopic extends AbstractTopic
 {
   /**
-   * @var array
+   * @var Redis
    */
-  protected $playing = [];
+  protected $redis;
 
   /**
    * {@inheritdoc}
@@ -23,6 +24,16 @@ class VideoTopic extends AbstractTopic
   public function getName()
   {
     return "video.topic";
+  }
+
+  /**
+   * @param Redis $redis
+   * @return $this
+   */
+  public function setRedis(Redis $redis)
+  {
+    $this->redis = $redis;
+    return $this;
   }
 
   /**
@@ -40,13 +51,16 @@ class VideoTopic extends AbstractTopic
       return;
     }
 
-    if (isset($this->playing[$room->getId()])) {
-      $video = $this->playing[$room->getId()];
-      $connection->event($topic->getId(), [
-        "cmd"      => VideoCommands::START,
-        "codename" => $video->getCodename(),
-        "provider" => $video->getProvider()
-      ]);
+    $videoID = $this->redis->get(sprintf("room:%s:playing", $room->getName()));
+    if ($videoID) {
+      $video = $this->em->getRepository("AppBundle:Video")->findByID($videoID);
+      if ($video) {
+        $connection->event($topic->getId(), [
+          "cmd"      => VideoCommands::START,
+          "codename" => $video->getCodename(),
+          "provider" => $video->getProvider()
+        ]);
+      }
     }
   }
 
@@ -135,7 +149,7 @@ class VideoTopic extends AbstractTopic
     $video->setDateLastPlayed(new \DateTime());
     $video->incrNumPlays();
     $this->em->persist($video);
-    $this->playing[$room->getId()] = $video;
+    $this->redis->set(sprintf("room:%s:playing", $room->getName()), $video->getId());
 
     $videoLog = new VideoLog($video, $room, $user);
     $this->em->merge($videoLog);

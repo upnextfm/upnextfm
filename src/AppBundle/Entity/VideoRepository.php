@@ -6,6 +6,17 @@ use Doctrine\ORM\EntityRepository;
 class VideoRepository extends EntityRepository
 {
   /**
+   * @param $videoID
+   * @return Video
+   */
+  public function findByID($videoID)
+  {
+    return $this->findOneBy([
+      "id" => $videoID
+    ]);
+  }
+
+  /**
    * Returns the video with the given codename and provider
    *
    * @param string $codename

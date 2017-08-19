@@ -90,6 +90,8 @@ services:
     app.topic.video:
         class: AppBundle\Topic\VideoTopic
         parent: app.topic.parent
+        calls:
+          - [setRedis, ["@snc_redis.video"]]
         tags:
           - { name: gos_web_socket.topic }
 
@@ -98,6 +100,8 @@ services:
     ## ########################################################################
     app.video.periodic:
       class: AppBundle\Periodic\VideoPeriodic
+      calls:
+        - [setRedis, ["@snc_redis.video"]]
       tags:
         - { name: gos_web_socket.periodic }
 

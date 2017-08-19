@@ -138,6 +138,10 @@ snc_redis:
       type: predis
       alias: session
       dsn: "%snc_redis_clients_session_dsn%"
+    video:
+      type: predis
+      alias: video
+      dsn: "%snc_redis_clients_video_dsn%"
   session:
     client: session
     locking: false
