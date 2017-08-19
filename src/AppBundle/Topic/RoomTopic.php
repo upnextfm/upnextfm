@@ -31,53 +31,57 @@ class RoomTopic extends AbstractTopic
    */
   public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
   {
-    $user = $this->getUser($connection);
-    if (!($user instanceof UserInterface)) {
-      return;
-    }
-
-    $room     = $this->getRoom($request->getAttributes()->get("room"), $user);
-    $repo     = $this->em->getRepository("AppBundle:ChatLog");
-    $messages = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
-
-    $repoFound = [];
-    $repoUsers = [];
-    foreach($messages as $message) {
-      $u = $message->getUser();
-      if ($u && !in_array($u->getUsername(), $repoFound)) {
-        $repoUsers[] = $this->serializeUser($message->getUser());
-        $repoFound[] = $u->getUsername();
+    try {
+      $user = $this->getUser($connection);
+      if (!($user instanceof UserInterface)) {
+        return;
       }
-    }
 
-    $users = [];
-    foreach($topic as $client) {
-      $u = $this->getUser($client);
-      if ($u instanceof UserInterface) {
-        $users[] = $u->getUsername();
-        if (!in_array($u->getUsername(), $repoFound)) {
-          $repoUsers[] = $this->serializeUser($u);
+      $room = $this->getRoom($request->getAttributes()->get("room"), $user);
+      $repo = $this->em->getRepository("AppBundle:ChatLog");
+      $messages = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
+
+      $repoFound = [];
+      $repoUsers = [];
+      foreach ($messages as $message) {
+        $u = $message->getUser();
+        if ($u && !in_array($u->getUsername(), $repoFound)) {
+          $repoUsers[] = $this->serializeUser($message->getUser());
           $repoFound[] = $u->getUsername();
         }
       }
-    }
 
-    $topic->broadcast([
-      "cmd"  => RoomCommands::JOINED,
-      "user" => $this->serializeUser($user)
-    ]);
-    $connection->event($topic->getId(), [
-      "cmd"      => RoomCommands::MESSAGES,
-      "messages" => array_reverse($this->serializeMessages($messages))
-    ]);
-    $connection->event($topic->getId(), [
-      "cmd"   => RoomCommands::REPO_USERS,
-      "users" => $repoUsers
-    ]);
-    $connection->event($topic->getId(), [
-      "cmd"   => RoomCommands::USERS,
-      "users" => $users
-    ]);
+      $users = [];
+      foreach ($topic as $client) {
+        $u = $this->getUser($client);
+        if ($u instanceof UserInterface) {
+          $users[] = $u->getUsername();
+          if (!in_array($u->getUsername(), $repoFound)) {
+            $repoUsers[] = $this->serializeUser($u);
+            $repoFound[] = $u->getUsername();
+          }
+        }
+      }
+
+      $topic->broadcast([
+        "cmd"  => RoomCommands::JOINED,
+        "user" => $this->serializeUser($user)
+      ]);
+      $connection->event($topic->getId(), [
+        "cmd"      => RoomCommands::MESSAGES,
+        "messages" => array_reverse($this->serializeMessages($messages))
+      ]);
+      $connection->event($topic->getId(), [
+        "cmd"   => RoomCommands::REPO_USERS,
+        "users" => $repoUsers
+      ]);
+      $connection->event($topic->getId(), [
+        "cmd"   => RoomCommands::USERS,
+        "users" => $users
+      ]);
+    } catch (\Exception $e) {
+      $this->logger->error($e->getMessage());
+    }
   }
 
   /**
@@ -90,15 +94,19 @@ class RoomTopic extends AbstractTopic
    */
   public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
   {
-    $user = $this->getUser($connection);
-    if (!($user instanceof UserInterface)) {
-      return;
-    }
+    try {
+      $user = $this->getUser($connection);
+      if (!($user instanceof UserInterface)) {
+        return;
+      }
 
-    $topic->broadcast([
-      "cmd"      => RoomCommands::PARTED,
-      "username" => $user->getUsername()
-    ]);
+      $topic->broadcast([
+        "cmd"      => RoomCommands::PARTED,
+        "username" => $user->getUsername()
+      ]);
+    } catch (\Exception $e) {
+      $this->logger->error($e->getMessage());
+    }
   }
 
   /**
