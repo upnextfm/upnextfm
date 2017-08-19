@@ -28,7 +28,8 @@ export default {
 
   },
   playlist: {
-    videoID:    'MD8flUkymrM',
+    codename:   'MD8flUkymrM',
+    provider:   'youtube',
     subscribed: false
   }
 };

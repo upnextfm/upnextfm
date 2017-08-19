@@ -1,31 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { playlistPlay } from 'actions/playlistActions';
+import * as types from 'actions/actionTypes';
 import Button from 'material-ui/Button';
 
 class PlaylistContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      videoID: 'MD8flUkymrM'
-    };
-  }
-
   handleClickPlay = () => {
-    this.props.dispatch(playlistPlay(this.state.videoID));
+    const codename = this.inputRef.value;
+    this.props.dispatch(playlistPlay(codename, types.PROVIDER_YOUTUBE));
   };
 
   render() {
-    const { videoID } = this.state;
+    const { codename } = this.props;
 
     return (
       <div className="up-room-video__playlist up-paper-container">
         <label htmlFor="up-youtube-id">YouTUBE ID: </label>
         <input
           id="up-youtube-id"
-          value={videoID}
+          defaultValue={codename}
           style={{ color: 'black' }}
-          onChange={(e) => { this.setState({ videoID: e.target.value }); }}
           ref={(ref) => { this.inputRef = ref; }}
         />
         <Button onClick={this.handleClickPlay}>Play</Button>

@@ -4,7 +4,7 @@ import YouTube from 'react-youtube';
 
 class Player extends React.Component {
   render() {
-    const { videoID } = this.props;
+    const { codename } = this.props;
     const opts = {
       width:      '100%',
       playerVars: {
@@ -13,7 +13,7 @@ class Player extends React.Component {
     };
 
     return (
-      <YouTube videoId={videoID} opts={opts} className="up-room-video__player" />
+      <YouTube videoId={codename} opts={opts} className="up-room-video__player" />
     );
   }
 }

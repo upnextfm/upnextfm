@@ -16,7 +16,8 @@ export default function playlistReducer(state = initialState.playlist, action = 
       });
     case types.PLAYLIST_START:
       return Object.assign({}, state, {
-        videoID: action.videoID
+        codename: action.codename,
+        provider: action.provider
       });
     default:
       return state;

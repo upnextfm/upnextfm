@@ -6,12 +6,16 @@ export function playlistSubscribe() {
     const room = getState().room;
     if (room.name !== '') {
       api.socket.subscribe(`${types.CHAN_VIDEO}/${room.name}`, (uri, payload) => {
-        switch(payload.cmd) {
+        switch (payload.cmd) {
           case types.CMD_VIDEO_START:
             dispatch({
-              type:    types.PLAYLIST_START,
-              videoID: payload.videoID
+              type:     types.PLAYLIST_START,
+              codename: payload.codename,
+              provider: payload.provider
             });
+            break;
+          default:
+
             break;
         }
       });
@@ -24,11 +28,12 @@ export function playlistSubscribe() {
 
 /**
  *
- * @param {string} videoID
+ * @param {string} codename
+ * @param {string} provider
  * @returns {Function}
  */
-export function playlistPlay(videoID) {
-  return (dispatch, getState, api) => {
+export function playlistPlay(codename, provider) {
+  return (dispatch, getState, api) => { // eslint-disable-line
     if (!getState().playlist.subscribed) {
       dispatch(playlistSubscribe());
     }
@@ -40,7 +45,8 @@ export function playlistPlay(videoID) {
       }
       api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
         cmd: types.CMD_VIDEO_PLAY,
-        videoID
+        codename,
+        provider
       });
     }
   };

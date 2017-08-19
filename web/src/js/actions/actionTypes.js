@@ -43,3 +43,5 @@ export const CMD_REPO_USERS  = 'repo_users';
 export const CMD_MESSAGES    = 'messages';
 export const CMD_VIDEO_PLAY  = 'play';
 export const CMD_VIDEO_START = 'start';
+
+export const PROVIDER_YOUTUBE = 'youtube';

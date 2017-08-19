@@ -3,6 +3,7 @@ namespace AppBundle\Topic;
 
 use AppBundle\Entity\ChatLog;
 use AppBundle\Entity\Room;
+use AppBundle\Entity\User;
 use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
@@ -108,12 +109,19 @@ class RoomTopic extends AbstractTopic
     array $eligible)
   {
     try {
+      $event = array_map("trim", $event);
+      if (empty($event["cmd"])) {
+        $this->logger->error("cmd not set.", $event);
+        return;
+      }
       $user = $this->getUser($conn);
-      if (is_string($user)) {
+      if (!($user instanceof UserInterface)) {
+        $this->logger->error("User not found.", $event);
         return;
       }
       $room = $this->getRoom($req->getAttributes()->get("room"), $user);
       if (!$room || $room->isDeleted()) {
+        $this->logger->error("Room not found.", $event);
         return;
       }
 
@@ -132,7 +140,7 @@ class RoomTopic extends AbstractTopic
    * @param Topic $topic
    * @param WampRequest $req
    * @param Room $room
-   * @param UserInterface $user
+   * @param UserInterface|User $user
    * @param array $event
    */
   protected function handleSend(
@@ -144,7 +152,6 @@ class RoomTopic extends AbstractTopic
     array $event)
   {
 
-    $msg = trim($event["msg"]);
     if (empty($msg)) {
       return;
     }
