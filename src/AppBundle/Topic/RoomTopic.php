@@ -7,14 +7,11 @@ use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
-use Ratchet\Wamp\WampConnection;
 
 class RoomTopic extends AbstractTopic
 {
   /**
-   * Like RPC is will use to prefix the channel
-   *
-   * @return string
+   * {@inheritdoc}
    */
   public function getName()
   {
@@ -22,12 +19,7 @@ class RoomTopic extends AbstractTopic
   }
 
   /**
-   * This will receive any Subscription requests for this topic.
-   *
-   * @param ConnectionInterface|WampConnection $connection
-   * @param Topic $topic
-   * @param WampRequest $request
-   * @return void
+   * {@inheritdoc}
    */
   public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
   {
@@ -85,12 +77,7 @@ class RoomTopic extends AbstractTopic
   }
 
   /**
-   * This will receive any UnSubscription requests for this topic.
-   *
-   * @param ConnectionInterface|WampConnection $connection
-   * @param Topic $topic
-   * @param WampRequest $request
-   * @return void
+   * {@inheritdoc}
    */
   public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
   {
@@ -110,15 +97,7 @@ class RoomTopic extends AbstractTopic
   }
 
   /**
-   * This will receive any Publish requests for this topic.
-   *
-   * @param ConnectionInterface $conn
-   * @param Topic $topic
-   * @param WampRequest $req
-   * @param $event
-   * @param array $exclude
-   * @param array $eligible
-   * @return mixed|void
+   * {@inheritdoc}
    */
   public function onPublish(
     ConnectionInterface $conn,
@@ -170,37 +149,18 @@ class RoomTopic extends AbstractTopic
       return;
     }
 
-
     $chatLog = new ChatLog($room, $user, $msg);
     $chatLog = $this->em->merge($chatLog);
     $this->em->flush();
-    dump($chatLog->getUser()->getId());
+
     $topic->broadcast([
-      'cmd' => RoomCommands::SEND,
-      'msg' => [
+      "cmd" => RoomCommands::SEND,
+      "msg" => [
         "id"      => $chatLog->getId(),
         "date"    => $event["date"],
         "from"    => $user->getUsername(),
         "message" => $msg
       ],
     ]);
-  }
-
-  /**
-   * @param string $roomName
-   * @param UserInterface $user
-   * @return Room
-   */
-  protected function getRoom($roomName, UserInterface $user = null)
-  {
-    $repo = $this->em->getRepository("AppBundle:Room");
-    $room = $repo->findByName($roomName);
-    if (!$room && $user !== null) {
-      $room = new Room($roomName, $user);
-      $this->em->merge($room);
-      $this->em->flush();
-    }
-
-    return $room;
   }
 }

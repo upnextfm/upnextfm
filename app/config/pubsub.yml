@@ -6,6 +6,14 @@ room_topic:
     room:
       pattern: "[\\w]+"
 
+video_topic:
+  channel: app/video/{room}
+  handler:
+    callback: "video.topic"
+  requirements:
+    room:
+      pattern: "[\\w]+"
+
 auth_topic:
   channel: app/auth
   handler:

@@ -1,0 +1,47 @@
+import * as types from 'actions/actionTypes';
+import { authToggleLoginDialog } from 'actions/authActions';
+
+export function playlistSubscribe() {
+  return (dispatch, getState, api) => {
+    const room = getState().room;
+    if (room.name !== '') {
+      api.socket.subscribe(`${types.CHAN_VIDEO}/${room.name}`, (uri, payload) => {
+        switch(payload.cmd) {
+          case types.CMD_VIDEO_START:
+            dispatch({
+              type:    types.PLAYLIST_START,
+              videoID: payload.videoID
+            });
+            break;
+        }
+      });
+      dispatch({
+        type: types.PLAYLIST_SUBSCRIBE
+      });
+    }
+  };
+}
+
+/**
+ *
+ * @param {string} videoID
+ * @returns {Function}
+ */
+export function playlistPlay(videoID) {
+  return (dispatch, getState, api) => {
+    if (!getState().playlist.subscribed) {
+      dispatch(playlistSubscribe());
+    }
+
+    const room = getState().room;
+    if (room.name !== '') {
+      if (!api.auth.isAuthenticated()) {
+        return dispatch(authToggleLoginDialog());
+      }
+      api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
+        cmd: types.CMD_VIDEO_PLAY,
+        videoID
+      });
+    }
+  };
+}

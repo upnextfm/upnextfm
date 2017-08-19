@@ -2,6 +2,7 @@
 namespace AppBundle\Topic;
 
 use AppBundle\Entity\ChatLog;
+use AppBundle\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
 use Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProviderInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
@@ -148,6 +149,24 @@ abstract class AbstractTopic implements TopicInterface
     }
 
     return $user;
+  }
+
+  /**
+   * @param string $roomName
+   * @param UserInterface $user
+   * @return Room
+   */
+  protected function getRoom($roomName, UserInterface $user = null)
+  {
+    $repo = $this->em->getRepository("AppBundle:Room");
+    $room = $repo->findByName($roomName);
+    if (!$room && $user !== null) {
+      $room = new Room($roomName, $user);
+      $this->em->merge($room);
+      $this->em->flush();
+    }
+
+    return $room;
   }
 
   /**

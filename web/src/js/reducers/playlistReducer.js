@@ -10,6 +10,14 @@ import initialState from 'store/initialState';
  */
 export default function playlistReducer(state = initialState.playlist, action = {}) {
   switch (action.type) {
+    case types.PLAYLIST_SUBSCRIBE:
+      return Object.assign({}, state, {
+        subscribed: true
+      });
+    case types.PLAYLIST_START:
+      return Object.assign({}, state, {
+        videoID: action.videoID
+      });
     default:
       return state;
   }

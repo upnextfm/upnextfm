@@ -85,6 +85,15 @@ services:
           - { name: gos_web_socket.topic }
 
     ## ########################################################################
+    ## Websocket Video Topic
+    ## ########################################################################
+    app.topic.video:
+        class: AppBundle\Topic\VideoTopic
+        parent: app.topic.parent
+        tags:
+          - { name: gos_web_socket.topic }
+
+    ## ########################################################################
     ## Websocket Authentication Provider
     ## ########################################################################
     gos_web_socket.websocket_authentification.provider:

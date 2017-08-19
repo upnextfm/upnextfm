@@ -24,16 +24,22 @@ export const ROOM_USERS        = 'ROOM_USERS';
 export const ROOM_MESSAGES     = 'ROOM_MESSAGES';
 export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
 
+export const PLAYLIST_START     = 'PLAYLIST_START';
+export const PLAYLIST_SUBSCRIBE = 'PLAYLIST_SUBSCRIBE';
+
 export const USERS_REPO_ADD       = 'USERS_REPO_ADD';
 export const USERS_REPO_ADD_MULTI = 'USERS_REPO_ADD_MULTI';
 export const USERS_REPO_REMOVE    = 'USERS_REPO_REMOVE';
 
-export const CHAN_ROOM      = 'app/room';
-export const CHAN_AUTH      = 'app/auth';
-export const CMD_AUTH       = 'auth';
-export const CMD_SEND       = 'send';
-export const CMD_JOINED     = 'joined';
-export const CMD_PARTED     = 'parted';
-export const CMD_USERS      = 'users';
-export const CMD_REPO_USERS = 'repo_users';
-export const CMD_MESSAGES   = 'messages';
+export const CHAN_ROOM       = 'app/room';
+export const CHAN_VIDEO      = 'app/video';
+export const CHAN_AUTH       = 'app/auth';
+export const CMD_AUTH        = 'auth';
+export const CMD_SEND        = 'send';
+export const CMD_JOINED      = 'joined';
+export const CMD_PARTED      = 'parted';
+export const CMD_USERS       = 'users';
+export const CMD_REPO_USERS  = 'repo_users';
+export const CMD_MESSAGES    = 'messages';
+export const CMD_VIDEO_PLAY  = 'play';
+export const CMD_VIDEO_START = 'start';

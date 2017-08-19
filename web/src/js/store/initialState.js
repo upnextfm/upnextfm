@@ -28,6 +28,7 @@ export default {
 
   },
   playlist: {
-
+    videoID:    'MD8flUkymrM',
+    subscribed: false
   }
 };
