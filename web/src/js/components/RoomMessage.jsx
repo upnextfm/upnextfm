@@ -1,9 +1,9 @@
 import React from 'react';
 import Moment from 'react-moment';
-import Linkify from 'react-linkify';
 import { ListItem } from 'material-ui/List';
 import { UserPropType, MessagePropType } from 'utils/props';
 import RoomUser from 'components/RoomUser';
+import Linkify from 'components/Linkify';
 
 const RoomMessage = ({ message, user, ...props }) => (
   <ListItem className="up-room-message" {...props}>
