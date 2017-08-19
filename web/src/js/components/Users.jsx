@@ -17,7 +17,7 @@ class Users extends React.Component {
 
     return (
       <Hidden xsDown>
-        <List className="up-room__chat__users up-paper-container">
+        <List className="up-room__chat__users">
           {room.users.map(username => (
             <ListItem key={username} button>
               <RoomUser user={usersFindByUsername(users.repo, username)} />

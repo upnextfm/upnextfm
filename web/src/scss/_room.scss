@@ -3,16 +3,11 @@
 .up-room {
   display: flex;
   flex-flow: column;
-  height: calc(100% - ( #{$nav-height} + ( #{$padding-std} * 2 )));
-  margin: $padding-std;
+  height: calc(100% - #{$nav-height});
 
   @media (min-width: $break-lg) {
     flex-flow: row !important;
   }
-}
-
-.up-room > div{
-  height: calc(100vh - ( #{$nav-height} + ( #{$padding-std} * 2 )));
 }
 
 .up-room__chat {
@@ -23,24 +18,25 @@
 
 .up-room__chat__users {
   //border: 1px solid red;
+  width: 20%;
   flex-grow: 2 !important;
   overflow: hidden !important;
-  padding: $padding-std !important;
-  min-width: 15%;
-  max-width: 15%;
+  padding-top: 0 !important;
+  background-color: #383D4B;
 
   li {
     padding: ($padding-std / 2) $padding-std !important;
   }
 
   .up-avatar {
-    width: 1.25rem !important;
-    height: 1.25rem !important;
+    width: 40px !important;
+    height: 40px !important;
   }
 }
 
 .up-room__chat__messages-container {
   //border: 1px solid green;
+  width: 80%;
   display: flex;
   flex-flow: column;
   flex-grow: 3 !important;
@@ -88,7 +84,7 @@
   display: flex;
   padding: $padding-std * 2;
   justify-content: space-between;
-  border-top: 1px solid $color-bg;
+  border-top: 1px solid #3a3a3a;
   min-height: 65px;
 
   input {
