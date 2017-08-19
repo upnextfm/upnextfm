@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 class PlaylistContainer extends React.Component {
   render() {
     return (
-      <div className="up-room__playlist up-paper-container">
+      <div className="up-room-video__playlist up-paper-container">
         PLAYLIST
       </div>
     );

@@ -36,7 +36,7 @@ class MessageInput extends React.Component {
     const { inputValue, dispatch } = this.props;
 
     return (
-      <div className="up-room__chat__input">
+      <div className="up-room-messages__input">
         <input
           type="text"
           value={inputValue}

@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { usersFindByUsername } from 'utils/users';
 import List from 'material-ui/List';
-import RoomMessage from 'components/RoomMessage';
+import Message from 'components/Chat/Message';
 
-class Messages extends React.Component {
+class MessagesPanel extends React.Component {
   static propTypes = {
     room:  PropTypes.object,
     users: PropTypes.object
@@ -21,9 +21,9 @@ class Messages extends React.Component {
 
     return (
       <Scrollbars ref={(ref) => { this.scrollRef = ref; }}>
-        <List className="up-room__chat__messages">
+        <List className="up-room-panel__messages">
           {room.messages.map(message => (
-            <RoomMessage
+            <Message
               key={message.id}
               message={message}
               user={usersFindByUsername(users.repo, message.from)}
@@ -42,4 +42,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Messages);
+export default connect(mapStateToProps)(MessagesPanel);

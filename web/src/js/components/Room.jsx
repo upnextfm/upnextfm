@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Grid from 'material-ui/Grid';
-import * as api from 'api';
 import { roomJoin } from 'actions/roomActions';
+import * as api from 'api';
+import Grid from 'material-ui/Grid';
 import LoginDialog from 'components/Dialogs/LoginDialog';
 import RegisterDialog from 'components/Dialogs/RegisterDialog';
+import ChatSide from 'components/Chat/ChatSide';
+import VideoSide from 'components/Video/VideoSide';
 import Nav from 'components/Nav';
-import ChatContainer from 'components/ChatContainer';
-import VideoContainer from 'components/VideoContainer';
 
 class Room extends React.Component {
   static propTypes = {
@@ -37,10 +37,10 @@ class Room extends React.Component {
         <Nav auth={auth} />
         <div className="up-room">
           <Grid item xs={12} sm={12} md={7}>
-            <ChatContainer />
+            <ChatSide />
           </Grid>
           <Grid item xs={12} sm={12} md={5}>
-            <VideoContainer />
+            <VideoSide />
           </Grid>
         </div>
         <LoginDialog />
