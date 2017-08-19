@@ -94,6 +94,14 @@ services:
           - { name: gos_web_socket.topic }
 
     ## ########################################################################
+    ## Video Periodic
+    ## ########################################################################
+    app.video.periodic:
+      class: AppBundle\Periodic\VideoPeriodic
+      tags:
+        - { name: gos_web_socket.periodic }
+
+    ## ########################################################################
     ## Websocket Authentication Provider
     ## ########################################################################
     gos_web_socket.websocket_authentification.provider:
