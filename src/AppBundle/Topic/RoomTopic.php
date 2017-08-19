@@ -110,6 +110,7 @@ class RoomTopic extends AbstractTopic
     array $exclude,
     array $eligible)
   {
+    $this->logger->info("Got command " . $event["cmd"], $event);
     try {
       $event = array_map("trim", $event);
       if (empty($event["cmd"])) {
