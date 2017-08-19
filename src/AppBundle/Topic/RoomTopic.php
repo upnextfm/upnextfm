@@ -154,7 +154,7 @@ class RoomTopic extends AbstractTopic
     UserInterface $user,
     array $event)
   {
-
+    $msg = $event["msg"];
     if (empty($msg)) {
       return;
     }
