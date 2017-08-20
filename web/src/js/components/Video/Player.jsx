@@ -10,6 +10,10 @@ class Player extends React.Component {
     this.player   = null;
   }
 
+  componentDidMount() {
+
+  }
+
   componentDidUpdate(prevProps) {
     if (this.player) {
       if (this.shouldSeekTo()) {
@@ -57,7 +61,8 @@ class Player extends React.Component {
   };
 
   handleStateChange = () => {
-    this.props.dispatch(videoStatus(this.player.getPlayerState()));
+    const status = this.player.getPlayerState();
+    this.props.dispatch(videoStatus(status));
   };
 
   render() {
