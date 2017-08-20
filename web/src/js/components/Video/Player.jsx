@@ -16,7 +16,6 @@ class Player extends React.Component {
         this.player.seekTo(this.props.video.time);
       }
       if (prevProps.video.status !== this.props.video.status) {
-        console.info(this.props.video.status);
         switch (this.props.video.status) {
           case 1:
             this.player.playVideo();
