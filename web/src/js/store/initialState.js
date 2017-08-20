@@ -26,8 +26,8 @@ export default {
     repo: []
   },
   video: {
-    time:    0,
-    isMuted: false
+    time:     0,
+    isMuted:  false
   },
   playlist: {
     codename:   'MD8flUkymrM',

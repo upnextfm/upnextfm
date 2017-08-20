@@ -1,16 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { videoReady } from 'actions/videoActions';
+import { videoReady, videoTime } from 'actions/videoActions';
 import YouTube from 'react-youtube';
 
 class Player extends React.Component {
   constructor(props) {
     super(props);
-    this.player = null;
+    this.interval = null;
+    this.player   = null;
   }
 
   componentDidUpdate() {
     if (this.player) {
+      if (this.shouldSeekTo()) {
+        this.player.seekTo(this.props.video.time);
+      }
       if (this.props.video.isMuted) {
         this.player.mute();
       } else {
@@ -19,18 +23,33 @@ class Player extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  shouldSeekTo = () => {
+    const diff = this.props.video.time - this.player.getCurrentTime();
+    return diff > 5;
+  };
+
+  handleInterval = () => {
+    const time = parseInt(this.player.getCurrentTime(), 10);
+    this.props.dispatch(videoTime(time));
+  };
+
   handleReady = (e) => {
     this.player = e.target;
     this.props.dispatch(videoReady());
+    this.player.seekTo(this.props.video.time);
+    setInterval(this.handleInterval, 1000);
   };
 
   render() {
-    const { video, playlist } = this.props;
+    const { playlist } = this.props;
     const opts = {
       width:      '100%',
       playerVars: {
         widget_referrer: document.location.href,
-        start:           video.time,
         showinfo:        0,
         controls:        0,
         autoplay:        1,

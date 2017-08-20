@@ -9,6 +9,13 @@ export function videoReady() {
   };
 }
 
+export function videoTime(time) {
+  return {
+    type: types.VIDEO_TIME,
+    time
+  };
+}
+
 export function videoToggleMute() {
   return (dispatch, getState, api) => {
     dispatch({
