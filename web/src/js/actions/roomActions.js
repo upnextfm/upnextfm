@@ -141,3 +141,13 @@ export function roomInputChange(inputValue) {
     inputValue
   };
 }
+
+/**
+ *
+ * @returns {{type: string}}
+ */
+export function roomToggleUsersCollapsed() {
+  return {
+    type: types.ROOM_TOGGLE_USERS_COLLAPSED
+  };
+}

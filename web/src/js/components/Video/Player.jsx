@@ -9,7 +9,7 @@ class Player extends React.Component {
       width:      '100%',
       playerVars: {
         showinfo: 0,
-        controls: 0,
+        controls: 1,
         autoplay: 1
       }
     };

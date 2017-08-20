@@ -16,10 +16,11 @@ export default {
     error:                null
   },
   room: {
-    name:       '',
-    inputValue: '',
-    users:      [],
-    messages:   []
+    name:             '',
+    inputValue:       '',
+    isUsersCollapsed: false,
+    users:            [],
+    messages:         []
   },
   users: {
     repo: []

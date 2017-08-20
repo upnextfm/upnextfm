@@ -1,6 +1,13 @@
 @import "vars";
 @import "mixins";
 
+$width-panel-users: 20%;
+$width-panel-users-collapsed: 58px;
+$width-avatar: 40px;
+$width-avatar-collapsed: 100%;
+$height-avatar: 40px;
+$height-avatar-collapsed: auto;
+
 /******************************************************************************
  * Room
  *****************************************************************************/
@@ -43,16 +50,33 @@
  * Panels
  *****************************************************************************/
 .up-room-panel__users {
-  max-width: 20%;
+  z-index: 2;
+  position: relative;
+  max-width: $width-panel-users;
   flex-grow: 2 !important;
   overflow: hidden !important;
   background-color: #0A4C76;
-  padding-top: 0 !important;
-  z-index: 2;
   box-shadow: 2px 0 2px rgba(0, 0, 0, 0.25);
 
+  &.up-collapsed {
+    max-width: $width-panel-users-collapsed;
+
+    .up-username {
+      display: none;
+    }
+
+    .up-avatar {
+      width: $width-avatar-collapsed !important;
+      height: $height-avatar-collapsed !important;
+    }
+  }
+
   @include media-xs {
-    max-width: 58px;
+    max-width: $width-panel-users-collapsed;
+  }
+
+  ul {
+    padding-top: 0 !important;
   }
 
   li {
@@ -60,12 +84,12 @@
   }
 
   .up-avatar {
-    width: 40px !important;
-    height: 40px !important;
+    width: $width-avatar !important;
+    height: $height-avatar !important;
 
     @include media-xs {
-      width: 100% !important;
-      height: auto !important;
+      width: $width-avatar-collapsed !important;
+      height: $height-avatar-collapsed !important;
     }
   }
 
@@ -73,6 +97,12 @@
     @include media-xs {
       display: none;
     }
+  }
+
+  .up-collapse {
+    position: absolute;
+    bottom: 10px;
+    left: 6px;
   }
 }
 

@@ -15,14 +15,15 @@ export const REGISTER_COMPLETE       = 'REGISTER_COMPLETE';
 
 export const NAV_TOGGLE_DRAWER   = 'NAV_TOGGLE_DRAWER';
 
-export const ROOM_JOINED       = 'ROOM_JOINED';
-export const ROOM_PARTED       = 'ROOM_PARTED';
-export const ROOM_NAME         = 'ROOM_NAME';
-export const ROOM_SEND         = 'ROOM_SEND';
-export const ROOM_PAYLOAD      = 'ROOM_PAYLOAD';
-export const ROOM_USERS        = 'ROOM_USERS';
-export const ROOM_MESSAGES     = 'ROOM_MESSAGES';
-export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
+export const ROOM_JOINED                 = 'ROOM_JOINED';
+export const ROOM_PARTED                 = 'ROOM_PARTED';
+export const ROOM_NAME                   = 'ROOM_NAME';
+export const ROOM_SEND                   = 'ROOM_SEND';
+export const ROOM_PAYLOAD                = 'ROOM_PAYLOAD';
+export const ROOM_USERS                  = 'ROOM_USERS';
+export const ROOM_MESSAGES               = 'ROOM_MESSAGES';
+export const ROOM_INPUT_CHANGE           = 'ROOM_INPUT_CHANGE';
+export const ROOM_TOGGLE_USERS_COLLAPSED = 'ROOM_TOGGLE_USERS_COLLAPSED';
 
 export const PLAYLIST_START     = 'PLAYLIST_START';
 export const PLAYLIST_SUBSCRIBE = 'PLAYLIST_SUBSCRIBE';

@@ -111,6 +111,10 @@ export default function roomReducer(state = initialState.room, action = {}) {
       return Object.assign({}, state, {
         inputValue: ''
       });
+    case types.ROOM_TOGGLE_USERS_COLLAPSED:
+      return Object.assign({}, state, {
+        isUsersCollapsed: !state.isUsersCollapsed
+      });
     case types.ROOM_JOINED:
       return joined(state, action);
     case types.ROOM_PARTED:
