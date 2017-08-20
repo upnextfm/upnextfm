@@ -8,6 +8,8 @@ class Player extends React.Component {
     const opts = {
       width:      '100%',
       playerVars: {
+        showinfo: 0,
+        controls: 0,
         autoplay: 1
       }
     };

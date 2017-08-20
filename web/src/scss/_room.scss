@@ -9,7 +9,7 @@
   flex-flow: column;
   height: calc(100% - #{$nav-height});
 
-  @include media-lg {
+  @media (min-width: $break-md) {
     flex-flow: row !important;
   }
 }
