@@ -26,8 +26,9 @@ export default {
     repo: []
   },
   video: {
-    time:     0,
-    isMuted:  false
+    time:    0,
+    status:  -1,    // -1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering, 4 cued
+    isMuted: false
   },
   playlist: {
     codename:   'MD8flUkymrM',

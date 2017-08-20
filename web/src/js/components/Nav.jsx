@@ -13,10 +13,12 @@ import ArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import PlayArrow from 'material-ui-icons/PlayArrow';
 import { animateScrollLeft } from 'utils/animate';
 import { navToggleDrawer } from 'actions/navActions';
-import { videoToggleMute } from 'actions/videoActions';
+import { videoToggleMute, videoTogglePlay, videoStatus } from 'actions/videoActions';
 import { authToggleLoginDialog, authLogout } from 'actions/authActions';
 import { registerToggleDialog } from 'actions/registerActions';
 import NavDrawer from 'components/NavDrawer';
+import MuteIcon from 'components/Icons/MuteIcon';
+import PlayIcon from 'components/Icons/PlayIcon';
 
 class Nav extends React.Component {
   static propTypes = {
@@ -57,7 +59,11 @@ class Nav extends React.Component {
     this.props.dispatch(videoToggleMute());
   };
 
-  handleClickDown = () => {
+  handleClickPlay = () => {
+    this.props.dispatch(videoTogglePlay());
+  };
+
+  handleClickScroll = () => {
     animateScrollLeft(document.body, document.body.scrollWidth, 50);
   };
 
@@ -92,13 +98,13 @@ class Nav extends React.Component {
           </Hidden>
           <Hidden smUp>
             <div className="up-nav__video-controls">
-              <IconButton onClick={this.handleClickDown}>
-                <PlayArrow />
+              <IconButton onClick={this.handleClickPlay}>
+                <PlayIcon status={video.status} />
               </IconButton>
-              <IconButton title={video.isMuted ? 'Unmute' : 'Mute'} onClick={this.handleClickMute}>
-                {video.isMuted ? <VolumeOff /> : <VolumeUp />}
+              <IconButton onClick={this.handleClickMute}>
+                <MuteIcon isMuted={video.isMuted} />
               </IconButton>
-              <IconButton onClick={this.handleClickDown}>
+              <IconButton onClick={this.handleClickScroll}>
                 <ArrowRight />
               </IconButton>
             </div>

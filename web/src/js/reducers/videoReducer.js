@@ -18,6 +18,14 @@ export default function videoReducer(state = initialState.video, action = {}) {
       return Object.assign({}, state, {
         time: action.time
       });
+    case types.VIDEO_STATUS:
+      return Object.assign({}, state, {
+        status: action.status
+      });
+    case types.VIDEO_TOGGLE_PLAY:
+      return Object.assign({}, state, {
+        status: state.status === 1 ? 2 : 1
+      });
     case types.VIDEO_TOGGLE_MUTE:
       return Object.assign({}, state, {
         isMuted: !state.isMuted

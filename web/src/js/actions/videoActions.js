@@ -16,6 +16,19 @@ export function videoTime(time) {
   };
 }
 
+export function videoStatus(status) {
+  return {
+    type: types.VIDEO_STATUS,
+    status
+  };
+}
+
+export function videoTogglePlay() {
+  return {
+    type: types.VIDEO_TOGGLE_PLAY
+  };
+}
+
 export function videoToggleMute() {
   return (dispatch, getState, api) => {
     dispatch({

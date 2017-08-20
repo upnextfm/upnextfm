@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { videoReady, videoTime } from 'actions/videoActions';
+import { videoReady, videoTime, videoStatus } from 'actions/videoActions';
 import YouTube from 'react-youtube';
 
 class Player extends React.Component {
@@ -10,10 +10,21 @@ class Player extends React.Component {
     this.player   = null;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     if (this.player) {
       if (this.shouldSeekTo()) {
         this.player.seekTo(this.props.video.time);
+      }
+      if (prevProps.video.status !== this.props.video.status) {
+        console.info(this.props.video.status);
+        switch (this.props.video.status) {
+          case 1:
+            this.player.playVideo();
+            break;
+          case 2:
+            this.player.pauseVideo();
+            break;
+        }
       }
       if (this.props.video.isMuted) {
         this.player.mute();
@@ -44,6 +55,10 @@ class Player extends React.Component {
     setInterval(this.handleInterval, 1000);
   };
 
+  handleStateChange = () => {
+    this.props.dispatch(videoStatus(this.player.getPlayerState()));
+  };
+
   render() {
     const { playlist } = this.props;
     const opts = {
@@ -62,6 +77,7 @@ class Player extends React.Component {
         opts={opts}
         videoId={playlist.codename}
         onReady={this.handleReady}
+        onStateChange={this.handleStateChange}
         className="up-room-video__player"
       />
     );
