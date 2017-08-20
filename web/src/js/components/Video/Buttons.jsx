@@ -1,14 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { videoToggleMute } from 'actions/videoActions';
+import { videoTogglePlay, videoToggleMute } from 'actions/videoActions';
 import IconButton from 'material-ui/IconButton';
 import SkipNext from 'material-ui-icons/SkipNext';
-import VolumeOff from 'material-ui-icons/VolumeOff';
-import VolumeUp from 'material-ui-icons/VolumeUp';
+import MuteIcon from 'components/Icons/MuteIcon';
+import PlayIcon from 'components/Icons/PlayIcon';
 
 class Buttons extends React.Component {
   handleClickMute = () => {
     this.props.dispatch(videoToggleMute());
+  };
+
+  handleClickPlay = () => {
+    this.props.dispatch(videoTogglePlay());
   };
 
   render() {
@@ -16,8 +20,11 @@ class Buttons extends React.Component {
 
     return (
       <div className="up-room-video__buttons up-paper-container">
-        <IconButton title={video.isMuted ? 'Unmute' : 'Mute'} onClick={this.handleClickMute}>
-          {video.isMuted ? <VolumeOff /> : <VolumeUp />}
+        <IconButton onClick={this.handleClickPlay}>
+          <PlayIcon status={video.status} />
+        </IconButton>
+        <IconButton onClick={this.handleClickMute}>
+          <MuteIcon isMuted={video.isMuted} />
         </IconButton>
         <IconButton title="Vote Skip">
           <SkipNext />
