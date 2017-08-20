@@ -30,6 +30,7 @@ export const PLAYLIST_SUBSCRIBE = 'PLAYLIST_SUBSCRIBE';
 
 export const VIDEO_READY       = 'VIDEO_READY';
 export const VIDEO_TIME        = 'VIDEO_TIME';
+export const VIDEO_DURATION    = 'VIDEO_DURATION';
 export const VIDEO_STATUS      = 'VIDEO_STATUS';
 export const VIDEO_TOGGLE_PLAY = 'VIDEO_TOGGLE_PLAY';
 export const VIDEO_TOGGLE_MUTE = 'VIDEO_TOGGLE_MUTE';

@@ -14,7 +14,7 @@ export default class VideoNav extends React.Component {
 
   render() {
     return (
-      <AppBar position="relative" color="default" className="up-nav up-nav--video">
+      <AppBar position="static" color="default" className="up-nav up-nav--video">
         <Toolbar>
           <IconButton onClick={this.handleClickScroll}>
             <ArrowLeft />

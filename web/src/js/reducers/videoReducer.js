@@ -12,11 +12,16 @@ export default function videoReducer(state = initialState.video, action = {}) {
   switch (action.type) {
     case types.VIDEO_READY:
       return Object.assign({}, state, {
-        isMuted: action.isMuted
+        isMuted:  action.isMuted,
+        duration: action.duration
       });
     case types.VIDEO_TIME:
       return Object.assign({}, state, {
         time: action.time
+      });
+    case types.VIDEO_DURATION:
+      return Object.assign({}, state, {
+        duration: action.duration
       });
     case types.VIDEO_STATUS:
       return Object.assign({}, state, {

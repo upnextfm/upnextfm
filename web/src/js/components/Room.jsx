@@ -11,6 +11,7 @@ import ChatSide from 'components/Chat/ChatSide';
 import VideoSide from 'components/Video/VideoSide';
 import VideoNav from 'components/VideoNav';
 import Nav from 'components/Nav';
+import Progress from 'components/Video/Progress';
 
 class Room extends React.Component {
   static propTypes = {
@@ -39,6 +40,9 @@ class Room extends React.Component {
         <Nav auth={auth} />
         <Hidden smUp>
           <VideoNav />
+        </Hidden>
+        <Hidden smUp>
+          <Progress />
         </Hidden>
         <div className="up-room">
           <Grid item xs={12} sm={12} md={7}>

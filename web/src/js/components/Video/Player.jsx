@@ -49,7 +49,9 @@ class Player extends React.Component {
 
   handleReady = (e) => {
     this.player = e.target;
-    this.props.dispatch(videoReady());
+
+    const duration = parseInt(this.player.getDuration(), 10);
+    this.props.dispatch(videoReady(duration));
     this.player.seekTo(this.props.video.time);
     setInterval(this.handleInterval, 1000);
   };
@@ -60,7 +62,7 @@ class Player extends React.Component {
 
   render() {
     const { playlist } = this.props;
-    const opts = {
+    const opts    = {
       width:      '100%',
       playerVars: {
         widget_referrer: document.location.href,
@@ -72,13 +74,15 @@ class Player extends React.Component {
     };
 
     return (
-      <YouTube
-        opts={opts}
-        videoId={playlist.codename}
-        onReady={this.handleReady}
-        onStateChange={this.handleStateChange}
-        className="up-room-video__player"
-      />
+      <div className="up-room-video__container">
+        <YouTube
+          opts={opts}
+          videoId={playlist.codename}
+          onReady={this.handleReady}
+          onStateChange={this.handleStateChange}
+          className="up-room-video__player"
+        />
+      </div>
     );
   }
 }

@@ -1,10 +1,11 @@
 import * as types from 'actions/actionTypes';
 
-export function videoReady() {
+export function videoReady(duration) {
   return (dispatch, getState, api) => {
     dispatch({
       type:    types.VIDEO_READY,
-      isMuted: api.storage.getItem('video:isMuted', getState().video.isMuted)
+      isMuted: api.storage.getItem('video:isMuted', getState().video.isMuted),
+      duration
     });
   };
 }
@@ -13,6 +14,13 @@ export function videoTime(time) {
   return {
     type: types.VIDEO_TIME,
     time
+  };
+}
+
+export function videoDuration(duration) {
+  return {
+    type: types.VIDEO_DURATION,
+    duration
   };
 }
 
