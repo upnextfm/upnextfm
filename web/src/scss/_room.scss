@@ -36,6 +36,10 @@ $height-avatar-collapsed: auto;
   display: flex;
   flex-direction: column;
 
+  @include media-xs {
+    padding-right: 0;
+  }
+
   & > span {
     margin: $padding-std 0;
     height: 0;
@@ -55,7 +59,7 @@ $height-avatar-collapsed: auto;
   max-width: $width-panel-users;
   flex-grow: 2 !important;
   overflow: hidden !important;
-  background-color: #0A4C76;
+  background-color: $color-room-primary;
   box-shadow: 2px 0 2px rgba(0, 0, 0, 0.25);
 
   &.up-collapsed {
@@ -106,8 +110,19 @@ $height-avatar-collapsed: auto;
   }
 }
 
+.up-room-panel__users__controls {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+}
+
 .up-room-panel__messages {
 
+}
+
+.up-room-panel__mobile {
+  margin-top: $padding-std;
+  background-color: $color-room-primary;
 }
 
 /******************************************************************************
