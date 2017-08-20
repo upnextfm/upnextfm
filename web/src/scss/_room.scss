@@ -147,6 +147,19 @@ $height-avatar-collapsed: auto;
   padding: ($padding-std / 2) $padding-std !important;
   align-items: flex-start !important;
 
+  @include media-xs {
+    flex-wrap: wrap;
+
+    & > div {
+      display: flex;
+      width: 100%;
+    }
+
+    .up-room-message__date {
+      margin-left: auto;
+    }
+  }
+
   &:hover {
     background-color: #444;
   }
@@ -166,6 +179,10 @@ $height-avatar-collapsed: auto;
   text-align: left;
   line-height: 1.2rem;
   padding: $padding-std 0;
+
+  @include media-xs {
+    flex-basis: 100%;
+  }
 
   a {
     color: $color-primary;
