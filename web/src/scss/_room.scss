@@ -13,12 +13,8 @@ $height-avatar-collapsed: auto;
  *****************************************************************************/
 .up-room {
   display: flex;
-  flex-flow: column;
+  flex-flow: row;
   height: calc(100% - #{$nav-height});
-
-  @media (min-width: $break-md) {
-    flex-flow: row !important;
-  }
 }
 
 /******************************************************************************
@@ -38,15 +34,6 @@ $height-avatar-collapsed: auto;
 
   @include media-xs {
     padding-right: 0;
-  }
-
-  & > span {
-    margin: $padding-std 0;
-    height: 0;
-    overflow: hidden;
-    position: relative;
-    padding-bottom: 56.25%;
-    border-radius: $border-radius-sm;
   }
 }
 
@@ -110,19 +97,8 @@ $height-avatar-collapsed: auto;
   }
 }
 
-.up-room-panel__users__controls {
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-}
-
 .up-room-panel__messages {
 
-}
-
-.up-room-panel__mobile {
-  margin-top: $padding-std;
-  background-color: $color-room-primary;
 }
 
 /******************************************************************************
@@ -209,9 +185,6 @@ $height-avatar-collapsed: auto;
  * Video
  *****************************************************************************/
 .up-room-video__player {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
 }

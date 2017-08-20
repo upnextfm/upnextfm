@@ -1,13 +1,13 @@
-export function animateScrollTo(element, to, duration) {
+export function animateScrollLeft(element, to, duration) {
   if (duration < 0) return;
-  const difference = to - element.scrollTop;
+  const difference = to - element.scrollLeft;
   const perTick    = difference / duration * 2;
 
   setTimeout(() => {
-    const scrollTop = element.scrollTop + perTick;
-    if (Number.isFinite(scrollTop)) {
-      element.scrollTop = scrollTop;
-      animateScrollTo(element, to, duration - 2);
+    const scrollLeft = element.scrollLeft + perTick;
+    if (Number.isFinite(scrollLeft)) {
+      element.scrollLeft = scrollLeft;
+      animateScrollLeft(element, to, duration - 2);
     }
   }, 10);
 }

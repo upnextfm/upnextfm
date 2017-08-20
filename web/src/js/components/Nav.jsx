@@ -7,7 +7,13 @@ import Toolbar from 'material-ui/Toolbar';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
+import VolumeOff from 'material-ui-icons/VolumeOff';
+import VolumeUp from 'material-ui-icons/VolumeUp';
+import ArrowRight from 'material-ui-icons/KeyboardArrowRight';
+import PlayArrow from 'material-ui-icons/PlayArrow';
+import { animateScrollLeft } from 'utils/animate';
 import { navToggleDrawer } from 'actions/navActions';
+import { videoToggleMute } from 'actions/videoActions';
 import { authToggleLoginDialog, authLogout } from 'actions/authActions';
 import { registerToggleDialog } from 'actions/registerActions';
 import NavDrawer from 'components/NavDrawer';
@@ -15,6 +21,8 @@ import NavDrawer from 'components/NavDrawer';
 class Nav extends React.Component {
   static propTypes = {
     auth:     PropTypes.object,
+    nav:      PropTypes.object,
+    video:    PropTypes.object,
     dispatch: PropTypes.func
   };
 
@@ -45,8 +53,16 @@ class Nav extends React.Component {
     this.props.dispatch(registerToggleDialog());
   };
 
+  handleClickMute = () => {
+    this.props.dispatch(videoToggleMute());
+  };
+
+  handleClickDown = () => {
+    animateScrollLeft(document.body, document.body.scrollWidth, 50);
+  };
+
   render() {
-    const { auth } = this.props;
+    const { auth, video } = this.props;
 
     return (
       <AppBar position="static" color="default">
@@ -74,6 +90,19 @@ class Nav extends React.Component {
               </span>
             )}
           </Hidden>
+          <Hidden smUp>
+            <div className="up-nav__video-controls">
+              <IconButton onClick={this.handleClickDown}>
+                <PlayArrow />
+              </IconButton>
+              <IconButton title={video.isMuted ? 'Unmute' : 'Mute'} onClick={this.handleClickMute}>
+                {video.isMuted ? <VolumeOff /> : <VolumeUp />}
+              </IconButton>
+              <IconButton onClick={this.handleClickDown}>
+                <ArrowRight />
+              </IconButton>
+            </div>
+          </Hidden>
         </Toolbar>
         <NavDrawer auth={auth} onClickLogin={this.handleClickLogin} onClickRegister={this.handleClickRegister} />
       </AppBar>
@@ -82,7 +111,10 @@ class Nav extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return Object.assign({}, state.nav);
+  return {
+    nav:   Object.assign({}, state.nav),
+    video: Object.assign({}, state.video)
+  };
 }
 
 export default connect(mapStateToProps)(Nav);
