@@ -11,10 +11,10 @@ const PlayIcon = ({ status, ...props }) => {
       icon = <Stop {...props} />;
       break;
     case 2:
-      icon = <Pause {...props} />;
+      icon = <PlayArrow {...props} />;
       break;
     default:
-      icon = <PlayArrow {...props} />;
+      icon = <Pause {...props} />;
       break;
   }
 
