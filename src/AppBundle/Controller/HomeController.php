@@ -19,6 +19,19 @@ class HomeController extends Controller
   }
 
   /**
+   * @Route("/homepage", name="homepage_dev")
+   */
+  public function homeAction()
+  {
+    $em = $this->getDoctrine()->getManager();
+    $playedRecently = $em->getRepository("AppBundle:VideoLog")->findRecent(10);
+
+    return $this->render(":home:home.html.twig", [
+      "playedRecently" => $playedRecently
+    ]);
+  }
+
+  /**
    * @Route("/contact", name="contact")
    *
    * @param Request $request

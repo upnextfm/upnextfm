@@ -3,16 +3,40 @@
 
 .up-grid {
   display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
 
   @include media-sm {
     display: block;
   }
 
   .up-col {
-    flex: 1;
+    flex: 1 0 100%;
+    max-width: 100%;
 
-    @include media-sm {
-      width: 100%;
+    @include media-xs {
+      flex: 1 0 100% !important;
+      max-width: 100% !important;
+    }
+
+    &.up-col-2 {
+      flex: 1 0 50%;
+      max-width: 50%;
+    }
+
+    &.up-col-3 {
+      flex: 1 0 25%;
+      max-width: 25%;
+    }
+
+    &.up-col-4 {
+      flex: 1 0 33%;
+      max-width: 33%;
+    }
+
+    &.up-col-6 {
+      flex: 1 0 16%;
+      max-width: 16%;
     }
   }
 }
