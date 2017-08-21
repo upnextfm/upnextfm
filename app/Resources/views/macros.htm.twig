@@ -1,8 +1,11 @@
 {% macro playedCard(played) %}
     <div class="up-col up-col-6">
         <div class="up-card up-card-1">
-            <a href="{{ played.video.permalink }}" target="_blank">
-                <img src="{{ played.video.thumbSmall }}" class="up-playlist__thumb" />
+            <a href="{{ played.video.permalink }}"  class="up-playlist__thumb" target="_blank">
+                <img src="{{ played.video.thumbSmall }}" />
+            </a>
+            <a href="/r/{{ played.room.name }}#play={{ played.video.title }}" class="up-fab">
+                <i class="material-icons">play_arrow</i>
             </a>
             <div class="up-playlist__body">
                 <h2 class="up-playlist__title">

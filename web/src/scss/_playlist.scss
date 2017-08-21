@@ -3,9 +3,15 @@
 .up-playlist {
 
   .up-card {
-    height: 255px;
+    height: 230px;
     width: 100%;
     padding: 0;
+  }
+
+  .up-fab {
+    position: absolute;
+    right: $padding-std * 2;
+    top: 100px;
   }
 }
 
@@ -15,7 +21,15 @@
 
 .up-playlist__thumb {
   width: 100%;
-  margin-bottom: 0.5rem;
+  height: 120px;
+  overflow: hidden;
+  display: block;
+  margin-bottom: 30px;
+
+  img {
+    width: 100%;
+    margin: -23px 0;
+  }
 }
 
 .up-playlist__title {

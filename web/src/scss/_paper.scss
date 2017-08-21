@@ -14,7 +14,7 @@
 
 .up-card {
   color: #FFF;
-  background: #000;
+  background: $color-secondary;
   border-radius: 2px;
   display: inline-block;
   margin: 1rem;
@@ -31,3 +31,25 @@
   }
 }
 
+.up-fab {
+  border:none;
+  color: #FFF;
+  background-color: $color-primary;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+
+  .material-icons {
+    font-size: $icon-size-lg;
+  }
+}
+
+.up-fab:hover {
+  background-color: lighten($color-primary, 10%);
+}
