@@ -54,16 +54,15 @@ $height-avatar-collapsed: auto;
   box-shadow: 2px 0 2px rgba(0, 0, 0, 0.25);
   transition: max-width .3s cubic-bezier(.25,.8,.25,1);
 
+  &, & > ul {
+    overflow: hidden;
+  }
+
   &.up-collapsed {
     max-width: $width-panel-users-collapsed;
 
     .up-username {
       display: none;
-    }
-
-    .up-avatar {
-      width: $width-avatar-collapsed !important;
-      height: $height-avatar-collapsed !important;
     }
   }
 
