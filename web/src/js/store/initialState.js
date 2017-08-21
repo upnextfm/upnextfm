@@ -1,8 +1,10 @@
 import Storage from 'api/Storage';
 
 export default {
-  nav: {
-    isDrawerOpen: false
+  layout: {
+    isNavDrawerOpen: false,
+    colsChatSide:    7,
+    colsVideoSide:   5
   },
   auth: {
     username:          '',

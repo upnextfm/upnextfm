@@ -12,7 +12,7 @@ import VolumeUp from 'material-ui-icons/VolumeUp';
 import ArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import PlayArrow from 'material-ui-icons/PlayArrow';
 import { animateScrollLeft } from 'utils/animate';
-import { navToggleDrawer } from 'actions/navActions';
+import { layoutToggleNavDrawer } from 'actions/layoutActions';
 import { videoToggleMute, videoTogglePlay, videoStatus } from 'actions/videoActions';
 import { authToggleLoginDialog, authLogout } from 'actions/authActions';
 import { registerToggleDialog } from 'actions/registerActions';
@@ -23,7 +23,7 @@ import PlayIcon from 'components/Icons/PlayIcon';
 class Nav extends React.Component {
   static propTypes = {
     auth:     PropTypes.object,
-    nav:      PropTypes.object,
+    layout:   PropTypes.object,
     video:    PropTypes.object,
     dispatch: PropTypes.func
   };
@@ -40,7 +40,7 @@ class Nav extends React.Component {
   }
 
   handleClickMenu = () => {
-    this.props.dispatch(navToggleDrawer());
+    this.props.dispatch(layoutToggleNavDrawer());
   };
 
   handleClickLogin = () => {
@@ -118,8 +118,8 @@ class Nav extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    nav:   Object.assign({}, state.nav),
-    video: Object.assign({}, state.video)
+    layout: Object.assign({}, state.layout),
+    video:  Object.assign({}, state.video)
   };
 }
 

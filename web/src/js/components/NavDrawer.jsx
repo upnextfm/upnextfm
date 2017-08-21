@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { layoutToggleNavDrawer } from 'actions/layoutActions';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
@@ -11,30 +12,28 @@ import Face from 'material-ui-icons/Face';
 import Favorite from 'material-ui-icons/Favorite';
 import Help from 'material-ui-icons/Help';
 import Info from 'material-ui-icons/Info';
-import { navToggleDrawer } from 'actions/navActions';
 
 class NavDrawer extends React.Component {
   static propTypes = {
     auth:            PropTypes.object.isRequired,
-    isDrawerOpen:    PropTypes.bool,
+    layout:          PropTypes.object,
     dispatch:        PropTypes.func,
     onClickLogin:    PropTypes.func,
     onClickRegister: PropTypes.func
   };
 
   static defaultProps = {
-    isDrawerOpen:    false,
     dispatch:        () => {},
     onClickLogin:    () => {},
     onClickRegister: () => {}
   };
 
   handleToggle = () => {
-    this.props.dispatch(navToggleDrawer());
+    this.props.dispatch(layoutToggleNavDrawer());
   };
 
   renderList() {
-    const { auth, onClickLogin, onClickRegister } = this.props;
+    const { auth, layout, onClickLogin, onClickRegister } = this.props;
 
     let authListItems = null;
     if (auth.isAuthenticated) {
@@ -116,10 +115,10 @@ class NavDrawer extends React.Component {
   }
 
   render() {
-    const { isDrawerOpen } = this.props;
+    const { layout } = this.props;
 
     return (
-      <Drawer open={isDrawerOpen} onRequestClose={this.handleToggle}>
+      <Drawer open={layout.isNavDrawerOpen} onRequestClose={this.handleToggle}>
         {this.renderList()}
       </Drawer>
     );
@@ -127,7 +126,7 @@ class NavDrawer extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return Object.assign({}, state.nav);
+  return Object.assign({}, { layout: state.layout });
 }
 
 export default connect(mapStateToProps)(NavDrawer);

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import nav from 'reducers/navReducer';
+import layout from 'reducers/layoutReducer';
 import auth from 'reducers/authReducer';
 import register from 'reducers/registerReducer';
 import room from 'reducers/roomReducer';
@@ -8,7 +8,7 @@ import video from 'reducers/videoReducer';
 import playlist from 'reducers/playlistReducer';
 
 const rootReducer = combineReducers({
-  nav,
+  layout,
   auth,
   register,
   room,

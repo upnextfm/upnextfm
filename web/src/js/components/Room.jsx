@@ -18,6 +18,7 @@ class Room extends React.Component {
     name:      PropTypes.string.isRequired,
     socketURI: PropTypes.string.isRequired,
     auth:      PropTypes.object.isRequired,
+    layout:    PropTypes.object.isRequired,
     dispatch:  PropTypes.func
   };
 
@@ -33,7 +34,7 @@ class Room extends React.Component {
   }
 
   render() {
-    const { auth } = this.props;
+    const { auth, layout } = this.props;
 
     return (
       <div>
@@ -45,10 +46,10 @@ class Room extends React.Component {
           <Progress />
         </Hidden>
         <div className="up-room">
-          <Grid item xs={12} sm={12} md={7}>
+          <Grid item xs={12} sm={12} md={layout.colsChatSide}>
             <ChatSide />
           </Grid>
-          <Grid item xs={12} sm={12} md={5}>
+          <Grid item xs={12} sm={12} md={layout.colsVideoSide}>
             <VideoSide />
           </Grid>
         </div>

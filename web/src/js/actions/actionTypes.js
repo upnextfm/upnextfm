@@ -13,7 +13,8 @@ export const REGISTER_BEGIN          = 'REGISTER_BEGIN';
 export const REGISTER_ERROR          = 'REGISTER_ERROR';
 export const REGISTER_COMPLETE       = 'REGISTER_COMPLETE';
 
-export const NAV_TOGGLE_DRAWER   = 'NAV_TOGGLE_DRAWER';
+export const LAYOUT_TOGGLE_NAV_DRAWER = 'LAYOUT_TOGGLE_NAV_DRAWER';
+export const LAYOUT_COLS              = 'LAYOUT_COLS';
 
 export const ROOM_JOINED                 = 'ROOM_JOINED';
 export const ROOM_PARTED                 = 'ROOM_PARTED';
