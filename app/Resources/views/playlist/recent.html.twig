@@ -2,7 +2,7 @@
 {% extends "base.html.twig" %}
 {% block body %}
     <div class="up-container">
-        <div class="up-grid up-grid--gutter up-playlist">
+        <div class="up-grid up-grid--gutter">
         {% for played in playedRecently %}
             {{ macros.playedCard(played) }}
         {% endfor %}
