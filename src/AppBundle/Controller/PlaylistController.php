@@ -11,7 +11,7 @@ class PlaylistController extends Controller
   public function homeAction()
   {
     $em = $this->getDoctrine()->getManager();
-    $playedRecently = $em->getRepository("AppBundle:VideoLog")->findRecent(10);
+    $playedRecently = $em->getRepository("AppBundle:VideoLog")->findRecent(100);
 
     return $this->render(":playlist:recent.html.twig", [
       "playedRecently" => $playedRecently
