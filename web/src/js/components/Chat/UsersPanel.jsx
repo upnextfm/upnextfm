@@ -7,7 +7,8 @@ import { usersFindByUsername } from 'utils/users';
 import Hidden from 'material-ui/Hidden';
 import List, { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
-import SwapHoriz from 'material-ui-icons/SwapHoriz';
+import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
+import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import User from 'components/Chat/User';
 
 class UsersPanel extends React.Component {
@@ -40,7 +41,7 @@ class UsersPanel extends React.Component {
         </List>
         <Hidden xsDown>
           <IconButton className="up-collapse" onClick={this.handleClickCollapse}>
-            <SwapHoriz />
+            {!room.isUsersCollapsed ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
           </IconButton>
         </Hidden>
       </div>
