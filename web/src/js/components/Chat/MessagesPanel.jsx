@@ -18,17 +18,27 @@ class MessagesPanel extends React.Component {
 
   render() {
     const { room, users } = this.props;
+    let prevUser = null;
+    let prevMessage = null;
 
     return (
       <Scrollbars ref={(ref) => { this.scrollRef = ref; }}>
         <List className="up-room-panel__messages">
-          {room.messages.map(message => (
-            <Message
-              key={message.id}
-              message={message}
-              user={usersFindByUsername(users.repo, message.from)}
-            />
-          ))}
+          {room.messages.map((message) => {
+            const user = usersFindByUsername(users.repo, message.from);
+            const item = (
+              <Message
+                key={message.id}
+                message={message}
+                user={user}
+                prevMessage={prevMessage}
+                prevUser={prevUser}
+              />
+            );
+            prevUser    = user;
+            prevMessage = message;
+            return item;
+          })}
         </List>
       </Scrollbars>
     );

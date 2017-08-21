@@ -39,15 +39,17 @@ class UsersPanel extends React.Component {
           ))}
         </List>
         <Hidden xsDown>
-          <IconButton className="up-collapse" onClick={this.handleClickCollapse}>
-            <KeyboardArrowLeft className={classNames(
-              'up-collapse__icon',
-              {
-                'up-collapsed': room.isUsersCollapsed
-              }
-             )}
-            />
-          </IconButton>
+          <div className="up-room-users__controls">
+            <IconButton className="up-collapse" onClick={this.handleClickCollapse}>
+              <KeyboardArrowLeft className={classNames(
+                'up-collapse__icon',
+                {
+                  'up-collapsed': room.isUsersCollapsed
+                }
+               )}
+              />
+            </IconButton>
+          </div>
         </Hidden>
       </div>
     );
