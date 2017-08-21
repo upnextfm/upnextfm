@@ -32,8 +32,6 @@ export default {
     isMuted:  false
   },
   playlist: {
-    codename:   'MD8flUkymrM',
-    provider:   'youtube',
-    subscribed: false
+    current: {}
   }
 };

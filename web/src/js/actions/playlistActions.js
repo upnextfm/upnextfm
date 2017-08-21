@@ -10,9 +10,8 @@ export function playlistSubscribe() {
         switch (payload.cmd) {
           case types.CMD_VIDEO_START:
             dispatch({
-              type:     types.PLAYLIST_START,
-              codename: payload.codename,
-              provider: payload.provider
+              type:    types.PLAYLIST_START,
+              current: payload.video
             });
             dispatch(videoTime(0));
             break;

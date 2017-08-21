@@ -56,9 +56,8 @@ class VideoTopic extends AbstractTopic
       $video = $this->em->getRepository("AppBundle:Video")->findByID($videoID);
       if ($video) {
         $connection->event($topic->getId(), [
-          "cmd"      => VideoCommands::START,
-          "codename" => $video->getCodename(),
-          "provider" => $video->getProvider()
+          "cmd"   => VideoCommands::START,
+          "video" => $this->serializeVideo($video)
         ]);
       }
     }

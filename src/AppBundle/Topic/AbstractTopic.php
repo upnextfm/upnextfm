@@ -1,15 +1,12 @@
 <?php
 namespace AppBundle\Topic;
 
-use AppBundle\Entity\ChatLog;
-use AppBundle\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
 use Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProviderInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -17,6 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Ratchet\Wamp\WampConnection;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
+use AppBundle\Entity\ChatLog;
+use AppBundle\Entity\Room;
+use AppBundle\Entity\Video;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractTopic implements TopicInterface
 {
@@ -181,6 +182,22 @@ abstract class AbstractTopic implements TopicInterface
       "avatar"   => "https://robohash.org/${username}?set=set3",
       "profile"  => "https://upnext.fm/u/${username}",
       "roles"    => $user->getRoles()
+    ];
+  }
+
+  /**
+   * @param Video $video
+   * @return array
+   */
+  protected function serializeVideo(Video $video)
+  {
+    return [
+      "codename"  => $video->getCodename(),
+      "provider"  => $video->getProvider(),
+      "permalink" => $video->getPermalink(),
+      "thumbnail" => $video->getThumbSmall(),
+      "title"     => $video->getTitle(),
+      "seconds"   => $video->getSeconds()
     ];
   }
 

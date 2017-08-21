@@ -13,8 +13,8 @@ class PlaylistContainer extends React.Component {
   }
 
   componentWillUpdate(nextProps) {
-    if (nextProps.codename !== this.props.codename) {
-      this.setState({ codename: nextProps.codename });
+    if (nextProps.current.codename !== this.props.current.codename) {
+      this.setState({ codename: nextProps.current.codename });
     }
   }
 
