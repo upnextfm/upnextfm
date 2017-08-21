@@ -89,7 +89,7 @@ class Linkify extends React.Component {
       if (match.index > lastIndex) {
         elements.push(string.substring(lastIndex, match.index));
       }
-      if (match.text.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
+      if (match.text.toLowerCase().match(/\.(jpeg|jpg|gif|png)$/) !== null) {
         elements.push(this.createImg(match, idx));
       } else {
         elements.push(this.createLink(match, idx));
