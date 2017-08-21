@@ -72,7 +72,7 @@ class Nav extends React.Component {
 
     return (
       <AppBar position="static" color="default">
-        <Toolbar  className="up-nav">
+        <Toolbar className="up-nav">
           <IconButton aria-label="Menu" onClick={this.handleClickMenu}>
             <MenuIcon />
           </IconButton>
