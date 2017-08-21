@@ -14,6 +14,10 @@ class Player extends React.Component {
 
   }
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps.video.time === this.props.video.time;
+  }
+
   componentDidUpdate(prevProps) {
     if (this.player) {
       if (this.shouldSeekTo()) {
