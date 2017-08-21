@@ -1,3 +1,5 @@
+import Storage from 'api/Storage';
+
 export default {
   nav: {
     isDrawerOpen: false
@@ -18,7 +20,7 @@ export default {
   room: {
     name:             '',
     inputValue:       '',
-    isUsersCollapsed: false,
+    isUsersCollapsed: Storage.getItem('room:isUsersCollapsed', false),
     users:            [],
     messages:         []
   },
