@@ -1,19 +1,20 @@
 {% macro playedCard(played) %}
     <div class="up-col up-col-6">
-        <div class="up-card up-card-1">
-            <a href="{{ played.video.permalink }}"  class="up-playlist__thumb" target="_blank">
-                <img src="{{ played.video.thumbSmall }}" />
-            </a>
-            <a href="/r/{{ played.room.name }}#play={{ played.video.title }}" class="up-fab">
-                <i class="material-icons">play_arrow</i>
-            </a>
-            <div class="up-playlist__body">
-                <h2 class="up-playlist__title">
+        <div class="card">
+            <div class="card-image">
+                <a href="{{ played.video.permalink }}" class="up-playlist__thumb" target="_blank">
+                    <img src="{{ played.video.thumbSmall }}" />
+                </a>
+                <a href="/r/{{ played.room.name }}#play={{ played.video.id }}" class="up-fab btn-floating halfway-fab waves-effect waves-light">
+                    <i class="material-icons">play_arrow</i>
+                </a>
+            </div>
+            <div class="card-content">
+                <h2 class="card-title">
                     {{ played.video.title }}
                 </h2>
-                <div class="up-playlist__room">
-                    {{ played.dateCreated|ago }} in
-                    <a href="/r/{{ played.room.name }}">/r/{{ played.room.name }}</a>
+                <div>
+                    {{ played.dateCreated|ago }} in <a href="/r/{{ played.room.name }}">/r/{{ played.room.name }}</a>
                 </div>
             </div>
         </div>

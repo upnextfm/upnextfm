@@ -16,6 +16,7 @@ class RoomController extends Controller
   {
     return $this->render(":room:index.html.twig", [
       "hide_navbar" => true,
+      "materialize" => false,
       "name" => $name
     ]);
   }

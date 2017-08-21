@@ -10,6 +10,9 @@
         {% block stylesheets %}
             <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
             <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            {% if materialize|default  %}
+            <link href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css" rel="stylesheet">
+            {% endif %}
             <link href="{{ asset('build/css/app.css') }}" rel="stylesheet" />
         {% endblock %}
     </head>
@@ -22,6 +25,9 @@
             <script>
                 var _WS_URI = '{{ ws_uri }}';
             </script>
+            {% if materialize|default  %}
+                <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+            {% endif %}
             <script src="{{ asset('js/autobahn.min.js') }}"></script>
             <script src="{{ asset('build/js/app.js') }}"></script>
         {% endblock %}

@@ -71,8 +71,8 @@ class Nav extends React.Component {
     const { auth, video } = this.props;
 
     return (
-      <AppBar position="static" color="default"  className="up-nav">
-        <Toolbar>
+      <AppBar position="static" color="default">
+        <Toolbar  className="up-nav">
           <IconButton aria-label="Menu" onClick={this.handleClickMenu}>
             <MenuIcon />
           </IconButton>

@@ -2,17 +2,6 @@
 
 .up-playlist {
 
-  .up-card {
-    height: 230px;
-    width: 100%;
-    padding: 0;
-  }
-
-  .up-fab {
-    position: absolute;
-    right: $padding-std * 2;
-    top: 100px;
-  }
 }
 
 .up-playlist__body {
@@ -24,7 +13,6 @@
   height: 120px;
   overflow: hidden;
   display: block;
-  margin-bottom: 30px;
 
   img {
     width: 100%;
@@ -33,9 +21,11 @@
 }
 
 .up-playlist__title {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 500;
-  height: 2rem;
+  height: 2.6rem;
   overflow: hidden;
+  line-height: 1.3rem;
   margin-bottom: $padding-std;
 }
+

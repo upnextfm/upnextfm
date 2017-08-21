@@ -1,13 +1,14 @@
 @import "vars";
 @import "mixins";
 
-.up-nav > div {
+.up-nav {
   color: #FFF !important;
   height: $nav-height !important;
   min-height: $nav-height !important;
   padding: $padding-std !important;
   background-color: #263238 !important;
   display: flex;
+  text-align: left;
   position: relative;
   align-items: center;
   z-index: 3;
@@ -22,10 +23,6 @@
   .up-badge {
     margin-left: auto;
   }
-}
-
-.up-nav--site {
-  text-align: left;
 }
 
 .up-nav__toggle {
