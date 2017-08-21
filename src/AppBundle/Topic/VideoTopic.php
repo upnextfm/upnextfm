@@ -144,6 +144,7 @@ class VideoTopic extends AbstractTopic
       $video->setCreatedInRoom($room);
       $video->setTitle($info->getTitle());
       $video->setSeconds($info->getSeconds());
+      $video->setPermalink($info->getPermalink());
       $video->setThumbSmall($info->getThumbnail("sm"));
       $video->setThumbMedium($info->getThumbnail("md"));
       $video->setThumbLarge($info->getThumbnail("lg"));

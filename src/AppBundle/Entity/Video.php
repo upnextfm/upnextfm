@@ -24,13 +24,19 @@ class Video
    * @var string
    * @ORM\Column(name="title", type="string", length=100, nullable=false)
    */
-  protected $title = "";
+  protected $title;
 
   /**
    * @var string
    * @ORM\Column(name="codename", type="string", length=50, nullable=false)
    */
-  protected $codename = "";
+  protected $codename;
+
+  /**
+   * @var string
+   * @ORM\Column(name="permalink", type="string", nullable=false)
+   */
+  protected $permalink;
 
   /**
    * @var string
@@ -163,6 +169,24 @@ class Video
   public function setCodename($codename)
   {
     $this->codename = $codename;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getPermalink()
+  {
+    return $this->permalink;
+  }
+
+  /**
+   * @param string $permalink
+   * @return $this
+   */
+  public function setPermalink($permalink)
+  {
+    $this->permalink = $permalink;
     return $this;
   }
 

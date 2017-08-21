@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Gesdinet\JWTRefreshTokenBundle\GesdinetJWTRefreshTokenBundle(),
             new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
             new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
+            new Knp\Bundle\TimeBundle\KnpTimeBundle(),
             new AppBundle\AppBundle(),
         ];
 
