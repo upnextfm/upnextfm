@@ -11,7 +11,7 @@
             <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
             <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
             {% if materialize|default  %}
-            <link href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css" rel="stylesheet">
+                <link href="{{ asset('build/css/materialize.css') }}" rel="stylesheet" />
             {% endif %}
             <link href="{{ asset('build/css/app.css') }}" rel="stylesheet" />
         {% endblock %}

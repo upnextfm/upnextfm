@@ -28,6 +28,7 @@
     "linkify-it": "^2.0.3",
     "material-ui": "^1.0.0-beta.4",
     "material-ui-icons": "^1.0.0-alpha.19",
+    "materialize-css": "^0.100.1",
     "moment": "^2.18.1",
     "promise-polyfill": "6.0.2",
     "prop-types": "^15.5.10",

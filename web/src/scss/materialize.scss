@@ -1,0 +1,15 @@
+@import "vars";
+@import "mixins";
+
+@import "../../../node_modules/materialize-css/sass/components/color";
+
+$primary-color: $color-secondary;
+$secondary-color: $color-primary;
+$card-bg-color: $color-secondary;
+
+@import "../../../node_modules/materialize-css/sass/materialize";
+
+.card-title {
+  max-height: 62px;
+  overflow: hidden;
+}
