@@ -144,8 +144,12 @@ class VideoTopic extends AbstractTopic
       $video->setCreatedInRoom($room);
       $video->setTitle($info->getTitle());
       $video->setSeconds($info->getSeconds());
+      $video->setThumbSmall($info->getThumbnail("sm"));
+      $video->setThumbMedium($info->getThumbnail("md"));
+      $video->setThumbLarge($info->getThumbnail("lg"));
       $video->setNumPlays(0);
     }
+
     $video->setDateLastPlayed(new \DateTime());
     $video->incrNumPlays();
     $this->em->persist($video);

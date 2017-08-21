@@ -51,6 +51,24 @@ class Video
   protected $numPlays = 0;
 
   /**
+   * @var string
+   * @ORM\Column(name="thumb_small", type="string", nullable=false)
+   */
+  protected $thumbSmall;
+
+  /**
+   * @var string
+   * @ORM\Column(name="thumb_medium", type="string", nullable=false)
+   */
+  protected $thumbMedium;
+
+  /**
+   * @var string
+   * @ORM\Column(name="thumb_large", type="string", nullable=false)
+   */
+  protected $thumbLarge;
+
+  /**
    * @var \AppBundle\Entity\User
    *
    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
@@ -215,6 +233,60 @@ class Video
   public function incrNumPlays()
   {
     $this->numPlays++;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getThumbSmall()
+  {
+    return $this->thumbSmall;
+  }
+
+  /**
+   * @param string $thumbSmall
+   * @return $this
+   */
+  public function setThumbSmall($thumbSmall)
+  {
+    $this->thumbSmall = $thumbSmall;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getThumbMedium()
+  {
+    return $this->thumbMedium;
+  }
+
+  /**
+   * @param string $thumbMedium
+   * @return $this
+   */
+  public function setThumbMedium($thumbMedium)
+  {
+    $this->thumbMedium = $thumbMedium;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getThumbLarge()
+  {
+    return $this->thumbLarge;
+  }
+
+  /**
+   * @param string $thumbLarge
+   * @return $this
+   */
+  public function setThumbLarge($thumbLarge)
+  {
+    $this->thumbLarge = $thumbLarge;
     return $this;
   }
 
