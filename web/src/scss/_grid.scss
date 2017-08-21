@@ -42,10 +42,10 @@
 }
 
 .up-grid--gutter {
-  margin-bottom: $padding-std;
+  margin-bottom: $padding-std / 2;
 
   .up-col {
-    margin: 0 $padding-std;
+    margin: 0 $padding-std / 2;
 
     &:first-child {
       margin-left: 0;
