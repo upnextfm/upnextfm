@@ -160,9 +160,8 @@ class VideoTopic extends AbstractTopic
     $this->em->flush();
 
     $topic->broadcast([
-      "cmd"      => VideoCommands::START,
-      "codename" => $video->getCodename(),
-      "provider" => $video->getProvider()
+      "cmd"   => VideoCommands::START,
+      "video" => $this->serializeVideo($video)
     ]);
   }
 }

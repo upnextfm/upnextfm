@@ -80,13 +80,15 @@ class Player extends React.Component {
 
     return (
       <div className="up-room-video__container">
-        <YouTube
-          opts={opts}
-          videoId={playlist.current.codename}
-          onReady={this.handleReady}
-          onStateChange={this.handleStateChange}
-          className="up-room-video__player"
-        />
+        {playlist.current.codename === undefined ? null : (
+          <YouTube
+            opts={opts}
+            videoId={playlist.current.codename}
+            onReady={this.handleReady}
+            onStateChange={this.handleStateChange}
+            className="up-room-video__player"
+          />
+        )}
       </div>
     );
   }
