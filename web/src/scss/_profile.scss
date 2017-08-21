@@ -1,39 +1,37 @@
 .up-profile {
 	display:flex;
 	flex-direction:row;
-	height: 100%;
+	height: calc(100vh-50px);
 }
 .up-profile__bio {
-	padding:1em;
+	background: #0a4c76;
 	flex-grow: 1;
-	display:flex;
-	flex-direction: column;
 	min-width:35%;
+	display: flex;
+	flex-direction: column;
 }
 .up-profile__bio__user {
+	width:100%;
 	display: flex;
-	flex-direction: row;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+	@include media-sm {
+		flex-flow: column;
+	}
 }
 .up-profile__bio__user__name {
-	position: relative;
-	bottom: -1.5em;
-	left: -.5em;
 	font-size: 2em;
-	align-self: flex-end;
 }
 .up-profile__bio__user__picture {
-	position: relative;
-	bottom: -4em;
-	border-radius:100%;
 	width:100%;
 	height:100%;
+	max-width: 30vh;
+	max-height: 30vh;
 }
 .up-profile__bio__text{
-	padding-top: 5em;
-	background: #333;
+	padding-top: 1em;
 }
-
-
 .up-profile__playlist {
 	padding: 1em;
 	flex-grow: 3;
