@@ -1,5 +1,6 @@
 import * as types from 'actions/actionTypes';
 import { authToggleLoginDialog } from 'actions/authActions';
+import { videoTime } from 'actions/videoActions';
 
 export function playlistSubscribe() {
   return (dispatch, getState, api) => {
@@ -13,6 +14,7 @@ export function playlistSubscribe() {
               codename: payload.codename,
               provider: payload.provider
             });
+            dispatch(videoTime(0));
             break;
           default:
 
