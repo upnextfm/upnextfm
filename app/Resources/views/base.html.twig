@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1" name="viewport">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>
             {% block title %}{% endblock %}{% if block('title') %} - {% endif %}UpNext
         </title>
@@ -26,6 +26,7 @@
                 var _WS_URI = '{{ ws_uri }}';
             </script>
             {% if materialize|default  %}
+                <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
                 <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
             {% endif %}
             <script src="{{ asset('js/autobahn.min.js') }}"></script>

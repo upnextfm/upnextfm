@@ -20,17 +20,24 @@ class ContactType extends AbstractType
     $builder
       ->add("name", TextType::class, [
         "required" => true,
-        "label"    => "Name"
+        "label"    => "Name",
+        "attr"     => [
+          "class" => "validate"
+        ]
       ])
       ->add("email", EmailType::class, [
         "required" => true,
-        "label"    => "Email"
+        "label"    => "Email",
+        "attr"     => [
+          "class" => "validate"
+        ]
       ])
       ->add("message", TextareaType::class, [
         "required" => true,
         "label"    => "Message",
         "attr"     => [
-          "rows" => 10
+          "class" => "materialize-textarea validate",
+          "rows"  => 10
         ]
       ])
       ->add("nonce", HiddenType::class, [

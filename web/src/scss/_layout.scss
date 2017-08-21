@@ -16,16 +16,7 @@ a {
   cursor: pointer;
 }
 
-.up-container {
-  width: 90%;
-  max-width: 90%;
-  margin: 0 auto;
-  padding: 0 $padding-std;
-  text-align: left;
-}
-
 .up-container--narrow {
-  @extend .up-container;
   max-width: $break-sm;
 }
 

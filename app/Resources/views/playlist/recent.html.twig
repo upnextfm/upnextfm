@@ -1,11 +1,9 @@
 {% import "::macros.htm.twig" as macros %}
 {% extends "base.html.twig" %}
 {% block body %}
-    <div class="up-container">
-        <div class="up-grid up-grid--gutter">
+    <div class="row">
         {% for played in playedRecently %}
             {{ macros.playedCard(played) }}
         {% endfor %}
-        </div>
     </div>
 {% endblock %}

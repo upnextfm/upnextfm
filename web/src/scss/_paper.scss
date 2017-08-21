@@ -11,23 +11,3 @@
 .up-paper-container:hover {
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
-
-.card {
-  color: #FFF;
-  background: $color-secondary;
-}
-
-.card-title {
-  max-height: 62px;
-  overflow: hidden;
-}
-
-.up-fab {
-  color: #FFF;
-  background-color: $color-primary;
-
-  &:hover,
-  &:focus {
-    background-color: lighten($color-primary, 10%);
-  }
-}

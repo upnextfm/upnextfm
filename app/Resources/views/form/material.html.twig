@@ -226,11 +226,9 @@
             {% set label = name|humanize %}
         {%- endif -%}
     {%- endif -%}
-    <div class="up-text--center">
-        <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>
-            <span>{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</span>
-        </button>
-    </div>
+    <button type="{{ type|default('button') }}" class="waves-effect waves-light btn" {{ block('button_attributes') }}>
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    </button>
 {%- endblock button_widget -%}
 
 {%- block submit_widget -%}
@@ -251,7 +249,7 @@
             {% set label_attr = label_attr|merge({'for': id}) %}
         {%- endif -%}
         {% if required -%}
-            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ 'up-form__label required')|trim}) %}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ 'required')|trim}) %}
         {%- endif -%}
         {% if label is empty -%}
             {%- if label_format is not empty -%}
@@ -280,11 +278,10 @@
 {%- endblock repeated_row -%}
 
 {%- block form_row -%}
-    <div class="up-form__group">
+    <div class="row">
         {{- form_errors(form) -}}
         {{- form_widget(form) -}}
         {{- form_label(form) -}}
-        <i class="up-form__bar"></i>
     </div>
 {%- endblock form_row -%}
 
@@ -314,7 +311,7 @@
     {%- else -%}
         {% set form_method = "POST" %}
     {%- endif -%}
-    <form name="{{ name }}" class="up-form" method="{{ form_method|lower }}"{% if action != '' %} action="{{ action }}"{% endif %}{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}{% if multipart %} enctype="multipart/form-data"{% endif %}>
+    <form name="{{ name }}" method="{{ form_method|lower }}"{% if action != '' %} action="{{ action }}"{% endif %}{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}{% if multipart %} enctype="multipart/form-data"{% endif %}>
     {%- if form_method != method -%}
         <input type="hidden" name="_method" value="{{ method }}" />
     {%- endif -%}
@@ -386,7 +383,7 @@
 {%- endblock widget_container_attributes -%}
 
 {%- block button_attributes -%}
-    id="{{ id }}" class="up-form__button" name="{{ full_name }}"{% if disabled %} disabled="disabled"{% endif -%}
+    id="{{ id }}" name="{{ full_name }}"{% if disabled %} disabled="disabled"{% endif -%}
     {{ block('attributes') }}
 {%- endblock button_attributes -%}
 

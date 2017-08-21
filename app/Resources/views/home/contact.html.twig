@@ -1,13 +1,30 @@
 {% extends "base.html.twig" %}
 {% block title %}Contact{% endblock %}
 {% block body %}
-    <div class="up-container--narrow">
+    <div class="container up-container--narrow up-center-page">
         {% form_theme form ":form:material.html.twig" %}
         {{ form_start(form) }}
         <p>
             Drop us a line and we'll get back to you as soon as we can.
         </p>
-        {{ form_widget(form) }}
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form_widget(form.name) }}
+                <label for="contact_name">Name</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form_widget(form.email) }}
+                <label for="contact_email">Email</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form_widget(form.message) }}
+                <label for="contact_message">Message</label>
+            </div>
+        </div>
         {{ form_end(form) }}
     </div>
 {% endblock %}
