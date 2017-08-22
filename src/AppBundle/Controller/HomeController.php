@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\ValueDecorator;
 use AppBundle\Form\ContactModel;
 use AppBundle\Form\ContactType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,8 +24,14 @@ class HomeController extends Controller
    */
   public function homepageAction()
   {
+    $rooms = [];
+    $roomStorage = $this->get("app.storage.room");
     $repo  = $this->getDoctrine()->getRepository("AppBundle:Room");
-    $rooms = $repo->findAll();
+    foreach($repo->findAll() as $room) {
+      $rooms[] = new ValueDecorator($room, [
+        "numUsers" => $roomStorage->getUserCount($room)
+      ]);
+    }
 
     return $this->render(":home:homepage.html.twig", [
       "rooms" => $rooms
