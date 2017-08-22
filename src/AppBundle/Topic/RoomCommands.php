@@ -10,4 +10,5 @@ class RoomCommands
   const USERS      = 'users';
   const REPO_USERS = 'repo_users';
   const MESSAGES   = 'messages';
+  const SETTINGS   = 'settings';
 }

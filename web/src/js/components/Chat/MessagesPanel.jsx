@@ -22,7 +22,7 @@ class MessagesPanel extends React.Component {
   }
 
   render() {
-    const { room, users } = this.props;
+    const { room, users, settings } = this.props;
     let prevUser = null;
     let prevMessage = null;
 
@@ -42,7 +42,7 @@ class MessagesPanel extends React.Component {
                   prevUser={prevUser}
                 />
               );
-            } else if (message.type === 'notice') {
+            } else if (message.type === 'notice' && settings.showNotices) {
               item = (
                 <Notice
                   key={message.id}
@@ -64,8 +64,9 @@ class MessagesPanel extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    room:  Object.assign({}, state.room),
-    users: Object.assign({}, state.users)
+    room:     Object.assign({}, state.room),
+    users:    Object.assign({}, state.users),
+    settings: Object.assign({}, state.settings)
   };
 }
 

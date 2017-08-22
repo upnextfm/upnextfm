@@ -20,6 +20,9 @@ export default {
     isSubmitting:         false,
     error:                null
   },
+  settings: {
+    showNotices: true
+  },
   room: {
     name:             '',
     inputValue:       '',

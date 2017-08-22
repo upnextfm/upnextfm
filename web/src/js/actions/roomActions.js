@@ -2,6 +2,7 @@ import * as types from 'actions/actionTypes';
 import { usersRepoAdd, usersRepoAddMulti, usersRepoRemove } from 'actions/usersActions';
 import { authToggleLoginDialog } from 'actions/authActions';
 import { playlistSubscribe } from 'actions/playlistActions';
+import { settingsAll } from 'actions/settingsActions';
 
 let noticeID = 0;
 
@@ -183,6 +184,9 @@ export function roomJoin(name) {
           break;
         case types.CMD_MESSAGES:
           dispatch(roomMessages(payload.messages));
+          break;
+        case types.CMD_SETTINGS:
+          dispatch(settingsAll(payload.settings));
           break;
         case types.CMD_SEND:
           dispatch(roomMessage(payload.message));

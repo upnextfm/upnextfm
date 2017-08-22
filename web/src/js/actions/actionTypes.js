@@ -13,6 +13,8 @@ export const REGISTER_BEGIN          = 'REGISTER_BEGIN';
 export const REGISTER_ERROR          = 'REGISTER_ERROR';
 export const REGISTER_COMPLETE       = 'REGISTER_COMPLETE';
 
+export const SETTINGS_ALL = 'SETTINGS_ALL';
+
 export const LAYOUT_TOGGLE_NAV_DRAWER = 'LAYOUT_TOGGLE_NAV_DRAWER';
 export const LAYOUT_COLS              = 'LAYOUT_COLS';
 export const LAYOUT_WINDOW_FOCUS      = 'LAYOUT_WINDOW_FOCUS';
@@ -51,6 +53,7 @@ export const CMD_SEND        = 'send';
 export const CMD_JOINED      = 'joined';
 export const CMD_PARTED      = 'parted';
 export const CMD_USERS       = 'users';
+export const CMD_SETTINGS    = 'settings';
 export const CMD_REPO_USERS  = 'repo_users';
 export const CMD_MESSAGES    = 'messages';
 export const CMD_VIDEO_PLAY  = 'play';

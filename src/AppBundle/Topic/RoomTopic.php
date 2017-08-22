@@ -86,6 +86,12 @@ class RoomTopic extends AbstractTopic
         "cmd"   => RoomCommands::USERS,
         "users" => $users
       ]);
+      $connection->event($topic->getId(), [
+        "cmd"      => RoomCommands::SETTINGS,
+        "settings" => [
+          "showNotices" => true
+        ]
+      ]);
       if ($user !== null) {
         $topic->broadcast([
           "cmd"  => RoomCommands::JOINED,
