@@ -78,6 +78,9 @@ class Linkify extends React.Component {
       return elements;
     }
 
+    string = string.replace(/\[#[a-fA-F0-9]{6}\]/g, '');
+    string = string.replace(/\[\/#\]/g, '');
+
     const matches = linkify.match(string);
     if (!matches) {
       return string;
