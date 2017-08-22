@@ -164,8 +164,8 @@ class RoomTopic extends AbstractTopic
     $this->em->flush();
 
     $topic->broadcast([
-      "cmd" => RoomCommands::SEND,
-      "msg" => [
+      "cmd"     => RoomCommands::SEND,
+      "message" => [
         "id"      => $chatLog->getId(),
         "date"    => $event["date"],
         "from"    => $user->getUsername(),

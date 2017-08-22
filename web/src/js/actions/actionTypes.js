@@ -21,12 +21,13 @@ export const ROOM_JOINED                 = 'ROOM_JOINED';
 export const ROOM_PARTED                 = 'ROOM_PARTED';
 export const ROOM_NAME                   = 'ROOM_NAME';
 export const ROOM_SEND                   = 'ROOM_SEND';
-export const ROOM_PAYLOAD                = 'ROOM_PAYLOAD';
 export const ROOM_USERS                  = 'ROOM_USERS';
+export const ROOM_MESSAGE                = 'ROOM_MESSAGE';
 export const ROOM_MESSAGES               = 'ROOM_MESSAGES';
 export const ROOM_INPUT_CHANGE           = 'ROOM_INPUT_CHANGE';
 export const ROOM_TOGGLE_USERS_COLLAPSED = 'ROOM_TOGGLE_USERS_COLLAPSED';
 export const ROOM_RESET_NUM_NEW_MESSAGES = 'ROOM_RESET_NUM_NEW_MESSAGES';
+export const ROOM_INCR_NUM_NEW_MESSAGES  = 'ROOM_INCR_NUM_NEW_MESSAGES';
 
 export const PLAYLIST_START     = 'PLAYLIST_START';
 export const PLAYLIST_SUBSCRIBE = 'PLAYLIST_SUBSCRIBE';

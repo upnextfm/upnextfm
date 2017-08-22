@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Favico from 'favico.js';
 import { connect } from 'react-redux';
 import { roomJoin } from 'actions/roomActions';
 import { layoutWindowFocused } from 'actions/layoutActions';
@@ -30,7 +31,7 @@ class Room extends React.Component {
 
   constructor(props) {
     super(props);
-    this.title = document.title;
+    this.favicon = null;
   }
 
   componentDidMount() {
@@ -38,16 +39,16 @@ class Room extends React.Component {
       .then(() => {
         this.props.dispatch(roomJoin(this.props.name));
       });
+
+    this.favicon = new Favico();
     domOnWindowBlur((status) => {
       this.props.dispatch(layoutWindowFocused(status));
     });
   }
 
-  componentDidUpdate() {
-    if (!this.props.layout.isWindowFocused && this.props.room.numNewMessages > 0) {
-      document.title = `*${this.title}`;
-    } else {
-      document.title = this.title;
+  componentDidUpdate(prevProps) {
+    if (prevProps.room.numNewMessages !== this.props.room.numNewMessages) {
+      this.favicon.badge(this.props.room.numNewMessages);
     }
   }
 

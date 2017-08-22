@@ -69,26 +69,20 @@ function messages(state, action) {
 }
 
 /**
+ * Adds a message
  *
  * @param {*} state
- * @param {{type: string, payload: *}} action
+ * @param {{type: string, message: *}} action
  * @returns {*}
  */
-function payload(state, action) {
-  switch (action.payload.cmd) {
-    case types.CMD_SEND:
-      const messages = state.messages.slice();
-      const message  = action.payload.msg;
-      message.date   = new Date(message.date);
-      messages.push(message);
-      return Object.assign({}, state, {
-        messages,
-        numNewMessages: state.numNewMessages + 1
-      });
-      break;
-    default:
-      return state;
-  }
+function message(state, action) {
+  const msgs = state.messages.slice();
+  const msg  = Object.assign({}, action.message);
+  msg.date   = new Date(msg.date);
+  msgs.push(msg);
+  return Object.assign({}, state, {
+    messages: msgs
+  });
 }
 
 /**
@@ -116,6 +110,10 @@ export default function roomReducer(state = initialState.room, action = {}) {
       return Object.assign({}, state, {
         isUsersCollapsed: !state.isUsersCollapsed
       });
+    case types.ROOM_INCR_NUM_NEW_MESSAGES:
+      return Object.assign({}, state, {
+        numNewMessages: state.numNewMessages + 1
+      });
     case types.ROOM_RESET_NUM_NEW_MESSAGES:
       return Object.assign({}, state, {
         numNewMessages: 0
@@ -128,8 +126,8 @@ export default function roomReducer(state = initialState.room, action = {}) {
       return users(state, action);
     case types.ROOM_MESSAGES:
       return messages(state, action);
-    case types.ROOM_PAYLOAD:
-      return payload(state, action);
+    case types.ROOM_MESSAGE:
+      return message(state, action);
     default:
       return state;
   }

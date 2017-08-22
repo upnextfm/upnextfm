@@ -25,6 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "classnames": "^2.2.5",
+    "favico.js": "^0.3.10",
     "linkify-it": "^2.0.3",
     "material-ui": "^1.0.0-beta.4",
     "material-ui-icons": "^1.0.0-alpha.19",
