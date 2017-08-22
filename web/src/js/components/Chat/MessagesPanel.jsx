@@ -12,15 +12,11 @@ class MessagesPanel extends React.Component {
     users: PropTypes.object
   };
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.scrollRef.scrollToBottom();
-    }, 1000);
-  }
-
   componentDidUpdate(prevProps) {
     if (prevProps.room.messages.length !== this.props.room.messages.length) {
-      this.scrollRef.scrollToBottom();
+      setTimeout(() => {
+        this.scrollRef.scrollToBottom();
+      }, 100);
     }
   }
 
