@@ -179,18 +179,14 @@ class RoomTopic extends AbstractTopic
       return;
     }
 
+    /** @var ChatLog $chatLog */
     $chatLog = new ChatLog($room, $user, $msg);
     $chatLog = $this->em->merge($chatLog);
     $this->em->flush();
 
     $topic->broadcast([
       "cmd"     => RoomCommands::SEND,
-      "message" => [
-        "id"      => $chatLog->getId(),
-        "date"    => $event["date"],
-        "from"    => $user->getUsername(),
-        "message" => $msg
-      ],
+      "message" => $this->serializeMessage($chatLog)
     ]);
   }
 }

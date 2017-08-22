@@ -5,6 +5,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { usersFindByUsername } from 'utils/users';
 import List from 'material-ui/List';
 import Message from 'components/Chat/Message';
+import Notice from 'components/Chat/Notice';
 
 class MessagesPanel extends React.Component {
   static propTypes = {
@@ -29,16 +30,28 @@ class MessagesPanel extends React.Component {
       <Scrollbars ref={(ref) => { this.scrollRef = ref; }}>
         <List className="up-room-panel__messages">
           {room.messages.map((message) => {
+            let item;
             const user = usersFindByUsername(users.repo, message.from);
-            const item = (
-              <Message
-                key={message.id}
-                message={message}
-                user={user}
-                prevMessage={prevMessage}
-                prevUser={prevUser}
-              />
-            );
+            if (message.type === 'message') {
+              item = (
+                <Message
+                  key={message.id}
+                  message={message}
+                  user={user}
+                  prevMessage={prevMessage}
+                  prevUser={prevUser}
+                />
+              );
+            } else if (message.type === 'notice') {
+              item = (
+                <Notice
+                  key={message.id}
+                  message={message}
+                  user={user}
+                />
+              );
+            }
+
             prevUser    = user;
             prevMessage = message;
             return item;

@@ -3,6 +3,13 @@ import { usersRepoAdd, usersRepoAddMulti, usersRepoRemove } from 'actions/usersA
 import { authToggleLoginDialog } from 'actions/authActions';
 import { playlistSubscribe } from 'actions/playlistActions';
 
+let noticeID = 0;
+
+function nextNoticeID() {
+  noticeID += 1;
+  return noticeID;
+}
+
 /**
  *
  * @returns {Function}
@@ -146,6 +153,14 @@ export function roomJoin(name) {
             type: types.ROOM_JOINED,
             user: payload.user
           });
+          if (api.auth.getUsername() !== payload.user.username) {
+            dispatch(roomMessage({
+              type:    'notice',
+              id:      nextNoticeID(),
+              date:    new Date(),
+              message: `${payload.user.username} joined the room.`
+            }));
+          }
           break;
         case types.CMD_PARTED:
           dispatch(usersRepoRemove(payload.username));
@@ -153,6 +168,12 @@ export function roomJoin(name) {
             type:     types.ROOM_PARTED,
             username: payload.username
           });
+          dispatch(roomMessage({
+            type:    'notice',
+            id:      nextNoticeID(),
+            date:    new Date(),
+            message: `${payload.username} left the room.`
+          }));
           break;
         case types.CMD_REPO_USERS:
           dispatch(usersRepoAddMulti(payload.users));

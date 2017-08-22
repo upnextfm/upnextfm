@@ -202,6 +202,21 @@ abstract class AbstractTopic implements TopicInterface
   }
 
   /**
+   * @param ChatLog $message
+   * @return array
+   */
+  protected function serializeMessage(ChatLog $message)
+  {
+    return [
+      "type"    => "message",
+      "id"      => $message->getId(),
+      "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
+      "from"    => $message->getUser()->getUsername(),
+      "message" => $message->getMessage()
+    ];
+  }
+
+  /**
    * @param ChatLog[] $messages
    * @return array
    */
@@ -209,12 +224,7 @@ abstract class AbstractTopic implements TopicInterface
   {
     $serialized = [];
     foreach($messages as $message) {
-      $serialized[] = [
-        "id"      => $message->getId(),
-        "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
-        "from"    => $message->getUser()->getUsername(),
-        "message" => $message->getMessage()
-      ];
+      $serialized[] = $this->serializeMessage($message);
     }
 
     return $serialized;
