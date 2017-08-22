@@ -1,10 +1,11 @@
 .up-profile {
-	posiiton: absolute;
+	position: absolute;
 	top: 0;
 	padding-top: 42px;
 	display:flex;
 	flex-direction:row;
-	height: 100%
+	height: 100%;
+
 	@media (max-width: #{$break-sm - 1px}) {
 		flex-direction: column;
 	}

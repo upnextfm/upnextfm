@@ -1,3 +1,4 @@
+{% import "::macros.htm.twig" as macros %}
 {% extends "base.html.twig" %}
 {% block title %}{{ user.username }}{% endblock %}
 {% block body %}
@@ -15,17 +16,9 @@
 			</div>
 		</div>
 		<div class="up-profile__playlist">
-			<!-- do like a for loop here or something -->
-			<div class="up-profile__playlsit__song">
-				<div class="up-profile__playlist__song-title">
-					ASDFGHJKL
-					<!-- Title here -->
-				</div>
-				<div class="up-profile__playlist__song-thumbnail">
-					<img />
-					<!-- thumb goes here -->
-				</div>
-			</div>
+			{% for played in playedRecently %}
+				{{ macros.playedCard(played) }}
+			{% endfor %}			
 		</div>
     </div>
 {% endblock %}
