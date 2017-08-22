@@ -15,6 +15,13 @@ $button-flat-color: #FFF;
   overflow: hidden;
 }
 
+.up-playlist-card {
+  .card-title {
+    height: 62px;
+    overflow: hidden;
+  }
+}
+
 .btn-flat:hover {
   background-color: transparent !important;
 }
