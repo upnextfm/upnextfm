@@ -1,10 +1,36 @@
 {% extends "base.html.twig" %}
 {% block title %}Login{% endblock %}
 {% block body %}
-    <div class="container">
-        <h1>Login</h1>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
+    <div class="row">
+        <div class="col s12">
+            <div class="card up-w400 up-center up-buffer-vert">
+                {{ form_start(form) }}
+                    <div class="card-content">
+                        <div class="card-title">
+                            Login
+                        </div>
+                        <div class="input-field">
+                            {{ form_widget(form.username) }}
+                            <label for="login_username">Username</label>
+                        </div>
+                        <div class="input-field">
+                            {{ form_widget(form.password) }}
+                            <label for="login_password">Password</label>
+                        </div>
+                        <p>
+                            {{ form_widget(form.remember, { attr: {
+                                class: "filled-in"
+                            }}) }}
+                            <label for="login_remember">Remember Me</label>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        {{ form_widget(form.login, { attr: {
+                            class: "btn waves-effect waves-light up-fill"
+                        }}) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
     </div>
 {% endblock %}

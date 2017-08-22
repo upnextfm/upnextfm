@@ -12,9 +12,27 @@
   text-align: center !important;
 }
 
+.up-center {
+  margin: 0 auto;
+}
+
 .up-center-page {
   display: flex;
   height: calc(100% - #{$nav-height});
   justify-content: center;
   align-items: center;
+}
+
+.up-w400 {
+  width: 400px;
+  max-width: 100%;
+}
+
+.up-buffer-vert {
+  margin-top: $padding-std;
+  margin-bottom: $padding-std;
+}
+
+.up-fill {
+  width: 100%;
 }
