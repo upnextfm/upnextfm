@@ -77,7 +77,7 @@ function messages(state, action) {
 function payload(state, action) {
   switch (action.payload.cmd) {
     case types.CMD_SEND:
-      const messages = state.messages;
+      const messages = state.messages.slice();
       const message  = action.payload.msg;
       message.date   = new Date(message.date);
       messages.push(message);

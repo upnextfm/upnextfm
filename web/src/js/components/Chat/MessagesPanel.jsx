@@ -12,8 +12,16 @@ class MessagesPanel extends React.Component {
     users: PropTypes.object
   };
 
-  componentDidUpdate() {
-    this.scrollRef.scrollToBottom();
+  componentDidMount() {
+    setTimeout(() => {
+      this.scrollRef.scrollToBottom();
+    }, 1000);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.room.messages.length !== this.props.room.messages.length) {
+      this.scrollRef.scrollToBottom();
+    }
   }
 
   render() {
@@ -48,7 +56,7 @@ class MessagesPanel extends React.Component {
 function mapStateToProps(state) {
   return {
     room:  Object.assign({}, state.room),
-    users: state.users
+    users: Object.assign({}, state.users)
   };
 }
 
