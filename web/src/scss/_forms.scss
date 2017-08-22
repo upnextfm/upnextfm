@@ -1,0 +1,6 @@
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #FFF !important;
+  -webkit-box-shadow: 0 0 0 30px #424242 inset !important;
+}
