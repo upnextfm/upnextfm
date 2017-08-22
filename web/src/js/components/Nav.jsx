@@ -7,10 +7,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
-import VolumeOff from 'material-ui-icons/VolumeOff';
-import VolumeUp from 'material-ui-icons/VolumeUp';
 import ArrowRight from 'material-ui-icons/KeyboardArrowRight';
-import PlayArrow from 'material-ui-icons/PlayArrow';
 import { animateScrollLeft } from 'utils/animate';
 import { layoutToggleNavDrawer } from 'actions/layoutActions';
 import { videoToggleMute, videoTogglePlay, videoStatus } from 'actions/videoActions';
@@ -79,7 +76,7 @@ class Nav extends React.Component {
           <a href="/" className="up-brand">
             <img src="/images/logo-brand.png" alt="Logo" />
           </a>
-          <Hidden xsDown>
+          <Hidden smDown>
             {auth.isAuthenticated
             ? (
               <Button className="up-btn-login" onClick={this.handleClickLogin}>
@@ -96,7 +93,7 @@ class Nav extends React.Component {
               </span>
             )}
           </Hidden>
-          <Hidden smUp>
+          <Hidden mdUp>
             <div className="up-nav__video-controls">
               <IconButton onClick={this.handleClickPlay}>
                 <PlayIcon status={video.status} />

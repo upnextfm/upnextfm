@@ -32,10 +32,10 @@ class Room extends React.Component {
           <Progress />
         </Hidden>
         <div className="up-room">
-          <Grid item xs={12} sm={12} md={layout.colsChatSide}>
+          <Grid item xs={12} md={layout.colsChatSide}>
             <ChatSide roomName={roomName} socketURI={socketURI} />
           </Grid>
-          <Grid item xs={12} sm={12} md={layout.colsVideoSide}>
+          <Grid item xs={12} md={layout.colsVideoSide}>
             <VideoSide />
           </Grid>
         </div>
