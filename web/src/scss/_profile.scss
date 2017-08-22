@@ -16,6 +16,10 @@
 	display: flex;
 	flex-direction: column;
 	box-shadow: 2px 0 2px rgba(0, 0, 0, 0.25);
+
+	@media (max-width: #{$break-sm - 1px}) {
+		flex-shrink: 0;
+	}
 }
 .up-profile__bio__user {
 	width:100%;
