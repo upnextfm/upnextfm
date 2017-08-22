@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { roomJoin } from 'actions/roomActions';
+import { layoutWindowFocused } from 'actions/layoutActions';
+import { domOnWindowBlur } from 'utils/dom';
 import * as api from 'api';
 import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
@@ -26,11 +28,27 @@ class Room extends React.Component {
     dispatch: () => {}
   };
 
+  constructor(props) {
+    super(props);
+    this.title = document.title;
+  }
+
   componentDidMount() {
     api.socket.connect(this.props.socketURI)
       .then(() => {
         this.props.dispatch(roomJoin(this.props.name));
       });
+    domOnWindowBlur((status) => {
+      this.props.dispatch(layoutWindowFocused(status));
+    });
+  }
+
+  componentDidUpdate() {
+    if (!this.props.layout.isWindowFocused && this.props.room.numNewMessages > 0) {
+      document.title = `*${this.title}`;
+    } else {
+      document.title = this.title;
+    }
   }
 
   render() {

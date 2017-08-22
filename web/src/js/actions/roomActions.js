@@ -155,3 +155,12 @@ export function roomToggleUsersCollapsed() {
     api.storage.setItem('room:isUsersCollapsed', getState().room.isUsersCollapsed);
   };
 }
+
+/**
+ * @returns {{type: string}}
+ */
+export function roomResetNumNewMessages() {
+  return {
+    type: types.ROOM_RESET_NUM_NEW_MESSAGES
+  };
+}

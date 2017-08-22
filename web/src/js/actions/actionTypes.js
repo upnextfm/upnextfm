@@ -15,6 +15,7 @@ export const REGISTER_COMPLETE       = 'REGISTER_COMPLETE';
 
 export const LAYOUT_TOGGLE_NAV_DRAWER = 'LAYOUT_TOGGLE_NAV_DRAWER';
 export const LAYOUT_COLS              = 'LAYOUT_COLS';
+export const LAYOUT_WINDOW_FOCUS      = 'LAYOUT_WINDOW_FOCUS';
 
 export const ROOM_JOINED                 = 'ROOM_JOINED';
 export const ROOM_PARTED                 = 'ROOM_PARTED';
@@ -25,6 +26,7 @@ export const ROOM_USERS                  = 'ROOM_USERS';
 export const ROOM_MESSAGES               = 'ROOM_MESSAGES';
 export const ROOM_INPUT_CHANGE           = 'ROOM_INPUT_CHANGE';
 export const ROOM_TOGGLE_USERS_COLLAPSED = 'ROOM_TOGGLE_USERS_COLLAPSED';
+export const ROOM_RESET_NUM_NEW_MESSAGES = 'ROOM_RESET_NUM_NEW_MESSAGES';
 
 export const PLAYLIST_START     = 'PLAYLIST_START';
 export const PLAYLIST_SUBSCRIBE = 'PLAYLIST_SUBSCRIBE';

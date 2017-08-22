@@ -82,7 +82,8 @@ function payload(state, action) {
       message.date   = new Date(message.date);
       messages.push(message);
       return Object.assign({}, state, {
-        messages
+        messages,
+        numNewMessages: state.numNewMessages + 1
       });
       break;
     default:
@@ -114,6 +115,10 @@ export default function roomReducer(state = initialState.room, action = {}) {
     case types.ROOM_TOGGLE_USERS_COLLAPSED:
       return Object.assign({}, state, {
         isUsersCollapsed: !state.isUsersCollapsed
+      });
+    case types.ROOM_RESET_NUM_NEW_MESSAGES:
+      return Object.assign({}, state, {
+        numNewMessages: 0
       });
     case types.ROOM_JOINED:
       return joined(state, action);

@@ -10,6 +10,10 @@ import initialState from 'store/initialState';
  */
 export default function layoutReducer(state = initialState.layout, action = {}) {
   switch (action.type) {
+    case types.LAYOUT_WINDOW_FOCUS:
+      return Object.assign({}, state, {
+        isWindowFocused: action.status === 'focus'
+      });
     case types.LAYOUT_TOGGLE_NAV_DRAWER:
       return Object.assign({}, state, {
         isNavDrawerOpen: !state.isNavDrawerOpen

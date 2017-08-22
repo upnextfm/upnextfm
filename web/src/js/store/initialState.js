@@ -3,6 +3,7 @@ import Storage from 'api/Storage';
 export default {
   layout: {
     isNavDrawerOpen: false,
+    isWindowFocused: true,
     colsChatSide:    7,
     colsVideoSide:   5
   },
@@ -23,6 +24,7 @@ export default {
     name:             '',
     inputValue:       '',
     isUsersCollapsed: Storage.getItem('room:isUsersCollapsed', false),
+    numNewMessages:   0,
     users:            [],
     messages:         []
   },
