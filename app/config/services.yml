@@ -27,6 +27,14 @@ services:
             - "@snc_redis.session.handler"
 
     ## ########################################################################
+    ## Storage Rooms
+    ## ########################################################################
+    app.storage.room:
+      class: AppBundle\Storage\RoomStorage
+      arguments:
+        - "@snc_redis.rooms"
+
+    ## ########################################################################
     ## API Request Listener
     ## ########################################################################
     api.request_listener:
@@ -81,6 +89,8 @@ services:
     app.topic.room:
         class: AppBundle\Topic\RoomTopic
         parent: app.topic.parent
+        calls:
+          - [setRoomStorage, ["@app.storage.room"]]
         tags:
           - { name: gos_web_socket.topic }
 
@@ -135,3 +145,4 @@ services:
         - "@monolog.logger"
       calls:
         - [setYoutube, ["@madcoda.youtube.youtube"]]
+

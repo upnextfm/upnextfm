@@ -1,0 +1,9 @@
+{% import "::macros.htm.twig" as macros %}
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="row">
+        {% for room in rooms %}
+            {{ macros.roomCard(room) }}
+        {% endfor %}
+    </div>
+{% endblock %}

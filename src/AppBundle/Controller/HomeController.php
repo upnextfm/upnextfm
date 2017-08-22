@@ -19,6 +19,19 @@ class HomeController extends Controller
   }
 
   /**
+   * @Route("/homepage", name="homepage_dev")
+   */
+  public function homepageAction()
+  {
+    $repo  = $this->getDoctrine()->getRepository("AppBundle:Room");
+    $rooms = $repo->findAll();
+
+    return $this->render(":home:homepage.html.twig", [
+      "rooms" => $rooms
+    ]);
+  }
+
+  /**
    * @Route("/contact", name="contact")
    *
    * @param Request $request

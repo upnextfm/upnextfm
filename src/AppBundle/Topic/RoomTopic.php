@@ -4,6 +4,7 @@ namespace AppBundle\Topic;
 use AppBundle\Entity\ChatLog;
 use AppBundle\Entity\Room;
 use AppBundle\Entity\User;
+use AppBundle\Storage\RoomStorage;
 use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
@@ -12,11 +13,26 @@ use Ratchet\Wamp\Topic;
 class RoomTopic extends AbstractTopic
 {
   /**
+   * @var RoomStorage
+   */
+  protected $roomStorage;
+
+  /**
    * {@inheritdoc}
    */
   public function getName()
   {
     return "room.topic";
+  }
+
+  /**
+   * @param RoomStorage $roomStorage
+   * @return $this
+   */
+  public function setRoomStorage(RoomStorage $roomStorage)
+  {
+    $this->roomStorage = $roomStorage;
+    return $this;
   }
 
   /**
@@ -29,11 +45,13 @@ class RoomTopic extends AbstractTopic
       if (!($user instanceof UserInterface)) {
         $user = null;
       }
-
       $room = $this->getRoom($request->getAttributes()->get("room"), $user);
-      $repo = $this->em->getRepository("AppBundle:ChatLog");
-      $messages = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
+      if ($user) {
+        $this->roomStorage->addUser($room, $user);
+      }
 
+      $repo      = $this->em->getRepository("AppBundle:ChatLog");
+      $messages  = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
       $repoFound = [];
       $repoUsers = [];
       foreach ($messages as $message) {
@@ -89,6 +107,8 @@ class RoomTopic extends AbstractTopic
       if (!($user instanceof UserInterface)) {
         return;
       }
+      $room = $this->getRoom($request->getAttributes()->get("room"), $user);
+      $this->roomStorage->removeUser($room, $user);
 
       $topic->broadcast([
         "cmd"      => RoomCommands::PARTED,
