@@ -57,9 +57,15 @@ class Video
           ->setTitle($resp->snippet->title)
           ->setSeconds($this->youtubeToSeconds($resp->contentDetails->duration))
           ->setDescription($resp->snippet->description)
-          ->setThumbnail("sm", $resp->snippet->thumbnails->medium->url)
-          ->setThumbnail("md", $resp->snippet->thumbnails->standard->url)
-          ->setThumbnail("lg", $resp->snippet->thumbnails->maxres->url);
+          ->setThumbnail("sm", !empty($resp->snippet->thumbnails->medium->url)
+            ? $resp->snippet->thumbnails->medium->url
+            : $resp->snippet->thumbnails->default->url)
+          ->setThumbnail("md", !empty($resp->snippet->thumbnails->standard->url)
+            ? $resp->snippet->thumbnails->standard->url
+            : $resp->snippet->thumbnails->default->url)
+          ->setThumbnail("lg", !empty($resp->snippet->thumbnails->high->url)
+            ? $resp->snippet->thumbnails->high->url
+            : $resp->snippet->thumbnails->default->url);
         return $info;
         break;
       default:
