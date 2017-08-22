@@ -14,16 +14,18 @@ class ProfileController extends Controller
    */
   public function indexAction($username)
   {
-    $user = $this->getDoctrine()
-      ->getManager()
-      ->getRepository("AppBundle:User")
-      ->findByUsername($username);
+    $em   = $this->getDoctrine()->getManager();
+    $user = $em->getRepository("AppBundle:User")->findByUsername($username);
     if (!$user) {
       throw $this->createNotFoundException();
     }
 
+    $playedRecently = $em->getRepository("AppBundle:VideoLog")
+      ->findRecentByUser($user, 100);
+
     return $this->render(":profile:index.html.twig", [
-      "user" => $user
+      "user"           => $user,
+      "playedRecently" => $playedRecently
     ]);
   }
 }
