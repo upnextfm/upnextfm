@@ -5,6 +5,13 @@
     <a href="/" class="up-brand">
         <img src="{{ asset('images/logo-brand.png') }}" />
     </a>
+    <div style="margin-left: auto">
+        {% if app.user %}
+            <a href="{{ path("logout") }}" class="btn btn-flat">Logout</a>
+        {% elseif not app.user %}
+            <a href="{{ path("login") }}" class="btn btn-flat">Login</a>
+        {% endif %}
+    </div>
 </nav>
 <div id="up-nav-slider" class="up-drawer">
     <nav>

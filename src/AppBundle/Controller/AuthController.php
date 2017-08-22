@@ -1,13 +1,12 @@
 <?php
 namespace AppBundle\Controller;
 
-use AppBundle\Form\LoginModel;
-use AppBundle\Form\LoginType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use AppBundle\Form\LoginModel;
+use AppBundle\Form\LoginType;
 
 class AuthController extends Controller
 {
@@ -17,7 +16,7 @@ class AuthController extends Controller
    * @param Request $request
    * @return \Symfony\Component\HttpFoundation\Response
    */
-  public function indexAction(Request $request)
+  public function loginAction(Request $request)
   {
     $model = new LoginModel();
     $form  = $this->createForm(LoginType::class, $model);
@@ -25,7 +24,9 @@ class AuthController extends Controller
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       $em   = $this->getDoctrine()->getManager();
-      $user = $em->getRepository("AppBundle:User")->findByUsername($model->getUsername());
+      $user = $em->getRepository("AppBundle:User")
+        ->findByUsername($model->getUsername());
+
       if(!$user){
         return new Response(
           "Username doesn't exists",
@@ -45,17 +46,34 @@ class AuthController extends Controller
         );
       }
 
-      $token = new UsernamePasswordToken($user, null, "main", $user->getRoles());
-      $this->get("security.token_storage")->setToken($token);
-      $this->get("session")->set("_security_main", serialize($token));
-      $event = new InteractiveLoginEvent($request, $token);
-      $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+      $handler = $this->get('lexik_jwt_authentication.handler.authentication_success');
+      $tokens  = json_decode($handler->handleAuthenticationSuccess($user)->getContent(), true);
+      $response = $this->redirectToRoute("homepage");
+      $response->headers->setCookie(new Cookie("token", $tokens["token"]));
 
-      return $this->redirect($this->generateUrl("homepage"));
+      return $response;
     }
 
     return $this->render(":auth:login.html.twig", [
       "form" => $form->createView()
     ]);
+  }
+
+  /**
+   * @Route("/logout", name="logout")
+   *
+   * @param Request $request
+   * @return Response
+   */
+  public function logoutAction(Request $request)
+  {
+    $this->get('security.token_storage')->setToken(null);
+    $session = $request->getSession();
+    $session->invalidate();
+
+    $response = $this->redirectToRoute("login");
+    $response->headers->clearCookie("token");
+
+    return $response;
   }
 }

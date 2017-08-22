@@ -6,10 +6,15 @@
 $primary-color: $color-secondary;
 $secondary-color: $color-primary;
 $card-bg-color: $color-secondary;
+$button-flat-color: #FFF;
 
 @import "../../../node_modules/materialize-css/sass/materialize";
 
 .card-title {
   max-height: 62px;
   overflow: hidden;
+}
+
+.btn-flat:hover {
+  background-color: transparent !important;
 }

@@ -105,6 +105,17 @@ lexik_jwt_authentication:
   public_key_path:  '%jwt_public_key_path%'
   pass_phrase:      '%jwt_key_pass_phrase%'
   token_ttl:        '%jwt_token_ttl%'
+  token_extractors:
+    authorization_header:
+      enabled: true
+      prefix:  Bearer
+      name:    Authorization
+    cookie:
+      enabled: true
+      name:    token
+    query_parameter:
+      enabled: false
+      name:    token
 
 ## ########################################################################
 ## GesdinetJWTRefreshTokenBundle
