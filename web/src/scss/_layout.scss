@@ -1,4 +1,5 @@
 @import "vars";
+@import "mixins";
 
 body, html, #mount, #mount > div {
   height: 100%;
@@ -30,4 +31,12 @@ a {
   p {
     margin-bottom: 0.5rem;
   }
+}
+
+.up-progress {
+  position: absolute;
+  top: $nav-height;
+  left: 0;
+  width: 100%;
+  z-index: 4;
 }
