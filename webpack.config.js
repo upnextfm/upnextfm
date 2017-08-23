@@ -11,6 +11,7 @@ Encore
   .addEntry('js/app', './web/src/js/app.jsx')
   .addEntry('js/room', './web/src/js/room.jsx')
   .addStyleEntry('css/app', './web/src/scss/app.scss')
+  .addStyleEntry('css/loader', './web/src/scss/loader.scss')
   .addStyleEntry('css/materialize', './web/src/scss/materialize.scss')
   .enableReactPreset()
   .enableSassLoader()

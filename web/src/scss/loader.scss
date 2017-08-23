@@ -1,0 +1,47 @@
+@import "vars";
+
+$width: 100px;
+
+.up-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.up-loader__circular{
+  height: $width;
+  width: $width;
+  position: relative;
+  animation: up-loader__rotate 2s linear infinite;
+}
+
+.up-loader__path {
+  stroke: $color-primary;
+  stroke-dasharray: 1,200;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  animation: up-loader__dash 1.5s ease-in-out infinite;
+}
+
+@keyframes up-loader__rotate {
+ 100% {
+  transform: rotate(360deg);
+ }
+}
+
+@keyframes up-loader__dash {
+ 0% {
+  stroke-dasharray: 1,200;
+  stroke-dashoffset: 0;
+ }
+
+ 50% {
+  stroke-dasharray: 89,200;
+  stroke-dashoffset: -35;
+ }
+
+ 100% {
+  stroke-dasharray: 89,200;
+  stroke-dashoffset: -124;
+ }
+}

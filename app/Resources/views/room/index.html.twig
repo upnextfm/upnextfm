@@ -2,13 +2,11 @@
 {% block title %}{{ name }}{% endblock %}
 {% block body %}
     <div id="mount" data-room="{{ name }}">
-        <!-- <div style="display:flex;align-items:center;justify-content:center;"> -->
-        <div class="loader">
-          <svg class="circular">
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
-          </svg>
+        <div class="up-loader">
+            <svg class="up-loader__circular">
+                <circle class="up-loader__path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"></circle>
+            </svg>
         </div>
-        <!-- </div> -->
     </div>
 {% endblock %}
 {% block javascripts %}
