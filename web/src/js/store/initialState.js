@@ -2,10 +2,11 @@ import Storage from 'api/Storage';
 
 export default {
   layout: {
-    isNavDrawerOpen: false,
-    isWindowFocused: true,
-    colsChatSide:    7,
-    colsVideoSide:   5
+    isNavDrawerOpen:  false,
+    isWindowFocused:  true,
+    isUsersCollapsed: Storage.getItem('layout:isUsersCollapsed', false),
+    colsChatSide:     7,
+    colsVideoSide:    5
   },
   auth: {
     username:          '',
@@ -21,15 +22,18 @@ export default {
     error:                null
   },
   settings: {
-    showNotices: true
+    user: {
+      showNotices: true
+    },
+    site: {},
+    room: {}
   },
   room: {
-    name:             '',
-    inputValue:       '',
-    isUsersCollapsed: Storage.getItem('room:isUsersCollapsed', false),
-    numNewMessages:   0,
-    users:            [],
-    messages:         []
+    name:           '',
+    inputValue:     '',
+    numNewMessages: 0,
+    users:          [],
+    messages:       []
   },
   users: {
     repo: []

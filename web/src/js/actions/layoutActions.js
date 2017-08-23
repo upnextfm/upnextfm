@@ -11,6 +11,19 @@ export function layoutToggleNavDrawer() {
 }
 
 /**
+ *
+ * @returns {{type: string}}
+ */
+export function layoutToggleUsersCollapsed() {
+  return (dispatch, getState, api) => {
+    dispatch({
+      type: types.LAYOUT_TOGGLE_USERS_COLLAPSED
+    });
+    api.storage.setItem('layout:isUsersCollapsed', getState().layout.isUsersCollapsed);
+  };
+}
+
+/**
  * @param {number} chatSide
  * @param {number} videoSide
  * @returns {{type: string, chatSide: number, videoSide: number}}

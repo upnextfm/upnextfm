@@ -13,7 +13,7 @@ export default class Storage {
    */
   static getItem(key, def = null) {
     let value = localStorage.getItem(key);
-    if (value !== null) {
+    if (value !== null && value !== 'null' && value !== undefined && value !== 'undefined') {
       value = JSON.parse(value);
     } else {
       value = def;

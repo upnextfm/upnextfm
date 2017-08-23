@@ -106,10 +106,6 @@ export default function roomReducer(state = initialState.room, action = {}) {
       return Object.assign({}, state, {
         inputValue: ''
       });
-    case types.ROOM_TOGGLE_USERS_COLLAPSED:
-      return Object.assign({}, state, {
-        isUsersCollapsed: !state.isUsersCollapsed
-      });
     case types.ROOM_INCR_NUM_NEW_MESSAGES:
       return Object.assign({}, state, {
         numNewMessages: state.numNewMessages + 1

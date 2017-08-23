@@ -23,6 +23,10 @@ export default function layoutReducer(state = initialState.layout, action = {}) 
         colsChatSide:  action.chatSide,
         colsVideoSide: action.videoSide
       });
+    case types.LAYOUT_TOGGLE_USERS_COLLAPSED:
+      return Object.assign({}, state, {
+        isUsersCollapsed: !state.isUsersCollapsed
+      });
     default:
       return state;
   }

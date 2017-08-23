@@ -13,11 +13,15 @@ export const REGISTER_BEGIN          = 'REGISTER_BEGIN';
 export const REGISTER_ERROR          = 'REGISTER_ERROR';
 export const REGISTER_COMPLETE       = 'REGISTER_COMPLETE';
 
-export const SETTINGS_ALL = 'SETTINGS_ALL';
+export const SETTINGS_ALL  = 'SETTINGS_ALL';
+export const SETTINGS_USER = 'SETTINGS_USER';
+export const SETTINGS_SITE = 'SETTINGS_SITE';
+export const SETTINGS_ROOM = 'SETTINGS_ROOM';
 
-export const LAYOUT_TOGGLE_NAV_DRAWER = 'LAYOUT_TOGGLE_NAV_DRAWER';
-export const LAYOUT_COLS              = 'LAYOUT_COLS';
-export const LAYOUT_WINDOW_FOCUS      = 'LAYOUT_WINDOW_FOCUS';
+export const LAYOUT_TOGGLE_NAV_DRAWER      = 'LAYOUT_TOGGLE_NAV_DRAWER';
+export const LAYOUT_TOGGLE_USERS_COLLAPSED = 'LAYOUT_TOGGLE_USERS_COLLAPSED';
+export const LAYOUT_COLS                   = 'LAYOUT_COLS';
+export const LAYOUT_WINDOW_FOCUS           = 'LAYOUT_WINDOW_FOCUS';
 
 export const ROOM_JOINED                 = 'ROOM_JOINED';
 export const ROOM_PARTED                 = 'ROOM_PARTED';
@@ -27,7 +31,6 @@ export const ROOM_USERS                  = 'ROOM_USERS';
 export const ROOM_MESSAGE                = 'ROOM_MESSAGE';
 export const ROOM_MESSAGES               = 'ROOM_MESSAGES';
 export const ROOM_INPUT_CHANGE           = 'ROOM_INPUT_CHANGE';
-export const ROOM_TOGGLE_USERS_COLLAPSED = 'ROOM_TOGGLE_USERS_COLLAPSED';
 export const ROOM_RESET_NUM_NEW_MESSAGES = 'ROOM_RESET_NUM_NEW_MESSAGES';
 export const ROOM_INCR_NUM_NEW_MESSAGES  = 'ROOM_INCR_NUM_NEW_MESSAGES';
 

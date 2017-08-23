@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { roomToggleUsersCollapsed } from 'actions/roomActions';
+import { layoutToggleUsersCollapsed } from 'actions/layoutActions';
 import { usersFindByUsername } from 'utils/users';
 import Hidden from 'material-ui/Hidden';
 import List, { ListItem } from 'material-ui/List';
@@ -12,22 +12,23 @@ import User from 'components/Chat/User';
 
 class UsersPanel extends React.Component {
   static propTypes = {
-    room:  PropTypes.object,
-    users: PropTypes.object
+    room:   PropTypes.object,
+    users:  PropTypes.object,
+    layout: PropTypes.object
   };
 
   handleClickCollapse = () => {
-    this.props.dispatch(roomToggleUsersCollapsed());
+    this.props.dispatch(layoutToggleUsersCollapsed());
   };
 
   render() {
-    const { room, users } = this.props;
+    const { room, users, layout } = this.props;
 
     return (
       <div className={classNames(
         'up-room-panel__users',
         {
-          'up-collapsed': room.isUsersCollapsed
+          'up-collapsed': layout.isUsersCollapsed
         }
       )}
       >
@@ -44,7 +45,7 @@ class UsersPanel extends React.Component {
               <KeyboardArrowLeft className={classNames(
                 'up-collapse__icon',
                 {
-                  'up-collapsed': room.isUsersCollapsed
+                  'up-collapsed': layout.isUsersCollapsed
                 }
                )}
               />
@@ -58,8 +59,9 @@ class UsersPanel extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    room:  Object.assign({}, state.room),
-    users: state.users
+    room:   Object.assign({}, state.room),
+    layout: Object.assign({}, state.layout),
+    users:  state.users
   };
 }
 

@@ -101,20 +101,6 @@ export function roomInputChange(inputValue) {
 }
 
 /**
- *
- * @returns {{type: string}}
- */
-export function roomToggleUsersCollapsed() {
-  // api.storage.getItem('video:isMuted', getState().video.isMuted)
-  return (dispatch, getState, api) => {
-    dispatch({
-      type: types.ROOM_TOGGLE_USERS_COLLAPSED
-    });
-    api.storage.setItem('room:isUsersCollapsed', getState().room.isUsersCollapsed);
-  };
-}
-
-/**
  * @returns {{type: string}}
  */
 export function roomResetNumNewMessages() {

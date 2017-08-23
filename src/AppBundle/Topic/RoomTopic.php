@@ -89,7 +89,11 @@ class RoomTopic extends AbstractTopic
       $connection->event($topic->getId(), [
         "cmd"      => RoomCommands::SETTINGS,
         "settings" => [
-          "showNotices" => true
+          "user" => [
+            "showNotices" => true
+          ],
+          "site" => [],
+          "room" => []
         ]
       ]);
       if ($user !== null) {

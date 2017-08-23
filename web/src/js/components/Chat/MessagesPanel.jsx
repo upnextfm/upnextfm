@@ -49,7 +49,7 @@ class MessagesPanel extends React.Component {
                   prevUser={prevUser}
                 />
               );
-            } else if (message.type === 'notice' && settings.showNotices) {
+            } else if (message.type === 'notice' && settings.user.showNotices) {
               item = (
                 <Notice
                   key={message.id}
