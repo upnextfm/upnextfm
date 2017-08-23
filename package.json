@@ -24,6 +24,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bbcode-to-react": "^0.2.6",
     "classnames": "^2.2.5",
     "favico.js": "^0.3.10",
     "linkify-it": "^2.0.3",
