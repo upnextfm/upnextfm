@@ -83,3 +83,27 @@
 .up-drawer__divider {
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
+
+.up-drawer__controls {
+  border-top: 1px solid #585858;
+  min-height: 76px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  text-align: center;
+  color: $color-dim;
+  font-size: 0.9rem;
+  padding: $padding-std;
+  flex-direction: column;
+  justify-content: center;
+
+
+  .SocialMediaShareButton {
+    outline: 0;
+    display: inline-block;
+    padding-bottom: $padding-std;
+    padding-right: $padding-std;
+  }
+}

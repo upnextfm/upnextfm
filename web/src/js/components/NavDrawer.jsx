@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { ShareButtons, generateShareIcon } from 'react-share';
 import { layoutToggleNavDrawer } from 'actions/layoutActions';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
@@ -114,12 +115,33 @@ class NavDrawer extends React.Component {
     );
   }
 
+  renderControls() {
+    const { TwitterShareButton, RedditShareButton } = ShareButtons;
+    const TwitterIcon = generateShareIcon('twitter');
+    const RedditIcon = generateShareIcon('reddit');
+
+    return (
+      <div className="up-drawer__controls">
+        <div>
+          <TwitterShareButton url={document.location.href}>
+            <TwitterIcon size={32} round />
+          </TwitterShareButton>
+          <RedditShareButton url={document.location.href}>
+            <RedditIcon size={32} round />
+          </RedditShareButton>
+          <p>2017 &copy; upnext.fm</p>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { layout } = this.props;
 
     return (
       <Drawer open={layout.isNavDrawerOpen} onRequestClose={this.handleToggle}>
         {this.renderList()}
+        {this.renderControls()}
       </Drawer>
     );
   }
