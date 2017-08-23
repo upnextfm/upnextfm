@@ -10,10 +10,6 @@ class Player extends React.Component {
     this.player   = null;
   }
 
-  componentDidMount() {
-
-  }
-
   shouldComponentUpdate(nextProps) {
     return nextProps.video.time === this.props.video.time;
   }
@@ -61,7 +57,7 @@ class Player extends React.Component {
     const duration = parseInt(this.player.getDuration(), 10);
     this.props.dispatch(videoReady(duration));
     this.player.seekTo(this.props.video.time);
-    setInterval(this.handleInterval, 1000);
+    // setInterval(this.handleInterval, 1000);
   };
 
   handleStateChange = () => {

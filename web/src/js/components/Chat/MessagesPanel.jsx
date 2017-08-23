@@ -13,6 +13,13 @@ class MessagesPanel extends React.Component {
     users: PropTypes.object
   };
 
+  shouldComponentUpdate(nextProps) {
+    return (
+      nextProps.room.messages.length !== this.props.room.messages.length ||
+      nextProps.users.repo.length !== this.props.users.repo.length
+    );
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.room.messages.length !== this.props.room.messages.length) {
       setTimeout(() => {

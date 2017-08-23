@@ -16,6 +16,13 @@ class UsersPanel extends React.Component {
     users: PropTypes.object
   };
 
+  shouldComponentUpdate(nextProps) {
+    return (
+      nextProps.room.isUsersCollapsed !== this.props.room.isUsersCollapsed ||
+      nextProps.room.users.length !== this.props.room.users.length
+    );
+  }
+
   handleClickCollapse = () => {
     this.props.dispatch(roomToggleUsersCollapsed());
   };
