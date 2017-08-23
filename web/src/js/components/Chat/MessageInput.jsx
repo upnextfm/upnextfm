@@ -6,6 +6,7 @@ import Send from 'material-ui-icons/Send';
 import AttachFile from 'material-ui-icons/AttachFile';
 import { roomInputChange, roomSend } from 'actions/roomActions';
 
+const KEY_TAB   = 9;
 const KEY_ENTER = 13;
 const KEY_UP    = 38;
 const KEY_DOWN  = 40;
@@ -33,12 +34,9 @@ class MessageInput extends React.Component {
   }
 
   componentDidUpdate() {
-    // Move caret to end of input.
     if (this.historyMoving) {
       this.historyMoving = false;
-      setTimeout(() => {
-        this.inputRef.selectionStart = this.inputRef.selectionEnd = 10000; // eslint-disable-line
-      }, 0);
+      this.moveCaretToEnd();
     }
   }
 
@@ -49,10 +47,29 @@ class MessageInput extends React.Component {
     this.inputRef.focus();
   };
 
+  moveCaretToEnd = () => {
+    setTimeout(() => {
+      this.inputRef.focus();
+      this.inputRef.selectionStart = this.inputRef.selectionEnd = 10000; // eslint-disable-line
+    }, 0);
+  };
+
   handleKeyDownInput = (e) => {
     switch (e.keyCode) { // eslint-disable-line default-case
       case KEY_ENTER:
         this.send();
+        break;
+      case KEY_TAB:
+        if (this.inputValue !== '') {
+          for (let i = 0; i < this.props.users.length; i++) {
+            if (this.props.users[i].toLowerCase().indexOf(this.props.inputValue.toLowerCase()) === 0) {
+              this.historyMoving = true;
+              this.props.dispatch(roomInputChange(
+                `${this.props.users[i]} `
+              ));
+            }
+          }
+        }
         break;
       case KEY_UP:
         if (this.historyIndex > 0) {
