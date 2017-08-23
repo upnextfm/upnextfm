@@ -23,6 +23,7 @@ $pdoCytube = new \PDO(
 importChatLogs();
 
 function decodeEntities($message) {
+  $message = html_entity_decode($message);
   return preg_replace_callback("/(&#[0-9]+;)/", function($m) {
     return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES");
   }, $message);

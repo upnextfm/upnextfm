@@ -29,7 +29,7 @@ export default class MessagesPanel extends React.Component {
   scrollToBottom = () => {
     setTimeout(() => {
       this.scrollRef.scrollToBottom();
-    }, 100);
+    }, 10);
   };
 
   render() {
