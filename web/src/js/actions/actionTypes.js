@@ -38,12 +38,12 @@ export const ROOM_INCR_NUM_NEW_MESSAGES  = 'ROOM_INCR_NUM_NEW_MESSAGES';
 export const PLAYLIST_START     = 'PLAYLIST_START';
 export const PLAYLIST_SUBSCRIBE = 'PLAYLIST_SUBSCRIBE';
 
-export const VIDEO_READY       = 'VIDEO_READY';
-export const VIDEO_TIME        = 'VIDEO_TIME';
-export const VIDEO_DURATION    = 'VIDEO_DURATION';
-export const VIDEO_STATUS      = 'VIDEO_STATUS';
-export const VIDEO_TOGGLE_PLAY = 'VIDEO_TOGGLE_PLAY';
-export const VIDEO_TOGGLE_MUTE = 'VIDEO_TOGGLE_MUTE';
+export const PLAYER_READY       = 'PLAYER_READY';
+export const PLAYER_TIME        = 'PLAYER_TIME';
+export const PLAYER_DURATION    = 'PLAYER_DURATION';
+export const PLAYER_STATUS      = 'PLAYER_STATUS';
+export const PLAYER_TOGGLE_PLAY = 'PLAYER_TOGGLE_PLAY';
+export const PLAYER_TOGGLE_MUTE = 'PLAYER_TOGGLE_MUTE';
 
 export const USERS_REPO_ADD       = 'USERS_REPO_ADD';
 export const USERS_REPO_ADD_MULTI = 'USERS_REPO_ADD_MULTI';

@@ -8,30 +8,30 @@ import initialState from 'store/initialState';
  * @param {*} action
  * @returns {*}
  */
-export default function videoReducer(state = initialState.video, action = {}) {
+export default function playerReducer(state = initialState.player, action = {}) {
   switch (action.type) {
-    case types.VIDEO_READY:
+    case types.PLAYER_READY:
       return Object.assign({}, state, {
         isMuted:  action.isMuted,
         duration: action.duration
       });
-    case types.VIDEO_TIME:
+    case types.PLAYER_TIME:
       return Object.assign({}, state, {
         time: action.time
       });
-    case types.VIDEO_DURATION:
+    case types.PLAYER_DURATION:
       return Object.assign({}, state, {
         duration: action.duration
       });
-    case types.VIDEO_STATUS:
+    case types.PLAYER_STATUS:
       return Object.assign({}, state, {
         status: action.status
       });
-    case types.VIDEO_TOGGLE_PLAY:
+    case types.PLAYER_TOGGLE_PLAY:
       return Object.assign({}, state, {
         status: state.status === 1 ? 2 : 1
       });
-    case types.VIDEO_TOGGLE_MUTE:
+    case types.PLAYER_TOGGLE_MUTE:
       return Object.assign({}, state, {
         isMuted: !state.isMuted
       });

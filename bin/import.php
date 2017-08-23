@@ -18,8 +18,8 @@ $pdoCytube = new \PDO(
 );
 
 //importRooms();
-importVideos();
-//importVideoLogs();
+//importVideos();
+importVideoLogs();
 //importChatLogs();
 
 /**

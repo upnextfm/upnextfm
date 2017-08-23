@@ -10,7 +10,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import ArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import { animateScrollLeft } from 'utils/animate';
 import { layoutToggleNavDrawer } from 'actions/layoutActions';
-import { videoToggleMute, videoTogglePlay, videoStatus } from 'actions/videoActions';
+import { playerToggleMute, playerTogglePlay } from 'actions/playerActions';
 import { authToggleLoginDialog, authLogout } from 'actions/authActions';
 import { registerToggleDialog } from 'actions/registerActions';
 import NavDrawer from 'components/NavDrawer';
@@ -53,11 +53,11 @@ class Nav extends React.Component {
   };
 
   handleClickMute = () => {
-    this.props.dispatch(videoToggleMute());
+    this.props.dispatch(playerToggleMute());
   };
 
   handleClickPlay = () => {
-    this.props.dispatch(videoTogglePlay());
+    this.props.dispatch(playerTogglePlay());
   };
 
   handleClickScroll = () => {

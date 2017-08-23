@@ -1,38 +1,47 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { videoReady, videoTime, videoStatus } from 'actions/videoActions';
+import * as actions from 'actions/playerActions';
 import YouTube from 'react-youtube';
 
 class Player extends React.Component {
+  static propTypes = {
+    video:  PropTypes.object,
+    player: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
     this.interval = null;
-    this.player   = null;
+    this.provider = null;
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.video.time === this.props.video.time;
+    return nextProps.player.time === this.props.player.time;
   }
 
   componentDidUpdate(prevProps) {
-    if (this.player) {
+    if (this.provider) {
       if (this.shouldSeekTo()) {
-        this.player.seekTo(this.props.video.time);
+        this.provider.seekTo(this.props.player.time);
       }
-      if (prevProps.video.status !== this.props.video.status) {
-        switch (this.props.video.status) {
+      if (prevProps.player.status !== this.props.player.status) {
+        switch (this.props.player.status) {
           case 1:
-            this.player.playVideo();
+            this.provider.playVideo();
             break;
           case 2:
-            this.player.pauseVideo();
+            this.provider.pauseVideo();
+            break;
+          default:
+            console.error(`Player status ${this.props.player.status} invalid.`);
             break;
         }
       }
-      if (this.props.video.isMuted) {
-        this.player.mute();
+      if (this.props.player.isMuted) {
+        this.provider.mute();
       } else {
-        this.player.unMute();
+        this.provider.unMute();
       }
     }
   }
@@ -42,31 +51,30 @@ class Player extends React.Component {
   }
 
   shouldSeekTo = () => {
-    const diff = this.props.video.time - this.player.getCurrentTime();
+    const diff = this.props.player.time - this.provider.getCurrentTime();
     return diff > 5;
   };
 
   handleInterval = () => {
-    const time = parseInt(this.player.getCurrentTime(), 10);
-    this.props.dispatch(videoTime(time));
+    const time = parseInt(this.provider.getCurrentTime(), 10);
+    this.props.dispatch(actions.playerTime(time));
   };
 
   handleReady = (e) => {
-    this.player = e.target;
+    this.provider = e.target;
 
-    const duration = parseInt(this.player.getDuration(), 10);
-    this.props.dispatch(videoReady(duration));
-    this.player.seekTo(this.props.video.time);
+    const duration = parseInt(this.provider.getDuration(), 10);
+    this.props.dispatch(actions.playerReady(duration));
+    this.provider.seekTo(this.props.player.time);
     // setInterval(this.handleInterval, 1000);
   };
 
   handleStateChange = () => {
-    const status = this.player.getPlayerState();
-    this.props.dispatch(videoStatus(status));
+    const status = this.provider.getPlayerState();
+    this.props.dispatch(actions.playerStatus(status));
   };
 
-  render() {
-    const { playlist } = this.props;
+  renderProviderYoutube() {
     const opts    = {
       width:      '100%',
       playerVars: {
@@ -79,16 +87,37 @@ class Player extends React.Component {
     };
 
     return (
+      <YouTube
+        opts={opts}
+        videoId={this.props.video.codename}
+        onReady={this.handleReady}
+        onStateChange={this.handleStateChange}
+        className="up-room-video__player up-room-video__player--youtube"
+      />
+    );
+  }
+
+  render() {
+    const { video } = this.props;
+    if (!video.codename) {
+      return (
+        <div className="up-room-video__container" />
+      );
+    }
+
+    let player;
+    switch (video.provider) {
+      case 'youtube':
+        player = this.renderProviderYoutube();
+        break;
+      default:
+        console.error(`Player provider "${video.provider}" invalid.`);
+        break;
+    }
+
+    return (
       <div className="up-room-video__container">
-        {playlist.current.codename === undefined ? null : (
-          <YouTube
-            opts={opts}
-            videoId={playlist.current.codename}
-            onReady={this.handleReady}
-            onStateChange={this.handleStateChange}
-            className="up-room-video__player"
-          />
-        )}
+        {player}
       </div>
     );
   }
@@ -96,8 +125,7 @@ class Player extends React.Component {
 
 function mapStateToProps(state) {
   return Object.assign({
-    video:    state.video,
-    playlist: state.playlist
+    player: state.player
   });
 }
 

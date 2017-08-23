@@ -39,7 +39,7 @@ export default {
   users: {
     repo: []
   },
-  video: {
+  player: {
     time:     0,
     duration: 0,
     status:   -1,    // -1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering, 4 cued

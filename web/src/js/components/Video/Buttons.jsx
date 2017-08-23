@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { videoTogglePlay, videoToggleMute } from 'actions/videoActions';
+import { playerTogglePlay, playerToggleMute } from 'actions/playerActions';
 import IconButton from 'material-ui/IconButton';
 import SkipNext from 'material-ui-icons/SkipNext';
 import MuteIcon from 'components/Icons/MuteIcon';
@@ -8,23 +8,23 @@ import PlayIcon from 'components/Icons/PlayIcon';
 
 class Buttons extends React.Component {
   handleClickMute = () => {
-    this.props.dispatch(videoToggleMute());
+    this.props.dispatch(playerToggleMute());
   };
 
   handleClickPlay = () => {
-    this.props.dispatch(videoTogglePlay());
+    this.props.dispatch(playerTogglePlay());
   };
 
   render() {
-    const { video } = this.props;
+    const { player } = this.props;
 
     return (
       <div className="up-room-video__buttons up-paper-container">
         <IconButton onClick={this.handleClickPlay}>
-          <PlayIcon status={video.status} />
+          <PlayIcon status={player.status} />
         </IconButton>
         <IconButton onClick={this.handleClickMute}>
-          <MuteIcon isMuted={video.isMuted} />
+          <MuteIcon isMuted={player.isMuted} />
         </IconButton>
         <IconButton title="Vote Skip">
           <SkipNext />
@@ -36,8 +36,7 @@ class Buttons extends React.Component {
 
 function mapStateToProps(state) {
   return Object.assign({
-    video:    state.video,
-    playlist: state.playlist
+    player: state.player
   });
 }
 
