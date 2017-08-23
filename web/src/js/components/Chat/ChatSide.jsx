@@ -18,7 +18,9 @@ class ChatSide extends React.Component {
 
   constructor(props) {
     super(props);
-    this.favicon = null;
+
+    this.messagesPanelRef = null;
+    this.favicon          = null;
   }
 
   componentDidMount() {
@@ -49,6 +51,7 @@ class ChatSide extends React.Component {
 
   handleCollapseUsers = () => {
     this.props.dispatch(layoutToggleUsersCollapsed());
+    this.messagesPanelRef.scrollToBottom();
   };
 
   renderUsersPanel() {
@@ -68,6 +71,7 @@ class ChatSide extends React.Component {
         settings={this.props.settings}
         messages={this.props.room.messages}
         users={this.props.users.repo}
+        ref={(ref) => { this.messagesPanelRef = ref; }}
       />
     );
   }

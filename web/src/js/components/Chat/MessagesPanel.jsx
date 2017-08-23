@@ -22,11 +22,15 @@ export default class MessagesPanel extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.messages.length !== this.props.messages.length) {
-      setTimeout(() => {
-        this.scrollRef.scrollToBottom();
-      }, 100);
+      this.scrollToBottom();
     }
   }
+
+  scrollToBottom = () => {
+    setTimeout(() => {
+      this.scrollRef.scrollToBottom();
+    }, 100);
+  };
 
   render() {
     const { messages, users, settings } = this.props;

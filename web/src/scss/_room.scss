@@ -62,7 +62,7 @@ $height-avatar-collapsed: auto;
     max-width: $width-panel-users-collapsed;
 
     .up-username {
-      display: none;
+      opacity: 0;
     }
   }
 
@@ -89,6 +89,8 @@ $height-avatar-collapsed: auto;
   }
 
   .up-username {
+    transition: opacity 0.2s linear;
+
     @include media-xs {
       display: none;
     }
