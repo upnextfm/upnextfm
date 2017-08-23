@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LinkifyIt from 'linkify-it';
+import BBCodeParser from 'bbcode-to-react';
 import tlds from 'tlds';
-import parser from 'bbcode-to-react';
 import { objectForEach } from 'utils/objects';
 
 const linkify = new LinkifyIt();
@@ -23,6 +23,21 @@ class Linkify extends React.Component {
     super(props);
     this.parseCounter = 0;
   }
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.children !== this.props.children;
+  }
+
+  /**
+   *
+   * @param {string} string
+   * @returns {*}
+   */
+  colorize = (string) => {
+    string = string.replace(/\[#([a-fA-F0-9]{6})\]/g, '[color=#$1]');
+    string = string.replace(/\[\/#\]/g, '[/color]');
+    return BBCodeParser.toReact(`${string}[/color]`);
+  };
 
   /**
    *
@@ -66,17 +81,6 @@ class Linkify extends React.Component {
       props
     );
     return this.createLink(match, idx);
-  };
-
-  /**
-   *
-   * @param {string} string
-   * @returns {*}
-   */
-  colorize = (string) => {
-    string = string.replace(/\[#([a-fA-F0-9]{6})\]/g, '[color=#$1]');
-    string = string.replace(/\[\/#\]/g, '[/color]');
-    return parser.toReact(`${string}[/color]`);
   };
 
   /**
