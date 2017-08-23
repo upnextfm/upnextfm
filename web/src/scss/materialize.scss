@@ -45,3 +45,18 @@ $button-flat-color: #FFF;
     color: #666;
   }
 }
+
+.page-footer {
+  margin-top: $padding-std * 4;
+
+  h5 {
+    font-size: 1.64rem;
+    line-height: 110%;
+    margin: 0.82rem 0 0.656rem 0;
+  }
+}
+
+.footer-copyright {
+  width: 100% !important;
+  text-align: center;
+}
