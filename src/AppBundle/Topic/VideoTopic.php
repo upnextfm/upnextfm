@@ -2,6 +2,8 @@
 namespace AppBundle\Topic;
 
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
+use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerTrait;
+use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
@@ -11,8 +13,10 @@ use AppBundle\Entity\Video;
 use AppBundle\Entity\VideoLog;
 use Predis\Client as Redis;
 
-class VideoTopic extends AbstractTopic
+class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
 {
+  use TopicPeriodicTimerTrait;
+
   /**
    * @var Redis
    */
@@ -163,5 +167,18 @@ class VideoTopic extends AbstractTopic
       "cmd"   => VideoCommands::START,
       "video" => $this->serializeVideo($video)
     ]);
+  }
+
+  /**
+   * @param Topic $topic
+   *
+   * @return mixed
+   */
+  public function registerPeriodicTimer(Topic $topic)
+  {
+    $interval = $this->container->getParameter("app_ws_video_time_update_interval");
+    $this->periodicTimer->addPeriodicTimer($this, VideoCommands::TIME_UPDATE, $interval, function() use ($topic) {
+
+    });
   }
 }
