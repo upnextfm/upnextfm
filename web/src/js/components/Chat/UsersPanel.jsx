@@ -43,6 +43,13 @@ export default class UsersPanel extends React.Component {
     this.setState({ menuOpen: false });
   };
 
+  handleClickProfile = () => {
+    const username = this.state.anchorEl.getAttribute('data-username');
+    if (username) {
+      window.open(`/u/${username}`);
+    }
+  };
+
   render() {
     const { roomUsers, repoUsers, isCollapsed, onCollapse } = this.props;
 
@@ -56,7 +63,7 @@ export default class UsersPanel extends React.Component {
       >
         <List>
           {roomUsers.map(username => (
-            <ListItem key={username} onClick={this.handleClickUser} button>
+            <ListItem key={username} onClick={this.handleClickUser} data-username={username} button>
               <User user={usersFindByUsername(repoUsers, username)} />
             </ListItem>
           ))}
@@ -82,7 +89,7 @@ export default class UsersPanel extends React.Component {
           <MenuItem onClick={this.handleCloseMenu}>
             Private Message
           </MenuItem>
-          <MenuItem onClick={this.handleCloseMenu}>
+          <MenuItem onClick={this.handleClickProfile}>
             Profile
           </MenuItem>
           <MenuItem onClick={this.handleCloseMenu}>
