@@ -18,8 +18,8 @@ $pdoCytube = new \PDO(
 );
 
 //importRooms();
-importVideos();
-//importVideoLogs();
+//importVideos();
+importVideoLogs();
 //importChatLogs();
 
 /**
@@ -52,7 +52,7 @@ function importChatLogs()
     if (!$meta["color"]) {
       continue;
     }
-    $message = sprintf("[%s]%s", $meta["color"], $message);
+    $message = sprintf("[%s]%s[/#]", $meta["color"], $message);
 
     $exec = [
       ":room_id"      => $room["id"],

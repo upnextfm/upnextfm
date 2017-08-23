@@ -37,6 +37,8 @@ export const ROOM_INCR_NUM_NEW_MESSAGES  = 'ROOM_INCR_NUM_NEW_MESSAGES';
 export const PLAYLIST_START     = 'PLAYLIST_START';
 export const PLAYLIST_SUBSCRIBE = 'PLAYLIST_SUBSCRIBE';
 
+export const YOUTUBE_LOADED = 'YOUTUBE_LOADED';
+
 export const VIDEO_READY       = 'VIDEO_READY';
 export const VIDEO_TIME        = 'VIDEO_TIME';
 export const VIDEO_DURATION    = 'VIDEO_DURATION';

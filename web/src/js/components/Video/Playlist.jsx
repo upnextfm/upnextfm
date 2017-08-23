@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { playlistPlay } from 'actions/playlistActions';
+import { youtubeLoadClient } from 'actions/youtubeActions';
 import * as types from 'actions/actionTypes';
 import Button from 'material-ui/Button';
 
@@ -12,9 +13,13 @@ class PlaylistContainer extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.dispatch(youtubeLoadClient());
+  }
+
   componentWillUpdate(nextProps) {
-    if (nextProps.current.codename !== this.props.current.codename) {
-      this.setState({ codename: nextProps.current.codename });
+    if (nextProps.playlist.current.codename !== this.props.playlist.current.codename) {
+      this.setState({ codename: nextProps.playlist.current.codename });
     }
   }
 
@@ -47,7 +52,10 @@ class PlaylistContainer extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return Object.assign({}, state.playlist);
+  return {
+    playlist: Object.assign({}, state.playlist),
+    youtube:  Object.assign({}, state.youtube)
+  };
 }
 
 export default connect(mapStateToProps)(PlaylistContainer);

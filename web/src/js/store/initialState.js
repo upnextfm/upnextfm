@@ -46,5 +46,8 @@ export default {
   },
   playlist: {
     current: {}
+  },
+  youtube: {
+    loaded: false
   }
 };

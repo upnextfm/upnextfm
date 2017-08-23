@@ -7,6 +7,7 @@ import room from 'reducers/roomReducer';
 import users from 'reducers/usersReducer';
 import video from 'reducers/videoReducer';
 import playlist from 'reducers/playlistReducer';
+import youtube from 'reducers/youtubeReducer';
 
 const rootReducer = combineReducers({
   layout,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   room,
   users,
   video,
-  playlist
+  playlist,
+  youtube
 });
 
 export default rootReducer;
