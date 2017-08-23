@@ -5,6 +5,7 @@ export default {
     isNavDrawerOpen:  false,
     isWindowFocused:  true,
     isUsersCollapsed: Storage.getItem('layout:isUsersCollapsed', false),
+    activeChat:       'room',
     colsChatSide:     7,
     colsVideoSide:    5
   },

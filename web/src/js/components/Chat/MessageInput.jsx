@@ -1,27 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import IconButton from 'material-ui/IconButton';
 import Send from 'material-ui-icons/Send';
 import AttachFile from 'material-ui-icons/AttachFile';
-import { roomInputChange, roomSend } from 'actions/roomActions';
 
 const KEY_TAB   = 9;
 const KEY_ENTER = 13;
 const KEY_UP    = 38;
 const KEY_DOWN  = 40;
 
-class MessageInput extends React.Component {
+export default class MessageInput extends React.Component {
   static propTypes = {
-    dispatch: PropTypes.func
+    value:       PropTypes.string,
+    tabComplete: PropTypes.array,
+    onSend:      PropTypes.func,
+    onChange:    PropTypes.func
   };
 
   static defaultProps = {
-    dispatch: () => {}
+    value:       '',
+    tabComplete: [],
+    onSend:      () => {},
+    onChange:    () => {}
   };
 
   constructor(props) {
     super(props);
+
+    this.inputRef      = null;
     this.history       = [];
     this.historyIndex  = 0;
     this.historyMoving = false;
@@ -41,9 +47,9 @@ class MessageInput extends React.Component {
   }
 
   send = () => {
-    this.history.push(this.props.inputValue);
+    this.history.push(this.props.value);
     this.historyIndex = this.history.length;
-    this.props.dispatch(roomSend());
+    this.props.onSend();
     this.inputRef.focus();
   };
 
@@ -54,19 +60,23 @@ class MessageInput extends React.Component {
     }, 0);
   };
 
+  handleChange = (e) => {
+    this.props.onChange(e.target.value);
+  };
+
   handleKeyDownInput = (e) => {
+    const { value, tabComplete, onChange } = this.props;
+
     switch (e.keyCode) { // eslint-disable-line default-case
       case KEY_ENTER:
         this.send();
         break;
       case KEY_TAB:
-        if (this.inputValue !== '') {
-          for (let i = 0; i < this.props.users.length; i++) {
-            if (this.props.users[i].toLowerCase().indexOf(this.props.inputValue.toLowerCase()) === 0) {
+        if (value !== '') {
+          for (let i = 0; i < tabComplete.length; i++) {
+            if (tabComplete[i].toLowerCase().indexOf(value.toLowerCase()) === 0) {
               this.historyMoving = true;
-              this.props.dispatch(roomInputChange(
-                `${this.props.users[i]} `
-              ));
+              onChange(`${tabComplete[i]} `);
             }
           }
         }
@@ -75,60 +85,63 @@ class MessageInput extends React.Component {
         if (this.historyIndex > 0) {
           this.historyIndex -= 1;
           this.historyMoving = true;
-          this.props.dispatch(roomInputChange(
-            this.history[this.historyIndex]
-          ));
+          onChange(this.history[this.historyIndex]);
         }
         break;
       case KEY_DOWN:
         if (this.history.length > this.historyIndex + 1) {
           this.historyIndex += 1;
           this.historyMoving = true;
-          this.props.dispatch(roomInputChange(
-            this.history[this.historyIndex]
-          ));
+          onChange(this.history[this.historyIndex]);
         } else if (this.history.length === this.historyIndex + 1) {
-          this.props.dispatch(roomInputChange(''));
+          onChange('');
         }
         break;
     }
   };
 
+  renderButtonAttach() {
+    return (
+      <IconButton
+        title="Attach File"
+        aria-label="Attach File"
+        style={{ marginLeft: 6 }}
+        onClick={() => { this.send(); }}
+      >
+        <AttachFile />
+      </IconButton>
+    );
+  }
+
+  renderButtonSend() {
+    return (
+      <IconButton
+        title="Send"
+        aria-label="Send"
+        onClick={() => { this.send(); }}
+      >
+        <Send />
+      </IconButton>
+    );
+  }
+
   render() {
-    const { inputValue, dispatch } = this.props;
+    const { value } = this.props;
 
     return (
       <div className="up-room-messages__input">
         <input
           type="text"
-          value={inputValue}
+          value={value}
           placeholder="Write message"
+          onChange={this.handleChange}
           onKeyDown={this.handleKeyDownInput}
-          onChange={(e) => { dispatch(roomInputChange(e.target.value)); }}
           ref={(ref) => { this.inputRef = ref; }}
         />
-        <IconButton
-          title="Attach File"
-          aria-label="Attach File"
-          style={{ marginLeft: 6 }}
-          onClick={() => { this.send(); }}
-        >
-          <AttachFile />
-        </IconButton>
-        <IconButton
-          title="Send"
-          aria-label="Send"
-          onClick={() => { this.send(); }}
-        >
-          <Send />
-        </IconButton>
+        {this.renderButtonAttach()}
+        {this.renderButtonSend()}
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  return Object.assign({}, state.room);
-}
-
-export default connect(mapStateToProps)(MessageInput);

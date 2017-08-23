@@ -10,6 +10,10 @@ import initialState from 'store/initialState';
  */
 export default function layoutReducer(state = initialState.layout, action = {}) {
   switch (action.type) {
+    case types.LAYOUT_SWITCH_ACTIVE_CHAT:
+      return Object.assign({}, state, {
+        activeChat: action.activeChat
+      });
     case types.LAYOUT_WINDOW_FOCUS:
       return Object.assign({}, state, {
         isWindowFocused: action.status === 'focus'

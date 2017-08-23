@@ -4,7 +4,7 @@ import { UserPropType, MessagePropType } from 'utils/props';
 import Linkify from 'components/Linkify';
 import Avatar from 'material-ui/Avatar';
 
-const Message = ({ message, user, prevMessage, prevUser, ...props }) => {
+const MessageType = ({ message, user, prevMessage, prevUser, ...props }) => {
   const showUser = (
     (!prevUser || prevUser.username !== user.username) ||
     (!prevMessage || message.date - prevMessage.date > 60000)
@@ -30,11 +30,11 @@ const Message = ({ message, user, prevMessage, prevUser, ...props }) => {
   );
 };
 
-Message.propTypes = {
+MessageType.propTypes = {
   message:     MessagePropType.isRequired,
   user:        UserPropType.isRequired,
   prevMessage: MessagePropType,
   prevUser:    UserPropType
 };
 
-export default Message;
+export default MessageType;

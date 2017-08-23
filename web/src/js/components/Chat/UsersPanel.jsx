@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { layoutToggleUsersCollapsed } from 'actions/layoutActions';
 import { usersFindByUsername } from 'utils/users';
 import Hidden from 'material-ui/Hidden';
 import List, { ListItem } from 'material-ui/List';
@@ -10,42 +8,46 @@ import IconButton from 'material-ui/IconButton';
 import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import User from 'components/Chat/User';
 
-class UsersPanel extends React.Component {
+export default class UsersPanel extends React.Component {
   static propTypes = {
-    room:   PropTypes.object,
-    users:  PropTypes.object,
-    layout: PropTypes.object
+    roomUsers:   PropTypes.array,
+    repoUsers:   PropTypes.array,
+    isCollapsed: PropTypes.bool,
+    onCollapse:  PropTypes.func
   };
 
-  handleClickCollapse = () => {
-    this.props.dispatch(layoutToggleUsersCollapsed());
+  static defaultProps = {
+    roomUsers:   [],
+    repoUsers:   [],
+    isCollapsed: false,
+    onCollapse:  () => {}
   };
 
   render() {
-    const { room, users, layout } = this.props;
+    const { roomUsers, repoUsers, isCollapsed, onCollapse } = this.props;
 
     return (
       <div className={classNames(
         'up-room-panel__users',
         {
-          'up-collapsed': layout.isUsersCollapsed
+          'up-collapsed': isCollapsed
         }
       )}
       >
         <List>
-          {room.users.map(username => (
+          {roomUsers.map(username => (
             <ListItem key={username} button>
-              <User user={usersFindByUsername(users.repo, username)} />
+              <User user={usersFindByUsername(repoUsers, username)} />
             </ListItem>
           ))}
         </List>
         <Hidden xsDown>
           <div className="up-room-users__controls">
-            <IconButton className="up-collapse" onClick={this.handleClickCollapse}>
+            <IconButton className="up-collapse" onClick={onCollapse}>
               <KeyboardArrowLeft className={classNames(
                 'up-collapse__icon',
                 {
-                  'up-collapsed': layout.isUsersCollapsed
+                  'up-collapsed': isCollapsed
                 }
                )}
               />
@@ -57,12 +59,3 @@ class UsersPanel extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    room:   Object.assign({}, state.room),
-    layout: Object.assign({}, state.layout),
-    users:  state.users
-  };
-}
-
-export default connect(mapStateToProps)(UsersPanel);

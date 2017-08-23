@@ -2,6 +2,18 @@ import * as types from 'actions/actionTypes';
 import { roomResetNumNewMessages } from 'actions/roomActions';
 
 /**
+ *
+ * @param {string} activeChat
+ * @returns {{type: string, activeChat: string}}
+ */
+export function layoutSwitchActiveChat(activeChat) {
+  return {
+    type: types.LAYOUT_SWITCH_ACTIVE_CHAT,
+    activeChat
+  };
+}
+
+/**
  * @returns {{type: string}}
  */
 export function layoutToggleNavDrawer() {
