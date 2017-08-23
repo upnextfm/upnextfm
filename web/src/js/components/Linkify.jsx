@@ -37,7 +37,7 @@ class Linkify extends React.Component {
   colorize = (string) => {
     string = string.replace(/\[#([a-fA-F0-9]{6})\]/g, '[color=#$1]');
     string = string.replace(/\[\/#\]/g, '[/color]');
-    return bbcode.toReact(`${string}[/color]`);
+    return bbcode.toReact(string);
   };
 
   /**
