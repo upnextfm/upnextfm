@@ -1,9 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\EntityRepository;
-
-class VideoRepository extends EntityRepository
+class VideoRepository extends AbstractRepository
 {
   /**
    * @param $videoID

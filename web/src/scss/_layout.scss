@@ -32,6 +32,16 @@ a {
   }
 }
 
+.up-page-title {
+  padding: ($padding-std * 2) 0 (($padding-std * 2) - 6px) 0;
+  font-size: 24px;
+  font-weight: 300;
+
+  @include media-xs {
+    font-size: 16px;
+  }
+}
+
 .up-progress {
   position: absolute;
   top: $nav-height;

@@ -29,7 +29,7 @@
                 </a>
             </div>
             <div class="card-content">
-                <h2 class="card-title">
+                <h2 class="card-title flow-text">
                     {{ played.video.title }}
                 </h2>
                 <small class="truncate">
@@ -42,4 +42,28 @@
             </div>
         </div>
     </div>
+{% endmacro %}
+
+{% macro pagination(route, currentPage, minPage, maxPage) %}
+    <ul class="pagination">
+        <li {{ currentPage == 1 ? 'class="disabled"' }}>
+            <a href="{{ path(route, {page: currentPage - 1 < 1 ? 1 : currentPage-1}) }}">
+                <i class="material-icons">chevron_left</i>
+            </a>
+        </li>
+
+        {% for i in minPage..maxPage %}
+            <li class="waves-effect{{ currentPage == i ? ' active' }}">
+                <a href="{{ path(route, {page: i}) }}">
+                    {{ i }}
+                </a>
+            </li>
+        {% endfor %}
+
+        <li {{ currentPage == maxPage ? 'class="disabled"' }}>
+            <a href="{{ path(route, {page: currentPage + 1 <= maxPage ? currentPage+1 : currentPage}) }}">
+                <i class="material-icons">chevron_right</i>
+            </a>
+        </li>
+    </ul>
 {% endmacro %}

@@ -1,9 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\EntityRepository;
-
-class ChatLogRepository extends EntityRepository
+class ChatLogRepository extends AbstractRepository
 {
   /**
    * Returns the most recent logs for the given room

@@ -6,15 +6,46 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class PlaylistController extends Controller
 {
   /**
-   * @Route("/recent", name="playlist_recent")
+   * @Route("/recent/{page}", name="playlist_recent", defaults={"page" = 1})
+   *
+   * @param int $page
+   * @return \Symfony\Component\HttpFoundation\Response
    */
-  public function homeAction()
+  public function recentAction($page)
   {
-    $em = $this->getDoctrine()->getManager();
-    $playedRecently = $em->getRepository("AppBundle:VideoLog")->findRecent(100);
+    $limit  = 30;
+    $offset = ($page - 1) * 30;
+
+    $em             = $this->getDoctrine()->getManager();
+    $repo           = $em->getRepository("AppBundle:VideoLog");
+    $playedRecently = $repo->findRecent($limit, $offset);
+    $playedCount    = $repo->countAll();
+
+    $minDate = new \DateTime();
+    $maxDate = new \DateTime();
+    if ($playedRecently) {
+      $minDate = $playedRecently[0]->getDateCreated();
+      $maxDate = $playedRecently[count($playedRecently) - 1]->getDateCreated();
+    }
+
+    $pages   = ceil($playedCount / $limit);
+    $minPage = $page - 4;
+    $maxPage = $page + 4;
+    if ($minPage < 1) {
+      $minPage = 1;
+    }
+    if ($maxPage > $pages) {
+      $maxPage = $pages;
+    }
 
     return $this->render(":playlist:recent.html.twig", [
-      "playedRecently" => $playedRecently
+      "playedRecently" => $playedRecently,
+      "playedCount"    => $playedCount,
+      "currentPage"    => $page,
+      "minPage"        => $minPage,
+      "maxPage"        => $maxPage,
+      "minDate"        => $minDate,
+      "maxDate"        => $maxDate
     ]);
   }
 }

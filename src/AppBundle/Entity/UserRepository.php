@@ -1,9 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\EntityRepository;
-
-class UserRepository extends EntityRepository
+class UserRepository extends AbstractRepository
 {
   /**
    * Returns the user with the given username

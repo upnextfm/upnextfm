@@ -1,9 +1,15 @@
 {% import "::macros.htm.twig" as macros %}
 {% extends "base.html.twig" %}
 {% block body %}
+    <h2 class="center-align up-page-title flow-text">
+        {{ minDate|date("F jS g:ia") }} - {{ maxDate|date("F jS g:ia") }}
+    </h2>
     <div class="row">
         {% for played in playedRecently %}
             {{ macros.playedCard(played) }}
         {% endfor %}
+    </div>
+    <div class="center-align up-pagination-container">
+        {{ macros.pagination('playlist_recent', currentPage, minPage, maxPage) }}
     </div>
 {% endblock %}

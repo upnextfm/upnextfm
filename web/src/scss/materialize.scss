@@ -31,3 +31,17 @@ $button-flat-color: #FFF;
 .btn-flat:hover {
   background-color: transparent !important;
 }
+
+.up-pagination-container {
+  small {
+    display: block;
+    padding-bottom: $padding-std;
+    font-size: 0.9rem;
+  }
+}
+
+.pagination {
+  a:hover {
+    color: #666;
+  }
+}

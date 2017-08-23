@@ -1,9 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\EntityRepository;
-
-class RoomRepository extends EntityRepository
+class RoomRepository extends AbstractRepository
 {
   /**
    * Returns the room with the given name

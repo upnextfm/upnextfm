@@ -1,21 +1,21 @@
 <?php
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\EntityRepository;
-
-class VideoLogRepository extends EntityRepository
+class VideoLogRepository extends AbstractRepository
 {
   /**
    * Returns the most recent logs
    *
    * @param int $limit
+   * @param int $offset
    * @return VideoLog[]
    */
-  public function findRecent($limit)
+  public function findRecent($limit, $offset = 0)
   {
     return $this->createQueryBuilder("v")
       ->orderBy("v.id", "desc")
       ->setMaxResults($limit)
+      ->setFirstResult($offset)
       ->getQuery()
       ->execute();
   }
