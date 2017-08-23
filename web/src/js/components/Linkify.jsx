@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LinkifyIt from 'linkify-it';
-import BBCodeParser from 'bbcode-to-react';
+import { Parser } from 'bbcode-to-react';
 import tlds from 'tlds';
 import { objectForEach } from 'utils/objects';
 
+const bbcode  = new Parser(['color']);
 const linkify = new LinkifyIt();
 linkify.tlds(tlds);
 
@@ -36,7 +37,7 @@ class Linkify extends React.Component {
   colorize = (string) => {
     string = string.replace(/\[#([a-fA-F0-9]{6})\]/g, '[color=#$1]');
     string = string.replace(/\[\/#\]/g, '[/color]');
-    return BBCodeParser.toReact(`${string}[/color]`);
+    return bbcode.toReact(`${string}[/color]`);
   };
 
   /**
