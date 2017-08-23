@@ -17,9 +17,9 @@ $pdoCytube = new \PDO(
   $params["database_cytube_password"]
 );
 
-//importRooms();
-//importVideos();
-//importVideoLogs();
+importRooms();
+importVideos();
+importVideoLogs();
 importChatLogs();
 
 function decodeEntities($message) {
