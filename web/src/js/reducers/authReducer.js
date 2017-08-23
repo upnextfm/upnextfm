@@ -39,14 +39,6 @@ export default function authReducer(state = is, action = {}) {
         isSubmitting:    false,
         isAuthenticated: false
       });
-    case types.AUTH_TOGGLE_LOGIN_DIALOG:
-      return Object.assign({}, state, {
-        isLoginDialogOpen: !state.isLoginDialogOpen
-      });
-    case types.AUTH_TOGGLE_REGISTER_DIALOG:
-      return Object.assign({}, state, {
-        isRegisterDialogOpen: !state.isRegisterDialogOpen
-      });
     case types.AUTH_RESET:
       return Object.assign({}, is);
     default: return state;

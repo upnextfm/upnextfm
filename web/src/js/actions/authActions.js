@@ -90,15 +90,6 @@ export function authLogout() {
 /**
  * @returns {{type: string}}
  */
-export function authToggleLoginDialog() {
-  return {
-    type: types.AUTH_TOGGLE_LOGIN_DIALOG
-  };
-}
-
-/**
- * @returns {{type: string}}
- */
 export function authReset() {
   return {
     type: types.AUTH_RESET

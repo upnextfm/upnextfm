@@ -2,25 +2,25 @@ import Storage from 'api/Storage';
 
 export default {
   layout: {
-    isNavDrawerOpen:  false,
-    isWindowFocused:  true,
-    isUsersCollapsed: Storage.getItem('layout:isUsersCollapsed', false),
-    activeChat:       'room',
-    colsChatSide:     7,
-    colsVideoSide:    5
+    isNavDrawerOpen:      false,
+    isWindowFocused:      true,
+    isLoginDialogOpen:    false,
+    isRegisterDialogOpen: false,
+    isUsersCollapsed:     Storage.getItem('layout:isUsersCollapsed', false),
+    activeChat:           'room',
+    colsChatSide:         7,
+    colsVideoSide:        5
   },
   auth: {
-    username:          '',
-    isLoginDialogOpen: false,
-    isAuthenticated:   false,
-    isSubmitting:      false,
-    error:             null
+    username:        '',
+    error:           null,
+    isAuthenticated: false,
+    isSubmitting:    false
   },
   register: {
-    isRegisterDialogOpen: false,
-    isRegistered:         false,
-    isSubmitting:         false,
-    error:                null
+    error:        null,
+    isRegistered: false,
+    isSubmitting: false
   },
   settings: {
     user: {

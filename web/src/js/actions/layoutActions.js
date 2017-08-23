@@ -24,7 +24,7 @@ export function layoutToggleNavDrawer() {
 
 /**
  *
- * @returns {{type: string}}
+ * @returns {Function}
  */
 export function layoutToggleUsersCollapsed() {
   return (dispatch, getState, api) => {
@@ -32,6 +32,24 @@ export function layoutToggleUsersCollapsed() {
       type: types.LAYOUT_TOGGLE_USERS_COLLAPSED
     });
     api.storage.setItem('layout:isUsersCollapsed', getState().layout.isUsersCollapsed);
+  };
+}
+
+/**
+ * @returns {{type: string}}
+ */
+export function layoutToggleRegisterDialog() {
+  return {
+    type: types.LAYOUT_TOGGLE_REGISTER_DIALOG
+  };
+}
+
+/**
+ * @returns {{type: string}}
+ */
+export function layoutToggleLoginDialog() {
+  return {
+    type: types.LAYOUT_TOGGLE_LOGIN_DIALOG
   };
 }
 

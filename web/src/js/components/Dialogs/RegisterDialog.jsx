@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { register, registerToggleDialog, registerReset } from 'actions/registerActions';
+import { layoutToggleRegisterDialog } from 'actions/layoutActions';
+import { register, registerReset } from 'actions/registerActions';
 import { FormControl, FormControlLabel } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
@@ -35,8 +36,8 @@ class RegisterDialog extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isSubmitting !== this.props.isSubmitting && this.props.isRegistered) {
-      this.props.dispatch(registerToggleDialog());
+    if (prevProps.register.isSubmitting !== this.props.register.isSubmitting && this.props.register.isRegistered) {
+      this.props.dispatch(layoutToggleRegisterDialog());
     }
   }
 
@@ -94,7 +95,7 @@ class RegisterDialog extends Component {
   };
 
   render() {
-    const { isDialogOpen, isSubmitting, error } = this.props;
+    const { layout, register } = this.props;
     const {
       username,
       password,
@@ -110,13 +111,13 @@ class RegisterDialog extends Component {
     return (
       <FormDialog
         submitText="Register"
-        error={error}
-        open={isDialogOpen}
-        submitting={isSubmitting}
+        error={register.error}
+        open={layout.isRegisterDialogOpen}
+        submitting={register.isSubmitting}
         onSubmit={this.handleSubmit}
         onClose={this.handleClose}
       >
-        <FormControl disabled={isSubmitting} fullWidth>
+        <FormControl disabled={register.isSubmitting} fullWidth>
           <TextField
             label="Username"
             name="username"
@@ -128,7 +129,7 @@ class RegisterDialog extends Component {
             autoFocus
           />
         </FormControl>
-        <FormControl disabled={isSubmitting} fullWidth>
+        <FormControl disabled={register.isSubmitting} fullWidth>
           <TextField
             label="Email"
             name="email"
@@ -140,7 +141,7 @@ class RegisterDialog extends Component {
             fullWidth
           />
         </FormControl>
-        <FormControl disabled={isSubmitting} fullWidth>
+        <FormControl disabled={register.isSubmitting} fullWidth>
           <TextField
             label="Password"
             name="password"
@@ -152,7 +153,7 @@ class RegisterDialog extends Component {
             fullWidth
           />
         </FormControl>
-        <FormControl disabled={isSubmitting} fullWidth>
+        <FormControl disabled={register.isSubmitting} fullWidth>
           <TextField
             label="Password Verify"
             name="password2"
@@ -164,7 +165,7 @@ class RegisterDialog extends Component {
             fullWidth
           />
         </FormControl>
-        <FormControl disabled={isSubmitting} fullWidth>
+        <FormControl disabled={register.isSubmitting} fullWidth>
           <FormControlLabel
             label="Agree to Terms of Service"
             control={
@@ -183,7 +184,10 @@ class RegisterDialog extends Component {
 }
 
 function mapStateToProps(state) {
-  return Object.assign({}, state.register);
+  return {
+    register: Object.assign({}, state.register),
+    layout:   Object.assign({}, state.layout)
+  };
 }
 
 export default connect(mapStateToProps)(RegisterDialog);

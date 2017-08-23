@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { authToggleLoginDialog, authReset, authLogin } from 'actions/authActions';
+import { layoutToggleLoginDialog } from 'actions/layoutActions';
+import { authReset, authLogin } from 'actions/authActions';
 import FormControl from 'material-ui/Form/FormControl';
 import TextField from 'material-ui/TextField';
 import FormDialog from 'components/Dialogs/FormDialog';
@@ -26,8 +27,8 @@ class LoginDialog extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isSubmitting !== this.props.isSubmitting && this.props.isAuthenticated) {
-      this.props.dispatch(authToggleLoginDialog());
+    if (prevProps.auth.isSubmitting !== this.props.auth.isSubmitting && this.props.auth.isAuthenticated) {
+      this.props.dispatch(layoutToggleLoginDialog());
     }
   }
 
@@ -65,19 +66,19 @@ class LoginDialog extends Component {
   };
 
   render() {
-    const { isLoginDialogOpen, isSubmitting, error } = this.props;
+    const { layout, auth } = this.props;
     const { username, password, usernameError, passwordError } = this.state;
 
     return (
       <FormDialog
         submitText="Login"
-        error={error}
-        open={isLoginDialogOpen}
-        submitting={isSubmitting}
+        error={auth.error}
+        open={layout.isLoginDialogOpen}
+        submitting={auth.isSubmitting}
         onSubmit={this.handleSubmit}
         onClose={this.handleClose}
       >
-        <FormControl disabled={isSubmitting} fullWidth>
+        <FormControl disabled={auth.isSubmitting} fullWidth>
           <TextField
             label="Username"
             name="username"
@@ -87,7 +88,7 @@ class LoginDialog extends Component {
             autoFocus
           />
         </FormControl>
-        <FormControl disabled={isSubmitting} fullWidth>
+        <FormControl disabled={auth.isSubmitting} fullWidth>
           <TextField
             label="Password"
             name="password"
@@ -103,7 +104,10 @@ class LoginDialog extends Component {
 }
 
 function mapStateToProps(state) {
-  return Object.assign({}, state.auth);
+  return {
+    auth:   Object.assign({}, state.auth),
+    layout: Object.assign({}, state.layout)
+  };
 }
 
 export default connect(mapStateToProps)(LoginDialog);

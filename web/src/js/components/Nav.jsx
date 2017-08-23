@@ -9,10 +9,9 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import ArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import { animateScrollLeft } from 'utils/animate';
-import { layoutToggleNavDrawer } from 'actions/layoutActions';
 import { playerToggleMute, playerTogglePlay } from 'actions/playerActions';
-import { authToggleLoginDialog, authLogout } from 'actions/authActions';
-import { registerToggleDialog } from 'actions/registerActions';
+import { layoutToggleNavDrawer, layoutToggleLoginDialog, layoutToggleRegisterDialog } from 'actions/layoutActions';
+import { authLogout } from 'actions/authActions';
 import NavDrawer from 'components/NavDrawer';
 import MuteIcon from 'components/Icons/MuteIcon';
 import PlayIcon from 'components/Icons/PlayIcon';
@@ -44,12 +43,12 @@ class Nav extends React.Component {
     if (this.props.auth.isAuthenticated) {
       this.props.dispatch(authLogout());
     } else {
-      this.props.dispatch(authToggleLoginDialog());
+      this.props.dispatch(layoutToggleLoginDialog());
     }
   };
 
   handleClickRegister = () => {
-    this.props.dispatch(registerToggleDialog());
+    this.props.dispatch(layoutToggleRegisterDialog());
   };
 
   handleClickMute = () => {
