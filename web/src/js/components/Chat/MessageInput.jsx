@@ -6,6 +6,10 @@ import Send from 'material-ui-icons/Send';
 import AttachFile from 'material-ui-icons/AttachFile';
 import { roomInputChange, roomSend } from 'actions/roomActions';
 
+const KEY_ENTER = 13;
+const KEY_UP    = 38;
+const KEY_DOWN  = 40;
+
 class MessageInput extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func
@@ -15,20 +19,61 @@ class MessageInput extends React.Component {
     dispatch: () => {}
   };
 
+  constructor(props) {
+    super(props);
+    this.history       = [];
+    this.historyIndex  = 0;
+    this.historyMoving = false;
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.inputRef.focus();
     }, 1000);
   }
 
+  componentDidUpdate() {
+    // Move caret to end of input.
+    if (this.historyMoving) {
+      this.historyMoving = false;
+      setTimeout(() => {
+        this.inputRef.selectionStart = this.inputRef.selectionEnd = 10000; // eslint-disable-line
+      }, 0);
+    }
+  }
+
   send = () => {
+    this.history.push(this.props.inputValue);
+    this.historyIndex = this.history.length;
     this.props.dispatch(roomSend());
     this.inputRef.focus();
   };
 
   handleKeyDownInput = (e) => {
-    if (e.keyCode === 13) {
-      this.send();
+    switch (e.keyCode) { // eslint-disable-line default-case
+      case KEY_ENTER:
+        this.send();
+        break;
+      case KEY_UP:
+        if (this.historyIndex > 0) {
+          this.historyIndex -= 1;
+          this.historyMoving = true;
+          this.props.dispatch(roomInputChange(
+            this.history[this.historyIndex]
+          ));
+        }
+        break;
+      case KEY_DOWN:
+        if (this.history.length > this.historyIndex + 1) {
+          this.historyIndex += 1;
+          this.historyMoving = true;
+          this.props.dispatch(roomInputChange(
+            this.history[this.historyIndex]
+          ));
+        } else if (this.history.length === this.historyIndex + 1) {
+          this.props.dispatch(roomInputChange(''));
+        }
+        break;
     }
   };
 
