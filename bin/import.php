@@ -19,8 +19,14 @@ $pdoCytube = new \PDO(
 
 //importRooms();
 //importVideos();
-importVideoLogs();
-//importChatLogs();
+//importVideoLogs();
+importChatLogs();
+
+function decodeEntities($message) {
+  return preg_replace_callback("/(&#[0-9]+;)/", function($m) {
+    return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES");
+  }, $message);
+}
 
 /**
  *
@@ -44,15 +50,17 @@ function importChatLogs()
     if (!$user) {
       continue;
     }
-    $message = trim(strip_tags($row["msg"]));
-    if (!$message) {
-      continue;
-    }
     $meta  = json_decode($row["meta"], true);
     if (!$meta["color"]) {
       continue;
     }
-    $message = sprintf("[%s]%s", $meta["color"], $message);
+
+    $message = trim(strip_tags($row["msg"]));
+    if (!$message) {
+      continue;
+    }
+    $message = decodeEntities($message);
+    $message = sprintf("[%s]%s[/#]", $meta["color"], $message);
 
     $exec = [
       ":room_id"      => $room["id"],

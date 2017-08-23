@@ -7,7 +7,6 @@ import Playlist from 'components/Video/Playlist';
 
 class VideoSide extends React.Component {
   static propTypes = {
-    player:   PropTypes.object.isRequired,
     playlist: PropTypes.object.isRequired
   };
 
@@ -26,7 +25,6 @@ class VideoSide extends React.Component {
 
 function mapStateToProps(state) {
   return Object.assign({
-    player:   state.player,
     playlist: state.playlist
   });
 }

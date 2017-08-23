@@ -26,15 +26,12 @@ class Player extends React.Component {
         this.provider.seekTo(this.props.player.time);
       }
       if (prevProps.player.status !== this.props.player.status) {
-        switch (this.props.player.status) {
+        switch (this.props.player.status) { // eslint-disable-line
           case 1:
             this.provider.playVideo();
             break;
           case 2:
             this.provider.pauseVideo();
-            break;
-          default:
-            console.error(`Player status ${this.props.player.status} invalid.`);
             break;
         }
       }
