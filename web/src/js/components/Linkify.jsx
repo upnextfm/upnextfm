@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LinkifyIt from 'linkify-it';
 import tlds from 'tlds';
+import parser from 'bbcode-to-react';
 import { objectForEach } from 'utils/objects';
 
 const linkify = new LinkifyIt();
@@ -72,25 +73,37 @@ class Linkify extends React.Component {
    * @param {string} string
    * @returns {*}
    */
+  colorize = (string) => {
+    string = string.replace(/\[#([a-fA-F0-9]{6})\]/g, '[color=#$1]');
+    string = string.replace(/\[\/#\]/g, '[/color]');
+    return parser.toReact(`${string}[/color]`);
+  };
+
+  /**
+   *
+   * @param {string} string
+   * @returns {*}
+   */
   parseString = (string) => {
     const elements = [];
     if (string === '') {
       return elements;
     }
 
-    string = string.replace(/\[#[a-fA-F0-9]{6}\]/g, '');
-    string = string.replace(/\[\/#\]/g, '');
-
     const matches = linkify.match(string);
     if (!matches) {
-      return string;
+      return this.colorize(string);
     }
 
     let lastIndex = 0;
+    let colorized = [];
     matches.forEach((match, idx) => {
       // Push the preceding text if there is any
       if (match.index > lastIndex) {
-        elements.push(string.substring(lastIndex, match.index));
+        colorized = this.colorize(string.substring(lastIndex, match.index));
+        for (let i = 0; i < colorized.length; i++) {
+          elements.push(colorized[i]);
+        }
       }
       if (match.text.toLowerCase().match(/\.(jpeg|jpg|gif|png)$/) !== null) {
         elements.push(this.createImg(match, idx));
@@ -102,7 +115,10 @@ class Linkify extends React.Component {
     });
 
     if (lastIndex < string.length) {
-      elements.push(string.substring(lastIndex));
+      colorized = this.colorize(string.substring(lastIndex));
+      for (let i = 0; i < colorized.length; i++) {
+        elements.push(colorized[i]);
+      }
     }
 
     return (elements.length === 1) ? elements[0] : elements;
