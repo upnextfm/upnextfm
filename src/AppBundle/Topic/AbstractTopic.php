@@ -195,7 +195,7 @@ abstract class AbstractTopic implements TopicInterface
       "codename"  => $video->getCodename(),
       "provider"  => $video->getProvider(),
       "permalink" => $video->getPermalink(),
-      "thumbnail" => $video->getThumbSmall(),
+      "thumbnail" => $video->getThumbSm(),
       "title"     => $video->getTitle(),
       "seconds"   => $video->getSeconds()
     ];

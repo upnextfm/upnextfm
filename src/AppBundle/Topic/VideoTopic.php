@@ -148,9 +148,9 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       $video->setTitle($info->getTitle());
       $video->setSeconds($info->getSeconds());
       $video->setPermalink($info->getPermalink());
-      $video->setThumbSmall($info->getThumbnail("sm"));
-      $video->setThumbMedium($info->getThumbnail("md"));
-      $video->setThumbLarge($info->getThumbnail("lg"));
+      $video->setThumbSm($info->getThumbnail("sm"));
+      $video->setThumbMd($info->getThumbnail("md"));
+      $video->setThumbLg($info->getThumbnail("lg"));
       $video->setNumPlays(0);
     }
 

@@ -58,21 +58,21 @@ class Video
 
   /**
    * @var string
-   * @ORM\Column(name="thumb_small", type="string", nullable=false)
+   * @ORM\Column(name="thumb_sm", type="string", nullable=false)
    */
-  protected $thumbSmall;
+  protected $thumbSm;
 
   /**
    * @var string
-   * @ORM\Column(name="thumb_medium", type="string", nullable=false)
+   * @ORM\Column(name="thumb_md", type="string", nullable=false)
    */
-  protected $thumbMedium;
+  protected $thumbMd;
 
   /**
    * @var string
-   * @ORM\Column(name="thumb_large", type="string", nullable=false)
+   * @ORM\Column(name="thumb_lg", type="string", nullable=false)
    */
-  protected $thumbLarge;
+  protected $thumbLg;
 
   /**
    * @var \AppBundle\Entity\User
@@ -263,54 +263,54 @@ class Video
   /**
    * @return string
    */
-  public function getThumbSmall()
+  public function getThumbSm()
   {
-    return $this->thumbSmall;
+    return $this->thumbSm;
   }
 
   /**
-   * @param string $thumbSmall
+   * @param string $thumbSm
    * @return $this
    */
-  public function setThumbSmall($thumbSmall)
+  public function setThumbSm($thumbSm)
   {
-    $this->thumbSmall = $thumbSmall;
+    $this->thumbSm = $thumbSm;
     return $this;
   }
 
   /**
    * @return string
    */
-  public function getThumbMedium()
+  public function getThumbMd()
   {
-    return $this->thumbMedium;
+    return $this->thumbMd;
   }
 
   /**
-   * @param string $thumbMedium
+   * @param string $thumbMd
    * @return $this
    */
-  public function setThumbMedium($thumbMedium)
+  public function setThumbMd($thumbMd)
   {
-    $this->thumbMedium = $thumbMedium;
+    $this->thumbMd = $thumbMd;
     return $this;
   }
 
   /**
    * @return string
    */
-  public function getThumbLarge()
+  public function getThumbLg()
   {
-    return $this->thumbLarge;
+    return $this->thumbLg;
   }
 
   /**
-   * @param string $thumbLarge
+   * @param string $thumbLg
    * @return $this
    */
-  public function setThumbLarge($thumbLarge)
+  public function setThumbLg($thumbLg)
   {
-    $this->thumbLarge = $thumbLarge;
+    $this->thumbLg = $thumbLg;
     return $this;
   }
 

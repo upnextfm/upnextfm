@@ -17,10 +17,10 @@ $pdoCytube = new \PDO(
   $params["database_cytube_password"]
 );
 
-importRooms();
+//importRooms();
 importVideos();
-importVideoLogs();
-importChatLogs();
+//importVideoLogs();
+//importChatLogs();
 
 /**
  *
@@ -154,8 +154,11 @@ function importVideos()
       if (!$createdInRoom) {
         continue;
       }
-
       $resp = $youtube->getVideoInfo($row["uid"]);
+      if (!$resp) {
+        continue;
+      }
+
       $exec = [
         ":created_by_user_id" => $createdByUser["id"],
         ":created_in_room_id" => $createdInRoom["id"],
@@ -167,26 +170,26 @@ function importVideos()
         ":num_plays"          => fetchCytubePlaylistHistoryCount($history["media_id"]),
         ":date_created"       => timeToDate($row["time"]),
         ":date_last_played"   => timeToDate($historyLast["time"]),
-        ":thumb_small"        => (!empty($resp->snippet->thumbnails->medium->url)
+        ":thumb_sm"           => (!empty($resp->snippet->thumbnails->medium->url)
           ? $resp->snippet->thumbnails->medium->url
           : $resp->snippet->thumbnails->default->url),
-        ":thumb_medium"       => (!empty($resp->snippet->thumbnails->standard->url)
+        ":thumb_md"           => (!empty($resp->snippet->thumbnails->standard->url)
           ? $resp->snippet->thumbnails->standard->url
           : $resp->snippet->thumbnails->default->url),
-        ":thumb_large"        => (!empty($resp->snippet->thumbnails->high->url)
+        ":thumb_lg"           => (!empty($resp->snippet->thumbnails->high->url)
           ? $resp->snippet->thumbnails->high->url
           : $resp->snippet->thumbnails->default->url)
       ];
 
       $sql = "
       INSERT INTO `video`
-      (`created_by_user_id`, `created_in_room_id`, `permalink`, `title`, `codename`, `provider`, `seconds`, `num_plays`, `date_created`, `date_last_played`, `thumb_small`, `thumb_medium`, `thumb_large`)
+      (`created_by_user_id`, `created_in_room_id`, `permalink`, `title`, `codename`, `provider`, `seconds`, `num_plays`, `date_created`, `date_last_played`, `thumb_sm`, `thumb_md`, `thumb_lg`)
       VALUES
-      (:created_by_user_id, :created_in_room_id, :permalink, :title, :codename, :provider, :seconds, :num_plays, :date_created, :date_last_played, :thumb_small, :thumb_medium, :thumb_large)
+      (:created_by_user_id, :created_in_room_id, :permalink, :title, :codename, :provider, :seconds, :num_plays, :date_created, :date_last_played, :thumb_sm, :thumb_md, :thumb_lg)
     ";
       $stmt = $pdoUpnext->prepare($sql);
       $stmt->execute($exec);
-      usleep(500);
+      usleep(1000);
     }
   }
 }
