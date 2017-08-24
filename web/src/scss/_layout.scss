@@ -9,6 +9,7 @@ body {
   color: $color-fg;
   background: $color-bg;
   font-family: 'Roboto', sans-serif;
+  overflow: scroll !important;
   display: flex;
   min-height: 100vh;
   flex-direction: column;

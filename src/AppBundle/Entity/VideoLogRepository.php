@@ -4,6 +4,20 @@ namespace AppBundle\Entity;
 class VideoLogRepository extends AbstractRepository
 {
   /**
+   * Returns the room with the given name
+   *
+   * @param int $id
+   *
+   * @return VideoLog
+   */
+  public function findByID($id)
+  {
+    return $this->findOneBy([
+      "id" => $id
+    ]);
+  }
+
+  /**
    * Returns the most recent logs
    *
    * @param int $limit

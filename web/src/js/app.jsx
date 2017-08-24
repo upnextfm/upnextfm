@@ -13,3 +13,29 @@ $(() => {
     target.removeClass('pulse');
   });
 });
+
+$(() => {
+  let playID = 0;
+  const modal  = $('.modal');
+  modal.modal({
+    ready: (m, trigger) => {
+      playID = $(trigger).parents('.card:first').data('id');
+    }
+  });
+
+  $('.up-play-modal__btn').on('click', (e) => {
+    const $target = $(e.currentTarget);
+    const room    = $target.data('room');
+    if (room && playID) {
+      fetch(`/api/r/${room}/playlist/${playID}`, {
+        method: 'PUT'
+      })
+        .then(() => {
+          modal.modal('close');
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  });
+});

@@ -1,0 +1,12 @@
+{% if playModalRooms is defined %}
+<div id="play-modal" class="modal up-modal">
+    <div class="modal-content">
+        <h4>Queue in Room</h4>
+        {% for room in playModalRooms %}
+            <button class="waves-effect waves-light btn up-play-modal__btn" data-room="{{ room.name }}">
+                {{ room.name }}
+            </button>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

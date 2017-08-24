@@ -25,6 +25,7 @@
         {% if hide_navbar is not defined  %}
             {% include ":_layout:footer.html.twig" %}
         {% endif %}
+        {% include ":_modals:play.html.twig" %}
         {% block javascripts %}
             <script>
                 var _WS_URI = '{{ ws_uri }}';

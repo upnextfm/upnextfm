@@ -45,7 +45,12 @@ class PlaylistController extends Controller
       "minPage"        => $minPage,
       "maxPage"        => $maxPage,
       "minDate"        => $minDate,
-      "maxDate"        => $maxDate
+      "maxDate"        => $maxDate,
+      "playModalRooms" => [
+        [
+          "name" => "lobby"
+        ]
+      ]
     ]);
   }
 }

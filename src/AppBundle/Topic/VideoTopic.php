@@ -18,6 +18,11 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   use TopicPeriodicTimerTrait;
 
   /**
+   * @var array
+   */
+  protected $playing = [];
+
+  /**
    * @var Redis
    */
   protected $redis;
@@ -157,6 +162,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     $video->setDateLastPlayed(new \DateTime());
     $video->incrNumPlays();
     $this->em->persist($video);
+
+    $this->playing[$room->getName()] = $video->getId();
     $this->redis->set(sprintf("room:%s:playing", $room->getName()), $video->getId());
 
     $videoLog = new VideoLog($video, $room, $user);
@@ -178,7 +185,18 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   {
     $interval = $this->container->getParameter("app_ws_video_time_update_interval");
     $this->periodicTimer->addPeriodicTimer($this, VideoCommands::TIME_UPDATE, $interval, function() use ($topic) {
-
+      $play = $this->redis->get("playlist:play");
+      if ($play) {
+        $this->redis->del("playlist:play");
+        $play  = json_decode($play, true);
+        $video = $this->em->getRepository("AppBundle:Video")->findByID($play["videoID"]);
+        if ($video) {
+          $topic->broadcast([
+            "cmd"   => VideoCommands::START,
+            "video" => $this->serializeVideo($video)
+          ]);
+        }
+      }
     });
   }
 }
