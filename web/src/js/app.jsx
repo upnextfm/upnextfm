@@ -1,4 +1,10 @@
+
+
 $(() => {
+  if ($.fn.sideNav === undefined) {
+    return;
+  }
+
   $('#up-nav-toggle').sideNav();
 
   $('.up-pulse-hover').hover((e) => {
@@ -17,6 +23,10 @@ $(() => {
 });
 
 $(() => {
+  if ($.fn.modal === undefined) {
+    return;
+  }
+
   let playID = 0;
   const modal  = $('.modal');
   modal.modal({

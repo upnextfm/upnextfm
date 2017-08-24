@@ -36,6 +36,10 @@ export default {
     users:          [],
     messages:       []
   },
+  pms: {
+    isSubscribed:  false,
+    conversations: []
+  },
   users: {
     repo: []
   },

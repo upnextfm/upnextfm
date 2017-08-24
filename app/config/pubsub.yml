@@ -6,6 +6,11 @@ room_topic:
     room:
       pattern: "[\\w]+"
 
+pms_topic:
+  channel: app/pms
+  handler:
+    callback: "pms.topic"
+
 video_topic:
   channel: app/video/{room}
   handler:

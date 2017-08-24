@@ -1,7 +1,9 @@
 <?php
 namespace AppBundle\Topic;
 
+use AppBundle\Entity\PrivateMessage;
 use AppBundle\Entity\User;
+use AppBundle\Storage\RoomStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProviderInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
@@ -53,6 +55,11 @@ abstract class AbstractTopic implements TopicInterface
   protected $em;
 
   /**
+   * @var RoomStorage
+   */
+  protected $roomStorage;
+
+  /**
    * @var LoggerInterface
    */
   protected $logger;
@@ -70,6 +77,16 @@ abstract class AbstractTopic implements TopicInterface
     $this->authenticationProvider = $container->get("gos_web_socket.websocket_authentification.provider");
     $this->em                     = $container->get("doctrine.orm.default_entity_manager");
     $this->logger                 = $logger;
+  }
+
+  /**
+   * @param RoomStorage $roomStorage
+   * @return $this
+   */
+  public function setRoomStorage(RoomStorage $roomStorage)
+  {
+    $this->roomStorage = $roomStorage;
+    return $this;
   }
 
   /**
@@ -229,5 +246,30 @@ abstract class AbstractTopic implements TopicInterface
     }
 
     return $serialized;
+  }
+
+  /**
+   * @param PrivateMessage $pm
+   * @return array
+   */
+  protected function serializePrivateMessage(PrivateMessage $pm)
+  {
+    return [
+      "id"      => $pm->getId(),
+      "type"    => "message",
+      "to"      => $pm->getToUser()->getUsername(),
+      "from"    => $pm->getFromUser()->getUsername(),
+      "date"    => $pm->getDateCreated()->format("D M d Y H:i:s O"),
+      "message" => $pm->getMessage()
+    ];
+  }
+
+  /**
+   * @param string $message
+   * @return string
+   */
+  protected function sanitizeMessage($message)
+  {
+    return trim(strip_tags($message));
   }
 }

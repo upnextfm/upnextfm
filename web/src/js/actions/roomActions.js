@@ -23,9 +23,9 @@ export function roomSend() {
         dispatch(authToggleLoginDialog());
       } else {
         api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-          cmd:  types.CMD_SEND,
-          date: (new Date()).toString(),
-          msg:  room.inputValue
+          cmd:     types.CMD_SEND,
+          date:    (new Date()).toString(),
+          message: room.inputValue
         });
       }
       dispatch({

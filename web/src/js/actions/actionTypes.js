@@ -35,6 +35,11 @@ export const ROOM_INPUT_CHANGE           = 'ROOM_INPUT_CHANGE';
 export const ROOM_RESET_NUM_NEW_MESSAGES = 'ROOM_RESET_NUM_NEW_MESSAGES';
 export const ROOM_INCR_NUM_NEW_MESSAGES  = 'ROOM_INCR_NUM_NEW_MESSAGES';
 
+export const PMS_SUBSCRIBED = 'PMS_SUBSCRIBED';
+export const PMS_SEND       = 'PMS_SEND';
+export const PMS_SENT       = 'PMS_SENT';
+export const PMS_RECEIVE    = 'PMS_RECEIVE';
+
 export const PLAYLIST_START     = 'PLAYLIST_START';
 export const PLAYLIST_SUBSCRIBE = 'PLAYLIST_SUBSCRIBE';
 
@@ -50,10 +55,13 @@ export const USERS_REPO_ADD_MULTI = 'USERS_REPO_ADD_MULTI';
 export const USERS_REPO_REMOVE    = 'USERS_REPO_REMOVE';
 
 export const CHAN_ROOM       = 'app/room';
+export const CHAN_PMS        = 'app/pms';
 export const CHAN_VIDEO      = 'app/video';
 export const CHAN_AUTH       = 'app/auth';
 export const CMD_AUTH        = 'auth';
 export const CMD_SEND        = 'send';
+export const CMD_SENT        = 'sent';
+export const CMD_RECEIVE     = 'receive';
 export const CMD_JOINED      = 'joined';
 export const CMD_PARTED      = 'parted';
 export const CMD_USERS       = 'users';

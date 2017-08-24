@@ -1,7 +1,6 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
-import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
 import ArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import { animateScrollLeft } from 'utils/animate';
@@ -20,7 +19,7 @@ export default class VideoNav extends React.Component {
             <ArrowLeft />
           </IconButton>
           <IconButton className="up-badge" onClick={this.handleClickScroll}>
-            <Badge badgeContent={4} color="primary" title="New Messages" />
+            <div className="up-badge">{4}</div>
           </IconButton>
         </Toolbar>
       </AppBar>

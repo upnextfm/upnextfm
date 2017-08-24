@@ -3,6 +3,7 @@ var path = require('path');
 var Encore = require('@symfony/webpack-encore');
 var webpack = require('webpack');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+var LiveReloadPlugin = require('webpack-livereload-plugin');
 
 Encore
   .setOutputPath('./web/build/')
@@ -23,5 +24,6 @@ Encore
 
 let config = Encore.getWebpackConfig();
 //config.plugins.push(new BundleAnalyzerPlugin());
+config.plugins.push(new LiveReloadPlugin({ port: 35730 }));
 
 module.exports = config;

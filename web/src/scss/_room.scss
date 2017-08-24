@@ -78,6 +78,10 @@ $height-avatar-collapsed: auto;
     padding: ($padding-std / 2) $padding-std !important;
   }
 
+  li.up-active {
+    background-color: darken($color-secondary, 5%);
+  }
+
   .up-avatar {
     width: $width-avatar !important;
     height: $height-avatar !important;
@@ -269,5 +273,10 @@ $height-avatar-collapsed: auto;
 
   .up-avatar {
     margin-right: $padding-std * 2;
+  }
+
+  .up-badge {
+    margin-left: auto;
+    background-color: lighten($color-secondary, 15%);
   }
 }

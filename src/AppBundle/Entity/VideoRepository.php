@@ -4,13 +4,13 @@ namespace AppBundle\Entity;
 class VideoRepository extends AbstractRepository
 {
   /**
-   * @param $videoID
+   * @param int $id
    * @return Video
    */
-  public function findByID($videoID)
+  public function findByID($id)
   {
     return $this->findOneBy([
-      "id" => $videoID
+      "id" => $id
     ]);
   }
 

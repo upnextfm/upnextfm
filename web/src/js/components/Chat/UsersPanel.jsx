@@ -9,8 +9,19 @@ import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import User from 'components/Chat/User';
 import UserMenu from 'components/Chat/UserMenu';
 
+function getNumNewMessages(conversations, fromUsername) {
+  for (let i = 0; i < conversations.length; i++) {
+    if (conversations[i].from === fromUsername) {
+      return conversations[i].numNewMessages;
+    }
+  }
+
+  return 0;
+}
+
 export default class UsersPanel extends React.Component {
   static propTypes = {
+    pms:         PropTypes.object,
     roomUsers:   PropTypes.array,
     repoUsers:   PropTypes.array,
     isCollapsed: PropTypes.bool,
@@ -18,6 +29,7 @@ export default class UsersPanel extends React.Component {
   };
 
   static defaultProps = {
+    pms:         {},
     roomUsers:   [],
     repoUsers:   [],
     isCollapsed: false,
@@ -52,7 +64,15 @@ export default class UsersPanel extends React.Component {
   };
 
   render() {
-    const { roomUsers, repoUsers, isCollapsed, onCollapse } = this.props;
+    const {
+      pms,
+      roomUsers,
+      repoUsers,
+      activeChat,
+      isCollapsed,
+      onCollapse,
+      conversations = pms.conversations
+    } = this.props;
 
     return (
       <div className={classNames(
@@ -64,8 +84,20 @@ export default class UsersPanel extends React.Component {
       >
         <List>
           {roomUsers.map(username => (
-            <ListItem key={username} onClick={this.handleClickUser} data-username={username} button>
-              <User user={usersFindByUsername(repoUsers, username)} />
+            <ListItem
+              key={username}
+              className={classNames(
+                'up-block',
+                { 'up-active': username === activeChat }
+              )}
+              onClick={this.handleClickUser}
+              data-username={username}
+              button
+            >
+              <User
+                user={usersFindByUsername(repoUsers, username)}
+                numNewMessages={getNumNewMessages(conversations, username)}
+              />
             </ListItem>
           ))}
         </List>

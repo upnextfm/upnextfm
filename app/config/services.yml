@@ -95,6 +95,17 @@ services:
           - { name: gos_web_socket.topic }
 
     ## ########################################################################
+    ## Websocket Private Message Topic
+    ## ########################################################################
+    app.topic.pms:
+        class: AppBundle\Topic\PrivateMessageTopic
+        parent: app.topic.parent
+        calls:
+          - [setRoomStorage, ["@app.storage.room"]]
+        tags:
+          - { name: gos_web_socket.topic }
+
+    ## ########################################################################
     ## Websocket Video Topic
     ## ########################################################################
     app.topic.video:

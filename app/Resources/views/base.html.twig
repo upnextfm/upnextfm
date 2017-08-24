@@ -36,6 +36,9 @@
             {% endif %}
             <script src="{{ asset('js/autobahn.min.js') }}"></script>
             <script src="{{ asset('build/js/app.js') }}"></script>
+            {% if app.environment == "dev" %}
+                <script src="http://localhost:35730/livereload.js"></script>
+            {% endif %}
         {% endblock %}
     </body>
 </html>
