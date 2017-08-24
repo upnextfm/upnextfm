@@ -5,20 +5,19 @@
 	<div class="up-profile">
 		<div class="up-profile__bio">
 			<div class="up-profile__bio__user">
-				<img class="up-profile__bio__user__picture" src = "https://robohash.org/{{ user.username }}?set=set3" />
+				<img class="up-profile__bio__user__picture" src="{{ user.info.avatarLg }}" />
 				<div class="up-profile__bio__user__name">
 					{{ user.username }}
 				</div>
 			</div>
 			<div class="up-profile__bio__text">
-				<p>bio goes here</p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi volutpat ullamcorper tincidunt. Proin vitae ultrices ante. Aliquam pellentesque nisl id turpis pharetra luctus a id purus. Quisque sed mauris orci. Ut egestas vehicula nisi, placerat dictum nibh ultricies a. Nam luctus nisl neque, a molestie odio rutrum vel. Etiam dapibus ullamcorper lacinia. Aliquam erat volutpat. Sed sapien risus, lacinia eu urna nec, euismod tempor nunc. Curabitur aliquet eros lobortis tincidunt elementum.
-
+				{{ user.info.bio }}
 			</div>
 		</div>
-		<div class="up-profile__playlist">
+		<div class="row">
 			{% for played in playedRecently %}
-				{{ macros.playedCard(played) }}
-			{% endfor %}			
+				{{ macros.playedCard(played, 3) }}
+			{% endfor %}
 		</div>
     </div>
 {% endblock %}
