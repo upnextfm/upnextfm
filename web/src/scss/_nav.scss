@@ -6,7 +6,7 @@
   height: $nav-height !important;
   min-height: $nav-height !important;
   padding: $padding-std !important;
-  background-color: #263238 !important;
+  background-color: $color-nav-bg !important;
   display: flex;
   text-align: left;
   position: relative;
