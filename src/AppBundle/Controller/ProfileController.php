@@ -21,7 +21,7 @@ class ProfileController extends Controller
     }
 
     $playedRecently = $em->getRepository("AppBundle:VideoLog")
-      ->findRecentByUser($user, 100);
+      ->findRecentByUser($user, 30);
 
     return $this->render(":profile:index.html.twig", [
       "user"           => $user,

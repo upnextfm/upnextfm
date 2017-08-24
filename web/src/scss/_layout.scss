@@ -9,6 +9,9 @@ body {
   color: $color-fg;
   background: $color-bg;
   font-family: 'Roboto', sans-serif;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 a {
@@ -18,6 +21,10 @@ a {
 
 .up-container--narrow {
   max-width: $break-sm;
+}
+
+.up-main {
+  flex: 1 0 auto;
 }
 
 .up-construction {

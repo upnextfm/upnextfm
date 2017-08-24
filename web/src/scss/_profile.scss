@@ -1,10 +1,14 @@
 .up-profile {
 	display:flex;
 	flex-direction:row;
-	height: 100%;
+  flex: 1 0 auto;
 
 	@media (max-width: #{$break-sm - 1px}) {
 		flex-direction: column;
+	}
+
+	.row {
+	  margin-bottom: -16px;
 	}
 }
 .up-profile__bio {

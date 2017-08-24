@@ -80,7 +80,7 @@ class HomeController extends Controller
    */
   public function aboutAction()
   {
-
+    return $this->render(":home:about.html.twig");
   }
 
   /**
