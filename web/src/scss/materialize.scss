@@ -48,7 +48,7 @@ $button-flat-color: #FFF;
 
 .page-footer {
   margin-top: $padding-std * 4;
-  background-color: #2d2d2d;
+  background-color: #262626;
 
   h5 {
     font-size: 1.64rem;
@@ -62,7 +62,13 @@ $button-flat-color: #FFF;
 
   .up-logo {
     height: 32px;
-    margin: ($padding-std * 2) 0;
+    margin: ($padding-std * 2) 0 $padding-std 0;
+  }
+
+  .up-social-icon {
+    height: 48px;
+    margin-right: ($padding-std * 2);
+    margin-top: ($padding-std * 2);
   }
 }
 
