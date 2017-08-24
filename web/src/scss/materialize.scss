@@ -56,6 +56,10 @@ $button-flat-color: #FFF;
     margin: 0.82rem 0 0.656rem 0;
   }
 
+  li {
+    margin-bottom: $padding-std;
+  }
+
   .up-logo {
     height: 32px;
     margin: ($padding-std * 2) 0;
