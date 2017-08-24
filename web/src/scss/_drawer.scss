@@ -1,87 +1,27 @@
 @import "vars";
 
 .up-drawer {
-  top: 0;
-  left: 0;
-  width: 0;
-  overflow: hidden;
-  margin-right: auto;
+  color: #FFF;
+  width: $drawer-width;
+  background-color: #424242;
 
-  &.up-opened {
-    width: $drawer-width;
+  li > a {
+    color: #FFF;
+    padding: 0 16px;
+    color: rgba(255, 255, 255, 1);
+    font-size: 16px;
+    font-weight: 400;
 
-    nav {
-      margin-left: 0;
+    & > i.material-icons {
+      color: #FFF;
+      margin: 0 16px 0 0;
     }
   }
-}
 
-.up-drawer__overlay {
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  visibility: hidden;
-  position: absolute;
-  transition: all 200ms ease-in;
-  transition-duration: .5s;
-}
-
-.up-drawer.up-opened .up-drawer__overlay {
-  z-index: 1;
-  opacity: 0.5;
-  background: #111;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.up-drawer nav {
-  top: 0;
-  left: 0;
-  z-index: 2;
-  margin: 0 0 0 -250px;
-  position: fixed;
-  width: $drawer-width;
-  height: 100%;
-  background: #424242;
-  transition: all 200ms ease-in;
-
-  ul {
-    padding: 0;
+  .divider {
     margin: 0;
-    width: 250px;
-    height: 100%;
-    list-style: none;
-    overflow: hidden;
-  }
-}
-
-.up-drawer__item {
-  color: #FFF;
-  display: flex;
-  position: relative;
-  align-items: center;
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 16px;
-  font-weight: 400;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  line-height: 24px;
-  text-decoration: none;
-
-  &:hover,
-  &.up-active {
     background-color: rgba(255, 255, 255, 0.12);
   }
-
-  span {
-    flex: none;
-    padding: 0 16px;
-  }
-}
-
-.up-drawer__divider {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .up-drawer__controls {
@@ -98,7 +38,6 @@
   padding: $padding-std;
   flex-direction: column;
   justify-content: center;
-
 
   .SocialMediaShareButton {
     outline: 0;

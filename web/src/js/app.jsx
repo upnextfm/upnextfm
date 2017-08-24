@@ -1,4 +1,6 @@
 $(() => {
+  $('#up-nav-toggle').sideNav();
+
   $('.up-pulse-hover').hover((e) => {
     let target = $(e.target);
     if (target.is('.material-icons')) {

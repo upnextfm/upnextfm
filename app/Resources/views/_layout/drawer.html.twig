@@ -1,0 +1,28 @@
+<ul id="slide-out" class="side-nav up-drawer">
+    <li>
+        {% if app.user %}
+            <a href="{{ path("logout") }}">
+                <i class="material-icons">compare_arrows</i>
+                <span>Logout</span>
+            </a>
+        {% else %}
+            <a href="{{ path("login") }}">
+                <i class="material-icons">compare_arrows</i>
+                <span>Login</span>
+            </a>
+        {% endif %}
+    </li>
+    <li><div class="divider"></div></li>
+    <li>
+        <a href="{{ path('about') }}" class="up-drawer__item">
+            <i class="material-icons">info</i>
+            <span>About Us</span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('help') }}" class="up-drawer__item">
+            <i class="material-icons">help</i>
+            <span>Help</span>
+        </a>
+    </li>
+</ul>
