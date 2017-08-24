@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Topic;
 
+use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProviderInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
@@ -171,7 +172,7 @@ abstract class AbstractTopic implements TopicInterface
   }
 
   /**
-   * @param UserInterface $user
+   * @param UserInterface|User $user
    * @return array
    */
   protected function serializeUser(UserInterface $user)
@@ -179,7 +180,7 @@ abstract class AbstractTopic implements TopicInterface
     $username = $user->getUsername();
     return [
       "username" => $username,
-      "avatar"   => "https://robohash.org/${username}?set=set3",
+      "avatar"   => $user->getInfo()->getAvatarSm(),
       "profile"  => "https://upnext.fm/u/${username}",
       "roles"    => $user->getRoles()
     ];

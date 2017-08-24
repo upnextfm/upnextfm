@@ -17,16 +17,80 @@ $pdoCytube = new \PDO(
   $params["database_cytube_password"]
 );
 
+importUserInfo();
 importRooms();
 importVideos();
 importVideoLogs();
 importChatLogs();
 
-function decodeEntities($message) {
-  $message = html_entity_decode($message);
-  return preg_replace_callback("/(&#[0-9]+;)/", function($m) {
-    return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES");
-  }, $message);
+/**
+ *
+ */
+function importUserInfo()
+{
+  global $pdoUpnext, $pdoCytube;
+
+  foreach($pdoCytube->query("SELECT * FROM `users`") as $row) {
+    println($row["name"]);
+
+    $user = fetchUserByUsername($row["name"]);
+    if (!$user) {
+      continue;
+    }
+
+    $profile = json_decode($row["profile"], true);
+    if (empty($profile["image"])) {
+      $profile["image"] = sprintf('https://robohash.org/%s?set=set3', $row["name"]);
+    }
+
+    $exec = [
+      ":user_id"   => $row["id"],
+      ":avatar_sm" => $profile["image"],
+      ":avatar_md" => $profile["image"],
+      ":avatar_lg" => $profile["image"],
+      ":location"  => isset($profile["location"]) ? $profile["location"] : "",
+      ":website"   => isset($profile["website"]) ? $profile["website"] : "",
+      ":bio"       => isset($profile["bio"]) ? $profile["bio"] : ""
+    ];
+
+    $sql = "
+      INSERT INTO `user_info`
+      (`user_id`, `avatar_sm`, `avatar_md`, `avatar_lg`, `location`, `website`, `bio`)
+      VALUES
+      (:user_id, :avatar_sm, :avatar_md, :avatar_lg, :location, :website, :bio)
+    ";
+    $stmt = $pdoUpnext->prepare($sql);
+    $stmt->execute($exec);
+  }
+
+  foreach($pdoUpnext->query("SELECT * FROM `user`") as $row) {
+    println($row["username"]);
+
+    $stmt = $pdoUpnext->prepare("SELECT * FROM `user_info` WHERE `user_id` = :user_id LIMIT 1");
+    $stmt->execute([":user_id" => $row["id"]]);
+    $info = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$info) {
+      $avatar = sprintf('https://robohash.org/%s?set=set3', $row["username"]);
+      $exec = [
+        ":user_id"   => $row["id"],
+        ":avatar_sm" => $avatar,
+        ":avatar_md" => $avatar,
+        ":avatar_lg" => $avatar,
+        ":location"  => "",
+        ":website"   => "",
+        ":bio"       => ""
+      ];
+
+      $sql = "
+      INSERT INTO `user_info`
+      (`user_id`, `avatar_sm`, `avatar_md`, `avatar_lg`, `location`, `website`, `bio`)
+      VALUES
+      (:user_id, :avatar_sm, :avatar_md, :avatar_lg, :location, :website, :bio)
+    ";
+      $stmt = $pdoUpnext->prepare($sql);
+      $stmt->execute($exec);
+    }
+  }
 }
 
 /**
@@ -308,6 +372,17 @@ function fetchCytubePlaylistHistoryCount($media_id)
 function timeToDate($time)
 {
   return date("Y-m-d H:i:s", $time / 1000);
+}
+
+/**
+ * @param string $message
+ * @return string
+ */
+function decodeEntities($message) {
+  $message = html_entity_decode($message);
+  return preg_replace_callback("/(&#[0-9]+;)/", function($m) {
+    return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES");
+  }, $message);
 }
 
 /**

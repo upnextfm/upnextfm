@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\UserInfo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Api\Response;
@@ -42,6 +43,14 @@ class RegistrationController extends Controller
     $user->setEnabled(true);
     $user->setLastLogin(new \DateTime());
     $user->setPassword($encoder->encodePassword($password, null));
+
+    $info = new UserInfo();
+    $info->setUser($user);
+    $info->setAvatarSm(sprintf('https://robohash.org/%s?set=set3&size=40x40', $username));
+    $info->setAvatarMd(sprintf('https://robohash.org/%s?set=set3&size=100x100', $username));
+    $info->setAvatarLg(sprintf('https://robohash.org/%s?set=set3&size=250x250', $username));
+    $user->setInfo($info);
+
     $em->persist($user);
     $em->flush();
 
