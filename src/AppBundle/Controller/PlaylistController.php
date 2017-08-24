@@ -49,6 +49,9 @@ class PlaylistController extends Controller
       "playModalRooms" => [
         [
           "name" => "lobby"
+        ],
+        [
+          "name" => "Metal"
         ]
       ]
     ]);

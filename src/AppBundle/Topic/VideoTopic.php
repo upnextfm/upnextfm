@@ -20,7 +20,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   /**
    * @var array
    */
-  protected $playing = [];
+  protected $subs = [];
 
   /**
    * @var Redis
@@ -60,7 +60,20 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       return;
     }
 
-    $videoID = $this->redis->get(sprintf("room:%s:playing", $room->getName()));
+    $client   = ["conn" => $connection, "id" => $topic->getId()];
+    $roomName = $room->getName();
+    if (!isset($this->subs[$roomName])) {
+      $this->subs[$roomName] = [];
+    }
+    if (!empty($this->subs[$roomName])) {
+      $index = array_search($client, $this->subs[$roomName]);
+      if (false !== $index) {
+        unset($this->subs[$roomName][$index]);
+      }
+    }
+    $this->subs[$roomName][] = $client;
+
+    $videoID = $this->redis->get(sprintf("room:%s:playing", $roomName));
     if ($videoID) {
       $video = $this->em->getRepository("AppBundle:Video")->findByID($videoID);
       if ($video) {
@@ -68,6 +81,34 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
           "cmd"   => VideoCommands::START,
           "video" => $this->serializeVideo($video)
         ]);
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+  {
+    $user = $this->getUser($connection);
+    if (!($user instanceof UserInterface)) {
+      $user = null;
+    }
+    $room = $this->getRoom($request->getAttributes()->get("room"), $user);
+    if (!$room) {
+      $this->logger->error("Room not found or created.");
+      return;
+    }
+
+    $roomName = $room->getName();
+    if (!isset($this->subs[$roomName])) {
+      $this->subs[$roomName] = [];
+    }
+    if (!empty($this->subs[$roomName])) {
+      $client = ["conn" => $connection, "id" => $topic->getId()];
+      $index  = array_search($client, $this->subs[$roomName]);
+      if (false !== $index) {
+        unset($this->subs[$roomName][$index]);
       }
     }
   }
@@ -185,16 +226,23 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   {
     $interval = $this->container->getParameter("app_ws_video_time_update_interval");
     $this->periodicTimer->addPeriodicTimer($this, VideoCommands::TIME_UPDATE, $interval, function() use ($topic) {
+
       $play = $this->redis->get("playlist:play");
       if ($play) {
         $this->redis->del("playlist:play");
-        $play  = json_decode($play, true);
-        $video = $this->em->getRepository("AppBundle:Video")->findByID($play["videoID"]);
-        if ($video) {
-          $topic->broadcast([
-            "cmd"   => VideoCommands::START,
-            "video" => $this->serializeVideo($video)
-          ]);
+        $play = json_decode($play, true);
+        $roomName = $play["roomName"];
+
+        if (isset($this->subs[$roomName])) {
+          $video = $this->em->getRepository("AppBundle:Video")->findByID($play["videoID"]);
+          if ($video) {
+            foreach($this->subs[$roomName] as $client) {
+              $client["conn"]->event($client["id"], [
+                "cmd"   => VideoCommands::START,
+                "video" => $this->serializeVideo($video)
+              ]);
+            }
+          }
         }
       }
     });

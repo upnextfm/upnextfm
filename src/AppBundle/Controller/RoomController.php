@@ -45,8 +45,8 @@ class RoomController extends Controller
 
     $redis = $this->get("snc_redis.video");
     $redis->set("playlist:play", json_encode([
-      "room"    => $room->getName(),
-      "videoID" => $videoLog->getVideo()->getId()
+      "roomName" => $room->getName(),
+      "videoID"  => $videoLog->getVideo()->getId()
     ]));
 
     return new Response(json_encode([
