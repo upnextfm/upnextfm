@@ -77,7 +77,7 @@
     "jsx-a11y/no-static-element-interactions": 0,
     "react/forbid-prop-types": [
       "error",
-      {"forbid": ["any"]}
+      {"forbid": []}
     ],
     "import/prefer-default-export": "off",
     "import/extensions": ["warn", "always", {

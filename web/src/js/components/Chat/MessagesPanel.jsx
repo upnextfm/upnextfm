@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { usersFindByUsername } from 'utils/users';
 import List from 'material-ui/List';
+import UserMenu from 'components/Chat/UserMenu';
 import MessageType from 'components/Chat/Types/MessageType';
 import NoticeType from 'components/Chat/Types/NoticeType';
 
@@ -13,10 +14,19 @@ export default class MessagesPanel extends React.Component {
     settings: PropTypes.object
   };
 
-  shouldComponentUpdate(nextProps) {
+  constructor(props) {
+    super(props);
+    this.state = {
+      menuAnchor: undefined,
+      menuOpen:   false
+    };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
     return (
       nextProps.messages.length !== this.props.messages.length ||
-      nextProps.users.length !== this.props.users.length
+      nextProps.users.length !== this.props.users.length ||
+      nextState !== this.state
     );
   }
 
@@ -30,6 +40,25 @@ export default class MessagesPanel extends React.Component {
     setTimeout(() => {
       this.scrollRef.scrollToBottom();
     }, 10);
+  };
+
+  handleClickUser = (e) => {
+    this.setState({
+      menuOpen:   true,
+      menuAnchor: e.currentTarget
+    });
+  };
+
+  handleCloseMenu = () => {
+    this.setState({ menuOpen: false });
+  };
+
+  handleClickProfile = () => {
+    const username = this.state.menuAnchor.getAttribute('data-username');
+    if (username) {
+      window.open(`/u/${username}`);
+      this.setState({ menuOpen: false });
+    }
   };
 
   render() {
@@ -47,8 +76,9 @@ export default class MessagesPanel extends React.Component {
               item = (
                 <MessageType
                   key={message.id}
-                  message={message}
                   user={user}
+                  message={message}
+                  onClickUser={this.handleClickUser}
                   prevMessage={prevMessage}
                   prevUser={prevUser}
                 />
@@ -57,8 +87,8 @@ export default class MessagesPanel extends React.Component {
               item = (
                 <NoticeType
                   key={message.id}
-                  message={message}
                   user={user}
+                  message={message}
                 />
               );
             }
@@ -68,6 +98,12 @@ export default class MessagesPanel extends React.Component {
             return item;
           })}
         </List>
+        <UserMenu
+          anchor={this.state.menuAnchor}
+          isOpen={this.state.menuOpen}
+          onClickProfile={this.handleClickProfile}
+          onRequestClose={this.handleCloseMenu}
+        />
       </Scrollbars>
     );
   }

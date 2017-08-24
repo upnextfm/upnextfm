@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { usersFindByUsername } from 'utils/users';
 import Hidden from 'material-ui/Hidden';
-import Menu, { MenuItem } from 'material-ui/Menu';
 import List, { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import User from 'components/Chat/User';
+import UserMenu from 'components/Chat/UserMenu';
 
 export default class UsersPanel extends React.Component {
   static propTypes = {
@@ -27,15 +27,15 @@ export default class UsersPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      anchorEl: undefined,
-      menuOpen: false
+      menuAnchor: undefined,
+      menuOpen:   false
     };
   }
 
   handleClickUser = (e) => {
     this.setState({
-      menuOpen: true,
-      anchorEl: e.currentTarget
+      menuOpen:   true,
+      menuAnchor: e.currentTarget
     });
   };
 
@@ -44,9 +44,10 @@ export default class UsersPanel extends React.Component {
   };
 
   handleClickProfile = () => {
-    const username = this.state.anchorEl.getAttribute('data-username');
+    const username = this.state.menuAnchor.getAttribute('data-username');
     if (username) {
       window.open(`/u/${username}`);
+      this.setState({ menuOpen: false });
     }
   };
 
@@ -81,21 +82,12 @@ export default class UsersPanel extends React.Component {
             </IconButton>
           </div>
         </Hidden>
-        <Menu
-          anchorEl={this.state.anchorEl}
-          open={this.state.menuOpen}
+        <UserMenu
+          anchor={this.state.menuAnchor}
+          isOpen={this.state.menuOpen}
+          onClickProfile={this.handleClickProfile}
           onRequestClose={this.handleCloseMenu}
-        >
-          <MenuItem onClick={this.handleCloseMenu}>
-            Private Message
-          </MenuItem>
-          <MenuItem onClick={this.handleClickProfile}>
-            Profile
-          </MenuItem>
-          <MenuItem onClick={this.handleCloseMenu}>
-            Ignore
-          </MenuItem>
-        </Menu>
+        />
       </div>
     );
   }
