@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 
@@ -20,6 +21,7 @@ class Room
 
   /**
    * @var string
+   * @Groups({"elastica"})
    * @ORM\Column(name="name", type="string", length=25, nullable=false)
    */
   protected $name = "";

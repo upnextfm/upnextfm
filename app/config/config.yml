@@ -22,7 +22,7 @@ framework:
   form: ~
   csrf_protection: ~
   validation: { enable_annotations: true }
-  #serializer: { enable_annotations: true }
+  serializer: { enable_annotations: true }
   templating:
     engines: ['twig']
   default_locale: '%locale%'
@@ -161,6 +161,43 @@ snc_redis:
   session:
     client: session
     locking: false
+
+## ########################################################################
+## Elasticsearch
+## ########################################################################
+fos_elastica:
+    clients:
+      default:
+        host: localhost
+        port: 9200
+    serializer: ~
+    indexes:
+      app:
+        types:
+          video:
+            serializer:
+              groups: [elastica]
+            persistence:
+              driver: orm
+              model: AppBundle\Entity\Video
+              provider: ~
+              finder: ~
+          video_log:
+            serializer:
+              groups: [elastica]
+            persistence:
+              driver: orm
+              model: AppBundle\Entity\VideoLog
+              provider: ~
+              finder: ~
+          chat_log:
+            serializer:
+              groups: [elastica]
+            persistence:
+              driver: orm
+              model: AppBundle\Entity\ChatLog
+              provider: ~
+              finder: ~
 
 ## ########################################################################
 ## Websockets

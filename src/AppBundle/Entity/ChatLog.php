@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 
@@ -20,6 +21,7 @@ class ChatLog
 
   /**
    * @var string
+   * @Groups({"elastica"})
    * @ORM\Column(name="message", type="text", nullable=true)
    */
   protected $message = "";
@@ -27,6 +29,7 @@ class ChatLog
   /**
    * @var \AppBundle\Entity\Room
    *
+   * @Groups({"elastica"})
    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Room", fetch="EAGER")
    * @ORM\JoinColumns({
    *   @ORM\JoinColumn(name="room_id", referencedColumnName="id")
