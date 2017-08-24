@@ -2,11 +2,19 @@
 <div id="play-modal" class="modal up-modal">
     <div class="modal-content">
         <h4>Queue in Room</h4>
-        {% for room in playModalRooms %}
-            <button class="waves-effect waves-light btn up-play-modal__btn" data-room="{{ room.name }}">
-                {{ room.name }}
-            </button>
-        {% endfor %}
+        {% if playModalRooms|length == 0 %}
+            <p>No rooms found.</p>
+            <p>
+                You must be logged in and in a room in order to queue songs.
+                Join a room and then refresh this page to try again.
+            </p>
+        {% else %}
+            {% for room in playModalRooms %}
+                <button class="waves-effect waves-light btn up-play-modal__btn" data-room="{{ room.name }}">
+                    {{ room.name }}
+                </button>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% endif %}

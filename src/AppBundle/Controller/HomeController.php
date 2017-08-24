@@ -29,7 +29,7 @@ class HomeController extends Controller
     $repo  = $this->getDoctrine()->getRepository("AppBundle:Room");
     foreach($repo->findAll() as $room) {
       $rooms[] = new ValueDecorator($room, [
-        "numUsers" => $roomStorage->getUserCount($room)
+        "numUsers" => $roomStorage->getRoomUserCount($room)
       ]);
     }
 

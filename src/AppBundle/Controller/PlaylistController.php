@@ -38,6 +38,17 @@ class PlaylistController extends Controller
       $maxPage = $pages;
     }
 
+    $rooms = [];
+    $user  = $this->getUser();
+    if ($user) {
+      $storage = $this->get("app.storage.room");
+      foreach($storage->getUserRooms($user) as $roomName) {
+        $rooms[] = [
+          "name" => $roomName
+        ];
+      }
+    }
+
     return $this->render(":playlist:recent.html.twig", [
       "playedRecently" => $playedRecently,
       "playedCount"    => $playedCount,
@@ -46,14 +57,7 @@ class PlaylistController extends Controller
       "maxPage"        => $maxPage,
       "minDate"        => $minDate,
       "maxDate"        => $maxDate,
-      "playModalRooms" => [
-        [
-          "name" => "lobby"
-        ],
-        [
-          "name" => "Metal"
-        ]
-      ]
+      "playModalRooms" => $rooms
     ]);
   }
 }
