@@ -6,7 +6,7 @@
     </h2>
     <div class="row">
         {% for played in playedRecently %}
-            {{ macros.playedCard(played) }}
+            {{ macros.playedCard(played, 2) }}
         {% endfor %}
     </div>
     <div class="center-align up-pagination-container">
