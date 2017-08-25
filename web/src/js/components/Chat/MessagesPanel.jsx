@@ -22,14 +22,6 @@ export default class MessagesPanel extends React.Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      nextProps.messages.length !== this.props.messages.length ||
-      nextProps.users.length !== this.props.users.length ||
-      nextState !== this.state
-    );
-  }
-
   componentDidUpdate(prevProps) {
     if (prevProps.messages.length !== this.props.messages.length) {
       this.scrollToBottom();
