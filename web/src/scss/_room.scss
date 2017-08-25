@@ -95,6 +95,7 @@ $height-avatar-collapsed: auto;
   .up-room-thumb {
     padding: $padding-std $padding-std !important;
     background-color: $color-secondary-light !important;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
 
     .up-avatar {
       border-radius: 0 !important;
