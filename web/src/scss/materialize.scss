@@ -28,6 +28,37 @@ $button-flat-color: #FFF;
   }
 }
 
+.up-room-card {
+  background-color: #292929;
+
+  .up-crop {
+    height: 200px;
+    display: block;
+    overflow: hidden;
+
+    img {
+      margin-top: -50px;
+    }
+  }
+
+  .card-title {
+    margin-top: 0;
+  }
+}
+
+.up-room-card__user-count {
+  display: flex;
+  align-items: center;
+
+  .material-icons {
+    margin-right: $padding-std;
+  }
+
+  span {
+    font-size: 20px;
+  }
+}
+
 .btn-flat:hover {
   background-color: transparent !important;
 }

@@ -23,7 +23,7 @@ class RoomSettings
   /**
    * @var \AppBundle\Entity\Room
    *
-   * @ORM\OneToOne(targetEntity="AppBundle\Entity\Room", cascade={"persist"}, inversedBy="room_settings")
+   * @ORM\OneToOne(targetEntity="AppBundle\Entity\Room", cascade={"persist"}, inversedBy="settings")
    * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
    */
   protected $room;

@@ -16,4 +16,18 @@ class RoomRepository extends AbstractRepository
       "name" => $name
     ]);
   }
+
+  /**
+   * @param int $limit
+   * @return Room[]
+   */
+  public function findPublic($limit)
+  {
+    return $this->createQueryBuilder("r")
+      ->where("r.isDeleted = 0")
+      ->andWhere("r.isPrivate = 0")
+      ->setMaxResults($limit)
+      ->getQuery()
+      ->execute();
+  }
 }

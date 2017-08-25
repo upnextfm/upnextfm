@@ -27,7 +27,7 @@ class HomeController extends Controller
     $rooms = [];
     $roomStorage = $this->get("app.storage.room");
     $repo  = $this->getDoctrine()->getRepository("AppBundle:Room");
-    foreach($repo->findAll() as $room) {
+    foreach($repo->findPublic(50) as $room) {
       $rooms[] = new ValueDecorator($room, [
         "numUsers" => $roomStorage->getRoomUserCount($room)
       ]);

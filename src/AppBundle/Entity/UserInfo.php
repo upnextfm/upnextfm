@@ -19,7 +19,7 @@ class UserInfo
 
   /**
    * @var User
-   * @ORM\OneToOne(targetEntity="AppBundle\Entity\User")
+   * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="info")
    * @ORM\JoinColumns({
    *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
    * })
