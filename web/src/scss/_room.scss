@@ -92,6 +92,10 @@ $height-avatar-collapsed: auto;
     }
   }
 
+  .up-room-thumb .up-avatar {
+    border-radius: 0 !important;
+  }
+
   .up-username {
     transition: opacity 0.2s linear;
 
