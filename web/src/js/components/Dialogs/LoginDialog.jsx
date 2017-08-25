@@ -42,6 +42,12 @@ class LoginDialog extends Component {
     });
   };
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      this.handleSubmit();
+    }
+  };
+
   handleSubmit = () => {
     const username = this.state.username.trim();
     const password = this.state.password.trim();
@@ -89,6 +95,7 @@ class LoginDialog extends Component {
             name="username"
             value={username}
             error={usernameError}
+            onKeyDown={this.handleKeyDown}
             onChange={this.handleChangeInput}
             autoFocus
           />
@@ -100,6 +107,7 @@ class LoginDialog extends Component {
             type="password"
             value={password}
             error={passwordError}
+            onKeyDown={this.handleKeyDown}
             onChange={this.handleChangeInput}
           />
         </FormControl>
