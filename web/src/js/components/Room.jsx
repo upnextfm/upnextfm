@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
+import { layoutToggleLoginDialog, layoutToggleRegisterDialog, layoutToggleHelpDialog } from 'actions/layoutActions';
 import Progress from 'components/Video/Progress';
+import HelpDialog from 'components/Dialogs/HelpDialog';
 import LoginDialog from 'components/Dialogs/LoginDialog';
 import RegisterDialog from 'components/Dialogs/RegisterDialog';
 import ChatSide from 'components/Chat/ChatSide';
@@ -20,7 +22,7 @@ class Room extends React.Component {
   };
 
   render() {
-    const { roomName, socketURI, auth, layout } = this.props;
+    const { roomName, socketURI, auth, layout, dispatch } = this.props;
 
     return (
       <div>
@@ -39,8 +41,18 @@ class Room extends React.Component {
             <VideoSide />
           </Grid>
         </div>
-        <LoginDialog />
-        <RegisterDialog />
+        <HelpDialog
+          isOpen={layout.isHelpDialogOpen}
+          onClose={() => { dispatch(layoutToggleHelpDialog()); }}
+        />
+        <LoginDialog
+          isOpen={layout.isLoginDialogOpen}
+          onClose={() => { dispatch(layoutToggleLoginDialog()); }}
+        />
+        <RegisterDialog
+          isOpen={layout.isRegisterDialogOpen}
+          onClose={() => { dispatch(layoutToggleRegisterDialog()); }}
+        />
       </div>
     );
   }

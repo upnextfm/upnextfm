@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { layoutToggleLoginDialog } from 'actions/layoutActions';
 import { authReset, authLogin } from 'actions/authActions';
 import FormControl from 'material-ui/Form/FormControl';
 import TextField from 'material-ui/TextField';
@@ -9,10 +8,15 @@ import FormDialog from 'components/Dialogs/FormDialog';
 
 class LoginDialog extends Component {
   static propTypes = {
+    auth:     PropTypes.object,
+    isOpen:   PropTypes.bool,
+    onClose:  PropTypes.func,
     dispatch: PropTypes.func
   };
 
   static defaultProps = {
+    isOpen:   false,
+    onClose:  () => {},
     dispatch: () => {}
   };
 
@@ -28,7 +32,7 @@ class LoginDialog extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.auth.isSubmitting !== this.props.auth.isSubmitting && this.props.auth.isAuthenticated) {
-      this.props.dispatch(layoutToggleLoginDialog());
+      this.props.onClose();
     }
   }
 
@@ -63,17 +67,18 @@ class LoginDialog extends Component {
       usernameError: false,
       passwordError: false
     });
+    this.props.onClose();
   };
 
   render() {
-    const { layout, auth } = this.props;
+    const { isOpen, auth } = this.props;
     const { username, password, usernameError, passwordError } = this.state;
 
     return (
       <FormDialog
         submitText="Login"
         error={auth.error}
-        open={layout.isLoginDialogOpen}
+        open={isOpen}
         submitting={auth.isSubmitting}
         onSubmit={this.handleSubmit}
         onClose={this.handleClose}
@@ -105,8 +110,7 @@ class LoginDialog extends Component {
 
 function mapStateToProps(state) {
   return {
-    auth:   Object.assign({}, state.auth),
-    layout: Object.assign({}, state.layout)
+    auth: Object.assign({}, state.auth)
   };
 }
 

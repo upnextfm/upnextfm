@@ -54,6 +54,15 @@ export function layoutToggleLoginDialog() {
 }
 
 /**
+ * @returns {{type: string}}
+ */
+export function layoutToggleHelpDialog() {
+  return {
+    type: types.LAYOUT_TOGGLE_HELP_DIALOG
+  };
+}
+
+/**
  * @param {number} chatSide
  * @param {number} videoSide
  * @returns {{type: string, chatSide: number, videoSide: number}}

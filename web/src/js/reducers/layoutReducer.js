@@ -30,6 +30,10 @@ export default function layoutReducer(state = initialState.layout, action = {}) 
       return Object.assign({}, state, {
         isRegisterDialogOpen: !state.isRegisterDialogOpen
       });
+    case types.LAYOUT_TOGGLE_HELP_DIALOG:
+      return Object.assign({}, state, {
+        isHelpDialogOpen: !state.isHelpDialogOpen
+      });
     case types.LAYOUT_COLS:
       return Object.assign({}, state, {
         colsChatSide:  action.chatSide,

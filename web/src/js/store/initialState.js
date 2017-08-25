@@ -6,6 +6,7 @@ export default {
     isWindowFocused:      true,
     isLoginDialogOpen:    false,
     isRegisterDialogOpen: false,
+    isHelpDialogOpen:     false,
     isUsersCollapsed:     Storage.getItem('layout:isUsersCollapsed', false),
     activeChat:           'room',
     colsChatSide:         7,

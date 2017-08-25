@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ShareButtons, generateShareIcon } from 'react-share';
-import { layoutToggleNavDrawer } from 'actions/layoutActions';
+import { layoutToggleNavDrawer, layoutToggleHelpDialog } from 'actions/layoutActions';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
@@ -34,7 +34,7 @@ class NavDrawer extends React.Component {
   };
 
   renderList() {
-    const { auth, layout, onClickLogin, onClickRegister } = this.props;
+    const { auth, layout, onClickLogin, onClickRegister, dispatch } = this.props;
 
     let authListItems = null;
     if (auth.isAuthenticated) {
@@ -87,13 +87,13 @@ class NavDrawer extends React.Component {
 
     const aboutListItems = (
       <div>
-        <ListItem button>
+        <ListItem onClick={() => { window.open('/about'); }} button>
           <ListItemIcon>
             <Info />
           </ListItemIcon>
           <ListItemText primary="About Us" />
         </ListItem>
-        <ListItem button>
+        <ListItem onClick={() => { dispatch(layoutToggleHelpDialog()); }} button>
           <ListItemIcon>
             <Help />
           </ListItemIcon>

@@ -44,7 +44,7 @@ export function registerComplete(resp) {
  * @param {{username: string, email: string, password: string}} details
  * @returns {Function}
  */
-export function register(details) {
+export function registerSubmit(details) {
   return (dispatch, getState, api) => {
     dispatch(registerBegin());
     return api.auth.register(details)

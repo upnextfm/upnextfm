@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { layoutToggleRegisterDialog } from 'actions/layoutActions';
-import { register, registerReset } from 'actions/registerActions';
+import { registerSubmit, registerReset } from 'actions/registerActions';
 import { FormControl, FormControlLabel } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
@@ -23,10 +22,14 @@ const FORM_STATE = {
 
 class RegisterDialog extends Component {
   static propTypes = {
+    isOpen:   PropTypes.bool,
+    onClose:  PropTypes.func,
     dispatch: PropTypes.func
   };
 
   static defaultProps = {
+    isOpen:   false,
+    onClose:  () => {},
     dispatch: () => {}
   };
 
@@ -37,7 +40,7 @@ class RegisterDialog extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.register.isSubmitting !== this.props.register.isSubmitting && this.props.register.isRegistered) {
-      this.props.dispatch(layoutToggleRegisterDialog());
+      this.props.onClose();
     }
   }
 
@@ -86,16 +89,17 @@ class RegisterDialog extends Component {
     }
     this.setState({ tosError: false });
 
-    this.props.dispatch(register({ username, email, password }));
+    this.props.dispatch(registerSubmit({ username, email, password }));
   };
 
   handleClose = () => {
     this.props.dispatch(registerReset());
     this.setState(FORM_STATE);
+    this.props.onClose();
   };
 
   render() {
-    const { layout, register } = this.props;
+    const { isOpen, register } = this.props;
     const {
       username,
       password,
@@ -112,7 +116,7 @@ class RegisterDialog extends Component {
       <FormDialog
         submitText="Register"
         error={register.error}
-        open={layout.isRegisterDialogOpen}
+        open={isOpen}
         submitting={register.isSubmitting}
         onSubmit={this.handleSubmit}
         onClose={this.handleClose}
@@ -185,8 +189,7 @@ class RegisterDialog extends Component {
 
 function mapStateToProps(state) {
   return {
-    register: Object.assign({}, state.register),
-    layout:   Object.assign({}, state.layout)
+    register: Object.assign({}, state.register)
   };
 }
 
