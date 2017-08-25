@@ -21,11 +21,13 @@ function getNumNewMessages(conversations, fromUsername) {
 
 export default class UsersPanel extends React.Component {
   static propTypes = {
-    pms:         PropTypes.object,
-    roomUsers:   PropTypes.array,
-    repoUsers:   PropTypes.array,
-    isCollapsed: PropTypes.bool,
-    onCollapse:  PropTypes.func
+    pms:          PropTypes.object,
+    roomName:     PropTypes.string,
+    roomSettings: PropTypes.object,
+    roomUsers:    PropTypes.array,
+    repoUsers:    PropTypes.array,
+    isCollapsed:  PropTypes.bool,
+    onCollapse:   PropTypes.func
   };
 
   static defaultProps = {
@@ -66,6 +68,8 @@ export default class UsersPanel extends React.Component {
   render() {
     const {
       pms,
+      roomName,
+      roomSettings,
       roomUsers,
       repoUsers,
       activeChat,
@@ -85,7 +89,8 @@ export default class UsersPanel extends React.Component {
         <List>
           <ListItem className="up-block" button>
             <div className="up-room-user">
-              <span>/r/lobby</span>
+              <img src={roomSettings.thumbSm} className="up-room-thumb" alt="Room thumbnail" />
+              <span className="up-username">/r/{roomName}</span>
             </div>
           </ListItem>
           {roomUsers.map(username => (

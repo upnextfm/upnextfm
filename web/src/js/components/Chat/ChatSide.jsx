@@ -82,6 +82,8 @@ class ChatSide extends React.Component {
       <UsersPanel
         onCollapse={this.handleCollapseUsers}
         pms={this.props.pms}
+        roomName={this.props.roomName}
+        roomSettings={this.props.settings.room}
         roomUsers={this.props.room.users}
         repoUsers={this.props.users.repo}
         activeChat={this.props.layout.activeChat}
