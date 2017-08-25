@@ -14,9 +14,9 @@
 				{{ user.info.bio }}
 			</div>
 		</div>
-		<div class="row">
+		<div class="up-profile__playlist">
 			{% for played in playedRecently %}
-				{{ macros.playedCard(played, 3) }}
+				{{ macros.playedCard(played, 3	) }}
 			{% endfor %}
 		</div>
     </div>

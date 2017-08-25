@@ -56,9 +56,13 @@
 
 
 .up-profile__playlist {
-	padding: 1em;
-	flex-grow: 3;
-	min-width: 65%;
 	display: flex;
-	flex-direction: column;
+	flex-wrap: wrap;
+}
+.up-profile__playlist > div {
+	flex: 1 0 20vw;
+	margin: .5rem;
+	@media (min-width: break-sm) {
+		max-width: 30vw;
+	}
 }
