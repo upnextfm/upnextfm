@@ -195,11 +195,18 @@ abstract class AbstractTopic implements TopicInterface
    */
   protected function serializeRoomSettings(RoomSettings $settings)
   {
+    $thumbSmDefault = $this->container->getParameter("app_thumb_sm_default");
+    $thumbMdDefault = $this->container->getParameter("app_thumb_md_default");
+    $thumbLgDefault = $this->container->getParameter("app_thumb_lg_default");
+    $thumbSm        = $settings->getThumbSm() ?: $thumbSmDefault;
+    $thumbMd        = $settings->getThumbMd() ?: $thumbMdDefault;
+    $thumbLg        = $settings->getThumbLg() ?: $thumbLgDefault;
+
     return [
       "isPublic" => $settings->isPublic(),
-      "thumbSm"  => $settings->getThumbSm(),
-      "thumbMd"  => $settings->getThumbMd(),
-      "thumbLg"  => $settings->getThumbLg()
+      "thumbSm"  => $thumbSm,
+      "thumbMd"  => $thumbMd,
+      "thumbLg"  => $thumbLg
     ];
   }
 

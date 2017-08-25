@@ -88,8 +88,8 @@ export default class UsersPanel extends React.Component {
       )}
       >
         <List>
-          <ListItem className="up-block" button>
-            <div className="up-room-user up-room-thumb">
+          <ListItem className="up-block up-room-thumb" button>
+            <div className="up-room-user">
               <Avatar src={roomSettings.thumbSm} className="up-avatar" />
               <span className="up-username">/r/{roomName}</span>
             </div>
