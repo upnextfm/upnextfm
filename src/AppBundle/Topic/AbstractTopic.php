@@ -2,6 +2,7 @@
 namespace AppBundle\Topic;
 
 use AppBundle\Entity\PrivateMessage;
+use AppBundle\Entity\RoomSettings;
 use AppBundle\Entity\User;
 use AppBundle\Storage\RoomStorage;
 use Doctrine\ORM\EntityManagerInterface;
@@ -186,6 +187,20 @@ abstract class AbstractTopic implements TopicInterface
     }
 
     return $room;
+  }
+
+  /**
+   * @param RoomSettings $settings
+   * @return array
+   */
+  protected function serializeRoomSettings(RoomSettings $settings)
+  {
+    return [
+      "isPublic" => $settings->isPublic(),
+      "thumbSm"  => $settings->getThumbSm(),
+      "thumbMd"  => $settings->getThumbMd(),
+      "thumbLg"  => $settings->getThumbLg()
+    ];
   }
 
   /**

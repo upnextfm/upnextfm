@@ -115,7 +115,7 @@ class RoomSettings
   /**
    * @return boolean
    */
-  public function isIsPublic()
+  public function isPublic()
   {
     return $this->isPublic;
   }

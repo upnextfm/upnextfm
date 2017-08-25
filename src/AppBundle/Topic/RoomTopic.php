@@ -58,6 +58,16 @@ class RoomTopic extends AbstractTopic
     }
 
     $connection->event($topic->getId(), [
+      "cmd"      => RoomCommands::SETTINGS,
+      "settings" => [
+        "user" => [
+          "showNotices" => true
+        ],
+        "site" => [],
+        "room" => $this->serializeRoomSettings($room->getSettings())
+      ]
+    ]);
+    $connection->event($topic->getId(), [
       "cmd"      => RoomCommands::MESSAGES,
       "messages" => array_reverse($this->serializeMessages($messages))
     ]);
@@ -69,16 +79,7 @@ class RoomTopic extends AbstractTopic
       "cmd"   => RoomCommands::USERS,
       "users" => $users
     ]);
-    $connection->event($topic->getId(), [
-      "cmd"      => RoomCommands::SETTINGS,
-      "settings" => [
-        "user" => [
-          "showNotices" => true
-        ],
-        "site" => [],
-        "room" => []
-      ]
-    ]);
+
     if ($user !== null) {
       $topic->broadcast([
         "cmd"  => RoomCommands::JOINED,

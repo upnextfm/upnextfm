@@ -83,6 +83,11 @@ export default class UsersPanel extends React.Component {
       )}
       >
         <List>
+          <ListItem className="up-block" button>
+            <div className="up-room-user">
+              <span>/r/lobby</span>
+            </div>
+          </ListItem>
           {roomUsers.map(username => (
             <ListItem
               key={username}
