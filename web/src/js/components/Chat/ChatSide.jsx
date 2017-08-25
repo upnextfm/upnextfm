@@ -4,7 +4,7 @@ import Favico from 'favico.js';
 import { connect } from 'react-redux';
 import { pmsSubscribe, pmsSend } from 'actions/pmsActions';
 import { roomJoin, roomSend, roomInputChange } from 'actions/roomActions';
-import { layoutWindowFocused, layoutToggleUsersCollapsed } from 'actions/layoutActions';
+import { layoutWindowFocused, layoutToggleUsersCollapsed, layoutSwitchActiveChat } from 'actions/layoutActions';
 import { domOnWindowBlur } from 'utils/dom';
 import * as api from 'api';
 import UsersPanel from 'components/Chat/UsersPanel';
@@ -77,10 +77,15 @@ class ChatSide extends React.Component {
     this.messagesPanelRef.scrollToBottom();
   };
 
+  handleClickRoomThumb = () => {
+    this.props.dispatch(layoutSwitchActiveChat('room'));
+  };
+
   renderUsersPanel() {
     return (
       <UsersPanel
         onCollapse={this.handleCollapseUsers}
+        onClickRoomThumb={this.handleClickRoomThumb}
         pms={this.props.pms}
         roomName={this.props.roomName}
         roomSettings={this.props.settings.room}

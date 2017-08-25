@@ -22,21 +22,23 @@ function getNumNewMessages(conversations, fromUsername) {
 
 export default class UsersPanel extends React.Component {
   static propTypes = {
-    pms:          PropTypes.object,
-    roomName:     PropTypes.string,
-    roomSettings: PropTypes.object,
-    roomUsers:    PropTypes.array,
-    repoUsers:    PropTypes.array,
-    isCollapsed:  PropTypes.bool,
-    onCollapse:   PropTypes.func
+    pms:              PropTypes.object,
+    roomName:         PropTypes.string,
+    roomSettings:     PropTypes.object,
+    roomUsers:        PropTypes.array,
+    repoUsers:        PropTypes.array,
+    isCollapsed:      PropTypes.bool,
+    onCollapse:       PropTypes.func,
+    onClickRoomThumb: PropTypes.func
   };
 
   static defaultProps = {
-    pms:         {},
-    roomUsers:   [],
-    repoUsers:   [],
-    isCollapsed: false,
-    onCollapse:  () => {}
+    pms:              {},
+    roomUsers:        [],
+    repoUsers:        [],
+    isCollapsed:      false,
+    onCollapse:       () => {},
+    onClickRoomThumb: () => {}
   };
 
   constructor(props) {
@@ -76,6 +78,7 @@ export default class UsersPanel extends React.Component {
       activeChat,
       isCollapsed,
       onCollapse,
+      onClickRoomThumb,
       conversations = pms.conversations
     } = this.props;
 
@@ -88,7 +91,7 @@ export default class UsersPanel extends React.Component {
       )}
       >
         <List>
-          <ListItem className="up-block up-room-thumb" button>
+          <ListItem className="up-block up-room-thumb" onClick={onClickRoomThumb} button>
             <div className="up-room-user">
               <Avatar src={roomSettings.thumbSm} className="up-avatar" />
               <span className="up-username">/r/{roomName}</span>
