@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { usersFindByUsername } from 'utils/users';
 import Hidden from 'material-ui/Hidden';
+import Avatar from 'material-ui/Avatar';
 import List, { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
@@ -88,8 +89,8 @@ export default class UsersPanel extends React.Component {
       >
         <List>
           <ListItem className="up-block" button>
-            <div className="up-room-user">
-              <img src={roomSettings.thumbSm} className="up-room-thumb" alt="Room thumbnail" />
+            <div className="up-room-user up-room-thumb">
+              <Avatar src={roomSettings.thumbSm} className="up-avatar" />
               <span className="up-username">/r/{roomName}</span>
             </div>
           </ListItem>

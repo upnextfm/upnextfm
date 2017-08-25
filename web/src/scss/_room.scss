@@ -82,8 +82,7 @@ $height-avatar-collapsed: auto;
     background-color: darken($color-secondary, 5%);
   }
 
-  .up-avatar,
-  .up-room-thumb {
+  .up-avatar {
     width: $width-avatar !important;
     height: $height-avatar !important;
 
@@ -91,11 +90,6 @@ $height-avatar-collapsed: auto;
       width: $width-avatar-collapsed !important;
       height: $height-avatar-collapsed !important;
     }
-  }
-
-  .up-room-thumb {
-    border-radius: 50%;
-    margin-right: ($padding-std * 2);
   }
 
   .up-username {
