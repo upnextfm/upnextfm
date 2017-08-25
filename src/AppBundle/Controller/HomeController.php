@@ -97,7 +97,7 @@ class HomeController extends Controller
    */
   public function helpAction()
   {
-
+    return $this->render(":home:help.html.twig");
   }
 
   /**
