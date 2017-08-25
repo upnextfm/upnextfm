@@ -101,17 +101,17 @@ class NavDrawer extends React.Component {
 
     const aboutListItems = (
       <div>
-        <ListItem onClick={() => { window.open('/about'); }} button>
-          <ListItemIcon>
-            <Info />
-          </ListItemIcon>
-          <ListItemText primary="About Us" />
-        </ListItem>
         <ListItem onClick={() => { dispatch(layoutToggleHelpDialog()); }} button>
           <ListItemIcon>
             <Help />
           </ListItemIcon>
           <ListItemText primary="Help" />
+        </ListItem>
+        <ListItem onClick={() => { window.open('/about'); }} button>
+          <ListItemIcon>
+            <Info />
+          </ListItemIcon>
+          <ListItemText primary="About Us" />
         </ListItem>
       </div>
     );
@@ -141,13 +141,15 @@ class NavDrawer extends React.Component {
     return (
       <div className="up-drawer__controls">
         <div>
-          <TwitterShareButton url={document.location.href}>
-            <TwitterIcon size={32} round />
-          </TwitterShareButton>
           <RedditShareButton url={document.location.href}>
             <RedditIcon size={32} round />
           </RedditShareButton>
-          <p>2017 &copy; upnext.fm</p>
+          <TwitterShareButton url={document.location.href}>
+            <TwitterIcon size={32} round />
+          </TwitterShareButton>
+          <p>
+            &copy; 2017 upnext.fm &bull; <a href="/terms">Terms of Use</a>
+          </p>
         </div>
       </div>
     );

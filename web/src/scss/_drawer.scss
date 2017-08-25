@@ -33,11 +33,21 @@
   width: 100%;
   display: flex;
   text-align: center;
+  text-transform: uppercase;
   color: $color-dim;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   padding: $padding-std;
   flex-direction: column;
   justify-content: center;
+
+  a {
+    color: $color-dim;
+    text-decoration: none;
+  }
+
+  .up-social-icon {
+    background-color: #FFF;
+  }
 
   .SocialMediaShareButton {
     outline: 0;
