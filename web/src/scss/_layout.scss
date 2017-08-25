@@ -57,3 +57,24 @@ a {
   width: 100%;
   z-index: 4;
 }
+
+.up-about {
+  a {
+    color: $color-primary;
+    text-decoration: underline;
+  }
+
+  h4 {
+    color: $color-primary;
+    margin: 88px auto;
+    max-width: 50%;
+
+    small {
+      font-size: 1rem;
+    }
+  }
+
+  .parallax img {
+    filter: grayscale(1);
+  }
+}

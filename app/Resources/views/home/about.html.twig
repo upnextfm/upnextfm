@@ -1,16 +1,63 @@
 {% extends "base.html.twig" %}
 {% block title %}About{% endblock %}
 {% block body %}
-    <h1 class="center-align flow-text">
-        About Us
-    </h1>
+    <div class="up-main up-about">
+        <h1 class="center-align">About Us</h1>
+        <h4 class="center-align flow-text" style="margin-top: 0;">
+            It all started April 1st, 2016, when the founding members met each other
+            on <a href="http://knowyourmeme.com/memes/events/robin">Reddit Robin</a>.
+            They had fun together and there was much rejoicing.
+        </h4>
+        <div class="parallax-container hide-on-small-only">
+            <div class="parallax">
+                <img src="{{ asset("images/about/robin.jpg") }}" />
+            </div>
+        </div>
+
+        <h4 class="center-align flow-text">
+            The founders moved to Cytube when Robin ended a week later, where they
+            established a new mecca for the group in a room called <i><a href="https://cytu.be/r/pienudes">Pienudes</a></i>.
+        </h4>
+        <div class="parallax-container hide-on-small-only">
+            <div class="parallax">
+                <img src="{{ asset("images/about/cytube.png") }}" />
+            </div>
+        </div>
+
+        <h4 class="center-align flow-text">
+            One of the founders said, "Hey, Cytube is open source. Let's create our own site!"
+            So they forked Cytube and registered pienudes.com and there was much rejoicing.
+        </h4>
+        <div class="parallax-container hide-on-small-only">
+            <div class="parallax">
+                <img src="{{ asset("images/about/pienudes.png") }}" />
+            </div>
+        </div>
+
+        <h4 class="center-align flow-text">
+            After much deliberation the founders decided on renaming the site and upnext.fm was born!<br />
+            <small>(There was much rejoicing.)</small>
+        </h4>
+        <div class="parallax-container hide-on-small-only">
+            <div class="parallax">
+                <img src="{{ asset("images/logo-md.png") }}" />
+            </div>
+        </div>
+
+        <h4 class="center-align flow-text">
+            Over the next year the founders moved on and upnext.fm fell into disrepair. One of the
+            remaining founders said, "We should rebuild!" So they did and it was good.
+        </h4>
+        <h4 class="center-align flow-text" style="font-size: 50px;">
+            Welcome to our site!
+        </h4>
+    </div>
     <div class="up-main container">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ullamcorper erat ut velit suscipit lobortis. Sed non est ac dolor posuere bibendum. Vestibulum luctus ex vitae tortor dignissim fringilla. Phasellus lectus mi, laoreet pharetra ex quis, dignissim lacinia neque. Proin sed orci et turpis ultrices dapibus eget eu mauris. Integer efficitur dui justo, non consectetur velit varius nec. Quisque fringilla, neque sit amet finibus laoreet, magna nulla elementum dolor, id gravida lorem risus vitae nunc. Etiam at malesuada nisl.</p>
-        <h2 class="center-align flow-text">
+        <h2 class="center-align flow-text" style="margin-bottom: 48px;">
             Developers
         </h2>
-        <div class="row">
-            <a  href="{{ path("profile", {username: "headzoo"}) }}" class="col s6 m2 offset-m4 center-align">
+        <div class="row" style="margin-bottom: 88px;">
+            <a href="{{ path("profile", {username: "headzoo"}) }}" class="col s6 m2 offset-m4 center-align">
                 <img src="{{ headzoo.info.avatarMd }}" class="up-avatar" />
                 <h6 class="center-align">headzoo</h6>
             </a>
@@ -20,12 +67,12 @@
             </a>
         </div>
 
-        <h2 class="center-align flow-text">
+        <h2 class="center-align flow-text" style="margin-bottom: 48px;">
             Founding Members
         </h2>
         <div class="row">
             {% for user in founding %}
-                <a  href="{{ path("profile", {username: user.username}) }}" class="col s4 m1 center-align up-avatar--about" style="height: 85px;">
+                <a href="{{ path("profile", {username: user.username}) }}" class="col s4 m1 center-align up-avatar--about" style="height: 85px;">
                     <img src="{{ user.info.avatarSm }}" class="up-avatar up-avatar--sm" />
                     <div class="center-align" style="font-size: 10px;">
                         {{ user.username }}
@@ -34,4 +81,10 @@
             {% endfor %}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('.parallax').parallax();
+    </script>
 {% endblock %}
