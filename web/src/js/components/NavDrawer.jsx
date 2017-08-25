@@ -9,6 +9,7 @@ import Divider from 'material-ui/Divider';
 import StarIcon from 'material-ui-icons/Star';
 import CompareArrows from 'material-ui-icons/CompareArrows';
 import AccountCircle from 'material-ui-icons/AccountCircle';
+import Comment from 'material-ui-icons/Comment';
 import Face from 'material-ui-icons/Face';
 import Favorite from 'material-ui-icons/Favorite';
 import Help from 'material-ui-icons/Help';
@@ -17,6 +18,7 @@ import Auth from 'api/Auth';
 
 class NavDrawer extends React.Component {
   static propTypes = {
+    roomName:        PropTypes.string.isRequired,
     auth:            PropTypes.object.isRequired,
     layout:          PropTypes.object,
     dispatch:        PropTypes.func,
@@ -35,7 +37,7 @@ class NavDrawer extends React.Component {
   };
 
   renderList() {
-    const { auth, layout, onClickLogin, onClickRegister, dispatch } = this.props;
+    const { auth, onClickLogin, onClickRegister, dispatch } = this.props;
 
     let authListItems = null;
     if (auth.isAuthenticated) {
@@ -86,6 +88,17 @@ class NavDrawer extends React.Component {
       );
     }
 
+    const roomListItems = (
+      <div>
+        <ListItem onClick={() => { window.open(`/chat/logs/${this.props.roomName}`); }} button>
+          <ListItemIcon>
+            <Comment />
+          </ListItemIcon>
+          <ListItemText primary="Chat Logs" />
+        </ListItem>
+      </div>
+    );
+
     const aboutListItems = (
       <div>
         <ListItem onClick={() => { window.open('/about'); }} button>
@@ -107,6 +120,10 @@ class NavDrawer extends React.Component {
       <div className="up-room-drawer">
         <List disablePadding>
           {authListItems}
+        </List>
+        <Divider />
+        <List disablePadding>
+          {roomListItems}
         </List>
         <Divider />
         <List disablePadding>

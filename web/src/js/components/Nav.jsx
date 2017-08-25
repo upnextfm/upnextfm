@@ -18,6 +18,7 @@ import PlayIcon from 'components/Icons/PlayIcon';
 
 class Nav extends React.Component {
   static propTypes = {
+    roomName: PropTypes.string.isRequired,
     auth:     PropTypes.object,
     layout:   PropTypes.object,
     video:    PropTypes.object,
@@ -64,7 +65,7 @@ class Nav extends React.Component {
   };
 
   render() {
-    const { auth, video } = this.props;
+    const { roomName, auth, video } = this.props;
 
     return (
       <AppBar position="static" color="default">
@@ -106,7 +107,12 @@ class Nav extends React.Component {
             </div>
           </Hidden>
         </Toolbar>
-        <NavDrawer auth={auth} onClickLogin={this.handleClickLogin} onClickRegister={this.handleClickRegister} />
+        <NavDrawer
+          auth={auth}
+          roomName={roomName}
+          onClickLogin={this.handleClickLogin}
+          onClickRegister={this.handleClickRegister}
+        />
       </AppBar>
     );
   }

@@ -31,13 +31,9 @@ class RoomController extends Controller
   public function apiPlaylistAddAction($name, $playID)
   {
     $em = $this->getDoctrine();
-    $roomRepo  = $em->getRepository("AppBundle:Room");
     $videoRepo = $em->getRepository("AppBundle:VideoLog");
 
-    $room = $roomRepo->findByName($name);
-    if (!$room) {
-      throw $this->createNotFoundException();
-    }
+    $room     = $this->findRoom($name);
     $videoLog = $videoRepo->findByID($playID);
     if (!$videoLog) {
       throw $this->createNotFoundException();

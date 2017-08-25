@@ -44,6 +44,13 @@
     </div>
 {% endmacro %}
 
+{% macro chatLog(log) %}
+    <li>
+        {{ log.user.username }}
+        {{ log.message|raw }}
+    </li>
+{% endmacro %}
+
 {% macro pagination(route, currentPage, minPage, maxPage) %}
     <ul class="pagination">
         <li {{ currentPage == 1 ? 'class="disabled"' }}>

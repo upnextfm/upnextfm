@@ -1,0 +1,23 @@
+{% import "::macros.htm.twig" as macros %}
+{% extends "base.html.twig" %}
+{% block title %}Chat Logs{% endblock %}
+{% block body %}
+    <h2 class="center-align up-page-title flow-text">
+        Chat Logs
+    </h2>
+    <div class="container up-main up-container--narrow">
+        <form method="get">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="input-search" type="text" name="q" value="{{ searchTerm }}">
+                    <label for="input-search">Search</label>
+                </div>
+            </div>
+        </form>
+        <ul class="up-chat-logs">
+            {% for log in logs %}
+                {{ macros.chatLog(log) }}
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

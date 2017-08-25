@@ -26,7 +26,7 @@ class Room extends React.Component {
 
     return (
       <div>
-        <Nav auth={auth} />
+        <Nav auth={auth} roomName={roomName} />
         <Hidden smUp>
           <VideoNav />
         </Hidden>
