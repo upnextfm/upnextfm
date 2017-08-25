@@ -31,18 +31,14 @@ $button-flat-color: #FFF;
 .up-room-card {
   background-color: #292929;
 
-  .up-crop {
-    height: 200px;
-    display: block;
-    overflow: hidden;
-
-    img {
-      margin-top: -50px;
-    }
-  }
-
   .card-title {
     margin-top: 0;
+  }
+
+  .up-card-image {
+    height: 280px;
+    display: block;
+    background-size: cover;
   }
 }
 

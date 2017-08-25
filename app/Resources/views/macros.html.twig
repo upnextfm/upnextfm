@@ -2,8 +2,8 @@
     <div class="col s12 m2">
         <div class="card up-room-card">
             <div class="card-image">
-                <a href="{{ path("room", {name: room.name}) }}" class="up-crop">
-                    <img src="{{ room.settings.thumbSm }}" />
+                <a href="{{ path("room", {name: room.name}) }}" class="up-card-image" style="background-image: url({{ room.settings.thumbSm }});">
+
                 </a>
             </div>
             <div class="card-content">
