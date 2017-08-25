@@ -80,7 +80,16 @@ class HomeController extends Controller
    */
   public function aboutAction()
   {
-    return $this->render(":home:about.html.twig");
+    $userRepo = $this->getDoctrine()->getRepository("AppBundle:User");
+    $headzoo  = $userRepo->findByUsername("headzoo");
+    $az4521   = $userRepo->findByUsername("az4521");
+    $founding = $userRepo->findFoundingMembers();
+
+    return $this->render(":home:about.html.twig", [
+      "headzoo"  => $headzoo,
+      "az4521"   => $az4521,
+      "founding" => $founding
+    ]);
   }
 
   /**

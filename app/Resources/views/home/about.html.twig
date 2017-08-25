@@ -1,23 +1,37 @@
 {% extends "base.html.twig" %}
 {% block title %}About{% endblock %}
 {% block body %}
-    <h2 class="center-align up-page-title flow-text">
+    <h1 class="center-align flow-text">
         About Us
-    </h2>
-    <div class="up-main container up-container--narrow" style="text-align: justify; font-size: 18px;">
-        UpNext is your community jukebox.
-        We're a group of strangers who met each other through internet chatrooms (reddit.com/r/joinrobin) and
-        found shared common interests through sharing and listening to music together in real time. Our music
-        channels are a melting pot of different genres and sounds from all over the world that reflect our diverse
-        userbase. Join us for a fun and unique listening experience by sharing your songs on the playlist or
-        spamming your favorite custom emotes in chat; upnext.fm is a close-knit community where everyone and
-        every sound is welcome :)
+    </h1>
+    <div class="up-main container">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ullamcorper erat ut velit suscipit lobortis. Sed non est ac dolor posuere bibendum. Vestibulum luctus ex vitae tortor dignissim fringilla. Phasellus lectus mi, laoreet pharetra ex quis, dignissim lacinia neque. Proin sed orci et turpis ultrices dapibus eget eu mauris. Integer efficitur dui justo, non consectetur velit varius nec. Quisque fringilla, neque sit amet finibus laoreet, magna nulla elementum dolor, id gravida lorem risus vitae nunc. Etiam at malesuada nisl.</p>
+        <h2 class="center-align flow-text">
+            Developers
+        </h2>
+        <div class="row">
+            <a  href="{{ path("profile", {username: "headzoo"}) }}" class="col s6 m2 offset-m4 center-align">
+                <img src="{{ headzoo.info.avatarMd }}" class="up-avatar" />
+                <h6 class="center-align">headzoo</h6>
+            </a>
+            <a href="{{ path("profile", {username: "az4521"}) }}" class="col s6 m2 center-align">
+                <img src="{{ az4521.info.avatarMd }}" class="up-avatar" />
+                <h6 class="center-align">az4521</h6>
+            </a>
+        </div>
+
+        <h2 class="center-align flow-text">
+            Founding Members
+        </h2>
+        <div class="row">
+            {% for user in founding %}
+                <a  href="{{ path("profile", {username: user.username}) }}" class="col s4 m1 center-align up-avatar--about" style="height: 85px;">
+                    <img src="{{ user.info.avatarSm }}" class="up-avatar up-avatar--sm" />
+                    <div class="center-align" style="font-size: 10px;">
+                        {{ user.username }}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
     </div>
-    <a href="https://github.com/upnextfm/upnextfm">
-        <img
-            style="position: absolute; top: 42px; right: 0; border: 0;"
-            src="{{ asset("images/forkme_right_gray_6d6d6d.png") }}"
-            alt="Fork me on GitHub"
-        />
-    </a>
 {% endblock %}

@@ -30,4 +30,16 @@ class UserRepository extends AbstractRepository
       "email" => $email
     ]);
   }
+
+  /**
+   * @return User[]
+   */
+  public function findFoundingMembers()
+  {
+    return $this->createQueryBuilder("u")
+      ->where("u.id < 37")
+      ->orderBy("u.username", "asc")
+      ->getQuery()
+      ->execute();
+  }
 }
