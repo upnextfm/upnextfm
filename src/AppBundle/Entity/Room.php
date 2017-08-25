@@ -116,6 +116,24 @@ class Room
   /**
    * @return string
    */
+  public function getDisplayName()
+  {
+    return $this->displayName;
+  }
+
+  /**
+   * @param string $displayName
+   * @return $this
+   */
+  public function setDisplayName($displayName)
+  {
+    $this->displayName = $displayName;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
   public function getDescription()
   {
     return $this->description;
