@@ -99,4 +99,12 @@ class HomeController extends Controller
   {
 
   }
+
+  /**
+   * @Route("/ayy", name="ayy")
+   */
+  public function ayyAction()
+  {
+    return $this->render(":home:ayy.html.twig");
+  }
 }

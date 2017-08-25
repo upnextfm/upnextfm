@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+{% block title %}AYY{% endblock %}
+{% block body %}
+    <object id="ayy" width="100%" height="100%">
+        <param name="movie" value="{{ asset("ayy_lmao.swf") }}">
+        <param name="scale" value="exactfit">
+        <embed src="{{ asset("ayy_lmao.swf") }}" width="100%" height="100%" scale="exactfit">
+        </embed>
+    </object>
+{% endblock %}
