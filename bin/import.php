@@ -19,6 +19,7 @@ $pdoCytube = new \PDO(
 
 importUserInfo();
 importRooms();
+importRoomSettings();
 importVideos();
 importVideoLogs();
 importChatLogs();
@@ -312,6 +313,46 @@ function importRooms()
   }
 }
 
+function importRoomSettings()
+{
+  global $pdoUpnext, $pdoCytube;
+
+  foreach($pdoUpnext->query("SELECT * FROM `room`") as $row) {
+    $channel = fetchCytubeChannelByName($row["name"]);
+    if (!$channel) {
+      continue;
+    }
+
+    println($channel["name"]);
+
+    $stmt = $pdoCytube->prepare("SELECT * FROM `channel_data` WHERE `channel_id` = :channel_id AND `key` = 'opts' LIMIT 1");
+    $stmt->execute([":channel_id" => $channel["id"]]);
+    $opts = json_decode($stmt->fetch(PDO::FETCH_ASSOC)["value"], true);
+    if (!$opts["join_msg"]) {
+      $opts["join_msg"] = "";
+    }
+
+    $exec = [
+      ":room_id"      => $row["id"],
+      ":is_public"    => 1,
+      ":join_message" => $opts["join_msg"],
+      ":thumb_sm"     => $opts["thumbnail"],
+      ":thumb_md"     => $opts["thumbnail"],
+      ":thumb_lg"     => $opts["thumbnail"],
+      ":date_updated" => date("Y-m-d H:i:s")
+    ];
+
+    $sql = "
+      INSERT INTO `room_settings`
+      (`room_id`, `is_public`, `thumb_sm`, `thumb_md`, `thumb_lg`, `join_message`, `date_updated`)
+      VALUES
+      (:room_id, :is_public, :thumb_sm, :thumb_md, :thumb_lg, :join_message, :date_updated)
+    ";
+    $stmt = $pdoUpnext->prepare($sql);
+    $stmt->execute($exec);
+  }
+}
+
 /**
  * @param string $username
  * @return array
@@ -348,6 +389,19 @@ function fetchCytubeChannelByID($channelID)
 
   $stmt = $pdoCytube->prepare("SELECT * FROM `channels` WHERE `id` = :id LIMIT 1");
   $stmt->execute([":id" => $channelID]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * @param string $name
+ * @return array
+ */
+function fetchCytubeChannelByName($name)
+{
+  global $pdoCytube;
+
+  $stmt = $pdoCytube->prepare("SELECT * FROM `channels` WHERE `name` = :name LIMIT 1");
+  $stmt->execute([":name" => $name]);
   return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 

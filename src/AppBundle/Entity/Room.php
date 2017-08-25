@@ -28,6 +28,13 @@ class Room
 
   /**
    * @var string
+   * @Groups({"elastica"})
+   * @ORM\Column(name="display_name", type="string", length=50, nullable=false)
+   */
+  protected $displayName = "";
+
+  /**
+   * @var string
    * @ORM\Column(name="description", type="text", nullable=true)
    */
   protected $description = "";
@@ -59,6 +66,13 @@ class Room
    * @ORM\Column(name="date_created", type="datetime", nullable=false)
    */
   protected $dateCreated;
+
+  /**
+   * @var RoomSettings
+   *
+   * @ORM\OneToOne(targetEntity="AppBundle\Entity\RoomSettings", mappedBy="room", fetch="EAGER", cascade={"persist"})
+   */
+  protected $settings;
 
   /**
    * Constructor
@@ -186,6 +200,24 @@ class Room
   public function setDateCreated($dateCreated)
   {
     $this->dateCreated = $dateCreated;
+    return $this;
+  }
+
+  /**
+   * @return RoomSettings
+   */
+  public function getSettings()
+  {
+    return $this->settings;
+  }
+
+  /**
+   * @param RoomSettings $settings
+   * @return $this
+   */
+  public function setSettings($settings)
+  {
+    $this->settings = $settings;
     return $this;
   }
 }
