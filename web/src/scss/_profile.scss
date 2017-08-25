@@ -59,6 +59,10 @@
 	display: flex;
 	flex-wrap: wrap;
 }
+.up-profile__playlist > div > .card > .card-image > a > img,
+.up-profile__playlist > div > .card {
+	border-radius: 0;
+}
 .up-profile__playlist > div {
 	flex: 1 0 20vw;
 	margin: 0 .5rem;

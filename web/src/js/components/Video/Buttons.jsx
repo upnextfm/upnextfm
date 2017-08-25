@@ -19,7 +19,7 @@ class Buttons extends React.Component {
     const { player } = this.props;
 
     return (
-      <div className="up-room-video__buttons up-paper-container">
+      <div className="up-room-video__buttons">
         <IconButton onClick={this.handleClickPlay}>
           <PlayIcon status={player.status} />
         </IconButton>

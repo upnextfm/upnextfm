@@ -231,6 +231,8 @@ $height-avatar-collapsed: auto;
   display: flex;
   flex-wrap: wrap;
   flex: 0 0 48px;
+  background: $color-secondary;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
 }
 
 .up-room-video__playlist {
