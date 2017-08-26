@@ -19,7 +19,7 @@ export function roomSend() {
   return (dispatch, getState, api) => {
     const room = getState().room;
     if (room.name !== '') {
-      if (!api.auth.isAuthenticated()) {
+      if (!getState().auth.isAuthenticated) {
         dispatch(authToggleLoginDialog());
       } else {
         api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
@@ -140,7 +140,7 @@ export function roomJoin(name) {
             type: types.ROOM_JOINED,
             user: payload.user
           });
-          if (api.auth.getUsername() !== payload.user.username) {
+          if (getState().auth.username !== payload.user.username) {
             dispatch(roomMessage({
               type:    'notice',
               id:      nextNoticeID(),

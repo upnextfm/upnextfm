@@ -4,22 +4,18 @@ import { roomJoin } from 'actions/roomActions';
 /**
  * @returns {{type: string}}
  */
-export function authLoginBegin() {
+export function authReset() {
   return {
-    type: types.AUTH_LOGIN_BEGIN
+    type: types.AUTH_RESET
   };
 }
 
 /**
- * @param {{token: string}} resp
- * @param {string} username
- * @returns {{type: string, token: *, username: string}}
+ * @returns {{type: string}}
  */
-export function authLoginComplete(resp, username) {
+export function authLoginBegin() {
   return {
-    type:  types.AUTH_LOGIN_COMPLETE,
-    token: resp.token,
-    username
+    type: types.AUTH_LOGIN_BEGIN
   };
 }
 
@@ -35,22 +31,44 @@ export function authLoginError(error) {
 }
 
 /**
+ * @param username
+ * @returns {{type: string, username: *}}
+ */
+export function authUsername(username) {
+  return {
+    type: types.AUTH_USERNAME,
+    username
+  };
+}
+
+/**
  * @param {{username: string, password: string}} creds
  * @returns {Function}
  */
 export function authLogin(creds) {
   return (dispatch, getState, api) => {
     dispatch(authLoginBegin());
-    return api.auth.login(creds)
+
+    const username = encodeURIComponent(creds.username);
+    const password = encodeURIComponent(creds.password);
+    const config = {
+      method:      'POST',
+      body:        `_username=${username}&_password=${password}&_remember_me=1`,
+      credentials: 'same-origin',
+      headers:     {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    };
+
+    return fetch('/login_check', config)
       .then((resp) => {
-        api.socket.publish(types.CHAN_AUTH, {
-          cmd: types.CMD_AUTH
-        });
+        dispatch(authUsername(creds.username));
         const room = getState().room;
         if (room.name !== '') {
           dispatch(roomJoin(room.name));
         }
-        dispatch(authLoginComplete(resp, creds.username));
+
+        return resp;
       })
       .catch((error) => {
         dispatch(authLoginError(error));
@@ -59,39 +77,22 @@ export function authLogin(creds) {
 }
 
 /**
- * @returns {{type: string}}
- */
-export function authLogoutBegin() {
-  return {
-    type: types.AUTH_LOGOUT_BEGIN
-  };
-}
-
-/**
- * @returns {{type: string}}
- */
-export function authLogoutComplete() {
-  return {
-    type: types.AUTH_LOGOUT_COMPLETE
-  };
-}
-
-/**
  * @returns {Function}
  */
 export function authLogout() {
-  return (dispatch, getState, api) => {
-    dispatch(authLogoutBegin());
-    api.auth.logout();
-    dispatch(authLogoutComplete());
+  return (dispatch) => {
+    dispatch(authLoginBegin());
+    return fetch('/logout', {
+      credentials: 'same-origin'
+    })
+      .then((resp) => {
+        dispatch(authUsername(''));
+        return resp;
+      })
+      .catch((error) => {
+        console.info(error);
+        dispatch(authUsername(''));
+      });
   };
 }
 
-/**
- * @returns {{type: string}}
- */
-export function authReset() {
-  return {
-    type: types.AUTH_RESET
-  };
-}

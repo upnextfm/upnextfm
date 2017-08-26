@@ -1,9 +1,7 @@
 export const AUTH_LOGIN_BEGIN     = 'AUTH_LOGIN_BEGIN';
-export const AUTH_LOGIN_COMPLETE  = 'AUTH_LOGIN_COMPLETE';
 export const AUTH_LOGIN_FAILURE   = 'AUTH_LOGIN_FAILURE';
-export const AUTH_LOGOUT_BEGIN    = 'AUTH_LOGOUT_BEGIN';
-export const AUTH_LOGOUT_COMPLETE = 'AUTH_LOGOUT_COMPLETE';
 export const AUTH_RESET           = 'AUTH_RESET';
+export const AUTH_USERNAME        = 'AUTH_USERNAME';
 
 // export const REGISTER_TOGGLE_DIALOG  = 'REGISTER_TOGGLE_DIALOG';
 export const REGISTER_RESET          = 'REGISTER_RESET';

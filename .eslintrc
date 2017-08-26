@@ -95,7 +95,8 @@
     "jsx-a11y"
   ],
   "globals": {
-    "$": true
+    "$": true,
+    "_WS_URI": true
   },
   "settings": {
     "import/resolver": {

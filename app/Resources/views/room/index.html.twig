@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ name }}{% endblock %}
 {% block body %}
-    <div id="mount" data-room="{{ name }}">
+    <div id="mount" data-room="{{ name }}" data-username="{{ username }}">
         {% include ":_layout:loader.html.twig" %}
     </div>
 {% endblock %}

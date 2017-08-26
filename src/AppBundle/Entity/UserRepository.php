@@ -4,6 +4,17 @@ namespace AppBundle\Entity;
 class UserRepository extends AbstractRepository
 {
   /**
+   * @param int $id
+   * @return User
+   */
+  public function findByID($id)
+  {
+    return $this->findOneBy([
+      "id" => $id
+    ]);
+  }
+
+  /**
    * Returns the user with the given username
    *
    * @param string $username

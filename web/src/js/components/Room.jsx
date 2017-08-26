@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
+import { authUsername } from 'actions/authActions';
 import { layoutToggleLoginDialog, layoutToggleRegisterDialog, layoutToggleHelpDialog } from 'actions/layoutActions';
 import Progress from 'components/Video/Progress';
 import HelpDialog from 'components/Dialogs/HelpDialog';
@@ -17,9 +18,17 @@ class Room extends React.Component {
   static propTypes = {
     roomName:  PropTypes.string.isRequired,
     socketURI: PropTypes.string.isRequired,
-    auth:      PropTypes.object.isRequired,
-    layout:    PropTypes.object.isRequired
+    username:  PropTypes.string,
+    auth:      PropTypes.object,
+    layout:    PropTypes.object
   };
+
+  constructor(props) {
+    super(props);
+    if (props.username) {
+      props.dispatch(authUsername(props.username));
+    }
+  }
 
   render() {
     const { roomName, socketURI, auth, layout, dispatch } = this.props;

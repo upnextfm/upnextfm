@@ -1,5 +1,5 @@
 import * as types from 'actions/actionTypes';
-import { authLoginComplete } from 'actions/authActions';
+import { authUsername } from 'actions/authActions';
 import { roomJoin } from 'actions/roomActions';
 
 /**
@@ -33,10 +33,9 @@ export function registerError(error) {
 /**
  * @returns {{type: string}}
  */
-export function registerComplete(resp) {
+export function registerComplete() {
   return {
-    type: types.REGISTER_COMPLETE,
-    resp
+    type: types.REGISTER_COMPLETE
   };
 }
 
@@ -45,19 +44,39 @@ export function registerComplete(resp) {
  * @returns {Function}
  */
 export function registerSubmit(details) {
-  return (dispatch, getState, api) => {
+  return (dispatch, getState) => {
     dispatch(registerBegin());
-    return api.auth.register(details)
+
+    const email          = encodeURIComponent(details.email);
+    const username       = encodeURIComponent(details.username);
+    const password       = encodeURIComponent(details.password);
+    const emailField     = `fos_user_registration_form[email]=${email}`;
+    const usernameField  = `fos_user_registration_form[username]=${username}`;
+    const passwordField  = `fos_user_registration_form[plainPassword][first]=${password}`;
+    const password2Field = `fos_user_registration_form[plainPassword][second]=${password}`;
+    const config = {
+      method:      'POST',
+      body:        `${emailField}&${usernameField}&${passwordField}&${password2Field}`,
+      credentials: 'same-origin',
+      headers:     {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    };
+
+    return fetch('/register/', config)
       .then((resp) => {
-        api.socket.publish(types.CHAN_AUTH, {
-          cmd: types.CMD_AUTH
-        });
+        if (!resp.ok) {
+          throw Error(resp.error);
+        }
+        dispatch(registerComplete());
+        dispatch(authUsername(details.username));
+
         const room = getState().room;
         if (room.name !== '') {
           dispatch(roomJoin(room.name));
         }
-        dispatch(registerComplete(resp));
-        dispatch(authLoginComplete(resp, details.username));
+
+        return resp;
       })
       .catch((error) => {
         dispatch(registerError(error));

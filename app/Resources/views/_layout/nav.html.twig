@@ -7,9 +7,9 @@
     </a>
     <div style="margin-left: auto">
         {% if app.user %}
-            <a href="{{ path("logout") }}" class="btn btn-flat">Logout</a>
+            <a href="{{ path("fos_user_security_logout") }}" class="btn btn-flat">Logout</a>
         {% elseif not app.user %}
-            <a href="{{ path("login") }}" class="btn btn-flat">Login</a>
+            <a href="{{ path("fos_user_security_login") }}" class="btn btn-flat">Login</a>
         {% endif %}
     </div>
 </nav>

@@ -1,12 +1,12 @@
 <ul id="slide-out" class="side-nav up-drawer">
     <li>
         {% if app.user %}
-            <a href="{{ path("logout") }}">
+            <a href="{{ path("fos_user_security_logout") }}">
                 <i class="material-icons">compare_arrows</i>
                 <span>Logout</span>
             </a>
         {% else %}
-            <a href="{{ path("login") }}">
+            <a href="{{ path("fos_user_security_login") }}">
                 <i class="material-icons">compare_arrows</i>
                 <span>Login</span>
             </a>

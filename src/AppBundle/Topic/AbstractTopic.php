@@ -151,21 +151,13 @@ abstract class AbstractTopic implements TopicInterface
    */
   protected function getUser(ConnectionInterface $connection, array $event = [])
   {
-    if (empty($event["token"])) {
-      $user = $this->clientManipulator->getClient($connection);
-    } else {
-      $request = new Request();
-      $request->headers->set('Authorization', 'Bearer ' . $event["token"]);
-      $creds = $this->tokenAuthenticator->getCredentials($request);
-      if (!$creds) {
-        $user = $this->clientManipulator->getClient($connection);
-      } else {
-        $user = $this->tokenAuthenticator->getUser($creds, $this->userProvider);
-      }
-    }
-
+    $user = $this->clientManipulator->getClient($connection);
     if ($user instanceof UserInterface) {
-      $user = $this->em->getRepository("AppBundle:User")->findByUsername($user->getUsername());
+      $username = $user->getUsername();
+      if ($username) {
+        $user = $this->em->getRepository("AppBundle:User")
+          ->findByUsername($user->getUsername());
+      }
     }
 
     return $user;

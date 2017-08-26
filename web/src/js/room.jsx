@@ -17,13 +17,14 @@ const theme = createMuiTheme({
     primary: orange
   })
 });
-const mount = document.getElementById('mount');
-const name  = mount.getAttribute('data-room');
+const mount    = document.getElementById('mount');
+const name     = mount.getAttribute('data-room');
+const username = mount.getAttribute('data-username');
 
 ReactDOM.render(
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
-      <Room roomName={name} socketURI={_WS_URI} />
+      <Room roomName={name} username={username} socketURI={_WS_URI} />
     </MuiThemeProvider>
   </Provider>
   ,

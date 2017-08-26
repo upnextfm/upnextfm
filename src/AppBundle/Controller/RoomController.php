@@ -3,6 +3,7 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class RoomController extends Controller
 {
@@ -14,10 +15,17 @@ class RoomController extends Controller
    */
   public function indexAction($name)
   {
+    $username = "";
+    $user = $this->getUser();
+    if ($user instanceof UserInterface) {
+      $username = $user->getUsername();
+    }
+
     return $this->render(":room:index.html.twig", [
+      "username"    => $username,
+      "name"        => $name,
       "hide_navbar" => true,
-      "materialize" => false,
-      "name" => $name
+      "materialize" => false
     ]);
   }
 

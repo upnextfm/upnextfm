@@ -41,7 +41,7 @@ export function playlistPlay(codename, provider) {
 
     const room = getState().room;
     if (room.name !== '') {
-      if (!api.auth.isAuthenticated()) {
+      if (!getState().auth.isAuthenticated) {
         return dispatch(authToggleLoginDialog());
       }
       api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {

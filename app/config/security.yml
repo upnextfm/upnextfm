@@ -13,43 +13,18 @@ security:
             id: fos_user.user_provider.username
 
     firewalls:
-        login:
-            pattern:  ^/api/login
-            stateless: true
-            anonymous: true
-            provider:  fos_userbundle
-            form_login:
-                check_path: /api/login_check
-                username_parameter: username
-                password_parameter: password
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
-                require_previous_session: false
-
-        api_refresh_token:
-            pattern:  ^/api/token_refresh
-            stateless: true
-            anonymous: true
-
-        room:
-            pattern: ^/u/.*
-            logout:       true
-            anonymous:    true
-
         main:
-            pattern: ^/
-            logout:       true
-            anonymous:    true
-            stateless:    true
-            guard:
-              authenticators:
-                - lexik_jwt_authentication.jwt_token_authenticator
+            logout:    true
+            anonymous: true
+            pattern:   ^/
+            form_login:
+                provider: fos_userbundle
+
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
     access_control:
-        - { path: ^/api/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/token_refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/register$,  roles: 'IS_AUTHENTICATED_ANONYMOUSLY' }
+      - { path: ^/login$,     roles: 'IS_AUTHENTICATED_ANONYMOUSLY' }
+      - { path: ^/resetting$, roles: 'IS_AUTHENTICATED_ANONYMOUSLY' }

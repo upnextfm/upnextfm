@@ -93,21 +93,17 @@ class RoomTopic extends AbstractTopic
    */
   public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
   {
-    try {
-      $user = $this->getUser($connection);
-      if (!($user instanceof UserInterface)) {
-        return;
-      }
-      $room = $this->getRoom($request->getAttributes()->get("room"), $user);
-      $this->roomStorage->removeUser($room, $user);
-
-      $topic->broadcast([
-        "cmd"      => RoomCommands::PARTED,
-        "username" => $user->getUsername()
-      ]);
-    } catch (\Exception $e) {
-      $this->logger->error($e->getMessage());
+    $user = $this->getUser($connection);
+    if (!($user instanceof UserInterface)) {
+      return;
     }
+    $room = $this->getRoom($request->getAttributes()->get("room"), $user);
+    $this->roomStorage->removeUser($room, $user);
+
+    $topic->broadcast([
+      "cmd"      => RoomCommands::PARTED,
+      "username" => $user->getUsername()
+    ]);
   }
 
   /**

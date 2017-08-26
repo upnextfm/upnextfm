@@ -1,4 +1,3 @@
-import Auth from 'api/Auth';
 
 class Socket {
 
@@ -18,10 +17,6 @@ class Socket {
    */
   connect = (uri) => {
     this.info(`Connecting to ${uri}`);
-    const token = Auth.getToken();
-    if (token !== null) {
-      uri = `${uri}?token=${token}`;
-    }
 
     return new Promise((resolve, reject) => {
       try {
@@ -93,7 +88,6 @@ class Socket {
   publish = (chan, payload) => {
     return new Promise((resolve) => {
       if (this.session) {
-        payload.token = Auth.getToken();
         this.session.publish(chan, payload);
       }
       resolve(this);

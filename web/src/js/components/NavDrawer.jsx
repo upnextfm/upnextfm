@@ -14,7 +14,6 @@ import Face from 'material-ui-icons/Face';
 import Favorite from 'material-ui-icons/Favorite';
 import Help from 'material-ui-icons/Help';
 import Info from 'material-ui-icons/Info';
-import Auth from 'api/Auth';
 
 class NavDrawer extends React.Component {
   static propTypes = {
@@ -49,13 +48,13 @@ class NavDrawer extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Logout" />
           </ListItem>
-          <ListItem onClick={() => { window.open(`/u/${Auth.getUsername()}`); }} button>
+          <ListItem onClick={() => { window.open(`/u/${auth.username}`); }} button>
             <ListItemIcon>
               <Face />
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListItem>
-          <ListItem onClick={() => { window.open(`/u/${Auth.getUsername()}/favorites`); }} button>
+          <ListItem onClick={() => { window.open(`/u/${auth.username}/favorites`); }} button>
             <ListItemIcon>
               <Favorite />
             </ListItemIcon>

@@ -127,19 +127,6 @@ services:
         - { name: gos_web_socket.periodic }
 
     ## ########################################################################
-    ## Websocket Authentication Provider
-    ## ########################################################################
-    gos_web_socket.websocket_authentification.provider:
-        class: AppBundle\Auth\WebsocketAuthenticationProvider
-        arguments:
-            - "@security.token_storage"
-            - "%gos_web_socket.firewall%"
-            - "@gos_web_socket.client_storage"
-            - "@lexik_jwt_authentication.security.guard.jwt_token_authenticator"
-            - "@fos_user.user_provider.username"
-            - "@?monolog.logger.websocket"
-
-    ## ########################################################################
     ## YouTube Service
     ## ########################################################################
     madcoda.youtube.youtube:
@@ -157,3 +144,18 @@ services:
       calls:
         - [setYoutube, ["@madcoda.youtube.youtube"]]
 
+    ## ########################################################################
+    ## Registration Form
+    ## ########################################################################
+    app.form.registration:
+        class: AppBundle\Form\RegistrationType
+        tags:
+            - { name: form.type, alias: registration }
+
+    ## ########################################################################
+    ## Registration Listener
+    ## ########################################################################
+    rs_user.registration_complet:
+        class: AppBundle\Listener\RegistrationListener
+        tags:
+            - { name: kernel.event_subscriber }

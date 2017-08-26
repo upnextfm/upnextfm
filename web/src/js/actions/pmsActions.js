@@ -28,7 +28,7 @@ function dispatchSocketPayload(dispatch, payload) {
  */
 export function pmsSubscribe() {
   return (dispatch, getState, api) => {
-    if (!api.auth.isAuthenticated()) {
+    if (!getState().auth.isAuthenticated) {
       return;
     }
 
@@ -49,7 +49,7 @@ export function pmsSubscribe() {
  */
 export function pmsSend(to, message) {
   return (dispatch, getState, api) => {
-    if (!api.auth.isAuthenticated()) {
+    if (!getState().auth.isAuthenticated) {
       return;
     }
 
