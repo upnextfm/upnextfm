@@ -35,6 +35,14 @@ services:
         - "@snc_redis.rooms"
 
     ## ########################################################################
+    ## Storage Websocket Driver
+    ## ########################################################################
+    app.storage.websocket_driver:
+      class: AppBundle\Storage\SocketPredisDriver
+      arguments:
+        - "@snc_redis.websocket_storage"
+
+    ## ########################################################################
     ## API Request Listener
     ## ########################################################################
     api.request_listener:
@@ -155,7 +163,8 @@ services:
     ## ########################################################################
     ## Registration Listener
     ## ########################################################################
-    rs_user.registration_complet:
+    app.registration_complet:
         class: AppBundle\Listener\RegistrationListener
         tags:
             - { name: kernel.event_subscriber }
+

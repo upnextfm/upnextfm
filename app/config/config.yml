@@ -153,6 +153,10 @@ snc_redis:
       type: predis
       alias: session
       dsn: "%snc_redis_clients_session_dsn%"
+    websocket_storage:
+      type: predis
+      alias: websocket_storage
+      dsn: "%snc_redis_clients_websocket_storage%"
     video:
       type: predis
       alias: video
@@ -215,3 +219,5 @@ gos_web_socket:
   client:
     firewall: main
     session_handler: "@app.session.handler"
+    storage:
+      driver: "@app.storage.websocket_driver"

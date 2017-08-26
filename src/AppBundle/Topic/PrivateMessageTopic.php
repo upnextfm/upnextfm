@@ -23,7 +23,7 @@ class PrivateMessageTopic extends AbstractTopic
    */
   public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $event, array $exclude, array $eligible)
   {
-    $this->logger->info("Got command " . $event["cmd"], array_merge($event, ["token" => ""]));
+    $this->logger->info("Got command " . $event["cmd"]);
 
     $payload = $event["message"];
     if (empty($payload["message"])) {

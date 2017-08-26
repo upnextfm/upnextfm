@@ -118,11 +118,13 @@ class RoomTopic extends AbstractTopic
     array $eligible)
   {
     $this->logger->info("Got command " . $event["cmd"], $event);
+
     $event = array_map("trim", $event);
     if (empty($event["cmd"])) {
       $this->logger->error("cmd not set.", $event);
       return;
     }
+
     $user = $this->getUser($conn);
     if (!($user instanceof UserInterface)) {
       $this->logger->error("User not found.", $event);
