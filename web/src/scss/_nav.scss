@@ -9,17 +9,27 @@
   align-items: center;
   background-color: $color-secondary !important;
 
+  ul {
+    display: flex;
+    align-items: center;
+  }
+
   .right {
     margin-left: auto;
+  }
+
+  .up-avatar {
+    height: 30px;
+    margin-top: 4px;
   }
 }
 
 .brand-logo {
   height: 26px;
-  padding: 0 0 0 ($padding-std * 2) !important;
+  margin-left: ($padding-std * 2);
 
   @include media-xs {
-    padding-left: 0 !important;
+    margin-left: 0;
   }
 
   img {
@@ -39,6 +49,10 @@
 
 nav ul a {
   text-transform: uppercase;
+
+  &:hover {
+    background-color: transparent;
+  }
 }
 
 .up-nav {

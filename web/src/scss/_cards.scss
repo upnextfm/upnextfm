@@ -1,0 +1,42 @@
+@import "vars";
+@import "mixins";
+
+.card-title {
+  margin-top: 0;
+  height: 62px;
+  max-height: 62px;
+  overflow: hidden;
+}
+
+.up-playlist-card {
+  small {
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+  }
+}
+
+.up-room-card {
+  .card-title {
+    height: auto;
+  }
+
+  .up-card-image {
+    height: 280px;
+    display: block;
+    background-size: cover;
+  }
+}
+
+.up-room-card__user-count {
+  display: flex;
+  align-items: center;
+
+  .material-icons {
+    margin-right: $padding-std;
+  }
+
+  span {
+    font-size: 20px;
+  }
+}

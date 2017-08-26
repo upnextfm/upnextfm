@@ -30,6 +30,12 @@ $color-error: red;
   color: $color-error !important;
 }
 
+// Materialize
+$card-bg-color: #292929;
+$primary-color: $color-secondary;
+$secondary-color: $color-primary;
+$button-flat-color: #FFF;
+
 // Shadows
 $shadow-inset: inset 0 2px 2px 0 rgba(0,0,0,.14);
 $shadow-0: 0 0 1px rgba(0, 0, 0, 0);

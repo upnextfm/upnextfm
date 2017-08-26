@@ -1,0 +1,35 @@
+@import "vars";
+@import "mixins";
+
+.page-footer {
+  margin-top: $padding-std * 4;
+  background-color: $card-bg-color;
+
+  h5 {
+    font-size: 1.64rem;
+    line-height: 110%;
+    margin: 0.82rem 0 0.656rem 0;
+  }
+
+  li {
+    margin-bottom: $padding-std;
+  }
+
+  .up-logo {
+    height: 32px;
+    margin: ($padding-std * 2) 0 $padding-std 0;
+  }
+
+  .up-social-icon {
+    height: 48px;
+    margin-right: ($padding-std * 2);
+    margin-top: ($padding-std * 2);
+  }
+}
+
+.footer-copyright {
+  width: 100% !important;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: lighten($card-bg-color, 2%) !important;
+}

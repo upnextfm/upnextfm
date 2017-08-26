@@ -20,7 +20,7 @@
 {% endmacro %}
 
 {% macro playedCard(played, size = "2") %}
-    <div class="col s12 m{{ size }}">
+    <div class="col s12 m4 l{{ size }}">
         <div class="card up-playlist-card" data-id="{{ played.id }}">
             <div class="card-image">
                 <a href="{{ played.video.permalink }}">
