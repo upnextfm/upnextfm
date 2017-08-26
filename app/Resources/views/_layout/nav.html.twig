@@ -1,16 +1,23 @@
-<nav class="up-nav">
-    <button id="up-nav-toggle" class="up-nav__toggle" data-activates="slide-out">
-        <i class="material-icons">menu</i>
-    </button>
-    <a href="/" class="up-brand">
-        <img src="{{ asset('images/logo-brand.png') }}" />
-    </a>
-    <div style="margin-left: auto">
-        {% if app.user %}
-            <a href="{{ path("fos_user_security_logout") }}" class="btn btn-flat">Logout</a>
-        {% elseif not app.user %}
-            <a href="{{ path("fos_user_security_login") }}" class="btn btn-flat">Login</a>
-        {% endif %}
+<nav>
+    <div class="nav-wrapper up-nav-wrapper">
+        <a href="/" class="brand-logo">
+            <img src="{{ asset('images/logo-brand.png') }}" />
+        </a>
+        <a href="#" id="up-nav-toggle" data-activates="slide-out" class="button-collapse">
+            <i class="material-icons">menu</i>
+        </a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li>
+                <a href="{{ path("playlist_recent") }}">Recent</a>
+            </li>
+            <li>
+            {% if app.user %}
+                <a href="{{ path("fos_user_security_logout") }}">Logout</a>
+            {% elseif not app.user %}
+                <a href="{{ path("fos_user_security_login") }}">Login</a>
+            {% endif %}
+            </li>
+        </ul>
     </div>
 </nav>
 {% include ":_layout:drawer.html.twig" %}

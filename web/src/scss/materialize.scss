@@ -5,22 +5,18 @@
 
 $primary-color: $color-secondary;
 $secondary-color: $color-primary;
-$card-bg-color: $color-secondary;
+$card-bg-color: #292929;
 $button-flat-color: #FFF;
 
 @import "../../../node_modules/materialize-css/sass/materialize";
 
 .card-title {
+  margin-top: 0;
   max-height: 62px;
   overflow: hidden;
 }
 
 .up-playlist-card {
-  .card-title {
-    height: 62px;
-    overflow: hidden;
-  }
-
   small {
     display: block;
     font-size: 0.9rem;
@@ -29,12 +25,6 @@ $button-flat-color: #FFF;
 }
 
 .up-room-card {
-  background-color: #292929;
-
-  .card-title {
-    margin-top: 0;
-  }
-
   .up-card-image {
     height: 280px;
     display: block;

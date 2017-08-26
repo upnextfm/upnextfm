@@ -14,7 +14,7 @@ class HomeController extends Controller
    */
   public function indexAction()
   {
-    if ($this->getParameter("kernel.environment") === "dev") {
+    if ($this->isDev()) {
       return $this->homepageAction();
     } else {
       return $this->render(":home:index.html.twig", [

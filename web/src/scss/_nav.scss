@@ -1,12 +1,51 @@
 @import "vars";
 @import "mixins";
 
+.up-nav-wrapper {
+  color: #FFF !important;
+  height: $nav-height !important;
+  min-height: $nav-height !important;
+  display: flex;
+  align-items: center;
+  background-color: $color-secondary !important;
+
+  .right {
+    margin-left: auto;
+  }
+}
+
+.brand-logo {
+  height: 26px;
+  padding: 0 0 0 ($padding-std * 2) !important;
+
+  @include media-xs {
+    padding-left: 0 !important;
+  }
+
+  img {
+    height: 100%;
+  }
+}
+
+.up-brand {
+  margin-top: 8px;
+  margin-left: 4px;
+  cursor: pointer;
+
+  img {
+    height: 19px;
+  }
+}
+
+nav ul a {
+  text-transform: uppercase;
+}
+
 .up-nav {
   color: #FFF !important;
   height: $nav-height !important;
   min-height: $nav-height !important;
   padding: $padding-std !important;
-  background-color: $color-nav-bg !important;
   display: flex;
   text-align: left;
   position: relative;
@@ -59,16 +98,6 @@
 
   button {
     width: 38px !important;
-  }
-}
-
-.up-brand {
-  margin-top: 8px;
-  margin-left: 4px;
-  cursor: pointer;
-
-  img {
-    height: 19px;
   }
 }
 

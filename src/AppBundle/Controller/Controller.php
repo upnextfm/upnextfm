@@ -17,4 +17,12 @@ class Controller
 
     return $room;
   }
+
+  /**
+   * @return bool
+   */
+  public function isDev()
+  {
+    return $this->getParameter("kernel.environment") === "dev";
+  }
 }
