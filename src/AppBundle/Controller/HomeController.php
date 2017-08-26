@@ -14,9 +14,13 @@ class HomeController extends Controller
    */
   public function indexAction()
   {
-    return $this->render(":home:index.html.twig", [
-      "hide_navbar" => true
-    ]);
+    if ($this->getParameter("kernel.environment") === "dev") {
+      return $this->homepageAction();
+    } else {
+      return $this->render(":home:index.html.twig", [
+        "hide_navbar" => true
+      ]);
+    }
   }
 
   /**
