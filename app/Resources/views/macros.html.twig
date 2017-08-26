@@ -1,9 +1,8 @@
 {% macro roomCard(room) %}
     <div class="col s12 m2">
         <div class="card up-room-card">
-            <div class="card-image">
+            <div class="card-image" style="background-color: #{{ room.settings.thumbColor }};">
                 <a href="{{ path("room", {name: room.name}) }}" class="up-card-image" style="background-image: url({{ room.settings.thumbSm }});">
-
                 </a>
             </div>
             <div class="card-content">

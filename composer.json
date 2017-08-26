@@ -30,6 +30,7 @@
         "gos/web-socket-bundle": "^1.8",
         "incenteev/composer-parameter-handler": "^2.0",
         "knplabs/knp-time-bundle": "^1.7",
+        "ksubileau/color-thief-php": "^1.3",
         "lexik/jwt-authentication-bundle": "^2.4",
         "madcoda/php-youtube-api": "^1.2",
         "nelmio/cors-bundle": "^1.4",

@@ -38,6 +38,13 @@ class RoomSettings
   /**
    * @var string
    *
+   * @ORM\Column(name="thumb_color", type="string", length=6, nullable=false)
+   */
+  protected $thumbColor;
+
+  /**
+   * @var string
+   *
    * @ORM\Column(name="thumb_sm", type="string", nullable=false)
    */
   protected $thumbSm;
@@ -127,6 +134,24 @@ class RoomSettings
   public function setIsPublic($isPublic)
   {
     $this->isPublic = $isPublic;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getThumbColor()
+  {
+    return $this->thumbColor;
+  }
+
+  /**
+   * @param string $thumbColor
+   * @return $this
+   */
+  public function setThumbColor($thumbColor)
+  {
+    $this->thumbColor = $thumbColor;
     return $this;
   }
 
