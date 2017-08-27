@@ -25,6 +25,35 @@
   }
 }
 
+.up-founder-quote {
+  flex-wrap: wrap;
+
+  .up-dim {
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+}
+
+.up-founder-avatar {
+  width: 225px;
+  min-width: 225px;
+  display: flex;
+  align-items: center;
+}
+
+.up-avatar--about {
+  display: flex;
+  align-items: center;
+  margin-bottom: $padding-std;
+
+  .up-avatar {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 6px;
+    margin-right: $padding-std;
+  }
+}
+
 #ayy {
   position: absolute;
   left: 0px;

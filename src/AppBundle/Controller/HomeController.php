@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\ChatLog;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\ValueDecorator;
@@ -85,14 +86,28 @@ class HomeController extends Controller
   public function aboutAction()
   {
     $userRepo = $this->getDoctrine()->getRepository("AppBundle:User");
+    $logRepo  = $this->getDoctrine()->getRepository("AppBundle:ChatLog");
     $headzoo  = $userRepo->findByUsername("headzoo");
     $az4521   = $userRepo->findByUsername("az4521");
-    $founding = $userRepo->findFoundingMembers();
+
+    $founding = [];
+    $chatLogs = [];
+    $ignored  = ["TriviaBot", "PieNudesBot"];
+    foreach($userRepo->findFoundingMembers() as $user) {
+      $username = $user->getUsername();
+      $logs     = $logRepo->findRecentByUser($user, 100);
+      if ($logs && !in_array($username, $ignored)) {
+        $founding[] = $user;
+        $rand = rand(0, count($logs) - 1);
+        $chatLogs[$username] = $this->parseLog($logs[$rand]);
+      }
+    }
 
     return $this->render("AppBundle:home:about.html.twig", [
       "headzoo"  => $headzoo,
       "az4521"   => $az4521,
-      "founding" => $founding
+      "founding" => $founding,
+      "chatLogs" => $chatLogs
     ]);
   }
 
@@ -110,5 +125,16 @@ class HomeController extends Controller
   public function ayyAction()
   {
     return $this->render("AppBundle:home:ayy.html.twig");
+  }
+
+  private function parseLog(ChatLog $log)
+  {
+    $message = preg_replace_callback('/\\[#([a-fA-F0-9]{6})\\]/', function($m) {
+      return sprintf('<span style="color: #%s;">', $m[1]);
+    }, $log->getMessage());
+    $message = str_replace('[/#]', '</span>', $message);
+    $log->setMessage($message);
+
+    return $log;
   }
 }

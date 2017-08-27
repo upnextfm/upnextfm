@@ -1,11 +1,11 @@
 <?php
 namespace AppBundle\Entity;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+
 class ChatLogRepository extends AbstractRepository
 {
   /**
-   * Returns the most recent logs for the given room
-   *
    * @param Room $room
    * @param int $limit
    * @return ChatLog[]
@@ -15,6 +15,22 @@ class ChatLogRepository extends AbstractRepository
     return $this->createQueryBuilder("c")
       ->where("c.room = :room")
       ->setParameter("room", $room)
+      ->orderBy("c.id", "desc")
+      ->setMaxResults($limit)
+      ->getQuery()
+      ->execute();
+  }
+
+  /**
+   * @param UserInterface $user
+   * @param $limit
+   * @return ChatLog[]
+   */
+  public function findRecentByUser(UserInterface $user, $limit)
+  {
+    return $this->createQueryBuilder("c")
+      ->where("c.user = :user")
+      ->setParameter("user", $user)
       ->orderBy("c.id", "desc")
       ->setMaxResults($limit)
       ->getQuery()

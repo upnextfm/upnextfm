@@ -15,6 +15,12 @@ body {
   flex-direction: column;
 }
 
+h1, h2, h3 {
+  small {
+    font-size: 0.9rem;
+  }
+}
+
 a {
   color: #FFF;
   cursor: pointer;

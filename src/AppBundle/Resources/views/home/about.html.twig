@@ -70,14 +70,25 @@
         </div>
 
         <h2 class="center-align flow-text" style="margin-bottom: 48px;">
-            Founding Members
+            Founding Members<br />
+            <small>(In alphabetical order)</small>
         </h2>
-        <div class="row">
+        <div class="container">
             {% for user in founding %}
-                <a href="{{ path("profile", {username: user.username}) }}" class="col s4 m1 center-align up-avatar--about" style="height: 85px;">
-                    <img src="{{ user.info.avatarSm }}" class="up-avatar up-avatar--sm" />
-                    <div class="center-align" style="font-size: 10px;">
-                        {{ user.username }}
+                <a href="{{ path("profile", {username: user.username}) }}" class="left-align up-avatar--about">
+                    <div class="up-founder-avatar">
+                        <img src="{{ user.info.avatarSm }}" class="up-avatar up-avatar--sm" />
+                        <div class="up-username">
+                            {{ user.username }}
+                        </div>
+                    </div>
+                    <div class="up-founder-quote">
+                        {% if chatLogs[user.username] %}
+                            {{ chatLogs[user.username].message|raw }}
+                        {% endif %}
+                        <div class="up-dim">
+                            {{ chatLogs[user.username].dateCreated|ago }}
+                        </div>
                     </div>
                 </a>
             {% endfor %}
