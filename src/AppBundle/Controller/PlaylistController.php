@@ -50,6 +50,7 @@ class PlaylistController extends Controller
     }
 
     return $this->render("AppBundle:playlist:recent.html.twig", [
+      "activeTab"      => "recent",
       "playedRecently" => $playedRecently,
       "playedCount"    => $playedCount,
       "currentPage"    => $page,

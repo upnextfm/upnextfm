@@ -47,6 +47,7 @@ twig:
   globals:
     ws_uri: wss://upnext.fm:8080
     materialize: true
+    activeTab: "home"
 
 ## ########################################################################
 ## Doctrine

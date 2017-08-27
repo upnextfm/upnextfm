@@ -1,22 +1,25 @@
 <ul id="slide-out" class="side-nav up-drawer">
-    <li>
-        {% if app.user %}
-            <a href="{{ path("fos_user_security_logout") }}">
-                <i class="material-icons">compare_arrows</i>
-                <span>Logout</span>
-            </a>
-        {% else %}
+    {% if not app.user %}
+        <li>
             <a href="{{ path("fos_user_security_login") }}">
                 <i class="material-icons">compare_arrows</i>
                 <span>Login</span>
             </a>
-        {% endif %}
-    </li>
-    <li><div class="divider"></div></li>
+        </li>
+        <li><div class="divider"></div></li>
+    {% endif %}
     <li>
+        <a href="#!">
+            <i class="material-icons">trending_up</i>
+            Charts
+        </a>
         <a href="{{ path("playlist_recent") }}">
             <i class="material-icons">play_arrow</i>
             Recent
+        </a>
+        <a href="{{ path("chat_logs") }}">
+            <i class="material-icons">question_answer</i>
+            Logs
         </a>
     </li>
     <li><div class="divider"></div></li>
@@ -29,7 +32,7 @@
     <li>
         <a href="{{ path('about') }}" class="up-drawer__item">
             <i class="material-icons">info</i>
-            <span>About Us</span>
+            <span>About</span>
         </a>
     </li>
 </ul>

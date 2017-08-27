@@ -9,18 +9,16 @@
   align-items: center;
   background-color: $color-secondary !important;
 
-  ul {
+  .right {
+    margin-left: auto;
     display: flex;
     align-items: center;
   }
 
-  .right {
-    margin-left: auto;
-  }
-
-  .up-avatar {
-    height: 30px;
-    margin-top: 4px;
+  .left {
+    margin-left: 190px;
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -47,11 +45,30 @@
   }
 }
 
+.up-nav__user {
+  a {
+    display: flex;
+    align-items: center;
+    padding: 4px ($padding-std * 2);
+  }
+
+  .up-avatar {
+    height: 30px;
+    margin-top: 4px;
+  }
+
+  span {
+    margin-left: $padding-std;
+  }
+}
+
 nav ul a {
   text-transform: uppercase;
+  padding: 12px ($padding-std * 2);
 
-  &:hover {
-    background-color: transparent;
+  &:hover,
+  &.up-active {
+    background-color: lighten($color-secondary, 5%);
   }
 }
 

@@ -6,25 +6,44 @@
         <a href="#" id="up-nav-toggle" data-activates="slide-out" class="button-collapse">
             <i class="material-icons">menu</i>
         </a>
-        <ul id="nav-mobile" class="right">
+        <ul id="nav-mobile" class="left">
             <li class="hide-on-med-and-down">
-                <a href="{{ path("playlist_recent") }}">Recent</a>
+                <a href="#!" class="{% if activeTab == "charts" %}up-active{% endif %}">Charts</a>
             </li>
             <li class="hide-on-med-and-down">
-                {% if app.user %}
-                    <a href="{{ path("fos_user_security_logout") }}">Logout</a>
-                {% elseif not app.user %}
-                    <a href="{{ path("fos_user_security_login") }}">Login</a>
-                {% endif %}
+                <a href="{{ path("playlist_recent") }}" class="{% if activeTab == "recent" %}up-active{% endif %}">Recent</a>
             </li>
+            <li class="hide-on-med-and-down">
+                <a href="{{ path("chat_logs") }}" class="{% if activeTab == "chat_logs" %}up-active{% endif %}">Logs</a>
+            </li>
+        </ul>
+
+        <ul class="right">
             {% if app.user %}
-                <li>
-                    <a href="{{ path("profile", {username: app.user.username}) }}">
+                <li class="up-nav__user">
+                    <a href="#!" class="dropdown-button" data-activates="up-user-dropdown">
                         <img src="{{ app.user.info.avatarSm }}" class="up-avatar" />
+                        <span class="up-username hide-on-med-and-down">
+                            {{ app.user.username }}
+                        </span>
                     </a>
+                </li>
+            {% else %}
+                <li>
+                    {% if not app.user %}
+                        <a href="{{ path("fos_user_security_login") }}">Login</a>
+                    {% endif %}
                 </li>
             {% endif %}
         </ul>
     </div>
 </nav>
+{% if app.user %}
+    <ul id="up-user-dropdown" class="dropdown-content">
+        <li><a href="{{ path("profile", {username: app.user.username}) }}">Profile</a></li>
+        <li><a href="#!">Account</a></li>
+        <li class="divider"></li>
+        <li><a href="{{ path("fos_user_security_logout") }}">Logout</a></li>
+    </ul>
+{% endif %}
 {% include "AppBundle:_layout:drawer.html.twig" %}

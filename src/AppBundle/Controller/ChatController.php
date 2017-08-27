@@ -32,6 +32,7 @@ class ChatController extends Controller
     }
 
     return $this->render("AppBundle:chat:logs.html.twig", [
+      "activeTab"  => "chat_logs",
       "logs"       => array_reverse($logs),
       "searchTerm" => $searchTerm
     ]);

@@ -51,3 +51,14 @@ $(() => {
     }
   });
 });
+
+$(() => {
+  if ($.fn.dropdown === undefined) {
+    return;
+  }
+
+  $('.dropdown-button').dropdown({
+    inDuration:  100,
+    outDuration: 225
+  });
+});

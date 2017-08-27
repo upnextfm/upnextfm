@@ -34,6 +34,9 @@ $color-error: red;
 $card-bg-color: #292929;
 $primary-color: $color-secondary;
 $secondary-color: $color-primary;
+$dropdown-color: #FFF;
+$dropdown-bg-color: lighten($color-secondary, 5%);
+$dropdown-hover-bg-color: lighten($color-secondary, 10%);
 $button-flat-color: #FFF;
 
 // Shadows
