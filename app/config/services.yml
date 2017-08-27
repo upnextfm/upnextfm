@@ -175,3 +175,14 @@ services:
       class: AppBundle\RabbitMQ\Consumer\SaveVideoConsumer
       arguments:
         - "@service_container"
+
+    ## ########################################################################
+    ## Sitemap Event Listeners
+    ## ########################################################################
+    app.sitemap.playlist_subscriber:
+      class:     AppBundle\EventListener\SitemapPlaylistSubscriber
+      arguments:
+        - "@router"
+        - "@doctrine.orm.entity_manager"
+      tags:
+        - { name: "kernel.event_subscriber", priority: 100 }
