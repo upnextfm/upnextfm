@@ -1,0 +1,28 @@
+@import "vars";
+@import "mixins";
+
+.up-home {
+  h2, h3, h4 {
+    font-weight: 300;
+  }
+
+  h2 {
+    font-size: 2rem;
+    line-height: 2rem;
+  }
+
+  h3 {
+    font-size: 1.28rem;
+    line-height: 1.28rem;
+    margin-bottom: $padding-std;
+  }
+}
+
+.up-home-news__meta {
+  color: $color-dim;
+  font-size: 0.9rem;
+}
+
+.up-home-news__item {
+  margin: $padding-std 0;
+}

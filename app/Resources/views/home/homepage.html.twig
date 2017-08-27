@@ -1,9 +1,48 @@
 {% import "::macros.html.twig" as macros %}
 {% extends "base.html.twig" %}
 {% block body %}
-    <div class="row">
-        {% for room in rooms %}
-            {{ macros.roomCard(room) }}
-        {% endfor %}
+    <div class="container-fluid">
+        <div class="row">
+            {% for room in rooms %}
+                {{ macros.roomCard(room) }}
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="col s12 m6 up-home">
+                <h2>News</h2>
+                <ul>
+                    <li>
+                        <h3>
+                            <a href="#">
+                                Site is back up!
+                            </a>
+                        </h3>
+                        <div class="up-home-news__meta">
+                            1 day ago
+                        </div>
+                        <p class="up-home-news__item">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vehicula, enim vitae gravida ultricies, enim lorem mattis sapien, ut bibendum eros dui ut orci.
+                        </p>
+                    </li>
+                    <li>
+                        <h3>
+                            <a href="#">
+                                Site is kill again =[
+                            </a>
+                        </h3>
+                        <div class="up-home-news__meta">
+                            29 days ago
+                        </div>
+                        <p class="up-home-news__item">
+                            Sed nisi enim, tincidunt et diam vitae, commodo efficitur nibh. Morbi at turpis eros. Maecenas egestas odio eget metus tempor pharetra.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <div class="col s12 m6 up-home">
+                <h2>Something Here...</h2>
+            </div>
+        </div>
     </div>
 {% endblock %}
