@@ -1,6 +1,6 @@
 <nav>
     <div class="nav-wrapper">
-        <a href="/" class="brand-logo">
+        <a href="{{ path("admin_homepage") }}" class="brand-logo">
             <img src="{{ asset('images/logo-brand.png') }}" />
         </a>
         <a href="#" id="up-nav-toggle" data-activates="slide-out" class="button-collapse">
@@ -8,13 +8,13 @@
         </a>
         <ul id="nav-mobile" class="upa-buttons hide-on-med-and-down">
             <li>
-                <a href="#">Users</a>
+                <a href="{{ path("admin_users") }}">Users</a>
             </li>
             <li>
-                <a href="#">Rooms</a>
+                <a href="{{ path("admin_rooms") }}">Rooms</a>
             </li>
             <li>
-                <a href="#">Playlists</a>
+                <a href="{{ path("admin_playlists") }}">Playlists</a>
             </li>
             <li>
                 <a class="dropdown-button" href="#!" data-activates="dropdown-content">
