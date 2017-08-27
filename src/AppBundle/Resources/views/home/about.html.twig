@@ -61,19 +61,19 @@
         <div class="row" style="margin-bottom: 88px;">
             <a href="{{ path("profile", {username: "headzoo"}) }}" class="col s6 m2 offset-m4 center-align">
                 <img src="{{ headzoo.info.avatarMd }}" class="up-avatar" />
-                <h6 class="center-align">headzoo</h6>
+                <h5 class="center-align up-username">headzoo</h5>
             </a>
             <a href="{{ path("profile", {username: "az4521"}) }}" class="col s6 m2 center-align">
                 <img src="{{ az4521.info.avatarMd }}" class="up-avatar" />
-                <h6 class="center-align">az4521</h6>
+                <h5 class="center-align up-username">az4521</h5>
             </a>
         </div>
 
         <h2 class="center-align flow-text" style="margin-bottom: 48px;">
-            Founding Members<br />
+            Founding Members
             <small>(In alphabetical order)</small>
         </h2>
-        <div class="container">
+        <div class="container" style="margin-bottom: 48px;">
             {% for user in founding %}
                 <a href="{{ path("profile", {username: user.username}) }}" class="left-align up-avatar--about">
                     <div class="up-founder-avatar">
@@ -93,6 +93,30 @@
                 </a>
             {% endfor %}
         </div>
+
+        <h2 class="center-align flow-text" style="margin-bottom: 48px;">
+            Powered By
+            <small>
+                This site would not be possible without the following open source projects.
+            </small>
+        </h2>
+        <p class="up-about-powered-by center-align">
+            <a href="https://symfony.com" title="Symfony">
+                <img src="{{ asset("images/about/logo-symfony.png") }}" alt="Symfony" />
+            </a>
+            <a href="https://facebook.github.io/react" title="React">
+                <img src="{{ asset("images/about/logo-react.png") }}" alt="React" style="height: 56px;" />
+            </a>
+            <a href="http://materializecss.com" title="Materialize CSS">
+                <img src="{{ asset("images/about/logo-materializecss.png") }}" alt="Materialize CSS" style="height: 52px;" />
+            </a>
+            <a href="https://www.elastic.co" title="Elasticsearch">
+                <img src="{{ asset("images/about/logo-elasticsearch.png") }}" alt="Elasticsearch" style="height: 56px;" />
+            </a>
+            <a href="https://www.mysql.com/" title="MySQL">
+                <img src="{{ asset("images/about/logo-mysql.png") }}" alt="MySQL" />
+            </a>
+        </p>
     </div>
 {% endblock %}
 {% block javascripts %}

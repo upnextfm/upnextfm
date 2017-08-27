@@ -46,6 +46,7 @@ twig:
   strict_variables: '%kernel.debug%'
   globals:
     ws_uri: wss://upnext.fm:8080
+    founding_users: "%app_founding_users%"
     materialize: true
     activeTab: "home"
 

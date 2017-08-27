@@ -43,12 +43,14 @@ class UserRepository extends AbstractRepository
   }
 
   /**
+   * @param string[] $usernames
    * @return User[]
    */
-  public function findFoundingMembers()
+  public function findByUsernames(array $usernames)
   {
     return $this->createQueryBuilder("u")
-      ->where("u.id < 37")
+      ->where("u.username IN (:usernames)")
+      ->setParameter("usernames", $usernames)
       ->orderBy("u.username", "asc")
       ->getQuery()
       ->execute();

@@ -16,6 +16,10 @@
     "build": "bin/encore production",
     "migrate": "bin/console doctrine:migrations:migrate --no-interaction",
     "deploy": "ssh ubuntu@upnext.fm 'cd /var/www/upnext.fm && npm run pull'",
+    "deploy:assets": "ssh ubuntu@upnext.fm 'cd /var/www/upnext.fm && npm install && composer update'",
+    "deploy:params": "scp app/config/parameters.yml ubuntu@upnext.fm:/var/www/upnext.fm/app/config/parameters.yml",
+    "deploy:db": "bin/dbexport.sh",
+    "deploy:full": "npm run deploy && npm run deploy:assets && npm run deploy:params && npm run deploy:db",
     "pull": "git pull && npm run build && bin/console cache:clear --no-warmup",
     "lint": "eslint ./web/src/js --cache --cache-location=.cache/eslint --ext .js,.jsx",
     "lint:fix": "npm run lint -- --fix"

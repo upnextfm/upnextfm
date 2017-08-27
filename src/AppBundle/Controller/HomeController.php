@@ -90,16 +90,14 @@ class HomeController extends Controller
     $headzoo  = $userRepo->findByUsername("headzoo");
     $az4521   = $userRepo->findByUsername("az4521");
 
-    $founding = [];
-    $chatLogs = [];
-    $ignored  = ["TriviaBot", "PieNudesBot"];
-    foreach($userRepo->findFoundingMembers() as $user) {
-      $username = $user->getUsername();
-      $logs     = $logRepo->findRecentByUser($user, 100);
-      if ($logs && !in_array($username, $ignored)) {
+    $founding  = [];
+    $chatLogs  = [];
+    $usernames = $this->getParameter("app_founding_users");
+    foreach($userRepo->findByUsernames($usernames) as $user) {
+      if ($logs = $logRepo->findRecentByUser($user, 100)) {
         $founding[] = $user;
         $rand = rand(0, count($logs) - 1);
-        $chatLogs[$username] = $this->parseLog($logs[$rand]);
+        $chatLogs[$user->getUsername()] = $this->parseLog($logs[$rand]);
       }
     }
 

@@ -1,4 +1,5 @@
 @import "vars";
+@import "mixins";
 
 .up-about {
   a {
@@ -35,8 +36,8 @@
 }
 
 .up-founder-avatar {
-  width: 225px;
-  min-width: 225px;
+  width: 246px;
+  min-width: 246px;
   display: flex;
   align-items: center;
 }
@@ -46,11 +47,28 @@
   align-items: center;
   margin-bottom: $padding-std;
 
+  @include media-xs {
+    display: block;
+  }
+
   .up-avatar {
     width: 50px;
     height: 50px;
+    margin-top: 4px;
     margin-bottom: 6px;
-    margin-right: $padding-std;
+    margin-right: $padding-std * 2;
+  }
+
+  .up-username {
+    font-size: 1.1rem;
+  }
+}
+
+.up-about-powered-by {
+
+  img {
+    height: 60px;
+    margin: 15px 10px;
   }
 }
 
