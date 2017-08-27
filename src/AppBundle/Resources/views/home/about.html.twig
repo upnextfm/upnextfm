@@ -87,7 +87,7 @@
                             {{ chatLogs[user.username].message|raw }}
                         {% endif %}
                         <div class="up-dim">
-                            {{ chatLogs[user.username].dateCreated|ago }}
+                            {{ chatLogs[user.username].dateCreated|date }}
                         </div>
                     </div>
                 </a>
