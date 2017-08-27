@@ -117,6 +117,10 @@ class RoomTopic extends AbstractTopic
     array $exclude,
     array $eligible)
   {
+    if (is_string($event) && $event === "ping") {
+      return $conn->event($topic->getId(), "pong");
+    }
+
     $this->logger->info("Got command " . $event["cmd"], $event);
 
     $event = array_map("trim", $event);

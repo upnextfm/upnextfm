@@ -4,7 +4,8 @@ import { authToggleLoginDialog } from 'actions/authActions';
 import { playlistSubscribe } from 'actions/playlistActions';
 import { settingsAll } from 'actions/settingsActions';
 
-let noticeID = 0;
+let noticeID     = 0;
+let pingInterval = null;
 
 function nextNoticeID() {
   noticeID += 1;
@@ -84,6 +85,9 @@ export function roomLeave() {
         name: ''
       });
       api.socket.unsubscribe(`${types.CHAN_ROOM}/${room.name}`);
+      if (pingInterval) {
+        clearInterval(pingInterval);
+      }
     }
   };
 }
@@ -131,8 +135,15 @@ export function roomJoin(name) {
       name
     });
     dispatch(playlistSubscribe());
+    pingInterval = setInterval(() => {
+      api.socket.publish(`${types.CHAN_ROOM}/${name}`, 'ping');
+    }, 30000);
 
     api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
+      if (payload === 'pong') {
+        return;
+      }
+
       switch (payload.cmd) {
         case types.CMD_JOINED:
           dispatch(usersRepoAdd(payload.user));
