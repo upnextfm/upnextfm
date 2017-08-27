@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>
+            {% block title %}{% endblock %}{% if block('title') %} - {% endif %}Admin - Upnext
+        </title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+            <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+            <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <link href="{{ asset('build/css/materialize.css') }}" rel="stylesheet" />
+            <link href="{{ asset('build/css/admin.css') }}" rel="stylesheet" />
+        {% endblock %}
+    </head>
+    <body>
+        {% include "AdminBundle:_layout:nav.html.twig" %}
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+        {% block javascripts %}
+            <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+            <script src="{{ asset('build/js/admin.js') }}"></script>
+            {% if app.environment == "dev" %}
+                <script src="http://localhost:35730/livereload.js"></script>
+            {% endif %}
+        {% endblock %}
+    </body>
+</html>

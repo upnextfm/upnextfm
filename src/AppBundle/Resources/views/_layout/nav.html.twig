@@ -7,10 +7,10 @@
             <i class="material-icons">menu</i>
         </a>
         <ul id="nav-mobile" class="right">
-            <li class=" hide-on-med-and-down">
+            <li class="hide-on-med-and-down">
                 <a href="{{ path("playlist_recent") }}">Recent</a>
             </li>
-            <li class=" hide-on-med-and-down">
+            <li class="hide-on-med-and-down">
                 {% if app.user %}
                     <a href="{{ path("fos_user_security_logout") }}">Logout</a>
                 {% elseif not app.user %}

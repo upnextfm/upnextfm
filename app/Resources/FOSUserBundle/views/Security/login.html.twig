@@ -1,32 +1,34 @@
 {% extends "AppBundle::base.html.twig" %}
 {% block title %}Login{% endblock %}
 {% block body %}
-    <div class="row">
-        <div class="col s12">
-            <div class="card up-w400 up-center up-buffer-vert">
-                <form action="{{ path("fos_user_security_check") }}" method="post">
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}" />
-                    <div class="card-content">
-                        <div class="card-title">
-                            Login
+    <div class="up-main">
+        <div class="row">
+            <div class="col s12">
+                <div class="card up-w400 up-center up-buffer-vert">
+                    <form action="{{ path("fos_user_security_check") }}" method="post">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}" />
+                        <div class="card-content">
+                            <div class="card-title">
+                                Login
+                            </div>
+                            <div class="input-field">
+                                <input type="text" name="_username" id="input-username" />
+                                <label for="input-username">Username</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="password" name="_password" id="input-password" />
+                                <label for="input-password">Password</label>
+                            </div>
+                            <p>
+                                <input type="checkbox" name="_remember_me" id="input-remember" checked="checked" class="filled-in" />
+                                <label for="input-remember">Remember Me</label>
+                            </p>
                         </div>
-                        <div class="input-field">
-                            <input type="text" name="_username" id="input-username" />
-                            <label for="input-username">Username</label>
+                        <div class="card-action">
+                            <button type="submit" name="_submit" class="btn waves-effect waves-light up-fill">Login</button>
                         </div>
-                        <div class="input-field">
-                            <input type="password" name="_password" id="input-password" />
-                            <label for="input-password">Password</label>
-                        </div>
-                        <p>
-                            <input type="checkbox" name="_remember_me" id="input-remember" checked="checked" class="filled-in" />
-                            <label for="input-remember">Remember Me</label>
-                        </p>
-                    </div>
-                    <div class="card-action">
-                        <button type="submit" name="_submit" class="btn waves-effect waves-light up-fill">Login</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

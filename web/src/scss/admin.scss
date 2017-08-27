@@ -1,0 +1,40 @@
+@import "vars";
+@import "mixins";
+@import "utils";
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  margin: 0 $padding-std;
+}
+
+nav {
+
+  .brand-logo {
+    height: 34px;
+    font-size: inherit;
+    margin-left: ($padding-std * 2);
+
+    @include media-xs {
+      margin-left: 0;
+    }
+
+    img {
+      height: 100%;
+    }
+  }
+}
+
+.nav-wrapper {
+  display: flex;
+  align-items: center;
+
+  .upa-buttons {
+    margin-left: 250px;
+  }
+}
+
+
