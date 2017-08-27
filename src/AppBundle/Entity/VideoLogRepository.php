@@ -27,6 +27,9 @@ class VideoLogRepository extends AbstractRepository
   public function findRecent($limit, $offset = 0)
   {
     return $this->createQueryBuilder("v")
+      ->join("AppBundle:Room", "r", "with", "v.room = r")
+      ->where("r.isPrivate = 0")
+      ->andWhere("r.isDeleted = 0")
       ->orderBy("v.id", "desc")
       ->setMaxResults($limit)
       ->setFirstResult($offset)
