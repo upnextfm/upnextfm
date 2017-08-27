@@ -26,7 +26,7 @@ class ChatLogRepository extends AbstractRepository
    * @param $limit
    * @return ChatLog[]
    */
-  public function findFirstByUser(UserInterface $user, $limit)
+  public function findRecentByUser(UserInterface $user, $limit)
   {
     return $this->createQueryBuilder("c")
       ->where("c.user = :user")
