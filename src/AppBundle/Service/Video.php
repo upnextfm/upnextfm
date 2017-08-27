@@ -53,6 +53,10 @@ class Video
     switch($provider) {
       case "youtube":
         $resp = $this->youtube->getVideoInfo($codename);
+        if (!$resp) {
+          return null;
+        }
+
         $info = new VideoInfo($codename, $provider, "https://youtu.be/${codename}");
         $info
           ->setTitle($resp->snippet->title)
