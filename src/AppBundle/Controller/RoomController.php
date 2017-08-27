@@ -21,7 +21,7 @@ class RoomController extends Controller
       $username = $user->getUsername();
     }
 
-    return $this->render(":room:index.html.twig", [
+    return $this->render("AppBundle:room:index.html.twig", [
       "username"    => $username,
       "name"        => $name,
       "hide_navbar" => true,

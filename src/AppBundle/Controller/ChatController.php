@@ -31,7 +31,7 @@ class ChatController extends Controller
       $this->parseLog($log);
     }
 
-    return $this->render(":chat:logs.html.twig", [
+    return $this->render("AppBundle:chat:logs.html.twig", [
       "logs"       => array_reverse($logs),
       "searchTerm" => $searchTerm
     ]);

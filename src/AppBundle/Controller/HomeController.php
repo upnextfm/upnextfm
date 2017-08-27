@@ -17,7 +17,7 @@ class HomeController extends Controller
     if ($this->isDev()) {
       return $this->homepageAction();
     } else {
-      return $this->render(":home:index.html.twig", [
+      return $this->render("AppBundle:home:index.html.twig", [
         "hide_navbar" => true
       ]);
     }
@@ -37,7 +37,7 @@ class HomeController extends Controller
       ]);
     }
 
-    return $this->render(":home:homepage.html.twig", [
+    return $this->render("AppBundle:home:homepage.html.twig", [
       "rooms" => $rooms
     ]);
   }
@@ -71,10 +71,10 @@ class HomeController extends Controller
         ->setBody($text);
       $this->get("mailer")->send($message);
 
-      return $this->render(":home:contact_success.html.twig");
+      return $this->render("AppBundle:home:contact_success.html.twig");
     }
 
-    return $this->render(":home:contact.html.twig", [
+    return $this->render("AppBundle:home:contact.html.twig", [
       "form" => $form->createView()
     ]);
   }
@@ -89,7 +89,7 @@ class HomeController extends Controller
     $az4521   = $userRepo->findByUsername("az4521");
     $founding = $userRepo->findFoundingMembers();
 
-    return $this->render(":home:about.html.twig", [
+    return $this->render("AppBundle:home:about.html.twig", [
       "headzoo"  => $headzoo,
       "az4521"   => $az4521,
       "founding" => $founding
@@ -101,7 +101,7 @@ class HomeController extends Controller
    */
   public function helpAction()
   {
-    return $this->render(":home:help.html.twig");
+    return $this->render("AppBundle:home:help.html.twig");
   }
 
   /**
@@ -109,6 +109,6 @@ class HomeController extends Controller
    */
   public function ayyAction()
   {
-    return $this->render(":home:ayy.html.twig");
+    return $this->render("AppBundle:home:ayy.html.twig");
   }
 }

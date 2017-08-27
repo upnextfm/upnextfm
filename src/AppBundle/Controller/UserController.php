@@ -19,7 +19,7 @@ class UserController extends Controller
     $playedRecently = $em->getRepository("AppBundle:VideoLog")
       ->findRecentByUser($user, 30);
 
-    return $this->render(":user:index.html.twig", [
+    return $this->render("AppBundle:user:index.html.twig", [
       "user"           => $user,
       "playedRecently" => $playedRecently
     ]);
@@ -34,7 +34,7 @@ class UserController extends Controller
   public function favoritesAction($username)
   {
     $user = $this->findUserOrThrow($username);
-    return $this->render(":user:favorites.html.twig", [
+    return $this->render("AppBundle:user:favorites.html.twig", [
       "user" => $user
     ]);
   }

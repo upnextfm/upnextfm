@@ -19,13 +19,13 @@
     </head>
     <body>
         {% if hide_navbar is not defined  %}
-            {% include ":_layout:nav.html.twig" %}
+            {% include "AppBundle:_layout:nav.html.twig" %}
         {% endif %}
         {% block body %}{% endblock %}
         {% if hide_navbar is not defined  %}
-            {% include ":_layout:footer.html.twig" %}
+            {% include "AppBundle:_layout:footer.html.twig" %}
         {% endif %}
-        {% include ":_modals:play.html.twig" %}
+        {% include "AppBundle:_modals:play.html.twig" %}
         {% block javascripts %}
             <script>
                 var _WS_URI = '{{ ws_uri }}';

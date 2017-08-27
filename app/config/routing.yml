@@ -3,6 +3,10 @@ PrestaSitemapBundle:
     prefix:   /
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+admin:
+    resource: "@AdminBundle/Controller/"
+    type: annotation
+    prefix:   /admin
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
