@@ -26,12 +26,12 @@ class ChatLogRepository extends AbstractRepository
    * @param $limit
    * @return ChatLog[]
    */
-  public function findRecentByUser(UserInterface $user, $limit)
+  public function findFirstByUser(UserInterface $user, $limit)
   {
     return $this->createQueryBuilder("c")
       ->where("c.user = :user")
       ->setParameter("user", $user)
-      ->orderBy("c.id", "desc")
+      ->orderBy("c.id", "asc")
       ->setMaxResults($limit)
       ->getQuery()
       ->execute();

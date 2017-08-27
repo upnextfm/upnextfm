@@ -95,7 +95,7 @@ class HomeController extends Controller
     $ignored  = ["TriviaBot", "PieNudesBot"];
     foreach($userRepo->findFoundingMembers() as $user) {
       $username = $user->getUsername();
-      $logs     = $logRepo->findRecentByUser($user, 100);
+      $logs     = $logRepo->findFirstByUser($user, 100);
       if ($logs && !in_array($username, $ignored)) {
         $founding[] = $user;
         $rand = rand(0, count($logs) - 1);
