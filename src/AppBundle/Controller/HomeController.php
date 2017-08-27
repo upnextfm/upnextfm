@@ -118,6 +118,14 @@ class HomeController extends Controller
   }
 
   /**
+   * @Route("/terms", name="terms")
+   */
+  public function termsAction()
+  {
+
+  }
+
+  /**
    * @Route("/ayy", name="ayy")
    */
   public function ayyAction()
