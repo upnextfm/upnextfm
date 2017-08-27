@@ -1,0 +1,11 @@
+@import "vars";
+
+.up-legal {
+  font-family: helvetica, arial, sans-serif;
+  text-align: justify;
+
+  p, ul, li {
+    line-height: 1.2rem;
+    margin-bottom: $padding-std;
+  }
+}

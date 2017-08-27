@@ -122,7 +122,7 @@ class HomeController extends Controller
    */
   public function termsAction()
   {
-
+    return $this->render("AppBundle:home:tos.html.twig");
   }
 
   /**
