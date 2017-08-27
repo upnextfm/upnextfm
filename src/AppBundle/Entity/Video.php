@@ -60,6 +60,13 @@ class Video
 
   /**
    * @var string
+   *
+   * @ORM\Column(name="thumb_color", type="string", length=6, nullable=false)
+   */
+  protected $thumbColor = "000000";
+
+  /**
+   * @var string
    * @ORM\Column(name="thumb_sm", type="string", nullable=false)
    */
   protected $thumbSm;
@@ -259,6 +266,24 @@ class Video
   public function incrNumPlays()
   {
     $this->numPlays++;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getThumbColor()
+  {
+    return $this->thumbColor;
+  }
+
+  /**
+   * @param string $thumbColor
+   * @return $this
+   */
+  public function setThumbColor($thumbColor)
+  {
+    $this->thumbColor = $thumbColor;
     return $this;
   }
 

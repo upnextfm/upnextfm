@@ -4,6 +4,20 @@ namespace AppBundle\Entity;
 class RoomRepository extends AbstractRepository
 {
   /**
+   * Returns the room with the given id
+   *
+   * @param int $id
+   *
+   * @return Room
+   */
+  public function findByID($id)
+  {
+    return $this->findOneBy([
+      "id" => $id
+    ]);
+  }
+
+  /**
    * Returns the room with the given name
    *
    * @param string $name

@@ -34,6 +34,11 @@ class VideoInfo
   protected $seconds = 0;
 
   /**
+   * @var string
+   */
+  protected $thumbColor = "000000";
+
+  /**
    * @var array
    */
   protected $thumbnails = [
@@ -161,6 +166,24 @@ class VideoInfo
   public function setSeconds($seconds)
   {
     $this->seconds = $seconds;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getThumbColor()
+  {
+    return $this->thumbColor;
+  }
+
+  /**
+   * @param string $thumbColor
+   * @return $this
+   */
+  public function setThumbColor($thumbColor)
+  {
+    $this->thumbColor = $thumbColor;
     return $this;
   }
 

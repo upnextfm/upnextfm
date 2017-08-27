@@ -176,6 +176,15 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       return;
     }
 
+    $msg = [
+      "provider"  => $event["provider"],
+      "codename"  => $event["codename"],
+      "user_id"   => $user->getId(),
+      "room_id"   => $room->getId(),
+      "video_log" => true
+    ];
+    $this->container->get('old_sound_rabbit_mq.save_video_producer')->publish(json_encode($msg));
+
     $video = $this->em->getRepository("AppBundle:Video")
       ->findByCodename($event["codename"], $event["provider"]);
     if (!$video) {
@@ -194,6 +203,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       $video->setTitle($info->getTitle());
       $video->setSeconds($info->getSeconds());
       $video->setPermalink($info->getPermalink());
+      $video->setThumbColor($info->getThumbColor());
       $video->setThumbSm($info->getThumbnail("sm"));
       $video->setThumbMd($info->getThumbnail("md"));
       $video->setThumbLg($info->getThumbnail("lg"));

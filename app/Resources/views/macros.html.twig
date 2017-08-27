@@ -21,7 +21,7 @@
 {% macro playedCard(played, size = "2") %}
     <div class="col s12 m4 l{{ size }}">
         <div class="card up-playlist-card" data-id="{{ played.id }}">
-            <div class="card-image">
+            <div class="card-image" style="background-color: #{{ played.video.thumbColor }};">
                 <a href="{{ played.video.permalink }}">
                     <img src="{{ played.video.thumbSm }}" />
                 </a>

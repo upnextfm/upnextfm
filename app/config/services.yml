@@ -156,15 +156,22 @@ services:
     ## Registration Form
     ## ########################################################################
     app.form.registration:
-        class: AppBundle\Form\RegistrationType
-        tags:
-            - { name: form.type, alias: registration }
+      class: AppBundle\Form\RegistrationType
+      tags:
+        - { name: form.type, alias: registration }
 
     ## ########################################################################
     ## Registration Listener
     ## ########################################################################
     app.registration_complet:
-        class: AppBundle\Listener\RegistrationListener
-        tags:
-            - { name: kernel.event_subscriber }
+      class: AppBundle\Listener\RegistrationListener
+      tags:
+        - { name: kernel.event_subscriber }
 
+    ## ########################################################################
+    ## RabbitMQ Save Video Consumer
+    ## ########################################################################
+    app_rabbitmq_save_video_consumer:
+      class: AppBundle\RabbitMQ\Consumer\SaveVideoConsumer
+      arguments:
+        - "@service_container"

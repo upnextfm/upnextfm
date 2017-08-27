@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Service;
 
+use ColorThief\ColorThief;
 use Madcoda\Youtube\Youtube;
 use Psr\Log\LoggerInterface;
 
@@ -66,6 +67,7 @@ class Video
           ->setThumbnail("lg", !empty($resp->snippet->thumbnails->high->url)
             ? $resp->snippet->thumbnails->high->url
             : $resp->snippet->thumbnails->default->url);
+        $info->setThumbColor($this->getThumbColor($info->getThumbnail("sm")));
         return $info;
         break;
       default:
@@ -83,5 +85,20 @@ class Video
     $start = new \DateTime('@0'); // Unix epoch
     $start->add(new \DateInterval($duration));
     return $start->getTimestamp();
+  }
+
+  /**
+   * @param string $thumbURL
+   * @return string
+   */
+  protected function getThumbColor($thumbURL)
+  {
+    $thumbColor = "000000";
+    try {
+      $dominantColor = ColorThief::getColor($thumbURL);
+      $thumbColor    = sprintf("%02x%02x%02x", $dominantColor[0], $dominantColor[1], $dominantColor[2]);
+    } catch (\Exception $e) {}
+
+    return $thumbColor;
   }
 }

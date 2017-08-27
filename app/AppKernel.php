@@ -26,6 +26,7 @@ class AppKernel extends Kernel
         new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
         new Knp\Bundle\TimeBundle\KnpTimeBundle(),
         new FOS\ElasticaBundle\FOSElasticaBundle(),
+        new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
         new AppBundle\AppBundle(),
       ];
 
