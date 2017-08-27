@@ -15,6 +15,11 @@
     margin-bottom: $padding-std;
   }
 
+  strong {
+    color: #ff9100;
+    font-weight: 500;
+  }
+
   .up-logo {
     height: 32px;
     margin: ($padding-std * 2) 0 $padding-std 0;
