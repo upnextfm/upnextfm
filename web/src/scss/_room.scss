@@ -113,6 +113,7 @@ $height-avatar-collapsed: auto;
 
 .up-room-panel__messages {
   overflow-x: hidden !important; // @todo fix
+  padding: $padding-std !important;
 
   @include media-xs {
     font-size: 0.9rem;
