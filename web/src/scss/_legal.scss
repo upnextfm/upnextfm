@@ -1,11 +1,26 @@
 @import "vars";
 
 .up-legal {
-  font-family: helvetica, arial, sans-serif;
   text-align: justify;
 
   p, ul, li {
     line-height: 1.2rem;
-    margin-bottom: $padding-std;
   }
+
+  ul ol, ol ol, ul ul, ol ul {
+    margin-bottom: 4px;
+    margin-top: 4px;
+  }
+
+  ul, ol {
+    margin: 20px 0 20px 40px;
+  }
+
+  ol[type="a"] {
+    list-style-type: lower-alpha;
+  }
+
+  ol[type="i"] {
+  list-style-type: lower-roman;
+}
 }

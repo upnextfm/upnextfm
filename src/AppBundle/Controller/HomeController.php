@@ -126,6 +126,14 @@ class HomeController extends Controller
   }
 
   /**
+   * @Route("/privacy", name="privacy")
+   */
+  public function privacyAction()
+  {
+    return $this->render("AppBundle:home:privacy.html.twig");
+  }
+
+  /**
    * @Route("/ayy", name="ayy")
    */
   public function ayyAction()
