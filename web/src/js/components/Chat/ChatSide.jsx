@@ -33,6 +33,7 @@ class ChatSide extends React.Component {
     super(props);
 
     this.messagesPanelRef = null;
+    this.messageInputRef  = null;
     this.favicon          = null;
   }
 
@@ -79,6 +80,7 @@ class ChatSide extends React.Component {
 
   handleClickRoomThumb = () => {
     this.props.dispatch(layoutSwitchActiveChat('room'));
+    this.messageInputRef.focus();
   };
 
   renderUsersPanel() {
@@ -121,6 +123,7 @@ class ChatSide extends React.Component {
         tabComplete={this.props.room.users}
         onSend={this.handleSendInput}
         onChange={this.handleChangeInput}
+        ref={(ref) => { this.messageInputRef = ref; }}
       />
     );
   }

@@ -51,7 +51,10 @@ class PrivateMessageTopic extends AbstractTopic
     $toUser = $this->em->getRepository("AppBundle:User")
       ->findByUsername($payload["to"]);
     if (!($toUser instanceof UserInterface)) {
-      $this->logger->error("To user not found.", $event);
+      $conn->event($topic->getId(), [
+        "cmd"   => PrivateMessageCommands::ERROR,
+        "error" => "User ${payload['to']} not found."
+      ]);
       return;
     }
     $pm = (new PrivateMessage())

@@ -34,9 +34,7 @@ export default class MessageInput extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.inputRef.focus();
-    }, 1000);
+    this.focus();
   }
 
   componentDidUpdate() {
@@ -45,6 +43,12 @@ export default class MessageInput extends React.Component {
       this.moveCaretToEnd();
     }
   }
+
+  focus = () => {
+    setTimeout(() => {
+      this.inputRef.focus();
+    }, 500);
+  };
 
   send = () => {
     this.history.push(this.props.value);

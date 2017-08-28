@@ -33,6 +33,7 @@ function receive(state, action) {
   }
 
   return Object.assign({}, state, {
+    isSending: false,
     conversations
   });
 }
@@ -63,6 +64,7 @@ function sent(state, action) {
   }
 
   return Object.assign({}, state, {
+    isSending: false,
     conversations
   });
 }
@@ -78,12 +80,17 @@ export default function pmsReducer(state = initialState.pms, action = {}) {
   switch (action.type) {
     case types.PMS_SUBSCRIBED:
       return Object.assign({}, state, {
-        isSubscribed: true
+        isSubscribed: true,
+        isSending:    false
       });
     case types.PMS_SENT:
       return sent(state, action);
     case types.PMS_RECEIVE:
       return receive(state, action);
+    case types.PMS_SENDING:
+      return Object.assign({}, state, {
+        isSending: true
+      });
     default:
       return state;
   }

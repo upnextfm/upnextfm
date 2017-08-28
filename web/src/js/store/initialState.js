@@ -40,6 +40,7 @@ export default {
   },
   pms: {
     isSubscribed:  false,
+    isSending:     false,
     conversations: []
   },
   users: {
