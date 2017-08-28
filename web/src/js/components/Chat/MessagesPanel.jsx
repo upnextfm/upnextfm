@@ -34,7 +34,8 @@ export default class MessagesPanel extends React.Component {
     }, 10);
   };
 
-  handleClickUser = (e) => {
+  handleContextMenuUser = (e) => {
+    e.preventDefault();
     this.setState({
       menuOpen:   true,
       menuAnchor: e.currentTarget
@@ -70,7 +71,7 @@ export default class MessagesPanel extends React.Component {
                   key={message.id}
                   user={user}
                   message={message}
-                  onClickUser={this.handleClickUser}
+                  onContextMenu={this.handleContextMenuUser}
                   prevMessage={prevMessage}
                   prevUser={prevUser}
                 />
