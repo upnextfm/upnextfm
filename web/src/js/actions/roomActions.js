@@ -2,6 +2,7 @@ import * as types from 'actions/actionTypes';
 import { usersRepoAdd, usersRepoAddMulti, usersRepoRemove } from 'actions/usersActions';
 import { layoutToggleLoginDialog } from 'actions/layoutActions';
 import { playlistSubscribe } from 'actions/playlistActions';
+import { pmsSend } from 'actions/pmsActions';
 import { settingsAll } from 'actions/settingsActions';
 
 let noticeID     = 0;
@@ -13,25 +14,68 @@ function nextNoticeID() {
 }
 
 /**
+ * Handles the /pm command
  *
+ * @param {string} msg
+ * @param {Function} dispatch
+ */
+function handleCommandPM(msg, dispatch) {
+  const [toUsername, ...messageParts] = msg.split(' ');
+  const message = messageParts.join(' ').trim();
+  if (toUsername !== '' && message !== '') {
+    dispatch(pmsSend(toUsername, message));
+  }
+}
+
+/**
+ * Handles the /send command
+ *
+ * @param {string} msg
+ * @param {Function} dispatch
+ * @param {Function} getState
+ * @param {*} api
+ */
+function handleCommandSend(msg, dispatch, getState, api) {
+  const room = getState().room;
+  if (room.name !== '') {
+    if (!getState().auth.isAuthenticated) {
+      dispatch(layoutToggleLoginDialog());
+    } else {
+      api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
+        cmd:     types.CMD_SEND,
+        date:    (new Date()).toString(),
+        message: msg
+      });
+    }
+    dispatch({
+      type: types.ROOM_SEND
+    });
+  }
+}
+
+const commands = {
+  '/send': handleCommandSend,
+  '/pm':   handleCommandPM
+};
+
+/**
+ * @param {string} inputValue
  * @returns {Function}
  */
-export function roomSend() {
+export function roomSend(inputValue) {
   return (dispatch, getState, api) => {
-    const room = getState().room;
-    if (room.name !== '') {
-      if (!getState().auth.isAuthenticated) {
-        dispatch(layoutToggleLoginDialog());
-      } else {
-        api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-          cmd:     types.CMD_SEND,
-          date:    (new Date()).toString(),
-          message: room.inputValue
-        });
-      }
-      dispatch({
-        type: types.ROOM_SEND
-      });
+    let value = inputValue.trim();
+    if (value[0] !== '/') {
+      value = `/send ${value}`;
+    }
+
+    const idx = value.indexOf(' ');
+    const cmd = (idx === -1) ? value : value.substr(0, idx).toLowerCase();
+    const msg = (idx === -1) ? null : value.substr(idx + 1).trim();
+    if (commands[cmd] !== undefined) {
+      commands[cmd](msg, dispatch, getState, api);
+    } else {
+      console.info('Unknown command.');
     }
   };
 }

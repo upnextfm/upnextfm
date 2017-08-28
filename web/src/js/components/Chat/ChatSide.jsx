@@ -57,16 +57,8 @@ class ChatSide extends React.Component {
   }
 
   handleSendInput = () => {
-    const { inputValue } = this.props.room;
-
-    if (inputValue.indexOf('/pm') === 0) {
-      const [cmd, toUsername, ...messageParts] = inputValue.split(' ');
-      const message = messageParts.join(' ');
-      this.props.dispatch(roomInputChange(''));
-      this.props.dispatch(pmsSend(toUsername, message));
-    } else {
-      this.props.dispatch(roomSend());
-    }
+    this.props.dispatch(roomSend(this.props.room.inputValue));
+    this.messageInputRef.focus();
   };
 
   handleChangeInput = (value) => {
@@ -76,6 +68,7 @@ class ChatSide extends React.Component {
   handleCollapseUsers = () => {
     this.props.dispatch(layoutToggleUsersCollapsed());
     this.messagesPanelRef.scrollToBottom();
+    this.messageInputRef.focus();
   };
 
   handleClickRoomThumb = () => {
