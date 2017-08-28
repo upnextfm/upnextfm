@@ -40,7 +40,7 @@ class RoomSettings
    *
    * @ORM\Column(name="thumb_color", type="string", length=6, nullable=false)
    */
-  protected $thumbColor;
+  protected $thumbColor = "000000";
 
   /**
    * @var string

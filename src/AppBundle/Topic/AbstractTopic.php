@@ -173,7 +173,16 @@ abstract class AbstractTopic implements TopicInterface
     $repo = $this->em->getRepository("AppBundle:Room");
     $room = $repo->findByName($roomName);
     if (!$room && $user !== null) {
-      $room = new Room($roomName, $user);
+      $room     = new Room($roomName, $user);
+      $settings = new RoomSettings();
+      $settings->setRoom($room);
+      $settings->setIsPublic(true);
+      $settings->setJoinMessage("Welcome to ${roomName}.");
+      $settings->setThumbSm($this->container->getParameter("app_thumb_sm_default"));
+      $settings->setThumbMd($this->container->getParameter("app_thumb_md_default"));
+      $settings->setThumbLg($this->container->getParameter("app_thumb_lg_default"));
+
+      $room->setSettings($settings);
       $this->em->merge($room);
       $this->em->flush();
     }
