@@ -2,6 +2,17 @@ import * as types from 'actions/actionTypes';
 import { roomResetNumNewMessages } from 'actions/roomActions';
 
 /**
+ * @param {string} errorMessage
+ * @returns {{type: string, errorMessage: *}}
+ */
+export function layoutErrorMessage(errorMessage) {
+  return {
+    type: types.LAYOUT_ERROR_MESSAGE,
+    errorMessage
+  };
+}
+
+/**
  *
  * @param {string} activeChat
  * @returns {{type: string, activeChat: string}}

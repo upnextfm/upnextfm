@@ -10,3 +10,21 @@
     margin: $padding-std 0;
   }
 }
+
+.up-snackbar > div {
+  color: #FFF;
+  background-color: $card-bg-color;
+}
+
+.up-snackbar--error > div {
+  background-color: $color-error;
+}
+
+.up-snackbar__message {
+  display: flex;
+  align-items: center;
+
+  .up-icon {
+    margin-right: $padding-std * 2;
+  }
+}

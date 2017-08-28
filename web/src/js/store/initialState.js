@@ -9,6 +9,7 @@ export default {
     isHelpDialogOpen:     false,
     isUsersCollapsed:     Storage.getItem('layout:isUsersCollapsed', false),
     activeChat:           'room',
+    errorMessage:         '',
     colsChatSide:         7,
     colsVideoSide:        5
   },

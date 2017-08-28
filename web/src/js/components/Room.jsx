@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
 import { authUsername } from 'actions/authActions';
-import { layoutToggleLoginDialog, layoutToggleRegisterDialog, layoutToggleHelpDialog } from 'actions/layoutActions';
+import { layoutToggleLoginDialog, layoutToggleRegisterDialog, layoutToggleHelpDialog, layoutErrorMessage } from 'actions/layoutActions';
 import Progress from 'components/Video/Progress';
 import HelpDialog from 'components/Dialogs/HelpDialog';
 import LoginDialog from 'components/Dialogs/LoginDialog';
@@ -13,6 +13,7 @@ import ChatSide from 'components/Chat/ChatSide';
 import VideoSide from 'components/Video/VideoSide';
 import VideoNav from 'components/VideoNav';
 import Nav from 'components/Nav';
+import ErrorSnackbar from 'components/ErrorSnackbar';
 
 class Room extends React.Component {
   static propTypes = {
@@ -29,6 +30,10 @@ class Room extends React.Component {
       props.dispatch(authUsername(props.username));
     }
   }
+
+  handleCloseErrorSnackbar = () => {
+    this.props.dispatch(layoutErrorMessage(''));
+  };
 
   render() {
     const { roomName, socketURI, auth, layout, dispatch } = this.props;
@@ -50,6 +55,10 @@ class Room extends React.Component {
             <VideoSide />
           </Grid>
         </div>
+        <ErrorSnackbar
+          errorMessage={layout.errorMessage}
+          onClose={this.handleCloseErrorSnackbar}
+        />
         <HelpDialog
           isOpen={layout.isHelpDialogOpen}
           onClose={() => { dispatch(layoutToggleHelpDialog()); }}

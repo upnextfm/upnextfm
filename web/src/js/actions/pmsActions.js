@@ -1,5 +1,5 @@
 import * as types from 'actions/actionTypes';
-import { layoutSwitchActiveChat } from 'actions/layoutActions';
+import { layoutSwitchActiveChat, layoutErrorMessage } from 'actions/layoutActions';
 
 /**
  * @param {Function} dispatch
@@ -49,7 +49,12 @@ export function pmsSubscribe() {
  */
 export function pmsSend(to, message) {
   return (dispatch, getState, api) => {
-    if (!getState().auth.isAuthenticated) {
+    const auth = getState().auth;
+    if (!auth.isAuthenticated) {
+      return;
+    }
+    if (auth.username.toLowerCase() === to.toLowerCase()) {
+      dispatch(layoutErrorMessage('Cannot send a PM to yourself.'));
       return;
     }
 

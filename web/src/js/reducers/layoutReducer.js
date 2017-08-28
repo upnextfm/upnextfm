@@ -10,6 +10,10 @@ import initialState from 'store/initialState';
  */
 export default function layoutReducer(state = initialState.layout, action = {}) {
   switch (action.type) {
+    case types.LAYOUT_ERROR_MESSAGE:
+      return Object.assign({}, state, {
+        errorMessage: action.errorMessage
+      });
     case types.LAYOUT_SWITCH_ACTIVE_CHAT:
       return Object.assign({}, state, {
         activeChat: action.activeChat
