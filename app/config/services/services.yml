@@ -66,11 +66,19 @@ services:
     ## Video Info Service
     ## ########################################################################
     app.service.video:
-      class: AppBundle\Service\Video
+      class: AppBundle\Service\VideoService
       arguments:
         - "@monolog.logger"
       calls:
         - [setYoutube, ["@madcoda.youtube.youtube"]]
+
+    ## ########################################################################
+    ## Thumbs Service
+    ## ########################################################################
+    app.service.thumbs:
+      class: AppBundle\Service\ThumbsService
+      arguments:
+        - "%app_service_thumbs_params%"
 
     ## ########################################################################
     ## Registration Form
@@ -85,6 +93,8 @@ services:
     ## ########################################################################
     app.registration_complet:
       class: AppBundle\Listener\RegistrationListener
+      arguments:
+        - "@app.service.thumbs"
       tags:
         - { name: kernel.event_subscriber }
 

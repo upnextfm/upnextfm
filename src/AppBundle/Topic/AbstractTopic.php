@@ -173,17 +173,18 @@ abstract class AbstractTopic implements TopicInterface
     $repo = $this->em->getRepository("AppBundle:Room");
     $room = $repo->findByName($roomName);
     if (!$room && $user !== null) {
+      $thumbService = $this->container->get("app.service.thumbs");
+
       $room     = new Room($roomName, $user);
       $settings = new RoomSettings();
       $settings->setRoom($room);
       $settings->setIsPublic(true);
       $settings->setJoinMessage("Welcome to ${roomName}.");
-      $settings->setThumbSm($this->container->getParameter("app_thumb_sm_default"));
-      $settings->setThumbMd($this->container->getParameter("app_thumb_md_default"));
-      $settings->setThumbLg($this->container->getParameter("app_thumb_lg_default"));
-
+      $settings->setThumbSm($thumbService->getRoomThumb($room, "sm"));
+      $settings->setThumbMd($thumbService->getRoomThumb($room, "md"));
+      $settings->setThumbLg($thumbService->getRoomThumb($room, "lg"));
       $room->setSettings($settings);
-      $this->em->merge($room);
+      $this->em->persist($room);
       $this->em->flush();
     }
 
@@ -196,18 +197,11 @@ abstract class AbstractTopic implements TopicInterface
    */
   protected function serializeRoomSettings(RoomSettings $settings)
   {
-    $thumbSmDefault = $this->container->getParameter("app_thumb_sm_default");
-    $thumbMdDefault = $this->container->getParameter("app_thumb_md_default");
-    $thumbLgDefault = $this->container->getParameter("app_thumb_lg_default");
-    $thumbSm        = $settings->getThumbSm() ?: $thumbSmDefault;
-    $thumbMd        = $settings->getThumbMd() ?: $thumbMdDefault;
-    $thumbLg        = $settings->getThumbLg() ?: $thumbLgDefault;
-
     return [
       "isPublic" => $settings->isPublic(),
-      "thumbSm"  => $thumbSm,
-      "thumbMd"  => $thumbMd,
-      "thumbLg"  => $thumbLg
+      "thumbSm"  => $settings->getThumbSm(),
+      "thumbMd"  => $settings->getThumbMd(),
+      "thumbLg"  => $settings->getThumbLg()
     ];
   }
 

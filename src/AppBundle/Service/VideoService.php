@@ -5,7 +5,7 @@ use ColorThief\ColorThief;
 use Madcoda\Youtube\Youtube;
 use Psr\Log\LoggerInterface;
 
-class Video
+class VideoService
 {
   /**
    * @var Youtube

@@ -3,6 +3,7 @@ namespace AppBundle\Listener;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserInfo;
+use AppBundle\Service\ThumbsService;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
@@ -15,6 +16,21 @@ class RegistrationListener implements EventSubscriberInterface
    * @var UserInterface|User
    */
   protected $user;
+
+  /**
+   * @var ThumbsService
+   */
+  protected $thumbService;
+
+  /**
+   * Constructor
+   *
+   * @param ThumbsService $thumbsService
+   */
+  public function __construct(ThumbsService $thumbsService)
+  {
+    $this->thumbService = $thumbsService;
+  }
 
   /**
    * {@inheritdoc}
@@ -40,12 +56,11 @@ class RegistrationListener implements EventSubscriberInterface
    */
   public function onRegistrationSuccess(FormEvent $event)
   {
-    $username = $this->user->getUsername();
     $info = new UserInfo();
     $info->setUser($this->user);
-    $info->setAvatarSm(sprintf('https://robohash.org/%s?set=set3&size=40x40', $username));
-    $info->setAvatarMd(sprintf('https://robohash.org/%s?set=set3&size=100x100', $username));
-    $info->setAvatarLg(sprintf('https://robohash.org/%s?set=set3&size=250x250', $username));
+    $info->setAvatarSm($this->thumbService->getUserAvatar($this->user, "sm"));
+    $info->setAvatarMd($this->thumbService->getUserAvatar($this->user, "md"));
+    $info->setAvatarLg($this->thumbService->getUserAvatar($this->user, "lg"));
     $this->user->setInfo($info);
   }
 }
