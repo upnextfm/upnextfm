@@ -43,7 +43,7 @@ export default class UsersPanel extends React.Component {
   }
 
   handleClickUser = (e) => {
-    const username = e.currentTarget.getAttribute('data-username');
+    const username = e.currentTarget.getAttribute('data-username').toLowerCase();
     this.props.onClickUser(username);
   };
 

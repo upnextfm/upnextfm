@@ -55,7 +55,9 @@ class ChatSide extends React.Component {
   };
 
   handleClickUser = (username) => {
-    this.props.dispatch(layoutSwitchActiveChat(username));
+    if (this.props.auth.isAuthenticated && username.toLowerCase() !== this.props.auth.username) {
+      this.props.dispatch(layoutSwitchActiveChat(username));
+    }
   };
 
   handleCollapseUsers = () => {
@@ -130,6 +132,7 @@ class ChatSide extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    auth:     Object.assign({}, state.auth),
     room:     Object.assign({}, state.room),
     users:    Object.assign({}, state.users),
     pms:      Object.assign({}, state.pms),
