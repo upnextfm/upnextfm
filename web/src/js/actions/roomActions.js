@@ -1,6 +1,6 @@
 import * as types from 'actions/actionTypes';
 import { usersRepoAdd, usersRepoAddMulti, usersRepoRemove } from 'actions/usersActions';
-import { authToggleLoginDialog } from 'actions/authActions';
+import { layoutToggleLoginDialog } from 'actions/layoutActions';
 import { playlistSubscribe } from 'actions/playlistActions';
 import { settingsAll } from 'actions/settingsActions';
 
@@ -21,7 +21,7 @@ export function roomSend() {
     const room = getState().room;
     if (room.name !== '') {
       if (!getState().auth.isAuthenticated) {
-        dispatch(authToggleLoginDialog());
+        dispatch(layoutToggleLoginDialog());
       } else {
         api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
           cmd:     types.CMD_SEND,

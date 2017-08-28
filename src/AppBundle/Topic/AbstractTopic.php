@@ -286,4 +286,21 @@ abstract class AbstractTopic implements TopicInterface
   {
     return trim(strip_tags($message));
   }
+
+  /**
+   * @return bool
+   * @throws \Doctrine\ORM\ORMException
+   */
+  protected function reopenEntityManager()
+  {
+    if (!$this->em->isOpen()) {
+      $this->em = $this->em->create(
+        $this->em->getConnection(),
+        $this->em->getConfiguration()
+      );
+      return true;
+    }
+
+    return false;
+  }
 }

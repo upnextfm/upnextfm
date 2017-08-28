@@ -4,10 +4,13 @@ namespace AppBundle\Topic;
 use AppBundle\Entity\ChatLog;
 use AppBundle\Entity\Room;
 use AppBundle\Entity\User;
+use Doctrine\ORM\ORMException;
 use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
+use Exception;
+use Ratchet\Wamp\WampConnection;
 
 class RoomTopic extends AbstractTopic
 {
@@ -21,70 +24,76 @@ class RoomTopic extends AbstractTopic
 
   /**
    * {@inheritdoc}
+   *
+   * @param ConnectionInterface|WampConnection $conn
    */
   public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
-    $user = $this->getUser($conn);
-    if (!($user instanceof UserInterface)) {
-      $user = null;
-    }
-    $room = $this->getRoom($request->getAttributes()->get("room"), $user);
-    if ($user) {
-      $this->roomStorage->addUser($room, $user);
-    }
-
-    $repo      = $this->em->getRepository("AppBundle:ChatLog");
-    $messages  = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
-    $repoFound = [];
-    $repoUsers = [];
-    foreach ($messages as $message) {
-      $u = $message->getUser();
-      if ($u && !in_array($u->getUsername(), $repoFound)) {
-        $repoUsers[] = $this->serializeUser($message->getUser());
-        $repoFound[] = $u->getUsername();
+    try {
+      $user = $this->getUser($conn);
+      if (!($user instanceof UserInterface)) {
+        $user = null;
       }
-    }
+      $room = $this->getRoom($request->getAttributes()->get("room"), $user);
+      if ($user) {
+        $this->roomStorage->addUser($room, $user);
+      }
 
-    $users = [];
-    foreach ($topic as $client) {
-      $u = $this->getUser($client);
-      if ($u instanceof UserInterface) {
-        $users[] = $u->getUsername();
-        if (!in_array($u->getUsername(), $repoFound)) {
-          $repoUsers[] = $this->serializeUser($u);
+      $repo = $this->em->getRepository("AppBundle:ChatLog");
+      $messages = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
+      $repoFound = [];
+      $repoUsers = [];
+      foreach ($messages as $message) {
+        $u = $message->getUser();
+        if ($u && !in_array($u->getUsername(), $repoFound)) {
+          $repoUsers[] = $this->serializeUser($message->getUser());
           $repoFound[] = $u->getUsername();
         }
       }
-    }
 
-    $conn->event($topic->getId(), [
-      "cmd"      => RoomCommands::SETTINGS,
-      "settings" => [
-        "user" => [
-          "showNotices" => true
-        ],
-        "site" => [],
-        "room" => $this->serializeRoomSettings($room->getSettings())
-      ]
-    ]);
-    $conn->event($topic->getId(), [
-      "cmd"      => RoomCommands::MESSAGES,
-      "messages" => array_reverse($this->serializeMessages($messages))
-    ]);
-    $conn->event($topic->getId(), [
-      "cmd"   => RoomCommands::REPO_USERS,
-      "users" => $repoUsers
-    ]);
-    $conn->event($topic->getId(), [
-      "cmd"   => RoomCommands::USERS,
-      "users" => $users
-    ]);
+      $users = [];
+      foreach ($topic as $client) {
+        $u = $this->getUser($client);
+        if ($u instanceof UserInterface) {
+          $users[] = $u->getUsername();
+          if (!in_array($u->getUsername(), $repoFound)) {
+            $repoUsers[] = $this->serializeUser($u);
+            $repoFound[] = $u->getUsername();
+          }
+        }
+      }
 
-    if ($user !== null) {
-      $topic->broadcast([
-        "cmd"  => RoomCommands::JOINED,
-        "user" => $this->serializeUser($user)
+      $conn->event($topic->getId(), [
+        "cmd"      => RoomCommands::SETTINGS,
+        "settings" => [
+          "user" => [
+            "showNotices" => true
+          ],
+          "site" => [],
+          "room" => $this->serializeRoomSettings($room->getSettings())
+        ]
       ]);
+      $conn->event($topic->getId(), [
+        "cmd"      => RoomCommands::MESSAGES,
+        "messages" => array_reverse($this->serializeMessages($messages))
+      ]);
+      $conn->event($topic->getId(), [
+        "cmd"   => RoomCommands::REPO_USERS,
+        "users" => $repoUsers
+      ]);
+      $conn->event($topic->getId(), [
+        "cmd"   => RoomCommands::USERS,
+        "users" => $users
+      ]);
+
+      if ($user !== null) {
+        $topic->broadcast([
+          "cmd"  => RoomCommands::JOINED,
+          "user" => $this->serializeUser($user)
+        ]);
+      }
+    } catch (Exception $e) {
+      $this->handleError($e);
     }
   }
 
@@ -93,21 +102,26 @@ class RoomTopic extends AbstractTopic
    */
   public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
   {
-    $user = $this->getUser($connection);
-    if (!($user instanceof UserInterface)) {
-      return;
+    try {
+      $user = $this->getUser($connection);
+      if (!($user instanceof UserInterface)) {
+        return;
+      }
+      $room = $this->getRoom($request->getAttributes()->get("room"), $user);
+      $this->roomStorage->removeUser($room, $user);
+      $topic->broadcast([
+        "cmd"      => RoomCommands::PARTED,
+        "username" => $user->getUsername()
+      ]);
+    } catch (Exception $e) {
+      $this->handleError($e);
     }
-    $room = $this->getRoom($request->getAttributes()->get("room"), $user);
-    $this->roomStorage->removeUser($room, $user);
-
-    $topic->broadcast([
-      "cmd"      => RoomCommands::PARTED,
-      "username" => $user->getUsername()
-    ]);
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @param ConnectionInterface|WampConnection $conn
    */
   public function onPublish(
     ConnectionInterface $conn,
@@ -117,36 +131,42 @@ class RoomTopic extends AbstractTopic
     array $exclude,
     array $eligible)
   {
-    if (is_string($event) && $event === "ping") {
-      $clientStorage = $this->container->get("app.ws.storage.driver");
-      $clientStorage->lifeTime($conn->resourceId, 86400);
-      return $conn->event($topic->getId(), "pong");
+    try {
+      if (is_string($event) && $event === "ping") {
+        $clientStorage = $this->container->get("app.ws.storage.driver");
+        $clientStorage->lifeTime($conn->resourceId, 86400);
+        return $conn->event($topic->getId(), "pong");
+      }
+
+      $this->logger->info("Got command " . $event["cmd"], $event);
+
+      $event = array_map("trim", $event);
+      if (empty($event["cmd"])) {
+        $this->logger->error("cmd not set.", $event);
+        return true;
+      }
+
+      $user = $this->getUser($conn);
+      if (!($user instanceof UserInterface)) {
+        $this->logger->error("User not found.", $event);
+        return true;
+      }
+      $room = $this->getRoom($req->getAttributes()->get("room"), $user);
+      if (!$room || $room->isDeleted()) {
+        $this->logger->error("Room not found.", $event);
+        return true;
+      }
+
+      switch ($event["cmd"]) {
+        case RoomCommands::SEND:
+          $this->handleSend($conn, $topic, $req, $room, $user, $event);
+          break;
+      }
+    } catch (Exception $e) {
+      $this->handleError($e);
     }
 
-    $this->logger->info("Got command " . $event["cmd"], $event);
-
-    $event = array_map("trim", $event);
-    if (empty($event["cmd"])) {
-      $this->logger->error("cmd not set.", $event);
-      return;
-    }
-
-    $user = $this->getUser($conn);
-    if (!($user instanceof UserInterface)) {
-      $this->logger->error("User not found.", $event);
-      return;
-    }
-    $room = $this->getRoom($req->getAttributes()->get("room"), $user);
-    if (!$room || $room->isDeleted()) {
-      $this->logger->error("Room not found.", $event);
-      return;
-    }
-
-    switch ($event["cmd"]) {
-      case RoomCommands::SEND:
-        $this->handleSend($conn, $topic, $req, $room, $user, $event);
-        break;
-    }
+    return true;
   }
 
   /**
@@ -174,10 +194,22 @@ class RoomTopic extends AbstractTopic
     $chatLog = new ChatLog($room, $user, $message);
     $chatLog = $this->em->merge($chatLog);
     $this->em->flush();
-
     $topic->broadcast([
       "cmd"     => RoomCommands::SEND,
       "message" => $this->serializeMessage($chatLog)
     ]);
+  }
+
+  /**
+   * @param \Exception $e
+   */
+  public function handleError(Exception $e)
+  {
+    $this->logger->error($e);
+    if ($e instanceof ORMException) {
+      if (stripos($e->getMessage(), 'closed') !== -1) {
+        $this->reopenEntityManager();
+      }
+    }
   }
 }
