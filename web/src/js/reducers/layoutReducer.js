@@ -16,7 +16,7 @@ export default function layoutReducer(state = initialState.layout, action = {}) 
       });
     case types.LAYOUT_SWITCH_ACTIVE_CHAT:
       return Object.assign({}, state, {
-        activeChat: action.activeChat
+        activeChat: action.activeChat.toLowerCase()
       });
     case types.LAYOUT_WINDOW_FOCUS:
       return Object.assign({}, state, {

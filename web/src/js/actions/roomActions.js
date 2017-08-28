@@ -47,9 +47,6 @@ function handleCommandSend(msg, dispatch, getState, api) {
         message: msg
       });
     }
-    dispatch({
-      type: types.ROOM_SEND
-    });
   }
 }
 
@@ -66,7 +63,12 @@ export function roomSend(inputValue) {
   return (dispatch, getState, api) => {
     let value = inputValue.trim();
     if (value[0] !== '/') {
-      value = `/send ${value}`;
+      const activeChat = getState().layout.activeChat;
+      if (activeChat !== 'room') {
+        value = `/pm ${activeChat} ${value}`;
+      } else {
+        value = `/send ${value}`;
+      }
     }
 
     const idx = value.indexOf(' ');
@@ -77,6 +79,10 @@ export function roomSend(inputValue) {
     } else {
       console.info('Unknown command.');
     }
+
+    dispatch({
+      type: types.ROOM_SEND
+    });
   };
 }
 

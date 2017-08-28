@@ -1,6 +1,7 @@
 import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
 import store from 'store/store';
+import { sanitizeMessage } from 'utils/messages';
 
 /**
  * Adds a pm to the user's conversations
@@ -10,26 +11,21 @@ import store from 'store/store';
  * @returns {*}
  */
 function receive(state, action) {
-  let found           = false;
+  const msg           = sanitizeMessage(action.message);
+  const key           = msg.from.toLowerCase();
   const activeChat    = store.getState().layout.activeChat;
-  const conversations = state.conversations.slice();
+  const conversations = Object.assign({}, state.conversations);
 
-  for (let i = 0; i < conversations.length; i++) {
-    if (conversations[i].from === action.message.from) {
-      conversations[i].messages.push(action.message);
-      if (activeChat !== action.message.from) {
-        conversations[i].numNewMessages += 1;
-      }
-      found = true;
-      break;
-    }
-  }
-  if (!found) {
-    conversations.push({
-      from:           action.message.from,
-      messages:       [action.message],
+  if (conversations[key] === undefined) {
+    conversations[key] = {
+      messages:       [msg],
       numNewMessages: 1
-    });
+    };
+  } else {
+    conversations[key].messages.push(msg);
+    if (activeChat !== key) {
+      conversations[key].numNewMessages += 1;
+    }
   }
 
   return Object.assign({}, state, {
@@ -46,21 +42,17 @@ function receive(state, action) {
  * @returns {*}
  */
 function sent(state, action) {
-  let found           = false;
-  const conversations = state.conversations.slice();
-  for (let i = 0; i < conversations.length; i++) {
-    if (conversations[i].from === action.message.to) {
-      conversations[i].messages.push(action.message);
-      found = true;
-      break;
-    }
-  }
-  if (!found) {
-    conversations.push({
-      from:           action.message.to,
-      messages:       [action.message],
+  const msg           = sanitizeMessage(action.message);
+  const key           = msg.to.toLowerCase();
+  const conversations = Object.assign({}, state.conversations);
+
+  if (conversations[key] === undefined) {
+    conversations[key] = {
+      messages:       [msg],
       numNewMessages: 0
-    });
+    };
+  } else {
+    conversations[key].messages.push(msg);
   }
 
   return Object.assign({}, state, {

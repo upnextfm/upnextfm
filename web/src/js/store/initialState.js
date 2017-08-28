@@ -41,7 +41,10 @@ export default {
   pms: {
     isSubscribed:  false,
     isSending:     false,
-    conversations: []
+    conversations: {
+      // headzoo: { messages: [], numNewMessages: 0 },
+      // Cliff:   { messages: [], numNewMessages: 0 }
+    }
   },
   users: {
     repo: []

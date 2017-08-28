@@ -15,12 +15,10 @@ function getMessages(activeChat, roomMessages, conversations) {
   if (activeChat === 'room') {
     return roomMessages;
   }
-  for (let i = 0; i < conversations.length; i++) {
-    if (conversations[i].from === activeChat) {
-      return conversations[i].messages;
-    }
+  if (conversations[activeChat] === undefined) {
+    return [];
   }
-  return [];
+  return conversations[activeChat].messages;
 }
 
 class ChatSide extends React.Component {

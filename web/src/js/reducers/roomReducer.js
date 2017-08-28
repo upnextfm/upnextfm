@@ -1,5 +1,6 @@
 import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
+import { sanitizeMessage } from 'utils/messages';
 
 /**
  * Adds a user to the room users list
@@ -59,10 +60,10 @@ function users(state, action) {
  */
 function messages(state, action) {
   const newMessages = [];
-  action.messages.forEach((message) => {
-    message.date = new Date(message.date);
-    newMessages.push(message);
+  action.messages.forEach((msg) => {
+    newMessages.push(sanitizeMessage(msg));
   });
+
   return Object.assign({}, state, {
     messages: newMessages
   });
@@ -77,9 +78,8 @@ function messages(state, action) {
  */
 function message(state, action) {
   const msgs = state.messages.slice();
-  const msg  = Object.assign({}, action.message);
-  msg.date   = new Date(msg.date);
-  msgs.push(msg);
+  msgs.push(sanitizeMessage(action.message));
+
   return Object.assign({}, state, {
     messages: msgs
   });
