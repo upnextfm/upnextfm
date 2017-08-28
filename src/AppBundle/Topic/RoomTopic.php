@@ -118,6 +118,8 @@ class RoomTopic extends AbstractTopic
     array $eligible)
   {
     if (is_string($event) && $event === "ping") {
+      $clientStorage = $this->container->get("app.storage.websocket_driver");
+      $clientStorage->lifeTime($conn->resourceId, 86400);
       return $conn->event($topic->getId(), "pong");
     }
 

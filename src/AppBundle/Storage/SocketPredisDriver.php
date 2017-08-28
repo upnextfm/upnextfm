@@ -62,6 +62,17 @@ class SocketPredisDriver implements DriverInterface
   }
 
   /**
+   * @param string $id
+   * @param int $lifeTime
+   * @return bool
+   */
+  public function lifeTime($id, $lifeTime)
+  {
+    $response = $this->client->expire($this->prefix . $id, $lifeTime);
+    return $response === true || $response == 'OK';
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function delete($id)

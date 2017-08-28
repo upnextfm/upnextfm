@@ -227,6 +227,7 @@ gos_web_socket:
     session_handler: "@app.session.handler"
     storage:
       driver: "@app.storage.websocket_driver"
+      ttl: 86400
 
 ## ########################################################################
 ## RabbitMQ
