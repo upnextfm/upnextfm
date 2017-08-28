@@ -26,6 +26,9 @@ Encore
 
 let config = Encore.getWebpackConfig();
 //config.plugins.push(new BundleAnalyzerPlugin());
+config.plugins.push(new webpack.DefinePlugin({
+  'PRODUCTION': JSON.stringify(Encore.isProduction())
+}));
 config.plugins.push(new LiveReloadPlugin({ port: 35730 }));
 
 module.exports = config;

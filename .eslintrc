@@ -96,7 +96,8 @@
   ],
   "globals": {
     "$": true,
-    "_WS_URI": true
+    "_WS_URI": true,
+    "PRODUCTION": true
   },
   "settings": {
     "import/resolver": {

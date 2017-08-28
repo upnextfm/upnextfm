@@ -69,6 +69,7 @@
     "jest": "^20.0.4",
     "node-sass": "^4.5.3",
     "postcss-loader": "^2.0.6",
+    "redux-devtools": "^3.4.0",
     "sass-loader": "^6.0.6",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-livereload-plugin": "^0.11.0"
