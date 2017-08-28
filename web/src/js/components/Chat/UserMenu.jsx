@@ -26,9 +26,6 @@ export default class UserMenu extends React.Component {
         open={isOpen}
         onRequestClose={onRequestClose}
       >
-        <MenuItem onClick={onRequestClose}>
-          Private Message
-        </MenuItem>
         <MenuItem onClick={onClickProfile}>
           Profile
         </MenuItem>

@@ -54,6 +54,10 @@ class ChatSide extends React.Component {
     this.props.dispatch(roomInputChange(value));
   };
 
+  handleClickUser = (username) => {
+    this.props.dispatch(layoutSwitchActiveChat(username));
+  };
+
   handleCollapseUsers = () => {
     this.props.dispatch(layoutToggleUsersCollapsed());
     this.messagesPanelRef.scrollToBottom();
@@ -68,6 +72,7 @@ class ChatSide extends React.Component {
   renderUsersPanel() {
     return (
       <UsersPanel
+        onClickUser={this.handleClickUser}
         onCollapse={this.handleCollapseUsers}
         onClickRoomThumb={this.handleClickRoomThumb}
         pms={this.props.pms}

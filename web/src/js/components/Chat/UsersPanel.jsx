@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { getNumNewMessages } from 'utils/messages';
 import { usersFindByUsername } from 'utils/users';
 import Hidden from 'material-ui/Hidden';
 import Avatar from 'material-ui/Avatar';
@@ -10,16 +11,6 @@ import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import User from 'components/Chat/User';
 import UserMenu from 'components/Chat/UserMenu';
 
-function getNumNewMessages(conversations, fromUsername) {
-  for (let i = 0; i < conversations.length; i++) {
-    if (conversations[i].from === fromUsername) {
-      return conversations[i].numNewMessages;
-    }
-  }
-
-  return 0;
-}
-
 export default class UsersPanel extends React.Component {
   static propTypes = {
     pms:              PropTypes.object,
@@ -28,6 +19,7 @@ export default class UsersPanel extends React.Component {
     roomUsers:        PropTypes.array,
     repoUsers:        PropTypes.array,
     isCollapsed:      PropTypes.bool,
+    onClickUser:      PropTypes.func,
     onCollapse:       PropTypes.func,
     onClickRoomThumb: PropTypes.func
   };
@@ -37,6 +29,7 @@ export default class UsersPanel extends React.Component {
     roomUsers:        [],
     repoUsers:        [],
     isCollapsed:      false,
+    onClickUser:      () => {},
     onCollapse:       () => {},
     onClickRoomThumb: () => {}
   };
@@ -50,6 +43,12 @@ export default class UsersPanel extends React.Component {
   }
 
   handleClickUser = (e) => {
+    const username = e.currentTarget.getAttribute('data-username');
+    this.props.onClickUser(username);
+  };
+
+  handleContextMenuUser = (e) => {
+    e.preventDefault();
     this.setState({
       menuOpen:   true,
       menuAnchor: e.currentTarget
@@ -105,6 +104,7 @@ export default class UsersPanel extends React.Component {
                 { 'up-active': username === activeChat }
               )}
               onClick={this.handleClickUser}
+              onContextMenu={this.handleContextMenuUser}
               data-username={username}
               button
             >

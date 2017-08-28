@@ -25,3 +25,16 @@ export function findActiveChatMessages(activeChat, roomMessages, conversations) 
   }
   return conversations[activeChat].messages;
 }
+
+/**
+ *
+ * @param {*} conversations
+ * @param {string} fromUsername
+ * @returns {number}
+ */
+export function getNumNewMessages(conversations, fromUsername) {
+  if (conversations[fromUsername] === undefined) {
+    return 0;
+  }
+  return conversations[fromUsername].numNewMessages;
+}
