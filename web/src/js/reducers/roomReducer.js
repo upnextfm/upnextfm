@@ -88,6 +88,14 @@ function message(state, action) {
 /**
  * Rooms reducer
  *
+ * state = {
+ *    name:           '',
+ *    inputValue:     '',
+ *    users:          [],
+ *    messages:       [],
+ *    numNewMessages: 0
+ * }
+ *
  * @param {*} state
  * @param {*} action
  * @returns {*}

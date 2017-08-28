@@ -1,13 +1,12 @@
-export const AUTH_LOGIN_BEGIN     = 'AUTH_LOGIN_BEGIN';
-export const AUTH_LOGIN_FAILURE   = 'AUTH_LOGIN_FAILURE';
-export const AUTH_RESET           = 'AUTH_RESET';
-export const AUTH_USERNAME        = 'AUTH_USERNAME';
+export const AUTH_LOGIN_BEGIN   = 'AUTH_LOGIN_BEGIN';
+export const AUTH_LOGIN_FAILURE = 'AUTH_LOGIN_FAILURE';
+export const AUTH_RESET         = 'AUTH_RESET';
+export const AUTH_USERNAME      = 'AUTH_USERNAME';
 
-// export const REGISTER_TOGGLE_DIALOG  = 'REGISTER_TOGGLE_DIALOG';
-export const REGISTER_RESET          = 'REGISTER_RESET';
-export const REGISTER_BEGIN          = 'REGISTER_BEGIN';
-export const REGISTER_ERROR          = 'REGISTER_ERROR';
-export const REGISTER_COMPLETE       = 'REGISTER_COMPLETE';
+export const REGISTER_RESET    = 'REGISTER_RESET';
+export const REGISTER_BEGIN    = 'REGISTER_BEGIN';
+export const REGISTER_ERROR    = 'REGISTER_ERROR';
+export const REGISTER_COMPLETE = 'REGISTER_COMPLETE';
 
 export const SETTINGS_ALL  = 'SETTINGS_ALL';
 export const SETTINGS_USER = 'SETTINGS_USER';

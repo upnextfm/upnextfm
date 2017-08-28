@@ -2,7 +2,14 @@ import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
 
 /**
- * Video reducer
+ * Player reducer
+ *
+ * state = {
+ *    time:     0,
+ *    duration: 0,
+ *    status:   -1,
+ *    isMuted:  false
+ * }
  *
  * @param {*} state
  * @param {*} action

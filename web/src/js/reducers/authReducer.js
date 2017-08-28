@@ -4,6 +4,13 @@ import initialState from 'store/initialState';
 /**
  * Auth reducer
  *
+ * state = {
+ *    username:        '',
+ *    error:           null,
+ *    isAuthenticated: false,
+ *    isSubmitting:    false
+ * }
+ *
  * @param {*} state
  * @param {*} action
  * @returns {*}

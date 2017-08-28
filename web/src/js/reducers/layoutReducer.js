@@ -2,7 +2,20 @@ import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
 
 /**
- * Nav reducer
+ * Layout reducer
+ *
+ * state = {
+ *    isNavDrawerOpen:      false,
+ *    isWindowFocused:      true,
+ *    isLoginDialogOpen:    false,
+ *    isRegisterDialogOpen: false,
+ *    isHelpDialogOpen:     false,
+ *    isUsersCollapsed:     false,
+ *    activeChat:           'room',
+ *    errorMessage:         '',
+ *    colsChatSide:         7,
+ *    colsVideoSide:        5
+ * }
  *
  * @param {*} state
  * @param {*} action

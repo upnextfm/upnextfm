@@ -2,7 +2,15 @@ import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
 
 /**
- * Nav reducer
+ * Settings reducer
+ *
+ * state = {
+ *    user: {
+ *      showNotices: true
+ *    },
+ *    site: {},
+ *    room: {}
+ * }
  *
  * @param {*} state
  * @param {*} action

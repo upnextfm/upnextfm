@@ -51,6 +51,10 @@ function removeRepoUser(state, action) {
 /**
  * User repo reducer
  *
+ * state = {
+ *    repo: []
+ * }
+ *
  * @param {*} state
  * @param {*} action
  * @returns {*}

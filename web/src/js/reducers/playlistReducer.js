@@ -4,6 +4,10 @@ import initialState from 'store/initialState';
 /**
  * Playlist reducer
  *
+ * state = {
+ *    current: {}
+ * }
+ *
  * @param {*} state
  * @param {*} action
  * @returns {*}

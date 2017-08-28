@@ -1,25 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as api from 'api';
 import Favico from 'favico.js';
 import { connect } from 'react-redux';
-import { pmsSubscribe, pmsSend } from 'actions/pmsActions';
+import { pmsSubscribe } from 'actions/pmsActions';
 import { roomJoin, roomSend, roomInputChange } from 'actions/roomActions';
 import { layoutWindowFocused, layoutToggleUsersCollapsed, layoutSwitchActiveChat } from 'actions/layoutActions';
 import { domOnWindowBlur } from 'utils/dom';
-import * as api from 'api';
+import { findActiveChatMessages } from 'utils/messages';
 import UsersPanel from 'components/Chat/UsersPanel';
 import MessagesPanel from 'components/Chat/MessagesPanel';
 import MessageInput from 'components/Chat/MessageInput';
-
-function getMessages(activeChat, roomMessages, conversations) {
-  if (activeChat === 'room') {
-    return roomMessages;
-  }
-  if (conversations[activeChat] === undefined) {
-    return [];
-  }
-  return conversations[activeChat].messages;
-}
 
 class ChatSide extends React.Component {
   static propTypes = {
@@ -91,7 +82,7 @@ class ChatSide extends React.Component {
   }
 
   renderMessagesPanel() {
-    const messages = getMessages(
+    const messages = findActiveChatMessages(
       this.props.layout.activeChat,
       this.props.room.messages,
       this.props.pms.conversations

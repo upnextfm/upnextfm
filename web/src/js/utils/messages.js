@@ -8,3 +8,20 @@ export function sanitizeMessage(message) {
   msg.date   = new Date(msg.date);
   return msg;
 }
+
+/**
+ *
+ * @param {string} activeChat
+ * @param {Array} roomMessages
+ * @param {*} conversations
+ * @returns {Array}
+ */
+export function findActiveChatMessages(activeChat, roomMessages, conversations) {
+  if (activeChat === 'room') {
+    return roomMessages;
+  }
+  if (conversations[activeChat] === undefined) {
+    return [];
+  }
+  return conversations[activeChat].messages;
+}

@@ -4,6 +4,12 @@ import initialState from 'store/initialState';
 /**
  * Register reducer
  *
+ * state = {
+ *    error:        null,
+ *    isRegistered: false,
+ *    isSubmitting: false
+ * }
+ *
  * @param {*} state
  * @param {*} action
  * @returns {*}

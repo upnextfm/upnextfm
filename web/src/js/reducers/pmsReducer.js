@@ -1,7 +1,7 @@
 import * as types from 'actions/actionTypes';
+import { sanitizeMessage } from 'utils/messages';
 import initialState from 'store/initialState';
 import store from 'store/store';
-import { sanitizeMessage } from 'utils/messages';
 
 /**
  * Adds a pm to the user's conversations
@@ -63,6 +63,15 @@ function sent(state, action) {
 
 /**
  * Private messages reducer
+ *
+ * state = {
+ *    isSubscribed:  false,
+ *    isSending:     false,
+ *    conversations: {
+ *       headzoo: { messages: [], numNewMessages: 0 },
+ *       az4521:  { messages: [], numNewMessages: 0 }
+ *   }
+ * }
  *
  * @param {*} state
  * @param {*} action
