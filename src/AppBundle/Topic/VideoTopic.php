@@ -48,9 +48,9 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   /**
    * {@inheritdoc}
    */
-  public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+  public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
-    $user = $this->getUser($connection);
+    $user = $this->getUser($conn);
     if (!($user instanceof UserInterface)) {
       $user = null;
     }
@@ -60,7 +60,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       return;
     }
 
-    $client   = ["conn" => $connection, "id" => $topic->getId()];
+    $client   = ["conn" => $conn, "id" => $topic->getId()];
     $roomName = $room->getName();
     if (!isset($this->subs[$roomName])) {
       $this->subs[$roomName] = [];
@@ -77,7 +77,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     if ($videoID) {
       $video = $this->em->getRepository("AppBundle:Video")->findByID($videoID);
       if ($video) {
-        $connection->event($topic->getId(), [
+        $conn->event($topic->getId(), [
           "cmd"   => VideoCommands::START,
           "video" => $this->serializeVideo($video)
         ]);

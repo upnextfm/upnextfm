@@ -84,7 +84,10 @@ export function roomLeave() {
         type: types.ROOM_NAME,
         name: ''
       });
-      api.socket.unsubscribe(`${types.CHAN_ROOM}/${room.name}`);
+      api.socket.unsubscribe(`${types.CHAN_ROOM}/${room.name}`)
+        .catch((err) => {
+          console.info(err);
+        });
       if (pingInterval) {
         clearInterval(pingInterval);
       }

@@ -22,9 +22,9 @@ class RoomTopic extends AbstractTopic
   /**
    * {@inheritdoc}
    */
-  public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+  public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
-    $user = $this->getUser($connection);
+    $user = $this->getUser($conn);
     if (!($user instanceof UserInterface)) {
       $user = null;
     }
@@ -57,7 +57,7 @@ class RoomTopic extends AbstractTopic
       }
     }
 
-    $connection->event($topic->getId(), [
+    $conn->event($topic->getId(), [
       "cmd"      => RoomCommands::SETTINGS,
       "settings" => [
         "user" => [
@@ -67,15 +67,15 @@ class RoomTopic extends AbstractTopic
         "room" => $this->serializeRoomSettings($room->getSettings())
       ]
     ]);
-    $connection->event($topic->getId(), [
+    $conn->event($topic->getId(), [
       "cmd"      => RoomCommands::MESSAGES,
       "messages" => array_reverse($this->serializeMessages($messages))
     ]);
-    $connection->event($topic->getId(), [
+    $conn->event($topic->getId(), [
       "cmd"   => RoomCommands::REPO_USERS,
       "users" => $repoUsers
     ]);
-    $connection->event($topic->getId(), [
+    $conn->event($topic->getId(), [
       "cmd"   => RoomCommands::USERS,
       "users" => $users
     ]);

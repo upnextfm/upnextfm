@@ -42,11 +42,11 @@ class ChatSide extends React.Component {
       this.props.dispatch(layoutWindowFocused(status));
     });
 
-    api.socket.connect(this.props.socketURI)
-      .then(() => {
-        this.props.dispatch(roomJoin(this.props.roomName));
-        this.props.dispatch(pmsSubscribe());
-      });
+    api.socket.on('socket/connect', () => {
+      this.props.dispatch(roomJoin(this.props.roomName));
+      this.props.dispatch(pmsSubscribe());
+    });
+    api.socket.connect(this.props.socketURI);
   }
 
   componentDidUpdate(prevProps) {

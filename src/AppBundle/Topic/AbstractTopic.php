@@ -93,12 +93,12 @@ abstract class AbstractTopic implements TopicInterface
   /**
    * This will receive any Subscription requests for this topic.
    *
-   * @param ConnectionInterface|WampConnection $connection
+   * @param ConnectionInterface|WampConnection $conn
    * @param Topic $topic
    * @param WampRequest $request
    * @return void
    */
-  public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+  public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
 /*    $topic->broadcast([
       'cmd' => Commands::JOIN,
