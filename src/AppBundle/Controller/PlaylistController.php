@@ -41,7 +41,7 @@ class PlaylistController extends Controller
     $rooms = [];
     $user  = $this->getUser();
     if ($user) {
-      $storage = $this->get("app.storage.room");
+      $storage = $this->get("app.ws.storage.room");
       foreach($storage->getUserRooms($user) as $roomName) {
         $rooms[] = [
           "name" => $roomName

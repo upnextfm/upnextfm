@@ -30,7 +30,7 @@ class HomeController extends Controller
   public function homepageAction()
   {
     $rooms = [];
-    $roomStorage = $this->get("app.storage.room");
+    $roomStorage = $this->get("app.ws.storage.room");
     $repo  = $this->getDoctrine()->getRepository("AppBundle:Room");
     foreach($repo->findPublic(50) as $room) {
       $rooms[] = new ValueDecorator($room, [
