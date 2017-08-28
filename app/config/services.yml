@@ -135,6 +135,17 @@ services:
         - { name: gos_web_socket.periodic }
 
     ## ########################################################################
+    ## Doctrine Periodic
+    ## ########################################################################
+    app.doctrine.periodic:
+      class: AppBundle\Periodic\DoctrinePeriodic
+      calls:
+        - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+        - [setLogger, ["@?monolog.logger.websocket"]]
+      tags:
+        - { name: gos_web_socket.periodic }
+
+    ## ########################################################################
     ## YouTube Service
     ## ########################################################################
     madcoda.youtube.youtube:
