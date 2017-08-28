@@ -18,8 +18,3 @@ video_topic:
   requirements:
     room:
       pattern: "[\\w]+"
-
-auth_topic:
-  channel: app/auth
-  handler:
-    callback: "auth.topic"

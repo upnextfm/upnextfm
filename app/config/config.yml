@@ -1,7 +1,8 @@
 imports:
   - { resource: parameters.yml }
   - { resource: security.yml }
-  - { resource: services.yml }
+  - { resource: services/services.yml }
+  - { resource: services/websocket.yml }
   - { resource: "@AdminBundle/Resources/config/services.yml" }
 
 ## ########################################################################
@@ -226,7 +227,7 @@ gos_web_socket:
     firewall: main
     session_handler: "@app.session.handler"
     storage:
-      driver: "@app.storage.websocket_driver"
+      driver: "@app.ws.storage.driver"
       ttl: 86400
 
 ## ########################################################################

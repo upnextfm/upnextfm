@@ -1,5 +1,3 @@
-# Learn more about services, parameters and containers at
-# https://symfony.com/doc/current/service_container.html
 parameters:
     api.request_listener.class: AppBundle\EventListener\RequestListener
     api.controller_response_listener.class: AppBundle\EventListener\ControllerResponseListener
@@ -25,22 +23,6 @@ services:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\WriteCheckSessionHandler
         arguments:
             - "@snc_redis.session.handler"
-
-    ## ########################################################################
-    ## Storage Rooms
-    ## ########################################################################
-    app.storage.room:
-      class: AppBundle\Storage\RoomStorage
-      arguments:
-        - "@snc_redis.rooms"
-
-    ## ########################################################################
-    ## Storage Websocket Driver
-    ## ########################################################################
-    app.storage.websocket_driver:
-      class: AppBundle\Storage\SocketPredisDriver
-      arguments:
-        - "@snc_redis.websocket_storage"
 
     ## ########################################################################
     ## API Request Listener
@@ -71,79 +53,6 @@ services:
           - "@serializer_json"
         tags:
           - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
-
-    ## ########################################################################
-    ## Websocket Parent Topic
-    ## ########################################################################
-    app.topic.parent:
-        arguments:
-          - "@service_container"
-          - "@?monolog.logger.websocket"
-        abstract: true
-        private: true
-
-    ## ########################################################################
-    ## Websocket Auth Topic
-    ## ########################################################################
-    app.topic.auth:
-        class: AppBundle\Topic\AuthTopic
-        parent: app.topic.parent
-        tags:
-          - { name: gos_web_socket.topic }
-
-    ## ########################################################################
-    ## Websocket Room Topic
-    ## ########################################################################
-    app.topic.room:
-        class: AppBundle\Topic\RoomTopic
-        parent: app.topic.parent
-        calls:
-          - [setRoomStorage, ["@app.storage.room"]]
-        tags:
-          - { name: gos_web_socket.topic }
-
-    ## ########################################################################
-    ## Websocket Private Message Topic
-    ## ########################################################################
-    app.topic.pms:
-        class: AppBundle\Topic\PrivateMessageTopic
-        parent: app.topic.parent
-        calls:
-          - [setRoomStorage, ["@app.storage.room"]]
-        tags:
-          - { name: gos_web_socket.topic }
-
-    ## ########################################################################
-    ## Websocket Video Topic
-    ## ########################################################################
-    app.topic.video:
-        class: AppBundle\Topic\VideoTopic
-        parent: app.topic.parent
-        calls:
-          - [setRedis, ["@snc_redis.video"]]
-        tags:
-          - { name: gos_web_socket.topic }
-
-    ## ########################################################################
-    ## Video Periodic
-    ## ########################################################################
-    app.video.periodic:
-      class: AppBundle\Periodic\VideoPeriodic
-      calls:
-        - [setRedis, ["@snc_redis.video"]]
-      tags:
-        - { name: gos_web_socket.periodic }
-
-    ## ########################################################################
-    ## Doctrine Periodic
-    ## ########################################################################
-    app.doctrine.periodic:
-      class: AppBundle\Periodic\DoctrinePeriodic
-      calls:
-        - [setEntityManager, ["@doctrine.orm.entity_manager"]]
-        - [setLogger, ["@?monolog.logger.websocket"]]
-      tags:
-        - { name: gos_web_socket.periodic }
 
     ## ########################################################################
     ## YouTube Service

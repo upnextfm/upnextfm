@@ -1,0 +1,89 @@
+parameters:
+    app.ws.storage.driver.class:    AppBundle\Storage\SocketPredisDriver
+    app.ws.storage.room.class:      AppBundle\Storage\RoomStorage
+    app.ws.topic.room.class:        AppBundle\Topic\RoomTopic
+    app.ws.topic.pms.class:         AppBundle\Topic\PrivateMessageTopic
+    app.ws.topic.video.class:       AppBundle\Topic\VideoTopic
+    app.ws.periodic.video.class:    AppBundle\Periodic\VideoPeriodic
+    app.ws.periodic.doctrine.class: AppBundle\Periodic\DoctrinePeriodic
+
+services:
+    ## ########################################################################
+    ## Storage Websocket Driver
+    ## ########################################################################
+    app.ws.storage.driver:
+      class: "%app.ws.storage.driver.class%"
+      arguments:
+        - "@snc_redis.websocket_storage"
+
+    ## ########################################################################
+    ## Storage Rooms
+    ## ########################################################################
+    app.ws.storage.room:
+      class: "%app.ws.storage.room.class%"
+      arguments:
+        - "@snc_redis.rooms"
+
+    ## ########################################################################
+    ## Websocket Parent Topic
+    ## ########################################################################
+    app.ws.topic.parent:
+        arguments:
+          - "@service_container"
+          - "@?monolog.logger.websocket"
+        abstract: true
+        private: true
+
+    ## ########################################################################
+    ## Websocket Room Topic
+    ## ########################################################################
+    app.ws.topic.room:
+        class: "%app.ws.topic.room.class%"
+        parent: app.ws.topic.parent
+        calls:
+          - [setRoomStorage, ["@app.ws.storage.room"]]
+        tags:
+          - { name: gos_web_socket.topic }
+
+    ## ########################################################################
+    ## Websocket Private Message Topic
+    ## ########################################################################
+    app.ws.topic.pms:
+        class: "%app.ws.topic.pms.class%"
+        parent: app.ws.topic.parent
+        calls:
+          - [setRoomStorage, ["@app.ws.storage.room"]]
+        tags:
+          - { name: gos_web_socket.topic }
+
+    ## ########################################################################
+    ## Websocket Video Topic
+    ## ########################################################################
+    app.ws.topic.video:
+        class: "%app.ws.topic.video.class%"
+        parent: app.ws.topic.parent
+        calls:
+          - [setRedis, ["@snc_redis.video"]]
+        tags:
+          - { name: gos_web_socket.topic }
+
+    ## ########################################################################
+    ## Video Periodic
+    ## ########################################################################
+    app.ws.periodic.video:
+      class: "%app.ws.periodic.video.class%"
+      calls:
+        - [setRedis, ["@snc_redis.video"]]
+      tags:
+        - { name: gos_web_socket.periodic }
+
+    ## ########################################################################
+    ## Doctrine Periodic
+    ## ########################################################################
+    app.ws.periodic.doctrine:
+      class: "%app.ws.periodic.doctrine.class%"
+      calls:
+        - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+        - [setLogger, ["@?monolog.logger.websocket"]]
+      tags:
+        - { name: gos_web_socket.periodic }
