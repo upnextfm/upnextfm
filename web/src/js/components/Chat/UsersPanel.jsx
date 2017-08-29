@@ -101,7 +101,7 @@ export default class UsersPanel extends React.Component {
               key={username}
               className={classNames(
                 'up-block',
-                { 'up-active': username === activeChat }
+                { 'up-active': username.toLowerCase() === activeChat }
               )}
               onClick={this.handleClickUser}
               onContextMenu={this.handleContextMenuUser}
