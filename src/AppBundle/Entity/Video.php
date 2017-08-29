@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
+use AppBundle\Playlist\Providers;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
@@ -116,19 +117,6 @@ class Video
   protected $dateLastPlayed;
 
   /**
-   * @param string $provider
-   * @return bool
-   */
-  public static function isValidProvider($provider)
-  {
-    if (!in_array($provider, [self::PROVIDER_YOUTUBE])) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
    * Constructor
    */
   public function __construct()
@@ -213,7 +201,7 @@ class Video
    */
   public function setProvider($provider)
   {
-    if (!self::isValidProvider($provider)) {
+    if (!Providers::isValidProvider($provider)) {
       throw new \InvalidArgumentException(sprintf(
         "Provider invalid '%s'.",
         $provider

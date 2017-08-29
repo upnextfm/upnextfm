@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Topic;
 
+use AppBundle\Playlist\ProvidersInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerTrait;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerInterface;
@@ -28,11 +29,26 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   protected $redis;
 
   /**
+   * @var ProvidersInterface
+   */
+  protected $providers;
+
+  /**
    * {@inheritdoc}
    */
   public function getName()
   {
     return "video.topic";
+  }
+
+  /**
+   * @param ProvidersInterface $providers
+   * @return $this
+   */
+  public function setProviders(ProvidersInterface $providers)
+  {
+    $this->providers = $providers;
+    return $this;
   }
 
   /**
@@ -167,37 +183,37 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     UserInterface $user,
     array $event)
   {
-    if (empty($event["codename"]) || empty($event["provider"])) {
-      $this->logger->error("Missing event argument.", $event);
-      return;
-    }
-    if (!Video::isValidProvider($event["provider"])) {
-      $this->logger->error("Invalid provider.", $event);
+    $parsed = $this->providers->parseURL($event["url"]);
+    if (!$parsed) {
+      $conn->event($topic->getId(), [
+        "cmd"   => VideoCommands::ERROR,
+        "error" => "Invalid URL '${event['url']}''."
+      ]);
       return;
     }
 
-    $msg = [
-      "provider"  => $event["provider"],
-      "codename"  => $event["codename"],
+/*    $msg = [
+      "provider"  => $parsed["provider"],
+      "codename"  => $parsed["codename"],
       "user_id"   => $user->getId(),
       "room_id"   => $room->getId(),
       "video_log" => true
     ];
-    $this->container->get('old_sound_rabbit_mq.save_video_producer')->publish(json_encode($msg));
+    $this->container->get('old_sound_rabbit_mq.save_video_producer')->publish(json_encode($msg));*/
 
     $video = $this->em->getRepository("AppBundle:Video")
-      ->findByCodename($event["codename"], $event["provider"]);
+      ->findByCodename($parsed["codename"], $parsed["provider"]);
     if (!$video) {
       $service = $this->container->get("app.service.video");
-      $info    = $service->getInfo($event["codename"], $event["provider"]);
+      $info    = $service->getInfo($parsed["codename"], $parsed["provider"]);
       if (!$info) {
         $this->logger->error("Failed to fetch video info.", $event);
         return;
       }
 
       $video = new Video();
-      $video->setCodename($event["codename"]);
-      $video->setProvider($event["provider"]);
+      $video->setCodename($parsed["codename"]);
+      $video->setProvider($parsed["provider"]);
       $video->setCreatedByUser($user);
       $video->setCreatedInRoom($room);
       $video->setTitle($info->getTitle());

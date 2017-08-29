@@ -1,5 +1,6 @@
 import * as types from 'actions/actionTypes';
 import { authToggleLoginDialog } from 'actions/authActions';
+import { layoutErrorMessage } from 'actions/layoutActions';
 import { playerTime } from 'actions/playerActions';
 
 export function playlistSubscribe() {
@@ -15,6 +16,9 @@ export function playlistSubscribe() {
             });
             dispatch(playerTime(0));
             break;
+          case types.CMD_ERROR:
+            dispatch(layoutErrorMessage(payload.error));
+            break;
           default:
 
             break;
@@ -29,11 +33,10 @@ export function playlistSubscribe() {
 
 /**
  *
- * @param {string} codename
- * @param {string} provider
+ * @param {string} url
  * @returns {Function}
  */
-export function playlistPlay(codename, provider) {
+export function playlistPlay(url) {
   return (dispatch, getState, api) => { // eslint-disable-line
     if (!getState().playlist.subscribed) {
       dispatch(playlistSubscribe());
@@ -44,10 +47,10 @@ export function playlistPlay(codename, provider) {
       if (!getState().auth.isAuthenticated) {
         return dispatch(authToggleLoginDialog());
       }
+
       api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
         cmd: types.CMD_VIDEO_PLAY,
-        codename,
-        provider
+        url
       });
     }
   };

@@ -116,3 +116,9 @@ services:
         - "@doctrine.orm.entity_manager"
       tags:
         - { name: "kernel.event_subscriber", priority: 100 }
+
+    ## ########################################################################
+    ## Playlist Providers
+    ## ########################################################################
+    app.playlist.providers:
+      class: AppBundle\Playlist\Providers

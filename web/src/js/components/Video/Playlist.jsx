@@ -8,36 +8,36 @@ class PlaylistContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      codename: ''
+      permalink: ''
     };
   }
 
   componentWillUpdate(nextProps) {
-    if (nextProps.current.codename !== this.props.current.codename) {
-      this.setState({ codename: nextProps.current.codename });
+    if (nextProps.current.permalink !== this.props.current.permalink) {
+      this.setState({ permalink: nextProps.current.permalink });
     }
   }
 
   handleClickPlay = () => {
-    const codename = this.inputRef.value;
-    this.props.dispatch(playlistPlay(codename, types.PROVIDER_YOUTUBE));
+    const permalink = this.inputRef.value;
+    this.props.dispatch(playlistPlay(permalink));
   };
 
   handleChange = (e) => {
-    this.setState({ codename: e.target.value });
+    this.setState({ permalink: e.target.value });
   };
 
   render() {
-    const { codename } = this.state;
+    const { permalink } = this.state;
 
     return (
       <div className="up-room-video__playlist up-paper-container">
-        <label htmlFor="up-youtube-id">YouTUBE ID: </label>
+        <label htmlFor="up-media-url">Media URL: </label>
         <input
-          id="up-youtube-id"
-          value={codename}
+          id="up-media-url"
+          value={permalink}
           onChange={this.handleChange}
-          style={{ color: 'black' }}
+          style={{ color: 'black', width: '75%' }}
           ref={(ref) => { this.inputRef = ref; }}
         />
         <Button onClick={this.handleClickPlay}>Play</Button>

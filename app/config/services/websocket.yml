@@ -63,6 +63,7 @@ services:
         class: "%app.ws.topic.video.class%"
         parent: app.ws.topic.parent
         calls:
+          - [setProviders, ["@app.playlist.providers"]]
           - [setRedis, ["@snc_redis.video"]]
         tags:
           - { name: gos_web_socket.topic }
