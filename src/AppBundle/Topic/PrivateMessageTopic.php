@@ -25,6 +25,42 @@ class PrivateMessageTopic extends AbstractTopic
   {
     $this->logger->info("Got command " . $event["cmd"]);
 
+    try {
+      if (is_string($event) && $event === "ping") {
+        $clientStorage = $this->container->get("app.ws.storage.driver");
+        $clientStorage->lifeTime($conn->resourceId, 86400);
+        return $conn->event($topic->getId(), "pong");
+      }
+
+      if (empty($event["cmd"])) {
+        $this->logger->error("cmd not set.", $event);
+        return true;
+      }
+
+      switch ($event["cmd"]) {
+        case PrivateMessageCommands::SEND:
+          $this->handleSend($conn, $topic, $req, $event);
+          break;
+        case PrivateMessageCommands::LOAD:
+          $this->handleLoad($conn, $topic, $req, $event);
+          break;
+      }
+    } catch (\Exception $e) {
+      $this->handleError($e);
+      return true;
+    }
+
+    return true;
+  }
+
+  /**
+   * @param ConnectionInterface $conn
+   * @param Topic $topic
+   * @param WampRequest $req
+   * @param array $event
+   */
+  protected function handleSend(ConnectionInterface $conn, Topic $topic, WampRequest $req, $event)
+  {
     $payload = $event["message"];
     if (empty($payload["message"])) {
       $this->logger->error("Missing 'message' parameter.");
@@ -79,6 +115,39 @@ class PrivateMessageTopic extends AbstractTopic
     $conn->event($topic->getId(), [
       "cmd"     => PrivateMessageCommands::SENT,
       "message" => $message
+    ]);
+  }
+
+  protected function handleLoad(ConnectionInterface $conn, Topic $topic, WampRequest $req, $event)
+  {
+    /** @var User $fromUser */
+    /** @var User $toUser */
+    /** @var PrivateMessage $pm */
+    $fromUser = $this->getUser($conn);
+    if (!($fromUser instanceof UserInterface)) {
+      $this->logger->error("From user not found.", $event);
+      return;
+    }
+    $toUser = $this->em->getRepository("AppBundle:User")
+      ->findByUsername($event["username"]);
+    if (!($toUser instanceof UserInterface)) {
+      $conn->event($topic->getId(), [
+        "cmd"   => PrivateMessageCommands::ERROR,
+        "error" => "User ${event['username']} not found."
+      ]);
+      return;
+    }
+
+    $conversation = [];
+    $repo = $this->em->getRepository("AppBundle:PrivateMessage");
+    foreach($repo->fetchConversation($fromUser, $toUser, 50) as $row) {
+      $conversation[] = $this->serializePrivateMessage($row);
+    }
+
+    $conn->event($topic->getId(), [
+      "cmd"          => PrivateMessageCommands::LOAD,
+      "to"           => $toUser->getUsername(),
+      "conversation" => array_reverse($conversation)
     ]);
   }
 }

@@ -39,6 +39,7 @@ export const PMS_SEND             = 'PMS_SEND';
 export const PMS_SENT             = 'PMS_SENT';
 export const PMS_RECEIVE          = 'PMS_RECEIVE';
 export const PMS_SENDING          = 'PMS_SENDING';
+export const PMS_LOAD             = 'PMS_LOAD';
 export const PMS_NUM_NEW_MESSAGES = 'PMS_NUM_NEW_MESSAGES';
 
 export const PLAYLIST_START     = 'PLAYLIST_START';
@@ -67,6 +68,7 @@ export const CMD_JOINED      = 'joined';
 export const CMD_PARTED      = 'parted';
 export const CMD_USERS       = 'users';
 export const CMD_ERROR       = 'error';
+export const CMD_LOAD        = 'load';
 export const CMD_REPO_USERS  = 'repo_users';
 export const CMD_MESSAGES    = 'messages';
 export const CMD_VIDEO_PLAY  = 'play';

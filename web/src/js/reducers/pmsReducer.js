@@ -4,6 +4,37 @@ import initialState from 'store/initialState';
 import store from 'store/store';
 
 /**
+ * Loads the conversation with another user
+ *
+ * @param {*} state
+ * @param {*} action
+ * @returns {*}
+ */
+function load(state, action) {
+  const msgs = [];
+  for (let i = 0; i < action.conversation.length; i++) {
+    msgs.push(sanitizeMessage(action.conversation[i]));
+  }
+
+  const key = action.to.toLowerCase();
+  const conversations = Object.assign({}, state.conversations);
+  if (conversations[key] === undefined) {
+    conversations[key] = {
+      messages:       msgs,
+      numNewMessages: 0
+    };
+  } else {
+    conversations[key].messages = msgs;
+    conversations[key].numNewMessages = 0;
+  }
+
+  return Object.assign({}, state, {
+    isSending: false,
+    conversations
+  });
+}
+
+/**
  * Adds a pm to the user's conversations
  *
  * @param {*} state
@@ -103,6 +134,8 @@ export default function pmsReducer(state = initialState.pms, action = {}) {
         isSubscribed: true,
         isSending:    false
       });
+    case types.PMS_LOAD:
+      return load(state, action);
     case types.PMS_SENT:
       return sent(state, action);
     case types.PMS_RECEIVE:

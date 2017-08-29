@@ -6,6 +6,8 @@ use AppBundle\Entity\RoomSettings;
 use AppBundle\Entity\User;
 use AppBundle\Storage\RoomStorage;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
+use Exception;
 use Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProviderInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
@@ -305,5 +307,18 @@ abstract class AbstractTopic implements TopicInterface
     }
 
     return false;
+  }
+
+  /**
+   * @param \Exception $e
+   */
+  protected function handleError(Exception $e)
+  {
+    $this->logger->error($e);
+    if ($e instanceof ORMException) {
+      if (stripos($e->getMessage(), 'closed') !== -1) {
+        $this->reopenEntityManager();
+      }
+    }
   }
 }

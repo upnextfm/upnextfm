@@ -199,17 +199,4 @@ class RoomTopic extends AbstractTopic
       "message" => $this->serializeMessage($chatLog)
     ]);
   }
-
-  /**
-   * @param \Exception $e
-   */
-  public function handleError(Exception $e)
-  {
-    $this->logger->error($e);
-    if ($e instanceof ORMException) {
-      if (stripos($e->getMessage(), 'closed') !== -1) {
-        $this->reopenEntityManager();
-      }
-    }
-  }
 }

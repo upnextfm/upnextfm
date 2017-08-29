@@ -60,13 +60,13 @@ class PrivateMessageRepository extends AbstractRepository
   public function fetchConversation(User $toUser, User $fromUser, $limit, $offset = 0)
   {
     return $this->createQueryBuilder("pm")
-      ->where("pm.toUser = :toUser")
-      ->where("pm.fromUser = :fromUser")
+      ->where("(pm.toUser = :toUser AND pm.fromUser = :fromUser)")
+      ->orWhere("(pm.toUser = :fromUser ANd pm.fromUser = :toUser)")
       ->setParameter("toUser", $toUser)
       ->setParameter("fromUser", $fromUser)
       ->setFirstResult($offset)
       ->setMaxResults($limit)
-      ->orderBy("id", "desc")
+      ->orderBy("pm.id", "desc")
       ->getQuery()
       ->execute();
   }

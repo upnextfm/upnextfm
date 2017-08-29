@@ -12,6 +12,12 @@ function dispatchSocketPayload(dispatch, payload, state) {
     case types.CMD_ERROR:
       dispatch(layoutErrorMessage(payload.error));
       break;
+    case types.CMD_LOAD:
+      return dispatch({
+        type:         types.PMS_LOAD,
+        to:           payload.to,
+        conversation: payload.conversation
+      });
     case types.CMD_RECEIVE:
       return dispatch({
         type:    types.PMS_RECEIVE,
@@ -26,7 +32,7 @@ function dispatchSocketPayload(dispatch, payload, state) {
         message: payload.message
       });
     default:
-      return console.error(`Invalid comment ${payload.cmd}`);
+      return console.error(`Invalid command ${payload.cmd}`);
   }
 
   return true;
@@ -70,6 +76,23 @@ export function pmsNumNewMessages(username, numNewMessages) {
     type: types.PMS_NUM_NEW_MESSAGES,
     username,
     numNewMessages
+  };
+}
+
+/**
+ * @param {string} username
+ * @returns {Function}
+ */
+export function pmsLoadConversation(username) {
+  return (dispatch, getState, api) => {
+    if (!getState().auth.isAuthenticated) {
+      return;
+    }
+
+    api.socket.publish(types.CHAN_PMS, {
+      cmd: types.CMD_LOAD,
+      username
+    });
   };
 }
 
