@@ -62,6 +62,25 @@ function sent(state, action) {
 }
 
 /**
+ * Sets the number of new messages from a user
+ *
+ * @param {*} state
+ * @param {*} action
+ * @returns {*}
+ */
+function numNewMessages(state, action) {
+  if (state.conversations[action.username] !== undefined) {
+    const conversations = Object.assign({}, state.conversations);
+    conversations[action.username].numNewMessages = action.numNewMessages;
+    return Object.assign({}, state, {
+      conversations
+    });
+  }
+
+  return state;
+}
+
+/**
  * Private messages reducer
  *
  * state = {
@@ -88,6 +107,8 @@ export default function pmsReducer(state = initialState.pms, action = {}) {
       return sent(state, action);
     case types.PMS_RECEIVE:
       return receive(state, action);
+    case types.PMS_NUM_NEW_MESSAGES:
+      return numNewMessages(state, action);
     case types.PMS_SENDING:
       return Object.assign({}, state, {
         isSending: true

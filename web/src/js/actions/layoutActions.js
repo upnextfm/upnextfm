@@ -1,5 +1,6 @@
 import * as types from 'actions/actionTypes';
 import { roomResetNumNewMessages } from 'actions/roomActions';
+import { pmsNumNewMessages } from 'actions/pmsActions';
 
 /**
  * @param {string} errorMessage
@@ -18,9 +19,15 @@ export function layoutErrorMessage(errorMessage) {
  * @returns {{type: string, activeChat: string}}
  */
 export function layoutSwitchActiveChat(activeChat) {
-  return {
-    type: types.LAYOUT_SWITCH_ACTIVE_CHAT,
-    activeChat
+  return (dispatch, getState) => {
+    const ac = activeChat.toLowerCase();
+    dispatch({
+      type:       types.LAYOUT_SWITCH_ACTIVE_CHAT,
+      activeChat: ac
+    });
+    if (ac !== 'room') {
+      dispatch(pmsNumNewMessages(activeChat, 0));
+    }
   };
 }
 

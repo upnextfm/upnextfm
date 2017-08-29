@@ -61,6 +61,19 @@ export function pmsSending(isSending) {
 }
 
 /**
+ * @param {string} username
+ * @param {number} numNewMessages
+ * @returns {{type: string, username: string, numNewMessages: number}}
+ */
+export function pmsNumNewMessages(username, numNewMessages) {
+  return {
+    type: types.PMS_NUM_NEW_MESSAGES,
+    username,
+    numNewMessages
+  };
+}
+
+/**
  *
  * @param {string} to
  * @param {string} message

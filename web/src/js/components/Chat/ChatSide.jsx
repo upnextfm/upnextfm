@@ -57,6 +57,7 @@ class ChatSide extends React.Component {
   handleClickUser = (username) => {
     if (this.props.auth.isAuthenticated && username.toLowerCase() !== this.props.auth.username) {
       this.props.dispatch(layoutSwitchActiveChat(username));
+      this.messageInputRef.focus();
     }
   };
 

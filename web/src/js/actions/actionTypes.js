@@ -34,11 +34,12 @@ export const ROOM_INPUT_CHANGE           = 'ROOM_INPUT_CHANGE';
 export const ROOM_RESET_NUM_NEW_MESSAGES = 'ROOM_RESET_NUM_NEW_MESSAGES';
 export const ROOM_INCR_NUM_NEW_MESSAGES  = 'ROOM_INCR_NUM_NEW_MESSAGES';
 
-export const PMS_SUBSCRIBED = 'PMS_SUBSCRIBED';
-export const PMS_SEND       = 'PMS_SEND';
-export const PMS_SENT       = 'PMS_SENT';
-export const PMS_RECEIVE    = 'PMS_RECEIVE';
-export const PMS_SENDING    = 'PMS_SENDING';
+export const PMS_SUBSCRIBED       = 'PMS_SUBSCRIBED';
+export const PMS_SEND             = 'PMS_SEND';
+export const PMS_SENT             = 'PMS_SENT';
+export const PMS_RECEIVE          = 'PMS_RECEIVE';
+export const PMS_SENDING          = 'PMS_SENDING';
+export const PMS_NUM_NEW_MESSAGES = 'PMS_NUM_NEW_MESSAGES';
 
 export const PLAYLIST_START     = 'PLAYLIST_START';
 export const PLAYLIST_SUBSCRIBE = 'PLAYLIST_SUBSCRIBE';

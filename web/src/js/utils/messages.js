@@ -33,8 +33,9 @@ export function findActiveChatMessages(activeChat, roomMessages, conversations) 
  * @returns {number}
  */
 export function getNumNewMessages(conversations, fromUsername) {
-  if (conversations[fromUsername] === undefined) {
+  const key = fromUsername.toLowerCase();
+  if (conversations[key] === undefined) {
     return 0;
   }
-  return conversations[fromUsername].numNewMessages;
+  return conversations[key].numNewMessages;
 }
