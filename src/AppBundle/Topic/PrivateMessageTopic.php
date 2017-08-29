@@ -64,16 +64,16 @@ class PrivateMessageTopic extends AbstractTopic
     $payload = $event["message"];
     if (empty($payload["message"])) {
       $this->logger->error("Missing 'message' parameter.");
-      return;
+      return true;
     }
     if (empty($payload["to"])) {
       $this->logger->error("Missing 'to' parameter.");
-      return;
+      return true;
     }
     $message = $this->sanitizeMessage($payload["message"]);
     if (empty($message)) {
       $this->logger->error("Empty 'message' parameter.");
-      return;
+      return true;
     }
 
     /** @var User $fromUser */
@@ -82,16 +82,14 @@ class PrivateMessageTopic extends AbstractTopic
     $fromUser = $this->getUser($conn);
     if (!($fromUser instanceof UserInterface)) {
       $this->logger->error("From user not found.", $event);
-      return;
+      return true;
     }
     $toUser = $this->em->getRepository("AppBundle:User")
       ->findByUsername($payload["to"]);
     if (!($toUser instanceof UserInterface)) {
-      $conn->event($topic->getId(), [
-        "cmd"   => PrivateMessageCommands::ERROR,
-        "error" => "User ${payload['to']} not found."
-      ]);
-      return;
+      return $this->connSendError($conn, $topic,
+        "User \"${payload['to']}\" not found."
+      );
     }
     $pm = (new PrivateMessage())
       ->setFromUser($fromUser)
@@ -103,7 +101,7 @@ class PrivateMessageTopic extends AbstractTopic
     $toUserConn = $this->clientManipulator->findByUsername($topic, $toUser->getUsername());
     if (!$toUserConn) {
       $this->logger->debug("To user is not online.", $event);
-      return;
+      return true;
     }
 
     $message = $this->serializePrivateMessage($pm);
@@ -112,12 +110,19 @@ class PrivateMessageTopic extends AbstractTopic
       "message" => $message
     ];
     $topic->broadcast($msg, [], [$toUserConn['connection']->WAMP->sessionId]);
-    $conn->event($topic->getId(), [
+    return $conn->event($topic->getId(), [
       "cmd"     => PrivateMessageCommands::SENT,
       "message" => $message
     ]);
   }
 
+  /**
+   * @param ConnectionInterface $conn
+   * @param Topic $topic
+   * @param WampRequest $req
+   * @param array $event
+   * @return mixed|void
+   */
   protected function handleLoad(ConnectionInterface $conn, Topic $topic, WampRequest $req, $event)
   {
     /** @var User $fromUser */
@@ -126,16 +131,14 @@ class PrivateMessageTopic extends AbstractTopic
     $fromUser = $this->getUser($conn);
     if (!($fromUser instanceof UserInterface)) {
       $this->logger->error("From user not found.", $event);
-      return;
+      return true;
     }
     $toUser = $this->em->getRepository("AppBundle:User")
       ->findByUsername($event["username"]);
     if (!($toUser instanceof UserInterface)) {
-      $conn->event($topic->getId(), [
-        "cmd"   => PrivateMessageCommands::ERROR,
-        "error" => "User ${event['username']} not found."
-      ]);
-      return;
+      return $this->connSendError($conn, $topic,
+        "User \"${event['username']}\" not found."
+      );
     }
 
     $conversation = [];
@@ -144,7 +147,7 @@ class PrivateMessageTopic extends AbstractTopic
       $conversation[] = $this->serializePrivateMessage($row);
     }
 
-    $conn->event($topic->getId(), [
+    return $conn->event($topic->getId(), [
       "cmd"          => PrivateMessageCommands::LOAD,
       "to"           => $toUser->getUsername(),
       "conversation" => array_reverse($conversation)

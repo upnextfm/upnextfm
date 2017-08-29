@@ -174,6 +174,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
    * @param Room $room
    * @param UserInterface|User $user
    * @param array $event
+   * @return mixed|void
    */
   protected function handlePlay(
     ConnectionInterface $conn,
@@ -185,11 +186,9 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   {
     $parsed = $this->providers->parseURL($event["url"]);
     if (!$parsed) {
-      $conn->event($topic->getId(), [
-        "cmd"   => VideoCommands::ERROR,
-        "error" => "Invalid URL '${event['url']}''."
-      ]);
-      return;
+      return $this->connSendError($conn, $topic,
+        "Invalid URL \"${event['url']}\"."
+      );
     }
 
 /*    $msg = [
@@ -208,7 +207,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       $info    = $service->getInfo($parsed["codename"], $parsed["provider"]);
       if (!$info) {
         $this->logger->error("Failed to fetch video info.", $event);
-        return;
+        return true;
       }
 
       $video = new Video();

@@ -7,5 +7,4 @@ class PrivateMessageCommands
   const SENT    = "sent";
   const SEND    = "send";
   const LOAD    = "load";
-  const ERROR   = "error";
 }

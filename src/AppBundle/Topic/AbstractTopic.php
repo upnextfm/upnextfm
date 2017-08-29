@@ -321,4 +321,18 @@ abstract class AbstractTopic implements TopicInterface
       }
     }
   }
+
+  /**
+   * @param ConnectionInterface $conn
+   * @param Topic $topic
+   * @param string $error
+   * @return mixed
+   */
+  protected function connSendError(ConnectionInterface $conn, Topic $topic, $error)
+  {
+    return $conn->event($topic->getId(), [
+      "cmd"   => Commands::ERROR,
+      "error" => $error
+    ]);
+  }
 }
