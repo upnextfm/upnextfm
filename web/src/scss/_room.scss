@@ -253,12 +253,47 @@ $height-avatar-collapsed: auto;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
 }
 
-.up-room-video__playlist {
+.up-room-playlist {
   padding: $padding-std;
   margin-left: 0 !important;
   margin-right: 0 !important;
   flex-grow: 1;
   min-height: 16em;
+}
+
+.up-room-playlist__items {
+  border-top: 1px solid #2b2b2b;
+  padding: 0 !important;
+
+  li {
+    padding: 0 !important;
+  }
+}
+
+.up-room-playlist__item {
+  height: 41px;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  padding: $padding-std / 2;
+  border-bottom: 1px solid #2b2b2b;
+
+  .up-thumbnail {
+    height: 32px;
+    width: 57px;
+    margin-right: $padding-std;
+  }
+}
+
+.up-room-playlist__item__meta {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .up-info {
+    font-size: 0.8rem;
+  }
 }
 
 /******************************************************************************

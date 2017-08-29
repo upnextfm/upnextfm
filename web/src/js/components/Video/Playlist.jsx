@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { playlistPlay } from 'actions/playlistActions';
 import * as types from 'actions/actionTypes';
+import { playlistPlay } from 'actions/playlistActions';
+import List, { ListItem } from 'material-ui/List';
 import Button from 'material-ui/Button';
+import PlaylistItem from 'components/Video/PlaylistItem';
 
 class PlaylistContainer extends React.Component {
   constructor(props) {
@@ -28,10 +30,11 @@ class PlaylistContainer extends React.Component {
   };
 
   render() {
+    const { current, videos } = this.props;
     const { permalink } = this.state;
 
     return (
-      <div className="up-room-video__playlist up-paper-container">
+      <div className="up-room-playlist up-paper-container">
         <label htmlFor="up-media-url">Media URL: </label>
         <input
           id="up-media-url"
@@ -41,6 +44,22 @@ class PlaylistContainer extends React.Component {
           ref={(ref) => { this.inputRef = ref; }}
         />
         <Button onClick={this.handleClickPlay}>Play</Button>
+        <div>
+          <List className="up-room-playlist__items">
+            {!current.codename ? null : (
+              <ListItem key={current.codename} button>
+                <PlaylistItem video={current} isCurrent />
+              </ListItem>
+            )}
+            {videos.map((video) => {
+              return (
+                <ListItem key={video.codename} button>
+                  <PlaylistItem video={video} />
+                </ListItem>
+              );
+            })}
+          </List>
+        </div>
       </div>
     );
   }
