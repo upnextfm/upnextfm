@@ -5,7 +5,7 @@ import Favico from 'favico.js';
 import { connect } from 'react-redux';
 import { pmsSubscribe } from 'actions/pmsActions';
 import { roomJoin, roomSend, roomInputChange } from 'actions/roomActions';
-import { layoutWindowFocused, layoutToggleUsersCollapsed, layoutSwitchActiveChat } from 'actions/layoutActions';
+import { layoutWindowFocused, layoutToggleUsersCollapsed, layoutSwitchActiveChat, layoutErrorMessage } from 'actions/layoutActions';
 import { domOnWindowBlur } from 'utils/dom';
 import { findActiveChatMessages } from 'utils/messages';
 import UsersPanel from 'components/Chat/UsersPanel';
@@ -27,14 +27,25 @@ class ChatSide extends React.Component {
   }
 
   componentDidMount() {
+    const { dispatch } = this.props;
+
     this.favicon = new Favico();
     domOnWindowBlur((status) => {
-      this.props.dispatch(layoutWindowFocused(status));
+      dispatch(layoutWindowFocused(status));
     });
 
     api.socket.on('socket/connect', () => {
-      this.props.dispatch(roomJoin(this.props.roomName));
-      this.props.dispatch(pmsSubscribe());
+      dispatch(layoutErrorMessage(''));
+      dispatch(roomJoin(this.props.roomName));
+      dispatch(pmsSubscribe());
+    });
+    api.socket.on('socket/disconnect', (resp) => {
+      console.info(resp);
+      if (resp.code === 3) {
+        dispatch(layoutErrorMessage(resp.reason));
+      } else if (resp.code === 6 || resp.code === 5) {
+        dispatch(layoutErrorMessage('Connection to server lost.'));
+      }
     });
     api.socket.connect(this.props.socketURI);
   }

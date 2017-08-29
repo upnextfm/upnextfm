@@ -57,6 +57,7 @@ class Room extends React.Component {
         </div>
         <ErrorSnackbar
           errorMessage={layout.errorMessage}
+          errorDuration={layout.errorDuration}
           onClose={this.handleCloseErrorSnackbar}
         />
         <HelpDialog

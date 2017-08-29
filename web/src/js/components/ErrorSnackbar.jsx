@@ -8,20 +8,18 @@ import ErrorIcon from 'material-ui-icons/Error';
 export default class ErrorSnackbar extends React.Component {
   static propTypes = {
     errorMessage: PropTypes.string,
+    duration:     PropTypes.number,
     onClose:      PropTypes.func
   };
 
   static defaultProps = {
     errorMessage: '',
+    duration:     30000,
     onClose:      () => {}
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const { errorMessage, onClose } = this.props;
+    const { errorMessage, duration, onClose } = this.props;
 
     return (
       <Snackbar
@@ -30,7 +28,7 @@ export default class ErrorSnackbar extends React.Component {
           horizontal: 'center'
         }}
         open={errorMessage !== ''}
-        autoHideDuration={6e3}
+        autoHideDuration={duration}
         className="up-snackbar up-snackbar--error"
         onRequestClose={onClose}
         SnackbarContentProps={{

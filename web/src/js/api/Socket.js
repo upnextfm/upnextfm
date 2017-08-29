@@ -9,6 +9,7 @@ class Socket {
     this.session   = null;
     this.connected = false;
     this.debug     = false;
+    this.reconnect = null;
   }
 
   /**
@@ -42,6 +43,12 @@ class Socket {
                 reason
               }
             });
+
+            if (code === 3) {
+              setTimeout(() => {
+                this.connect(uri);
+              }, 5000);
+            }
           });
       } catch (error) {
         this.error(error);

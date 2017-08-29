@@ -10,6 +10,7 @@ export default {
     isUsersCollapsed:     Storage.getItem('layout:isUsersCollapsed', false),
     activeChat:           'room',
     errorMessage:         '',
+    errorDuration:        30000,
     colsChatSide:         7,
     colsVideoSide:        5
   },

@@ -25,7 +25,8 @@ export default function layoutReducer(state = initialState.layout, action = {}) 
   switch (action.type) {
     case types.LAYOUT_ERROR_MESSAGE:
       return Object.assign({}, state, {
-        errorMessage: action.errorMessage
+        errorMessage:  action.errorMessage,
+        errorDuration: action.errorDuration
       });
     case types.LAYOUT_SWITCH_ACTIVE_CHAT:
       return Object.assign({}, state, {

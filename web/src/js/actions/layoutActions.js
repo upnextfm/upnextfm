@@ -6,12 +6,14 @@ const loadedConversations = [];
 
 /**
  * @param {string} errorMessage
+ * @param {number} errorDuration
  * @returns {{type: string, errorMessage: *}}
  */
-export function layoutErrorMessage(errorMessage) {
+export function layoutErrorMessage(errorMessage, errorDuration = 30000) {
   return {
     type: types.LAYOUT_ERROR_MESSAGE,
-    errorMessage
+    errorMessage,
+    errorDuration
   };
 }
 
