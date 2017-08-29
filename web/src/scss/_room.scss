@@ -64,6 +64,12 @@ $height-avatar-collapsed: auto;
     .up-username {
       opacity: 0;
     }
+
+    .up-badge {
+      position: absolute;
+      left: 26px;
+      top: 4px;
+    }
   }
 
   @include media-xs {

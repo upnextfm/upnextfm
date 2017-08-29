@@ -58,6 +58,7 @@ class ChatSide extends React.Component {
 
   handleSendInput = () => {
     this.props.dispatch(roomSend(this.props.room.inputValue));
+    this.messagesPanelRef.scrollToBottom();
     this.messageInputRef.focus();
   };
 
