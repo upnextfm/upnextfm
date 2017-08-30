@@ -2,7 +2,11 @@
     <div class="col s12 m2">
         <div class="card up-room-card">
             <div class="card-image" style="background-color: #{{ room.settings.thumbColor }};" aria-hidden="true">
-                <a href="{{ path("room", {name: room.name}) }}" class="up-card-image" style="background-image: url({{ room.settings.thumbMd }});">
+                <a
+                    class="up-card-image"
+                    href="{{ path("room", {name: room.name}) }}"
+                    style="background-image: url({{ room.settings.thumbMd }});"
+                >
                 </a>
             </div>
             <div class="card-content">
@@ -22,8 +26,11 @@
     <div class="col s12 m4 l{{ size }}">
         <div class="card up-playlist-card" data-id="{{ played.id }}">
             <div class="card-image" style="background-color: #{{ played.video.thumbColor }};" aria-hidden="true">
-                <a href="{{ played.video.permalink }}">
-                    <img src="{{ played.video.thumbSm }}" />
+                <a
+                    class="up-card-image"
+                    href="{{ played.video.permalink }}"
+                    style="background-image: url({{ played.video.thumbSm }});"
+                >
                 </a>
                 <button class="btn-floating halfway-fab waves-effect waves-light up-pulse-hover">
                     <i class="material-icons modal-trigger" data-target="play-modal">play_arrow</i>
