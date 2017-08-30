@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Player from 'components/Video/Player';
 import Buttons from 'components/Video/Buttons';
 import Playlist from 'components/Video/Playlist';
+import Progress from 'components/Video/Progress';
 
 class VideoSide extends React.Component {
   static propTypes = {
@@ -16,6 +17,7 @@ class VideoSide extends React.Component {
     return (
       <div className="up-room-side__video">
         <Player video={playlist.current} />
+        <Progress />
         <Buttons />
         <Playlist />
       </div>
