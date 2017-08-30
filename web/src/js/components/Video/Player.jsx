@@ -17,7 +17,8 @@ class Player extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.player.time === this.props.player.time;
+    // return nextProps.player.time === this.props.player.time;
+    return true;
   }
 
   componentDidUpdate(prevProps) {
@@ -62,7 +63,7 @@ class Player extends React.Component {
 
     const duration = parseInt(this.provider.getDuration(), 10);
     this.props.dispatch(actions.playerReady(duration));
-    this.provider.seekTo(this.props.player.time);
+    // this.provider.seekTo(this.props.player.time);
     // setInterval(this.handleInterval, 1000);
   };
 
@@ -76,6 +77,7 @@ class Player extends React.Component {
       width:      '100%',
       playerVars: {
         widget_referrer: document.location.href,
+        start:           this.props.video.start,
         showinfo:        0,
         controls:        0,
         autoplay:        1,

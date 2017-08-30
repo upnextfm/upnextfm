@@ -2,6 +2,7 @@
 namespace AppBundle\Topic;
 
 use AppBundle\Playlist\ProvidersInterface;
+use AppBundle\Storage\PlaylistStorage;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerTrait;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerInterface;
@@ -24,6 +25,16 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   protected $subs = [];
 
   /**
+   * @var Room[]
+   */
+  protected $rooms = [];
+
+  /**
+   * @var PlaylistStorage
+   */
+  protected $playlist;
+
+  /**
    * @var Redis
    */
   protected $redis;
@@ -39,6 +50,16 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   public function getName()
   {
     return "video.topic";
+  }
+
+  /**
+   * @param PlaylistStorage $playlist
+   * @return $this
+   */
+  public function setPlaylistStorage(PlaylistStorage $playlist)
+  {
+    $this->playlist = $playlist;
+    return $this;
   }
 
   /**
@@ -88,16 +109,28 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       }
     }
     $this->subs[$roomName][] = $client;
+    $this->rooms[$roomName]  = $room;
 
-    $videoID = $this->redis->get(sprintf("room:%s:playing", $roomName));
-    if ($videoID) {
-      $video = $this->em->getRepository("AppBundle:Video")->findByID($videoID);
-      if ($video) {
-        $conn->event($topic->getId(), [
-          "cmd"   => VideoCommands::START,
-          "video" => $this->serializeVideo($video)
-        ]);
-      }
+    $videos = [];
+    foreach($this->playlist->getAll($room) as $videoLog) {
+      $videos[] = $this->serializeVideo($videoLog->getVideo());
+    }
+    if ($videos) {
+      $conn->event($topic->getId(), [
+        "cmd"    => VideoCommands::VIDEOS,
+        "videos" => $videos
+      ]);
+    }
+
+    $current = $this->playlist->getCurrent($room);
+    if ($current) {
+      /** @var VideoLog $videoLog */
+      $videoLog = $current["videoLog"];
+      $conn->event($topic->getId(), [
+        "cmd"   => VideoCommands::START,
+        "start" => time() - $current["timeStarted"],
+        "video" => $this->serializeVideo($videoLog->getVideo())
+      ]);
     }
   }
 
@@ -125,6 +158,10 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       $index  = array_search($client, $this->subs[$roomName]);
       if (false !== $index) {
         unset($this->subs[$roomName][$index]);
+        if (count($this->subs[$roomName]) === 0) {
+          unset($this->subs[$roomName]);
+          unset($this->rooms[$roomName]);
+        }
       }
     }
   }
@@ -158,8 +195,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       }
 
       switch ($event["cmd"]) {
-        case VideoCommands::PLAY:
-          $this->handlePlay($conn, $topic, $req, $room, $user, $event);
+        case VideoCommands::APPEND:
+          $this->handleAppend($conn, $topic, $req, $room, $user, $event);
           break;
       }
     } catch (\Exception $e) {
@@ -176,7 +213,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
    * @param array $event
    * @return mixed|void
    */
-  protected function handlePlay(
+  protected function handleAppend(
     ConnectionInterface $conn,
     Topic $topic,
     WampRequest $req,
@@ -184,21 +221,14 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     UserInterface $user,
     array $event)
   {
+    $this->logger->debug("Appending", $event);
+
     $parsed = $this->providers->parseURL($event["url"]);
     if (!$parsed) {
       return $this->connSendError($conn, $topic,
         "Invalid URL \"${event['url']}\"."
       );
     }
-
-/*    $msg = [
-      "provider"  => $parsed["provider"],
-      "codename"  => $parsed["codename"],
-      "user_id"   => $user->getId(),
-      "room_id"   => $room->getId(),
-      "video_log" => true
-    ];
-    $this->container->get('old_sound_rabbit_mq.save_video_producer')->publish(json_encode($msg));*/
 
     $video = $this->em->getRepository("AppBundle:Video")
       ->findByCodename($parsed["codename"], $parsed["provider"]);
@@ -223,23 +253,30 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       $video->setThumbMd($info->getThumbnail("md"));
       $video->setThumbLg($info->getThumbnail("lg"));
       $video->setNumPlays(0);
+      $this->em->persist($video);
     }
 
+    /** @var VideoLog $videoLog */
     $video->setDateLastPlayed(new \DateTime());
     $video->incrNumPlays();
-    $this->em->persist($video);
-
-    $this->playing[$room->getName()] = $video->getId();
-    $this->redis->set(sprintf("room:%s:playing", $room->getName()), $video->getId());
-
     $videoLog = new VideoLog($video, $room, $user);
-    $this->em->merge($videoLog);
+    $videoLog = $this->em->merge($videoLog);
     $this->em->flush();
 
-    $topic->broadcast([
-      "cmd"   => VideoCommands::START,
-      "video" => $this->serializeVideo($video)
-    ]);
+    $this->playlist->append($videoLog);
+    usleep(100);
+
+    if (!$this->playlist->getCurrent($room)) {
+      if ($current = $this->playlist->popToCurrent($room)) {
+        $this->sendToRoom($room, [
+          "cmd"   => VideoCommands::START,
+          "video" => $this->serializeVideo($videoLog->getVideo()),
+          "start" => 0
+        ]);
+      }
+    }
+
+    return $this->sendPlaylistToRoom($room);
   }
 
   /**
@@ -249,27 +286,88 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
    */
   public function registerPeriodicTimer(Topic $topic)
   {
-    $interval = $this->container->getParameter("app_ws_video_time_update_interval");
-    $this->periodicTimer->addPeriodicTimer($this, VideoCommands::TIME_UPDATE, $interval, function() use ($topic) {
+    $this->periodicTimer->addPeriodicTimer(
+      $this,
+      VideoCommands::TIME_UPDATE,
+      $this->container->getParameter("app_ws_video_time_update_interval"),
+      function() use ($topic) {
 
-      $play = $this->redis->get("playlist:play");
-      if ($play) {
-        $this->redis->del("playlist:play");
-        $play = json_decode($play, true);
-        $roomName = $play["roomName"];
+        /** @var VideoLog $videoLog */
+        foreach ($this->rooms as $roomName => $room) {
+          $current = $this->playlist->getCurrent($room);
+          if (!$current) {
+            $current = $this->playlist->popToCurrent($room);
+          }
+          if ($current) {
 
-        if (isset($this->subs[$roomName])) {
-          $video = $this->em->getRepository("AppBundle:Video")->findByID($play["videoID"]);
-          if ($video) {
-            foreach($this->subs[$roomName] as $client) {
-              $client["conn"]->event($client["id"], [
-                "cmd"   => VideoCommands::START,
-                "video" => $this->serializeVideo($video)
-              ]);
+            $videoLog      = $current["videoLog"];
+            $timeFinishes  = $current["timeStarted"] + $videoLog->getVideo()->getSeconds();
+            $timeRemaining = $timeFinishes - time();
+
+            $this->logger->debug(sprintf(
+              'Current for room "%s" is "%s" with time remaining %s.',
+              $roomName,
+              $videoLog->getVideo()->getTitle(),
+              $timeRemaining
+            ));
+
+            if ($timeRemaining <= 0) {
+              if ($current = $this->playlist->popToCurrent($room)) {
+
+                $videoLog = $current["videoLog"];
+                $this->logger->info(sprintf(
+                  'Current set to "%s" for room "%s".',
+                  $videoLog->getVideo()->getTitle(),
+                  $roomName
+                ));
+
+                $this->sendToRoom($room, [
+                  "cmd"   => VideoCommands::START,
+                  "video" => $this->serializeVideo($videoLog->getVideo()),
+                  "start" => 0
+                ]);
+                $this->sendPlaylistToRoom($room);
+              } else {
+                $this->playlist->clearCurrent($room);
+                $this->sendToRoom($room, [
+                  "cmd" => VideoCommands::STOP
+                ]);
+              }
             }
           }
         }
-      }
     });
+  }
+
+  /**
+   * @param Room $room
+   * @param mixed $msg
+   */
+  private function sendToRoom(Room $room, $msg)
+  {
+    $roomName = $room->getName();
+    foreach ($this->subs[$roomName] as $client) {
+      $client["conn"]->event($client["id"], $msg);
+    }
+  }
+
+  /**
+   * @param Room $room
+   * @return bool
+   */
+  private function sendPlaylistToRoom(Room $room)
+  {
+    $videos = [];
+    foreach($this->playlist->getAll($room) as $videoLog) {
+      $videos[] = $this->serializeVideo($videoLog->getVideo());
+    }
+    if ($videos) {
+      $this->sendToRoom($room, [
+        "cmd"    => VideoCommands::VIDEOS,
+        "videos" => $videos
+      ]);
+    }
+
+    return true;
   }
 }

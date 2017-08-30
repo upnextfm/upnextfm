@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function formatSeconds(seconds) {
-  var date = new Date(1970,0,1);
+  const date = new Date(1970, 0, 1);
   date.setSeconds(seconds);
-  return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+  return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
 }
 
 export default class Component extends React.Component {

@@ -71,14 +71,6 @@ class UserInfo
   }
 
   /**
-   * @return User
-   */
-  public function getUser()
-  {
-    return $this->user;
-  }
-
-  /**
    * @param User $user
    * @return $this
    */

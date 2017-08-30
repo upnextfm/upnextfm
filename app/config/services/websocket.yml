@@ -1,6 +1,7 @@
 parameters:
     app.ws.storage.driver.class:    AppBundle\Storage\SocketPredisDriver
     app.ws.storage.room.class:      AppBundle\Storage\RoomStorage
+    app.ws.storage.playlist.class:  AppBundle\Storage\PlaylistStorage
     app.ws.topic.room.class:        AppBundle\Topic\RoomTopic
     app.ws.topic.pms.class:         AppBundle\Topic\PrivateMessageTopic
     app.ws.topic.video.class:       AppBundle\Topic\VideoTopic
@@ -17,12 +18,31 @@ services:
         - "@snc_redis.websocket_storage"
 
     ## ########################################################################
+    ## Storage Parent
+    ## ########################################################################
+    app.ws.storage.parent:
+        arguments:
+          - "@snc_redis.rooms"
+          - "@?monolog.logger.websocket"
+        abstract: true
+        private: true
+
+    ## ########################################################################
     ## Storage Rooms
     ## ########################################################################
     app.ws.storage.room:
       class: "%app.ws.storage.room.class%"
-      arguments:
-        - "@snc_redis.rooms"
+      parent: app.ws.storage.parent
+
+    ## ########################################################################
+    ## Storage Playlist
+    ## ########################################################################
+    app.ws.storage.playlist:
+      class: "%app.ws.storage.playlist.class%"
+      parent: app.ws.storage.parent
+      calls:
+        - [setVideoLogRepository, ["@=service('doctrine').getRepository('AppBundle:VideoLog')"]]
+
 
     ## ########################################################################
     ## Websocket Parent Topic
@@ -63,6 +83,7 @@ services:
         class: "%app.ws.topic.video.class%"
         parent: app.ws.topic.parent
         calls:
+          - [setPlaylistStorage, ["@app.ws.storage.playlist"]]
           - [setProviders, ["@app.playlist.providers"]]
           - [setRedis, ["@snc_redis.video"]]
         tags:

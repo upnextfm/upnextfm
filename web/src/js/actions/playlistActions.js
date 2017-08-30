@@ -9,12 +9,23 @@ export function playlistSubscribe() {
     if (room.name !== '') {
       api.socket.subscribe(`${types.CHAN_VIDEO}/${room.name}`, (uri, payload) => {
         switch (payload.cmd) {
+          case types.CMD_VIDEO_VIDEOS:
+            dispatch({
+              type:   types.PLAYLIST_VIDEOS,
+              videos: payload.videos
+            });
+            break;
           case types.CMD_VIDEO_START:
             dispatch({
               type:    types.PLAYLIST_START,
+              start:   payload.start,
               current: payload.video
             });
-            dispatch(playerTime(0));
+            break;
+          case types.CMD_VIDEO_STOP:
+            dispatch({
+              type: types.PLAYLIST_STOP
+            });
             break;
           case types.CMD_ERROR:
             dispatch(layoutErrorMessage(payload.error));
@@ -36,7 +47,7 @@ export function playlistSubscribe() {
  * @param {string} url
  * @returns {Function}
  */
-export function playlistPlay(url) {
+export function playlistAppend(url) {
   return (dispatch, getState, api) => { // eslint-disable-line
     if (!getState().playlist.subscribed) {
       dispatch(playlistSubscribe());
@@ -49,7 +60,7 @@ export function playlistPlay(url) {
       }
 
       api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
-        cmd: types.CMD_VIDEO_PLAY,
+        cmd: types.CMD_VIDEO_APPEND,
         url
       });
     }

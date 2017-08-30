@@ -5,23 +5,8 @@ use AppBundle\Entity\Room;
 use Predis\Client as Redis;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class RoomStorage
+class RoomStorage extends AbstractStorage
 {
-  /**
-   * @var Redis
-   */
-  protected $redis;
-
-  /**
-   * Constructor
-   *
-   * @param Redis $redis
-   */
-  public function __construct(Redis $redis)
-  {
-    $this->redis = $redis;
-  }
-
   /**
    * Adds a user to the given room
    *

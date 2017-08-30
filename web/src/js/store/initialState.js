@@ -55,23 +55,6 @@ export default {
   },
   playlist: {
     current: {},
-    videos:  [
-      {
-        codename:  'dDxgSvJINlU',
-        permalink: 'https://youtu.be/dDxgSvJINlU',
-        provider:  'youtube',
-        seconds:   250,
-        thumbnail: 'https://i.ytimg.com/vi/dDxgSvJINlU/mqdefault.jpg',
-        title:     'Blue October - Hate Me'
-      },
-      {
-        codename:  'Xx5s-IBu9BA',
-        permalink: 'https://youtu.be/Xx5s-IBu9BA',
-        provider:  'youtube',
-        seconds:   263,
-        thumbnail: 'https://i.ytimg.com/vi/Xx5s-IBu9BA/mqdefault.jpg',
-        title:     'Karmin - Sugar (Official Video)'
-      }
-    ]
+    videos:  []
   }
 };

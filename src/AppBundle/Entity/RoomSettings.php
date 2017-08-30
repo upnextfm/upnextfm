@@ -102,14 +102,6 @@ class RoomSettings
   }
 
   /**
-   * @return Room
-   */
-  public function getRoom()
-  {
-    return $this->room;
-  }
-
-  /**
    * @param Room $room
    * @return $this
    */
