@@ -1,12 +1,12 @@
 <?php
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\ChatLog;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\ValueDecorator;
 use AppBundle\Form\ContactModel;
 use AppBundle\Form\ContactType;
+use AppBundle\Entity\ChatLog;
 
 class HomeController extends Controller
 {

@@ -99,7 +99,21 @@ services:
     app.service.thumbs:
       class: AppBundle\Service\ThumbsService
       arguments:
+        - "@app.identicon"
+        - "@app.service.upload"
         - "%app_service_thumbs_params%"
+
+    ## ########################################################################
+    ## Upload Service
+    ## ########################################################################
+    app.service.upload:
+      class: AppBundle\Service\UploadService
+      arguments:
+        - "@aws.s3"
+        - "%aws_buckets%"
+        - "%app_service_upload_rooturl%"
+      calls:
+        - [setLogger, ["@logger"]]
 
     ## ########################################################################
     ## Registration Form
@@ -133,3 +147,9 @@ services:
     ## ########################################################################
     app.playlist.providers:
       class: AppBundle\Playlist\Providers
+
+    ## ########################################################################
+    ## Identicon
+    ## ########################################################################
+    app.identicon:
+      class: Identicon\Identicon

@@ -258,3 +258,13 @@ old_sound_rabbit_mq:
       queue_options:
         name: "save-video"
       callback: app_rabbitmq_save_video_consumer
+
+## ########################################################################
+## AWS
+## ########################################################################
+aws:
+  version: latest
+  region: us-east-1
+  credentials:
+    key: "%aws_credentials_key%"
+    secret: "%aws_credentials_secret%"

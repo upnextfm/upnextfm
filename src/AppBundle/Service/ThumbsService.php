@@ -3,9 +3,20 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\Room;
 use AppBundle\Entity\User;
+use Identicon\Identicon;
 
 class ThumbsService
 {
+  /**
+   * @var Identicon
+   */
+  protected $identicon;
+
+  /**
+   * @var UploadService
+   */
+  protected $uploadService;
+
   /**
    * @var array
    */
@@ -14,11 +25,15 @@ class ThumbsService
   /**
    * Constructor
    *
+   * @param Identicon $identicon
+   * @param UploadService $uploadService
    * @param array $defaults
    */
-  public function __construct(array $defaults)
+  public function __construct(Identicon $identicon, UploadService $uploadService, array $defaults)
   {
-    $this->defaults = $defaults;
+    $this->identicon     = $identicon;
+    $this->uploadService = $uploadService;
+    $this->defaults      = $defaults;
   }
 
   /**
@@ -60,28 +75,39 @@ class ThumbsService
    */
   public function getRoomThumb(Room $room, $size)
   {
-    if (!$room || !$room->getSettings()) {
-      return str_replace("{name}", $room->getName(), $this->defaults["thumb_${size}"]);
+    if ($room && $room->getSettings()) {
+      switch($size) {
+        case "sm":
+          $thumb = $room->getSettings()->getThumbSm();
+          break;
+        case "md":
+          $thumb = $room->getSettings()->getThumbMd();
+          break;
+        case "lg":
+          $thumb = $room->getSettings()->getThumbLg();
+          break;
+        default:
+          throw new \InvalidArgumentException("Invalid thumb size '${size}'.");
+          break;
+      }
+      if ($thumb) {
+        return $thumb;
+      }
     }
 
-    switch($size) {
-      case "sm":
-        $thumb = $room->getSettings()->getThumbSm();
-        break;
-      case "md":
-        $thumb = $room->getSettings()->getThumbMd();
-        break;
-      case "lg":
-        $thumb = $room->getSettings()->getThumbLg();
-        break;
-      default:
-        throw new \InvalidArgumentException("Invalid thumb size '${size}'.");
-        break;
-    }
-    if ($thumb) {
-      return $thumb;
+    $roomName = $room->getName();
+    $urls     = [];
+    $sizes    = ["sm" => 50, "md" => 250, "lg" => 500];
+    $thumbs   = [
+      "sm" => sprintf("%s/thumb-sm.png", $roomName),
+      "md" => sprintf("%s/thumb-md.png", $roomName),
+      "lg" => sprintf("%s/thumb-lg.png", $roomName)
+    ];
+    foreach($thumbs as $s => $path) {
+      $imageData = $this->identicon->getImageData($roomName, $sizes[$s]);
+      $urls[$s]  = $this->uploadService->uploadData($imageData, $path);
     }
 
-    return str_replace("{name}", $room->getName(), $this->defaults["thumb_${size}"]);
+    return $urls[$size];
   }
 }

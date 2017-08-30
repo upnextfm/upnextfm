@@ -27,6 +27,7 @@ class AppKernel extends Kernel
         new Knp\Bundle\TimeBundle\KnpTimeBundle(),
         new FOS\ElasticaBundle\FOSElasticaBundle(),
         new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
+        new Aws\Symfony\AwsBundle(),
         new AppBundle\AppBundle(),
         new AdminBundle\AdminBundle(),
       ];
