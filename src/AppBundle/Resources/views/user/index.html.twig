@@ -2,22 +2,28 @@
 {% extends "AppBundle::base.html.twig" %}
 {% block title %}{{ user.username }}{% endblock %}
 {% block body %}
-	<div class="up-profile">
-		<div class="up-profile__bio">
-			<div class="up-profile__bio__user">
-				<img class="up-profile__bio__user__picture" src="{{ user.info.avatarLg }}" />
-				<div class="up-profile__bio__user__name">
-					{{ user.username }}
+	<div class="container">
+		<div class="row">
+			<div class="col s12 m6">
+				<div class="up-profile__bio">
+					<div class="up-profile__bio__user">
+						<img class="up-avatar" src="{{ user.info.avatarLg }}" />
+						<div class="up-username truncate">
+							{{ user.username }}
+						</div>
+					</div>
+					<div class="up-profile__bio__text">
+						{{ user.info.bio }}
+					</div>
 				</div>
 			</div>
-			<div class="up-profile__bio__text">
-				{{ user.info.bio }}
+			<div class="col s12 m6">
+				<div class="up-profile__timeline">
+					{% for event in events %}
+						{{ macros.eventCard(event) }}
+					{% endfor %}
+				</div>
 			</div>
 		</div>
-		<div class="up-profile__playlist">
-			{% for played in playedRecently %}
-				{{ macros.playedCard(played, 3	) }}
-			{% endfor %}
-		</div>
-    </div>
+	</div>
 {% endblock %}

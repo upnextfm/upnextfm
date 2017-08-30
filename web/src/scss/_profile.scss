@@ -1,72 +1,28 @@
-.up-profile {
-	display:flex;
-	flex-direction:row;
-  flex: 1 0 auto;
+@import "vars";
+@import "mixins";
 
-	@media (max-width: #{$break-sm - 1px}) {
-		flex-direction: column;
-	}
-
-	.row {
-	  margin-bottom: -16px;
-	}
-}
 .up-profile__bio {
-	min-width:35%;
-	max-width:35%;
-	display: flex;
-	flex-direction: column;
-	box-shadow: 2px 0 2px rgba(0, 0, 0, 0.25);
+	padding-top: $padding-std * 2;
 
-	@media (max-width: #{$break-sm - 1px}) {
-		flex-shrink: 0;
-		max-width: 100%;
+	.up-avatar {
+    margin-bottom: -50px;
+	}
+
+	.up-username {
+    font-size: 1.5em;
+    padding: 3.5rem .5rem .5rem;
+    background: $color-secondary;
 	}
 }
-.up-profile__bio__user {
-	width:100%;
-	display: flex;
-	flex-flow: column;
-	flex-shrink: 0;
-}
-.up-profile__bio__user__name {
-	font-size: 1.5em;
-	padding: .5rem;
-	padding-top: 3.5rem;
-	background: #0a4c76;
-	text-overflow: ellipsis;
-	overflow: hidden;
-}
-.up-profile__bio__user__picture {
-	padding-bottom: 35%;
-	width: 35%;
-	overflow: hidden;
-	position: relative;
-	bottom: -3rem;
-	padding: .5rem;
-	border-radius: 100%;
-}
+
 .up-profile__bio__text{
 	padding: .5rem;
-	background: #0a4c76;
+  height: 100%;
+	background: $color-secondary;
 	word-wrap: break-word;
-	border-top: 1px solid #083d5e;
-	height: 100%
+	border-top: 1px solid darken($color-secondary, 5%);
 }
 
-
-.up-profile__playlist {
-	display: flex;
-	flex-wrap: wrap;
-}
-.up-profile__playlist > div > .card > .card-image > a > img,
-.up-profile__playlist > div > .card {
-	border-radius: 0;
-}
-.up-profile__playlist > div {
-	flex: 1 0 20vw;
-	margin: 0 .5rem;
-	@media (min-width: break-sm) {
-		max-width: 30vw;
-	}
+.up-profile__timeline {
+  padding-top: $padding-std * 2;
 }

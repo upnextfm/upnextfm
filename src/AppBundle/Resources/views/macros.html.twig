@@ -45,6 +45,29 @@
     </div>
 {% endmacro %}
 
+{% macro eventCard(event) %}
+    <div class="card horizontal up-event-card">
+        <div class="card-image">
+            <a href="{{ event.targetVideo.permalink }}">
+                <img src="{{ event.targetVideo.thumbSm }}" />
+            </a>
+        </div>
+        <div class="card-content">
+            <div class="card-title">
+                <a href="{{ event.targetVideo.permalink }}">
+                    {{ event.targetVideo.title }}
+                </a>
+            </div>
+            <small class="truncate">
+                {{ event.dateCreated|ago }}
+                in <a href="{{ path("room", {name: event.targetRoom.name}) }}">
+                    /r/{{ event.targetRoom.name }}
+                </a>
+            </small>
+        </div>
+    </div>
+{% endmacro %}
+
 {% macro chatLog(log) %}
     <li>
         {{ log.user.username }}

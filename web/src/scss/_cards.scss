@@ -20,6 +20,27 @@
   }
 }
 
+.up-event-card {
+  .card-image {
+    height: 88px;
+    width: 128px;
+
+    img {
+      height: 100%;
+      width: 100% !important;
+    }
+  }
+
+  .card-title {
+    height: 32px;
+    overflow: hidden;
+  }
+
+  .card-content {
+    padding: ($padding-std * 2) 24px;
+  }
+}
+
 .up-room-card {
   .card-title {
     height: auto;

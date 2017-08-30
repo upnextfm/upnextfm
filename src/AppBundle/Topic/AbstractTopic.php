@@ -14,6 +14,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +32,11 @@ abstract class AbstractTopic implements TopicInterface
    * @var ContainerInterface
    */
   protected $container;
+
+  /**
+   * @var EventDispatcherInterface
+   */
+  protected $eventDispatcher;
 
   /**
    * @var ClientManipulatorInterface
@@ -74,6 +80,7 @@ abstract class AbstractTopic implements TopicInterface
   public function __construct(ContainerInterface $container, LoggerInterface $logger)
   {
     $this->container              = $container;
+    $this->eventDispatcher        = $container->get("event_dispatcher");
     $this->clientManipulator      = $container->get("gos_web_socket.websocket.client_manipulator");
     $this->tokenAuthenticator     = $container->get("lexik_jwt_authentication.security.guard.jwt_token_authenticator");
     $this->userProvider           = $container->get("fos_user.user_provider.username");

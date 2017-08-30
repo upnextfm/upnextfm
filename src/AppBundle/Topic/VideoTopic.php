@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Topic;
 
+use AppBundle\EventListener\Event\PlayedVideoEvent;
+use AppBundle\EventListener\Event\UserEvents;
 use AppBundle\Playlist\ProvidersInterface;
 use AppBundle\Storage\PlaylistStorage;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
@@ -264,6 +266,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     $this->em->flush();
 
     $this->playlist->append($videoLog);
+    $event = new PlayedVideoEvent($user, $room, $video);
+    $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
     usleep(100);
 
     if (!$this->playlist->getCurrent($room)) {

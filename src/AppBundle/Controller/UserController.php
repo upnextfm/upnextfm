@@ -14,14 +14,14 @@ class UserController extends Controller
    */
   public function indexAction($username)
   {
-    $em   = $this->getDoctrine()->getManager();
-    $user = $this->findUserOrThrow($username);
-    $playedRecently = $em->getRepository("AppBundle:VideoLog")
-      ->findRecentByUser($user, 30);
+    $em     = $this->getDoctrine()->getManager();
+    $user   = $this->findUserOrThrow($username);
+    $events = $em->getRepository("AppBundle:UserEvent")
+      ->findByUser($user, 50);
 
     return $this->render("AppBundle:user:index.html.twig", [
-      "user"           => $user,
-      "playedRecently" => $playedRecently
+      "user"   => $user,
+      "events" => $events
     ]);
   }
 

@@ -2,6 +2,7 @@ parameters:
     api.request_listener.class: AppBundle\EventListener\RequestListener
     api.controller_response_listener.class: AppBundle\EventListener\ControllerResponseListener
     api.exception_listener.class: AppBundle\EventListener\ExceptionListener
+    app.events.user_action_subscriber.class: AppBundle\EventListener\UserEventSubscriber
 
 services:
     encoder_json:
@@ -55,6 +56,26 @@ services:
           - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     ## ########################################################################
+    ## User Event Subscriber
+    ## ########################################################################
+    app.events.user_event_subscriber:
+      class: "%app.events.user_action_subscriber.class%"
+      arguments:
+        - "@doctrine.orm.entity_manager"
+      tags:
+        - { name: kernel.event_subscriber }
+
+    ## ########################################################################
+    ## Registration Listener
+    ## ########################################################################
+    app.registration_complet:
+      class: AppBundle\Listener\RegistrationListener
+      arguments:
+        - "@app.service.thumbs"
+      tags:
+        - { name: kernel.event_subscriber }
+
+    ## ########################################################################
     ## YouTube Service
     ## ########################################################################
     madcoda.youtube.youtube:
@@ -87,16 +108,6 @@ services:
       class: AppBundle\Form\RegistrationType
       tags:
         - { name: form.type, alias: registration }
-
-    ## ########################################################################
-    ## Registration Listener
-    ## ########################################################################
-    app.registration_complet:
-      class: AppBundle\Listener\RegistrationListener
-      arguments:
-        - "@app.service.thumbs"
-      tags:
-        - { name: kernel.event_subscriber }
 
     ## ########################################################################
     ## RabbitMQ Save Video Consumer
