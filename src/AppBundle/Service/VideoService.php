@@ -62,11 +62,11 @@ class VideoService
           ->setTitle($resp->snippet->title)
           ->setSeconds($this->youtubeToSeconds($resp->contentDetails->duration))
           ->setDescription($resp->snippet->description)
-          ->setThumbnail("sm", !empty($resp->snippet->thumbnails->medium->url)
-            ? $resp->snippet->thumbnails->medium->url
-            : $resp->snippet->thumbnails->default->url)
-          ->setThumbnail("md", !empty($resp->snippet->thumbnails->standard->url)
+          ->setThumbnail("sm", !empty($resp->snippet->thumbnails->standard->url)
             ? $resp->snippet->thumbnails->standard->url
+            : $resp->snippet->thumbnails->default->url)
+          ->setThumbnail("md", !empty($resp->snippet->thumbnails->medium->url)
+            ? $resp->snippet->thumbnails->medium->url
             : $resp->snippet->thumbnails->default->url)
           ->setThumbnail("lg", !empty($resp->snippet->thumbnails->high->url)
             ? $resp->snippet->thumbnails->high->url
