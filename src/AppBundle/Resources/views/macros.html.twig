@@ -45,29 +45,6 @@
     </div>
 {% endmacro %}
 
-{% macro eventCard(event) %}
-    <div class="card horizontal up-event-card">
-        <div class="card-image">
-            <a href="{{ event.targetVideo.permalink }}">
-                <img src="{{ event.targetVideo.thumbSm }}" />
-            </a>
-        </div>
-        <div class="card-content">
-            <div class="card-title">
-                <a href="{{ event.targetVideo.permalink }}">
-                    {{ event.targetVideo.title }}
-                </a>
-            </div>
-            <small class="truncate">
-                Played {{ event.dateCreated|ago }}
-                in <a href="{{ path("room", {name: event.targetRoom.name}) }}">
-                    /r/{{ event.targetRoom.name }}
-                </a>
-            </small>
-        </div>
-    </div>
-{% endmacro %}
-
 {% macro chatLog(log) %}
     <li>
         {{ log.user.username }}
@@ -97,4 +74,121 @@
             </a>
         </li>
     </ul>
+{% endmacro %}
+
+{#
+ # Renders a card for the "played_video" user event.
+ #}
+{% macro eventCardPlayedVideo(event) %}
+    <div class="card horizontal up-event-card up-event-card--played-video" data-event-id="{{ event.id }}">
+        <div class="card-image">
+            <a href="{{ event.targetVideo.permalink }}">
+                <img src="{{ event.targetVideo.thumbSm }}" />
+            </a>
+        </div>
+        <div class="card-content">
+            <div class="card-title">
+                <a href="{{ event.targetVideo.permalink }}">
+                    {{ event.targetVideo.title }}
+                </a>
+            </div>
+            <small class="truncate">
+                Played {{ event.dateCreated|ago }}
+                in <a href="{{ path("room", {name: event.targetRoom.name}) }}">
+                    /r/{{ event.targetRoom.name }}
+                </a>
+            </small>
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+ # Renders a card for the "favorited" user event.
+ #}
+{% macro eventCardFavorited(event) %}
+    <div class="card horizontal up-event-card up-event-card--favorited" data-event-id="{{ event.id }}">
+        <div class="card-image">
+            <a href="{{ event.targetVideo.permalink }}">
+                <img src="{{ event.targetVideo.thumbSm }}" />
+            </a>
+        </div>
+        <div class="card-content">
+            <div class="card-title">
+                <a href="{{ event.targetVideo.permalink }}">
+                    {{ event.targetVideo.title }}
+                </a>
+            </div>
+            <small class="truncate">
+                Favorited {{ event.dateCreated|ago }}
+                in <a href="{{ path("room", {name: event.targetRoom.name}) }}">
+                    /r/{{ event.targetRoom.name }}
+                </a>
+            </small>
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+ # Renders a card for the "upvoted" user event.
+ #}
+{% macro eventCardUpvoted(event) %}
+    <div class="card horizontal up-event-card up-event-card--upvoted" data-event-id="{{ event.id }}">
+        <div class="card-image">
+            <a href="{{ event.targetVideo.permalink }}">
+                <img src="{{ event.targetVideo.thumbSm }}" />
+            </a>
+        </div>
+        <div class="card-content">
+            <div class="card-title">
+                <a href="{{ event.targetVideo.permalink }}">
+                    {{ event.targetVideo.title }}
+                </a>
+            </div>
+            <small class="truncate">
+                Upvoted {{ event.dateCreated|ago }}
+                in <a href="{{ path("room", {name: event.targetRoom.name}) }}">
+                    /r/{{ event.targetRoom.name }}
+                </a>
+            </small>
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+ # Renders a card for the "created_room" user event.
+ #}
+{% macro eventCardCreatedRoom(event) %}
+    <div class="card horizontal up-event-card up-event-card--created-room" data-event-id="{{ event.id }}">
+        <div class="card-image">
+            <a href="{{ path("room", {name: event.targetRoom.name}) }}">
+                <img src="{{ event.targetRoom.settings.thumbSm }}" />
+            </a>
+        </div>
+        <div class="card-content">
+            <div class="card-title">
+                <a href="{{ path("room", {name: event.targetRoom.name}) }}">
+                    {{ event.user.username }} created /r/{{ event.targetRoom.name }}
+                </a>
+            </div>
+            <small class="truncate">
+                {{ event.dateCreated|ago }}
+            </small>
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+ # Renders a card for any user event.
+ #}
+{% macro eventCard(event) %}
+    {% import _self as macros %}
+    {% if event.type == "played_video" %}
+        {{ macros.eventCardPlayedVideo(event) }}
+    {% elseif event.type == "favorited" %}
+        {{ macros.eventCardFavorited(event) }}
+    {% elseif event.type == "upvoted" %}
+        {{ macros.eventCardUpvoted(event) }}
+    {% elseif event.type == "created_room" %}
+        {{ macros.eventCardCreatedRoom(event) }}
+    {% endif %}
 {% endmacro %}

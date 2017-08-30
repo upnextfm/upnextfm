@@ -32,16 +32,84 @@ function importUserEvents()
 {
   global $pdoUpnext, $pdoCytube;
 
-  foreach($pdoUpnext->query("SELECT * FROM `video_log` ORDER BY `id` ASC") as $row) {
-    println($row["user_id"]);
+  $videoLogs = [];
+  foreach($pdoUpnext->query("SELECT *, UNIX_TIMESTAMP(date_created) * 1000 AS time FROM `video_log` ORDER BY `id` ASC") as $row) {
+    $row["type"] = "played_video";
+    $videoLogs[] = $row;
+  }
 
-    $exec = [
-      ":type"            => "played_video",
-      ":target_video_id" => $row["video_id"],
-      ":target_room_id"  => $row["room_id"],
-      ":user_id"         => $row["user_id"],
-      ":date_created"    => $row["date_created"]
-    ];
+  $favorites = [];
+  foreach($pdoCytube->query("SELECT * FROM `favorites` ORDER BY `id` ASC") as $row) {
+    $cytubeUser = fetchCytubeUserByID($row["user_id"]);
+    if ($cytubeUser) {
+      $upnextUser = fetchUserByUsername($cytubeUser["name"]);
+      if ($upnextUser) {
+        $cytubeMedia = fetchCytubeMediaByID($row["media_id"]);
+        if ($cytubeMedia) {
+          $upnextVideo = fetchVideoByCodename($cytubeMedia["uid"]);
+          if ($upnextVideo) {
+            $row["user_id"]  = $upnextUser["id"];
+            $row["video_id"] = $upnextVideo["id"];
+            $row["room_id"]  = 1;
+            $row["type"]     = "favorited";
+            $favorites[]     = $row;
+          }
+        }
+      }
+    }
+  }
+
+  $votes = [];
+  foreach($pdoCytube->query("SELECT * FROM `votes` ORDER BY `id` ASC") as $row) {
+    if ($row["value"] != 1) {
+      continue;
+    }
+
+    $cytubeUser = fetchCytubeUserByID($row["user_id"]);
+    if ($cytubeUser) {
+      $upnextUser = fetchUserByUsername($cytubeUser["name"]);
+      if ($upnextUser) {
+        $cytubeMedia = fetchCytubeMediaByID($row["media_id"]);
+        if ($cytubeMedia) {
+          $upnextVideo = fetchVideoByCodename($cytubeMedia["uid"]);
+          if ($upnextVideo) {
+            $row["user_id"]  = $upnextUser["id"];
+            $row["video_id"] = $upnextVideo["id"];
+            $row["room_id"]  = 1;
+            $row["type"]     = "upvoted";
+            $votes[]         = $row;
+          }
+        }
+      }
+    }
+  }
+
+  $channels = [];
+  foreach($pdoCytube->query("SELECT * FROM `channels` ORDER BY `id` ASC") as $row) {
+    $upnextUser = fetchUserByUsername($row["owner"]);
+    if ($upnextUser) {
+      $upnextRoom = fetchRoomByName($row["name"]);
+      if ($upnextRoom) {
+        $row["user_id"]  = $upnextUser["id"];
+        $row["video_id"] = null;
+        $row["room_id"]  = $upnextRoom["id"];
+        $row["type"]     = "created_room";
+        $channels[]      = $row;
+      }
+    }
+  }
+
+  $events = array_merge($videoLogs, $favorites, $votes, $channels);
+  usort($events, function($a, $b) {
+    if ($a["time"] == $b["time"]) {
+      return 0;
+    }
+    return ($a["time"] < $b["time"]) ? -1 : 1;
+  });
+
+  foreach($events as $event) {
+    $dateCreated = timeToDate($event["time"]);
+    println($dateCreated . " " . $event["type"]);
 
     $sql = "
       INSERT INTO `user_event`
@@ -50,7 +118,13 @@ function importUserEvents()
       (:type, :target_video_id, :target_room_id, :user_id, :date_created)
     ";
     $stmt = $pdoUpnext->prepare($sql);
-    $stmt->execute($exec);
+    $stmt->execute([
+      ":type"            => $event["type"],
+      ":target_video_id" => $event["video_id"],
+      ":target_room_id"  => $event["room_id"],
+      ":user_id"         => $event["user_id"],
+      ":date_created"    => $dateCreated
+    ]);
   }
 }
 
@@ -343,6 +417,9 @@ function importRooms()
   }
 }
 
+/**
+ *
+ */
 function importRoomSettings()
 {
   global $pdoUpnext, $pdoCytube;
@@ -390,10 +467,37 @@ function importRoomSettings()
 function fetchUserByUsername($username)
 {
   global $pdoUpnext;
+  static $users = [];
 
-  $stmt = $pdoUpnext->prepare("SELECT * FROM `user` WHERE `username` = :username LIMIT 1");
-  $stmt->execute([":username" => $username]);
-  return $stmt->fetch(PDO::FETCH_ASSOC);
+  if (!isset($users[$username])) {
+    $stmt = $pdoUpnext->prepare("SELECT * FROM `user` WHERE `username` = :username LIMIT 1");
+    $stmt->execute([":username" => $username]);
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $users[$username] = $row;
+    }
+  }
+
+  return isset($users[$username]) ? $users[$username] : null;
+}
+
+/**
+ * @param string $codename
+ * @return array
+ */
+function fetchVideoByCodename($codename)
+{
+  global $pdoUpnext;
+  static $videos = [];
+
+  if (!isset($videos[$codename])) {
+    $stmt = $pdoUpnext->prepare("SELECT * FROM `video` WHERE `codename` = :codename LIMIT 1");
+    $stmt->execute([":codename" => $codename]);
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $videos[$codename] = $row;
+    }
+  }
+
+  return isset($videos[$codename]) ? $videos[$codename] : null;
 }
 
 /**
@@ -403,10 +507,38 @@ function fetchUserByUsername($username)
 function fetchRoomByName($name)
 {
   global $pdoUpnext;
+  static $rooms = [];
 
-  $stmt = $pdoUpnext->prepare("SELECT * FROM `room` WHERE `name` = :name LIMIT 1");
-  $stmt->execute([":name" => $name]);
-  return $stmt->fetch(PDO::FETCH_ASSOC);
+  if (!isset($rooms[$name])) {
+    $stmt = $pdoUpnext->prepare("SELECT * FROM `room` WHERE `name` = :name LIMIT 1");
+    $stmt->execute([":name" => $name]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row) {
+      $rooms[$name] = $row;
+    }
+  }
+
+  return $rooms[$name] ?: null;
+}
+
+/**
+ * @param int $userID
+ * @return array
+ */
+function fetchCytubeUserByID($userID)
+{
+  global $pdoCytube;
+  static $users = [];
+
+  if (!isset($users[$userID])) {
+    $stmt = $pdoCytube->prepare("SELECT * FROM `users` WHERE `id` = :id LIMIT 1");
+    $stmt->execute([":id" => $userID]);
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $users[$userID] = $row;
+    }
+  }
+
+  return isset($users[$userID]) ? $users[$userID] : null;
 }
 
 /**
@@ -433,6 +565,26 @@ function fetchCytubeChannelByName($name)
   $stmt = $pdoCytube->prepare("SELECT * FROM `channels` WHERE `name` = :name LIMIT 1");
   $stmt->execute([":name" => $name]);
   return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * @param int $mediaID
+ * @return array
+ */
+function fetchCytubeMediaByID($mediaID)
+{
+  global $pdoCytube;
+  static $media = [];
+
+  if (!isset($media[$mediaID])) {
+    $stmt = $pdoCytube->prepare("SELECT * FROM `media` WHERE `id` = :id LIMIT 1");
+    $stmt->execute([":id" => $mediaID]);
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $media[$mediaID] = $row;
+    }
+  }
+
+  return isset($media[$mediaID]) ? $media[$mediaID] : null;
 }
 
 /**

@@ -28,7 +28,10 @@ class UserEventSubscriber implements EventSubscriberInterface
   public static function getSubscribedEvents()
   {
     return [
-      Event\UserEvents::PLAYED_VIDEO => "onPlayedVideo"
+      Event\UserEvents::PLAYED_VIDEO => "onPlayedVideo",
+      Event\UserEvents::FAVORITED    => "onFavorited",
+      Event\UserEvents::UPVOTED      => "onUpvoted",
+      Event\UserEvents::CREATED_ROOM => "onCreatedRoom"
     ];
   }
 
@@ -41,6 +44,44 @@ class UserEventSubscriber implements EventSubscriberInterface
     $userEvent->setUser($event->getUser());
     $userEvent->setTargetRoom($event->getRoom());
     $userEvent->setTargetVideo($event->getVideo());
+    $this->em->persist($userEvent);
+    $this->em->flush();
+  }
+
+  /**
+   * @param Event\FavoritedEvent $event
+   */
+  public function onFavorited(Event\FavoritedEvent $event)
+  {
+    $userEvent = new UserEvent(Event\UserEvents::FAVORITED);
+    $userEvent->setUser($event->getUser());
+    $userEvent->setTargetRoom($event->getRoom());
+    $userEvent->setTargetVideo($event->getVideo());
+    $this->em->persist($userEvent);
+    $this->em->flush();
+  }
+
+  /**
+   * @param Event\UpvotedEvent $event
+   */
+  public function onUpvoted(Event\UpvotedEvent $event)
+  {
+    $userEvent = new UserEvent(Event\UserEvents::UPVOTED);
+    $userEvent->setUser($event->getUser());
+    $userEvent->setTargetRoom($event->getRoom());
+    $userEvent->setTargetVideo($event->getVideo());
+    $this->em->persist($userEvent);
+    $this->em->flush();
+  }
+
+  /**
+   * @param Event\CreatedRoomEvent $event
+   */
+  public function onCreatedRoom(Event\CreatedRoomEvent $event)
+  {
+    $userEvent = new UserEvent(Event\UserEvents::CREATED_ROOM);
+    $userEvent->setUser($event->getUser());
+    $userEvent->setTargetRoom($event->getRoom());
     $this->em->persist($userEvent);
     $this->em->flush();
   }

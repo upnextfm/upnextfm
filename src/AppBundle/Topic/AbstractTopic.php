@@ -4,6 +4,8 @@ namespace AppBundle\Topic;
 use AppBundle\Entity\PrivateMessage;
 use AppBundle\Entity\RoomSettings;
 use AppBundle\Entity\User;
+use AppBundle\EventListener\Event\CreatedRoomEvent;
+use AppBundle\EventListener\Event\UserEvents;
 use AppBundle\Storage\RoomStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
@@ -174,7 +176,7 @@ abstract class AbstractTopic implements TopicInterface
 
   /**
    * @param string $roomName
-   * @param UserInterface $user
+   * @param UserInterface|User $user
    * @return Room
    */
   protected function getRoom($roomName, UserInterface $user = null)
@@ -195,6 +197,9 @@ abstract class AbstractTopic implements TopicInterface
       $room->setSettings($settings);
       $this->em->persist($room);
       $this->em->flush();
+
+      $event = new CreatedRoomEvent($user, $room);
+      $this->eventDispatcher->dispatch(UserEvents::CREATED_ROOM, $event);
     }
 
     return $room;
