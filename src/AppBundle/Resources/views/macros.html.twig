@@ -59,7 +59,7 @@
                 </a>
             </div>
             <small class="truncate">
-                {{ event.dateCreated|ago }}
+                Played {{ event.dateCreated|ago }}
                 in <a href="{{ path("room", {name: event.targetRoom.name}) }}">
                     /r/{{ event.targetRoom.name }}
                 </a>

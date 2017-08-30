@@ -17,12 +17,42 @@ $pdoCytube = new \PDO(
   $params["database_cytube_password"]
 );
 
-importUserInfo();
-importRooms();
-importRoomSettings();
-importVideos();
-importVideoLogs();
-importChatLogs();
+// importUserInfo();
+// importRooms();
+// importRoomSettings();
+// importVideos();
+// importVideoLogs();
+// importChatLogs();
+// importUserEvents();
+
+/**
+ *
+ */
+function importUserEvents()
+{
+  global $pdoUpnext, $pdoCytube;
+
+  foreach($pdoUpnext->query("SELECT * FROM `video_log` ORDER BY `id` ASC") as $row) {
+    println($row["user_id"]);
+
+    $exec = [
+      ":type"            => "played_video",
+      ":target_video_id" => $row["video_id"],
+      ":target_room_id"  => $row["room_id"],
+      ":user_id"         => $row["user_id"],
+      ":date_created"    => $row["date_created"]
+    ];
+
+    $sql = "
+      INSERT INTO `user_event`
+      (`type`, `target_video_id`, `target_room_id`, `user_id`, `date_created`)
+      VALUES
+      (:type, :target_video_id, :target_room_id, :user_id, :date_created)
+    ";
+    $stmt = $pdoUpnext->prepare($sql);
+    $stmt->execute($exec);
+  }
+}
 
 /**
  *

@@ -21,9 +21,12 @@
 }
 
 .up-event-card {
+  overflow: hidden;
+
   .card-image {
     height: 88px;
     width: 128px;
+    min-width: 128px;
 
     img {
       height: 100%;

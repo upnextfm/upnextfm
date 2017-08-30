@@ -17,7 +17,7 @@ class UserController extends Controller
     $em     = $this->getDoctrine()->getManager();
     $user   = $this->findUserOrThrow($username);
     $events = $em->getRepository("AppBundle:UserEvent")
-      ->findByUser($user, 50);
+      ->findByUser($user, 25);
 
     return $this->render("AppBundle:user:index.html.twig", [
       "user"   => $user,
