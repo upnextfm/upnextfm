@@ -28,7 +28,7 @@ class PlaylistContainer extends React.Component {
     const { permalink } = this.state;
 
     return (
-      <div className="up-room-playlist up-paper-container">
+      <div className="up-room-playlist">
         <div className="up-room-playlist__input">
           <label htmlFor="up-media-url">URL</label>
           <input

@@ -27,7 +27,7 @@ export default class Component extends React.Component {
         <div className="up-room-playlist__item__meta">
           <div className="up-title">
             {!isCurrent ? null : (
-              <img src="/images/equalizer.gif" alt="Equalizer" style={{ marginRight: 4 }} />
+              <img src="/images/equalizer.gif" alt="Equalizer" style={{ height: 12, marginRight: 4 }} />
             )}
             {video.title}
           </div>

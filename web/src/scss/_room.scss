@@ -260,13 +260,15 @@ $height-avatar-collapsed: auto;
 }
 
 .up-room-playlist {
-  padding: $padding-std;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
   min-height: 16em;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  background-color: $card-bg-color !important;
+  transition: all .3s cubic-bezier(.25,.8,.25,1);
+  box-shadow: -2px 0 2px rgba(0, 0, 0, 0.25);
 }
 
 .up-room-playlist__input {
@@ -274,7 +276,7 @@ $height-avatar-collapsed: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: $padding-std 0;
+  padding: $padding-std;
 
   label {
     flex-shrink: 0;
@@ -299,7 +301,7 @@ $height-avatar-collapsed: auto;
 }
 
 .up-room-playlist__items {
-  border-top: 1px solid #2b2b2b;
+  border-top: 1px solid #2d2d2d;
   padding: 0 !important;
 
   li {
@@ -308,12 +310,12 @@ $height-avatar-collapsed: auto;
 }
 
 .up-room-playlist__item {
-  height: 41px;
+  height: 48px;
   width: 100%;
   display: flex;
   align-items: flex-start;
-  padding: $padding-std / 2;
-  border-bottom: 1px solid #2b2b2b;
+  padding: $padding-std;
+  border-bottom: 1px solid #2d2d2d;
 
   .up-thumbnail {
     height: 32px;
