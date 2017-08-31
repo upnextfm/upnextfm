@@ -30,8 +30,12 @@ export default {
     user: {
       showNotices: true
     },
-    site: {},
-    room: {}
+    socket: {
+      pingInterval: 30000,
+      uri:          ''
+    },
+    site:   {},
+    room:   {}
   },
   room: {
     name:           '',

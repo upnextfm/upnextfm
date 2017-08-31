@@ -24,6 +24,7 @@ class RoomController extends Controller
     return $this->render("AppBundle:room:index.html.twig", [
       "username"    => $username,
       "name"        => $name,
+      "settings"    => json_encode($this->getParameter("app_ws_settings")),
       "hide_navbar" => true,
       "materialize" => false
     ]);

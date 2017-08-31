@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
+import { settingsSocket } from 'actions/settingsActions';
 import { userUsername } from 'actions/userActions';
 import { layoutToggleLoginDialog, layoutToggleRegisterDialog, layoutToggleHelpDialog, layoutErrorMessage } from 'actions/layoutActions';
 import Progress from 'components/Video/Progress';
@@ -17,18 +18,17 @@ import ErrorSnackbar from 'components/ErrorSnackbar';
 
 class Room extends React.Component {
   static propTypes = {
-    roomName:  PropTypes.string.isRequired,
-    socketURI: PropTypes.string.isRequired,
-    username:  PropTypes.string,
-    user:      PropTypes.object,
-    layout:    PropTypes.object
+    roomName:       PropTypes.string.isRequired,
+    socketSettings: PropTypes.object.isRequired,
+    username:       PropTypes.string,
+    user:           PropTypes.object,
+    layout:         PropTypes.object
   };
 
   constructor(props) {
     super(props);
-    if (props.username) {
-      props.dispatch(userUsername(props.username));
-    }
+    props.dispatch(settingsSocket(props.socketSettings));
+    props.dispatch(userUsername(props.username));
   }
 
   handleCloseErrorSnackbar = () => {
@@ -36,7 +36,7 @@ class Room extends React.Component {
   };
 
   render() {
-    const { roomName, socketURI, user, layout, dispatch } = this.props;
+    const { roomName, user, layout, dispatch } = this.props;
 
     return (
       <div>
@@ -49,7 +49,7 @@ class Room extends React.Component {
         </Hidden>
         <div className="up-room">
           <Grid item xs={12} md={layout.colsChatSide}>
-            <ChatSide roomName={roomName} socketURI={socketURI} />
+            <ChatSide roomName={roomName} />
           </Grid>
           <Grid item xs={12} md={layout.colsVideoSide}>
             <VideoSide />

@@ -47,3 +47,15 @@ export function settingsRoom(settings) {
     settings
   };
 }
+
+/**
+ *
+ * @param {*} settings
+ * @returns {{type: string, settings: *}}
+ */
+export function settingsSocket(settings) {
+  return {
+    type: types.SETTINGS_SOCKET,
+    settings
+  };
+}

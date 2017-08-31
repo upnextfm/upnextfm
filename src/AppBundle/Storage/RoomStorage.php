@@ -20,7 +20,6 @@ class RoomStorage extends AbstractStorage
       $pipe->sadd($this->keyRoomUsers($room), $user->getUsername());
       $pipe->sadd($this->keyUserRooms($user), $room->getName());
     });
-
   }
 
   /**

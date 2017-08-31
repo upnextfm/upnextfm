@@ -26,7 +26,6 @@ use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use AppBundle\Entity\ChatLog;
 use AppBundle\Entity\Room;
-use AppBundle\Entity\Video;
 use Psr\Log\LoggerInterface;
 
 abstract class AbstractTopic implements TopicInterface
@@ -35,6 +34,11 @@ abstract class AbstractTopic implements TopicInterface
    * @var ContainerInterface
    */
   protected $container;
+
+  /**
+   * @var array
+   */
+  protected $socketSettings = [];
 
   /**
    * @var EventDispatcherInterface
@@ -83,6 +87,7 @@ abstract class AbstractTopic implements TopicInterface
   public function __construct(ContainerInterface $container, LoggerInterface $logger)
   {
     $this->container              = $container;
+    $this->socketSettings         = $container->getParameter("app_ws_settings");
     $this->eventDispatcher        = $container->get("event_dispatcher");
     $this->clientManipulator      = $container->get("gos_web_socket.websocket.client_manipulator");
     $this->tokenAuthenticator     = $container->get("lexik_jwt_authentication.security.guard.jwt_token_authenticator");

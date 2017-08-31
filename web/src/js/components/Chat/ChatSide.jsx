@@ -14,8 +14,7 @@ import MessageInput from 'components/Chat/MessageInput';
 
 class ChatSide extends React.Component {
   static propTypes = {
-    roomName:  PropTypes.string.isRequired,
-    socketURI: PropTypes.string.isRequired
+    roomName: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -27,7 +26,7 @@ class ChatSide extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, settings } = this.props;
 
     this.favicon = new Favico();
     domOnWindowBlur((status) => {
@@ -47,7 +46,7 @@ class ChatSide extends React.Component {
         dispatch(layoutErrorMessage('Connection to server lost.'));
       }
     });
-    api.socket.connect(this.props.socketURI);
+    api.socket.connect(settings.socket.uri);
   }
 
   componentDidUpdate(prevProps) {

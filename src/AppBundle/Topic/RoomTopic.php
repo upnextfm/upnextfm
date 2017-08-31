@@ -4,7 +4,6 @@ namespace AppBundle\Topic;
 use AppBundle\Entity\ChatLog;
 use AppBundle\Entity\Room;
 use AppBundle\Entity\User;
-use Doctrine\ORM\ORMException;
 use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;

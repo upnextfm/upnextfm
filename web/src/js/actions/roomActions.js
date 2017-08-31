@@ -253,7 +253,7 @@ export function roomJoin(name) {
     dispatch(playlistSubscribe());
     pingInterval = setInterval(() => {
       api.socket.publish(`${types.CHAN_ROOM}/${name}`, 'ping');
-    }, 30000);
+    }, getState().settings.socket.pingInterval);
 
     api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
       if (payload === 'pong') {

@@ -1,5 +1,6 @@
 imports:
     - { resource: config.yml }
+    - { resource: parameters_dev.yml }
 
 framework:
     router:
@@ -27,13 +28,6 @@ monolog:
             type: server_log
             process_psr_3_messages: false
             host: 127.0.0.1:9911
-
-## ########################################################################
-## Twig
-## ########################################################################
-twig:
-    globals:
-      ws_uri: ws://dev.upnext.fm:8081
 
 ## ########################################################################
 ## Websockets

@@ -32,6 +32,10 @@ export default function settingsReducer(state = initialState.settings, action = 
       return Object.assign({}, state, {
         room: action.settings
       });
+    case types.SETTINGS_SOCKET:
+      return Object.assign({}, state, {
+        socket: action.settings
+      });
     default:
       return state;
   }
