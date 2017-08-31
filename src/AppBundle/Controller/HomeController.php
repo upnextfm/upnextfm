@@ -15,10 +15,6 @@ class HomeController extends Controller
    */
   public function indexAction()
   {
-    $v = $this->get("app.service.video");
-    $p = $v->getPlaylist("PLCD0445C57F2B7F41", "youtube");
-    dump($p);die();
-
     if ($this->isDev()) {
       return $this->homepageAction();
     } else {
