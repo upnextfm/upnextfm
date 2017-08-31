@@ -1,9 +1,12 @@
 <?php
 namespace AppBundle\Topic;
 
+use AppBundle\Entity\VideoRepository;
 use AppBundle\EventListener\Event\PlayedVideoEvent;
 use AppBundle\EventListener\Event\UserEvents;
 use AppBundle\Playlist\ProvidersInterface;
+use AppBundle\Service\VideoInfo;
+use AppBundle\Service\VideoService;
 use AppBundle\Storage\PlaylistStorage;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerTrait;
@@ -47,6 +50,16 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   protected $providers;
 
   /**
+   * @var VideoService
+   */
+  protected $videoService;
+
+  /**
+   * @var VideoRepository
+   */
+  protected $videoRepo;
+
+  /**
    * {@inheritdoc}
    */
   public function getName()
@@ -71,6 +84,26 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   public function setProviders(ProvidersInterface $providers)
   {
     $this->providers = $providers;
+    return $this;
+  }
+
+  /**
+   * @param VideoService $videoService
+   * @return $this
+   */
+  public function setVideoService(VideoService $videoService)
+  {
+    $this->videoService = $videoService;
+    return $this;
+  }
+
+  /**
+   * @param VideoRepository $videoRepo
+   * @return $this
+   */
+  public function setVideoRepository(VideoRepository $videoRepo)
+  {
+    $this->videoRepo = $videoRepo;
     return $this;
   }
 
@@ -223,8 +256,6 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     UserInterface $user,
     array $event)
   {
-    $this->logger->debug("Appending", $event);
-
     $parsed = $this->providers->parseURL($event["url"]);
     if (!$parsed) {
       return $this->connSendError($conn, $topic,
@@ -232,50 +263,60 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       );
     }
 
-    $video = $this->em->getRepository("AppBundle:Video")
-      ->findByCodename($parsed["codename"], $parsed["provider"]);
-    if (!$video) {
-      $service = $this->container->get("app.service.video");
-      $info    = $service->getInfo($parsed["codename"], $parsed["provider"]);
-      if (!$info) {
-        $this->logger->error("Failed to fetch video info.", $event);
+    if ($parsed["playlist"]) {
+      $codenames = $this->videoService->getPlaylist($parsed["codename"], $parsed["provider"]);
+      foreach($codenames as $codename) {
+        $video = $this->getOrCreateVideo(
+          $room,
+          $user,
+          $codename,
+          $parsed["provider"]
+        );
+        if ($video) {
+          /** @var VideoLog $videoLog */
+          $video->setDateLastPlayed(new \DateTime());
+          $video->incrNumPlays();
+          $videoLog = new VideoLog($video, $room, $user);
+          $videoLog = $this->em->merge($videoLog);
+          $this->em->flush();
+
+          $this->playlist->append($videoLog);
+          $event = new PlayedVideoEvent($user, $room, $video);
+          $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
+        }
+      }
+      usleep(500);
+    } else {
+      $video = $this->getOrCreateVideo(
+        $room,
+        $user,
+        $parsed["codename"],
+        $parsed["provider"]
+      );
+      if (!$video) {
         return true;
       }
 
-      $video = new Video();
-      $video->setCodename($parsed["codename"]);
-      $video->setProvider($parsed["provider"]);
-      $video->setCreatedByUser($user);
-      $video->setCreatedInRoom($room);
-      $video->setTitle($info->getTitle());
-      $video->setSeconds($info->getSeconds());
-      $video->setPermalink($info->getPermalink());
-      $video->setThumbColor($info->getThumbColor());
-      $video->setThumbSm($info->getThumbnail("sm"));
-      $video->setThumbMd($info->getThumbnail("md"));
-      $video->setThumbLg($info->getThumbnail("lg"));
-      $video->setNumPlays(0);
-      $this->em->persist($video);
+      /** @var VideoLog $videoLog */
+      $video->setDateLastPlayed(new \DateTime());
+      $video->incrNumPlays();
+      $videoLog = new VideoLog($video, $room, $user);
+      $videoLog = $this->em->merge($videoLog);
+      $this->em->flush();
+
+      $this->playlist->append($videoLog);
+      $event = new PlayedVideoEvent($user, $room, $video);
+      $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
+      usleep(500);
     }
-
-    /** @var VideoLog $videoLog */
-    $video->setDateLastPlayed(new \DateTime());
-    $video->incrNumPlays();
-    $videoLog = new VideoLog($video, $room, $user);
-    $videoLog = $this->em->merge($videoLog);
-    $this->em->flush();
-
-    $this->playlist->append($videoLog);
-    $event = new PlayedVideoEvent($user, $room, $video);
-    $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
-    usleep(500);
 
     if (!$this->playlist->getCurrent($room)) {
       if ($current = $this->playlist->popToCurrent($room)) {
+        $videoLog = $current["videoLog"];
         $this->sendToRoom($room, [
           "cmd"   => VideoCommands::START,
           "video" => $this->serializeVideo($videoLog->getVideo()),
-          "start" => 0
+          "start" => $current["timeStarted"]
         ]);
       }
     }
@@ -344,6 +385,41 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
           }
         }
     });
+  }
+
+  /**
+   * @param Room $room
+   * @param UserInterface|User $user
+   * @param string $codename
+   * @param string $provider
+   * @return Video|null
+   */
+  private function getOrCreateVideo(Room $room, UserInterface $user, $codename, $provider)
+  {
+    $video = $this->videoRepo->findByCodename($codename, $provider);
+    if (!$video) {
+      $info = $this->videoService->getInfo($codename, $provider);
+      if (!$info) {
+        return null;
+      }
+
+      $video = new Video();
+      $video->setCodename($info->getCodename());
+      $video->setProvider($info->getProvider());
+      $video->setCreatedByUser($user);
+      $video->setCreatedInRoom($room);
+      $video->setTitle($info->getTitle());
+      $video->setSeconds($info->getSeconds());
+      $video->setPermalink($info->getPermalink());
+      $video->setThumbColor($info->getThumbColor());
+      $video->setThumbSm($info->getThumbnail("sm"));
+      $video->setThumbMd($info->getThumbnail("md"));
+      $video->setThumbLg($info->getThumbnail("lg"));
+      $video->setNumPlays(0);
+      $this->em->persist($video);
+    }
+
+    return $video;
   }
 
   /**

@@ -85,7 +85,9 @@ services:
         calls:
           - [setPlaylistStorage, ["@app.ws.storage.playlist"]]
           - [setProviders, ["@app.playlist.providers"]]
+          - [setVideoService, ["@app.service.video"]]
           - [setRedis, ["@snc_redis.video"]]
+          - [setVideoRepository, ["@=service('doctrine').getRepository('AppBundle:Video')"]]
         tags:
           - { name: gos_web_socket.topic }
 

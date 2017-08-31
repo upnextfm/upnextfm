@@ -27,7 +27,8 @@ class Providers implements ProvidersInterface
       if (!empty($query["v"])) {
         return [
           "codename" => $query["v"],
-          "provider" => self::YOUTUBE
+          "provider" => self::YOUTUBE,
+          "playlist" => false
         ];
       }
     }
@@ -35,8 +36,20 @@ class Providers implements ProvidersInterface
     if (preg_match('/youtu\.be\/([^\?&#]+)/i', $mediaURL, $matches)) {
       return [
         "codename" => $matches[1],
-        "provider" => self::YOUTUBE
+        "provider" => self::YOUTUBE,
+        "playlist" => false
       ];
+    }
+
+    if (preg_match('/youtube\.com\/playlist\?([^#]+)/', $mediaURL, $matches)) {
+      parse_str($matches[1], $query);
+      if (!empty($query["list"])) {
+        return [
+          "codename" => $query["list"],
+          "provider" => self::YOUTUBE,
+          "playlist" => true
+        ];
+      }
     }
 
     return null;

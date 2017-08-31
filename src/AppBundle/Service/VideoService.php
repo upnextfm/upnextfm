@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Service;
 
+use AppBundle\Playlist\Providers;
 use ColorThief\ColorThief;
 use Madcoda\Youtube\Youtube;
 use Psr\Log\LoggerInterface;
@@ -51,33 +52,70 @@ class VideoService
     ));
 
     switch($provider) {
-      case "youtube":
-        $resp = $this->youtube->getVideoInfo($codename);
-        if (!$resp) {
-          return null;
+      case Providers::YOUTUBE:
+        if ($resp = $this->youtube->getVideoInfo($codename)) {
+          return $this->youtubeInfo($codename, $resp);
         }
-
-        $info = new VideoInfo($codename, $provider, "https://youtu.be/${codename}");
-        $info
-          ->setTitle($resp->snippet->title)
-          ->setSeconds($this->youtubeToSeconds($resp->contentDetails->duration))
-          ->setDescription($resp->snippet->description)
-          ->setThumbnail("sm", !empty($resp->snippet->thumbnails->standard->url)
-            ? $resp->snippet->thumbnails->standard->url
-            : $resp->snippet->thumbnails->default->url)
-          ->setThumbnail("md", !empty($resp->snippet->thumbnails->medium->url)
-            ? $resp->snippet->thumbnails->medium->url
-            : $resp->snippet->thumbnails->default->url)
-          ->setThumbnail("lg", !empty($resp->snippet->thumbnails->high->url)
-            ? $resp->snippet->thumbnails->high->url
-            : $resp->snippet->thumbnails->default->url);
-        $info->setThumbColor($this->getThumbColor($info->getThumbnail("sm")));
-        return $info;
-        break;
-      default:
-        return null;
         break;
     }
+
+    return null;
+  }
+
+  /**
+   * @param string $codename
+   * @param string $provider
+   * @return array
+   */
+  public function getPlaylist($codename, $provider)
+  {
+    $this->logger->debug(sprintf(
+      "Fetching playlist info for '%s'@'%s'.",
+      $codename,
+      $provider
+    ));
+
+    switch($provider) {
+      case Providers::YOUTUBE:
+        $resp = $this->youtube->getPlaylistItemsByPlaylistId($codename, 25);
+        if ($resp) {
+          $codenames = [];
+          foreach($resp as $r) {
+            $codenames[] = $r->contentDetails->videoId;
+          }
+
+          return $codenames;
+        }
+        break;
+    }
+
+    return [];
+  }
+
+  /**
+   * @param string $codename
+   * @param object $resp
+   * @return VideoInfo
+   */
+  protected function youtubeInfo($codename, $resp)
+  {
+    $info = new VideoInfo($codename, Providers::YOUTUBE, "https://youtu.be/${codename}");
+    $info
+      ->setTitle($resp->snippet->title)
+      ->setSeconds($this->youtubeToSeconds($resp->contentDetails->duration))
+      ->setDescription($resp->snippet->description)
+      ->setThumbnail("sm", !empty($resp->snippet->thumbnails->standard->url)
+        ? $resp->snippet->thumbnails->standard->url
+        : $resp->snippet->thumbnails->default->url)
+      ->setThumbnail("md", !empty($resp->snippet->thumbnails->medium->url)
+        ? $resp->snippet->thumbnails->medium->url
+        : $resp->snippet->thumbnails->default->url)
+      ->setThumbnail("lg", !empty($resp->snippet->thumbnails->high->url)
+        ? $resp->snippet->thumbnails->high->url
+        : $resp->snippet->thumbnails->default->url);
+    $info->setThumbColor($this->getThumbColor($info->getThumbnail("sm")));
+
+    return $info;
   }
 
   /**
