@@ -97,7 +97,8 @@
   ],
   "globals": {
     "$": true,
-    "_WS_URI": true,
+    "gapi": true,
+    "_WS_SETTINGS": true,
     "PRODUCTION": true
   },
   "settings": {

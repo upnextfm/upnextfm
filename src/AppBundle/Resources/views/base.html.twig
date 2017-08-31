@@ -33,6 +33,7 @@
             {% endif %}
             <script src="{{ asset('js/autobahn.min.js') }}"></script>
             <script src="{{ asset('build/js/app.js') }}"></script>
+            <script src="//apis.google.com/js/client.js?onload=googleApiClientReady"></script>
             {% if app.environment == "dev" %}
                 <script src="http://localhost:35730/livereload.js"></script>
             {% endif %}
