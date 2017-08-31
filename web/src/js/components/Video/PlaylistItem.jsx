@@ -17,11 +17,13 @@ export default class Component extends React.Component {
 
     return (
       <div className="up-room-playlist__item">
-        <img
-          src={video.thumbnail}
-          className="up-thumbnail"
-          alt="Thumbnail"
-        />
+        <a href={video.permalink} target="_blank">
+          <img
+            src={video.thumbnail}
+            className="up-thumbnail"
+            alt="Thumbnail"
+          />
+        </a>
         <div className="up-room-playlist__item__meta">
           <div className="up-title">
             {!isCurrent ? null : (
