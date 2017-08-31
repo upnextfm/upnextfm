@@ -355,3 +355,7 @@ $height-avatar-collapsed: auto;
 .up-video-progress {
   background-color: #404040 !important;
 }
+
+.up-video-progress--thin .up-video-progress {
+  height: 2px !important;
+}

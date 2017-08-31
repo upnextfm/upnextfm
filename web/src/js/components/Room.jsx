@@ -45,7 +45,7 @@ class Room extends React.Component {
           <VideoNav />
         </Hidden>
         <Hidden smUp>
-          <Progress />
+          <Progress className="up-video-progress--thin" />
         </Hidden>
         <div className="up-room">
           <Grid item xs={12} md={layout.colsChatSide}>
