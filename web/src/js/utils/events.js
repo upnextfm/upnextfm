@@ -98,4 +98,4 @@ export class EventDispatcher {
   };
 }
 
-export const videoEventDispatcher = new EventDispatcher();
+export default new EventDispatcher();

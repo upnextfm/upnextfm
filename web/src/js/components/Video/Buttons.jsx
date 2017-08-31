@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { playerTogglePlay, playerToggleMute } from 'actions/playerActions';
 import { formatSeconds } from 'utils/media';
-import { videoEventDispatcher } from 'utils/events';
+import eventDispatcher from 'utils/events';
 import IconButton from 'material-ui/IconButton';
 import SkipNext from 'material-ui-icons/SkipNext';
 import MuteIcon from 'components/Icons/MuteIcon';
@@ -18,7 +18,7 @@ class Buttons extends React.Component {
   }
 
   componentDidMount() {
-    this.offTime = videoEventDispatcher.on('time', (e) => {
+    this.offTime = eventDispatcher.on('player.time', (e) => {
       this.setState({ time: e.value });
     });
   }

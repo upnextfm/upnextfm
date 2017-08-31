@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { LinearProgress } from 'material-ui/Progress';
-import { videoEventDispatcher } from 'utils/events';
+import eventDispatcher from 'utils/events';
 
 class Progress extends React.Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class Progress extends React.Component {
   }
 
   componentDidMount() {
-    this.offTime = videoEventDispatcher.on('time', (e) => {
+    this.offTime = eventDispatcher.on('player.time', (e) => {
       this.setState({ time: e.value });
     });
   }
