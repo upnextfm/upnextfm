@@ -268,7 +268,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     $this->playlist->append($videoLog);
     $event = new PlayedVideoEvent($user, $room, $video);
     $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
-    usleep(100);
+    usleep(500);
 
     if (!$this->playlist->getCurrent($room)) {
       if ($current = $this->playlist->popToCurrent($room)) {
@@ -302,8 +302,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
           if (!$current) {
             $current = $this->playlist->popToCurrent($room);
           }
-          if ($current) {
 
+          if ($current) {
             $videoLog      = $current["videoLog"];
             $timeFinishes  = $current["timeStarted"] + $videoLog->getVideo()->getSeconds();
             $timeRemaining = $timeFinishes - time();
@@ -336,8 +336,11 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
                 $this->sendToRoom($room, [
                   "cmd" => VideoCommands::STOP
                 ]);
+                $this->sendPlaylistToRoom($room);
               }
             }
+          } else {
+            $this->sendPlaylistToRoom($room);
           }
         }
     });
@@ -365,12 +368,10 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     foreach($this->playlist->getAll($room) as $videoLog) {
       $videos[] = $this->serializeVideo($videoLog->getVideo());
     }
-    if ($videos) {
-      $this->sendToRoom($room, [
-        "cmd"    => VideoCommands::VIDEOS,
-        "videos" => $videos
-      ]);
-    }
+    $this->sendToRoom($room, [
+      "cmd"    => VideoCommands::VIDEOS,
+      "videos" => $videos
+    ]);
 
     return true;
   }

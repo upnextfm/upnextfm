@@ -214,7 +214,6 @@ export function roomJoin(name) {
           }
           break;
         case types.CMD_PARTED:
-          dispatch(usersRepoRemove(payload.username));
           dispatch({
             type:     types.ROOM_PARTED,
             username: payload.username
