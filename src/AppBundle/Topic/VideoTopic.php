@@ -316,7 +316,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
         $this->sendToRoom($room, [
           "cmd"   => VideoCommands::START,
           "video" => $this->serializeVideo($videoLog->getVideo()),
-          "start" => $current["timeStarted"]
+          "start" => 0
         ]);
       }
     }
