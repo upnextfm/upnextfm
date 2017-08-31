@@ -38,7 +38,7 @@ function handleCommandPM(msg, dispatch) {
 function handleCommandSend(msg, dispatch, getState, api) {
   const room = getState().room;
   if (room.name !== '') {
-    if (!getState().auth.isAuthenticated) {
+    if (!getState().user.isAuthenticated) {
       dispatch(layoutToggleLoginDialog());
     } else {
       api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
@@ -204,7 +204,7 @@ export function roomJoin(name) {
             type: types.ROOM_JOINED,
             user: payload.user
           });
-          if (getState().auth.username !== payload.user.username) {
+          if (getState().user.username !== payload.user.username) {
             dispatch(roomMessage({
               type:    'notice',
               id:      nextNoticeID(),

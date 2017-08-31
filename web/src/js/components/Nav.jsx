@@ -11,7 +11,7 @@ import ArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import { animateScrollLeft } from 'utils/animate';
 import { playerToggleMute, playerTogglePlay } from 'actions/playerActions';
 import { layoutToggleNavDrawer, layoutToggleLoginDialog, layoutToggleRegisterDialog } from 'actions/layoutActions';
-import { authLogout } from 'actions/authActions';
+import { userLogout } from 'actions/userActions';
 import NavDrawer from 'components/NavDrawer';
 import MuteIcon from 'components/Icons/MuteIcon';
 import PlayIcon from 'components/Icons/PlayIcon';
@@ -19,7 +19,7 @@ import PlayIcon from 'components/Icons/PlayIcon';
 class Nav extends React.Component {
   static propTypes = {
     roomName: PropTypes.string.isRequired,
-    auth:     PropTypes.object,
+    user:     PropTypes.object,
     layout:   PropTypes.object,
     video:    PropTypes.object,
     dispatch: PropTypes.func
@@ -41,8 +41,8 @@ class Nav extends React.Component {
   };
 
   handleClickLogin = () => {
-    if (this.props.auth.isAuthenticated) {
-      this.props.dispatch(authLogout());
+    if (this.props.user.isAuthenticated) {
+      this.props.dispatch(userLogout());
     } else {
       this.props.dispatch(layoutToggleLoginDialog());
     }
@@ -65,7 +65,7 @@ class Nav extends React.Component {
   };
 
   render() {
-    const { roomName, auth, video } = this.props;
+    const { roomName, user, video } = this.props;
 
     return (
       <AppBar position="static" color="default">
@@ -77,7 +77,7 @@ class Nav extends React.Component {
             <img src="/images/logo-brand.png" alt="Logo" />
           </a>
           <Hidden smDown>
-            {auth.isAuthenticated
+            {user.isAuthenticated
             ? (
               <Button className="up-btn-login" onClick={this.handleClickLogin}>
                 Logout
@@ -108,7 +108,7 @@ class Nav extends React.Component {
           </Hidden>
         </Toolbar>
         <NavDrawer
-          auth={auth}
+          user={user}
           roomName={roomName}
           onClickLogin={this.handleClickLogin}
           onClickRegister={this.handleClickRegister}

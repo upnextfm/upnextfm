@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import layout from 'reducers/layoutReducer';
-import auth from 'reducers/authReducer';
 import register from 'reducers/registerReducer';
+import user from 'reducers/userReducer';
 import settings from 'reducers/settingsReducer';
 import room from 'reducers/roomReducer';
 import pms from 'reducers/pmsReducer';
@@ -11,7 +11,7 @@ import playlist from 'reducers/playlistReducer';
 
 const rootReducer = combineReducers({
   layout,
-  auth,
+  user,
   register,
   settings,
   room,

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { authReset, authLogin } from 'actions/authActions';
+import { userReset, userLogin } from 'actions/userActions';
 import FormControl from 'material-ui/Form/FormControl';
 import TextField from 'material-ui/TextField';
 import FormDialog from 'components/Dialogs/FormDialog';
 
 class LoginDialog extends Component {
   static propTypes = {
-    auth:     PropTypes.object,
+    user:     PropTypes.object,
     isOpen:   PropTypes.bool,
     onClose:  PropTypes.func,
     dispatch: PropTypes.func
@@ -31,7 +31,7 @@ class LoginDialog extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.auth.isSubmitting !== this.props.auth.isSubmitting && this.props.auth.isAuthenticated) {
+    if (prevProps.user.isSubmitting !== this.props.user.isSubmitting && this.props.user.isAuthenticated) {
       this.props.onClose();
     }
   }
@@ -62,11 +62,11 @@ class LoginDialog extends Component {
     }
     this.setState({ passwordError: false });
 
-    this.props.dispatch(authLogin({ username, password }));
+    this.props.dispatch(userLogin({ username, password }));
   };
 
   handleClose = () => {
-    this.props.dispatch(authReset());
+    this.props.dispatch(userReset());
     this.setState({
       username:      '',
       password:      '',
@@ -77,19 +77,19 @@ class LoginDialog extends Component {
   };
 
   render() {
-    const { isOpen, auth } = this.props;
+    const { isOpen, user } = this.props;
     const { username, password, usernameError, passwordError } = this.state;
 
     return (
       <FormDialog
         submitText="Login"
-        error={auth.error}
+        error={user.error}
         open={isOpen}
-        submitting={auth.isSubmitting}
+        submitting={user.isSubmitting}
         onSubmit={this.handleSubmit}
         onClose={this.handleClose}
       >
-        <FormControl disabled={auth.isSubmitting} fullWidth>
+        <FormControl disabled={user.isSubmitting} fullWidth>
           <TextField
             label="Username"
             name="username"
@@ -100,7 +100,7 @@ class LoginDialog extends Component {
             autoFocus
           />
         </FormControl>
-        <FormControl disabled={auth.isSubmitting} fullWidth>
+        <FormControl disabled={user.isSubmitting} fullWidth>
           <TextField
             label="Password"
             name="password"
@@ -118,7 +118,7 @@ class LoginDialog extends Component {
 
 function mapStateToProps(state) {
   return {
-    auth: Object.assign({}, state.auth)
+    user: Object.assign({}, state.user)
   };
 }
 

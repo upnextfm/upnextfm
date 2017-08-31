@@ -4,18 +4,18 @@ import { roomJoin } from 'actions/roomActions';
 /**
  * @returns {{type: string}}
  */
-export function authReset() {
+export function userReset() {
   return {
-    type: types.AUTH_RESET
+    type: types.USER_RESET
   };
 }
 
 /**
  * @returns {{type: string}}
  */
-export function authLoginBegin() {
+export function userLoginBegin() {
   return {
-    type: types.AUTH_LOGIN_BEGIN
+    type: types.USER_LOGIN_BEGIN
   };
 }
 
@@ -23,9 +23,9 @@ export function authLoginBegin() {
  * @param {string} error
  * @returns {{type: string, message: *}}
  */
-export function authLoginError(error) {
+export function userLoginError(error) {
   return {
-    type: types.AUTH_LOGIN_FAILURE,
+    type: types.USER_LOGIN_FAILURE,
     error
   };
 }
@@ -34,9 +34,9 @@ export function authLoginError(error) {
  * @param username
  * @returns {{type: string, username: *}}
  */
-export function authUsername(username) {
+export function userUsername(username) {
   return {
-    type: types.AUTH_USERNAME,
+    type: types.USER_USERNAME,
     username
   };
 }
@@ -45,9 +45,9 @@ export function authUsername(username) {
  * @param {{username: string, password: string}} creds
  * @returns {Function}
  */
-export function authLogin(creds) {
+export function userLogin(creds) {
   return (dispatch, getState, api) => {
-    dispatch(authLoginBegin());
+    dispatch(userLoginBegin());
 
     const username = encodeURIComponent(creds.username);
     const password = encodeURIComponent(creds.password);
@@ -62,7 +62,7 @@ export function authLogin(creds) {
 
     return fetch('/login_check', config)
       .then((resp) => {
-        dispatch(authUsername(creds.username));
+        dispatch(userUsername(creds.username));
         const room = getState().room;
         if (room.name !== '') {
           dispatch(roomJoin(room.name));
@@ -71,7 +71,7 @@ export function authLogin(creds) {
         return resp;
       })
       .catch((error) => {
-        dispatch(authLoginError(error));
+        dispatch(userLoginError(error));
       });
   };
 }
@@ -79,19 +79,19 @@ export function authLogin(creds) {
 /**
  * @returns {Function}
  */
-export function authLogout() {
+export function userLogout() {
   return (dispatch) => {
-    dispatch(authLoginBegin());
+    dispatch(userLoginBegin());
     return fetch('/logout', {
       credentials: 'same-origin'
     })
       .then((resp) => {
-        dispatch(authUsername(''));
+        dispatch(userUsername(''));
         return resp;
       })
       .catch((error) => {
         console.info(error);
-        dispatch(authUsername(''));
+        dispatch(userUsername(''));
       });
   };
 }

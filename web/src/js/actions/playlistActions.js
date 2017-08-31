@@ -1,5 +1,5 @@
 import * as types from 'actions/actionTypes';
-import { authToggleLoginDialog } from 'actions/authActions';
+import { userToggleLoginDialog } from 'actions/userActions';
 import { layoutErrorMessage } from 'actions/layoutActions';
 import { playerTime } from 'actions/playerActions';
 
@@ -55,8 +55,8 @@ export function playlistAppend(url) {
 
     const room = getState().room;
     if (room.name !== '') {
-      if (!getState().auth.isAuthenticated) {
-        return dispatch(authToggleLoginDialog());
+      if (!getState().user.isAuthenticated) {
+        return dispatch(userToggleLoginDialog());
       }
 
       api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {

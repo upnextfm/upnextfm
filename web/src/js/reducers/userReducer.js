@@ -2,7 +2,7 @@ import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
 
 /**
- * Auth reducer
+ * User reducer
  *
  * state = {
  *    username:        '',
@@ -15,31 +15,31 @@ import initialState from 'store/initialState';
  * @param {*} action
  * @returns {*}
  */
-export default function authReducer(state = initialState.auth, action = {}) {
+export default function userReducer(state = initialState.user, action = {}) {
   switch (action.type) {
-    case types.AUTH_USERNAME:
+    case types.USER_USERNAME:
       return Object.assign({}, state, {
         username:        action.username,
         error:           '',
         isSubmitting:    false,
         isAuthenticated: action.username !== ''
       });
-    case types.AUTH_LOGIN_BEGIN:
+    case types.USER_LOGIN_BEGIN:
       return Object.assign({}, state, {
         error:           '',
         username:        '',
         isSubmitting:    true,
         isAuthenticated: false
       });
-    case types.AUTH_LOGIN_FAILURE:
+    case types.USER_LOGIN_FAILURE:
       return Object.assign({}, state, {
         isSubmitting:    false,
         isAuthenticated: false,
         username:        '',
         error:           action.error
       });
-    case types.AUTH_RESET:
-      return Object.assign({}, initialState.auth);
+    case types.USER_RESET:
+      return Object.assign({}, initialState.user);
     default: return state;
   }
 }

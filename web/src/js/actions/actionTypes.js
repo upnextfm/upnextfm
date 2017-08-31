@@ -1,7 +1,7 @@
-export const AUTH_LOGIN_BEGIN   = 'AUTH_LOGIN_BEGIN';
-export const AUTH_LOGIN_FAILURE = 'AUTH_LOGIN_FAILURE';
-export const AUTH_RESET         = 'AUTH_RESET';
-export const AUTH_USERNAME      = 'AUTH_USERNAME';
+export const USER_LOGIN_BEGIN   = 'USER_LOGIN_BEGIN';
+export const USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE';
+export const USER_RESET         = 'USER_RESET';
+export const USER_USERNAME      = 'USER_USERNAME';
 
 export const REGISTER_RESET    = 'REGISTER_RESET';
 export const REGISTER_BEGIN    = 'REGISTER_BEGIN';

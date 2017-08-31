@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
-import { authUsername } from 'actions/authActions';
+import { userUsername } from 'actions/userActions';
 import { layoutToggleLoginDialog, layoutToggleRegisterDialog, layoutToggleHelpDialog, layoutErrorMessage } from 'actions/layoutActions';
 import Progress from 'components/Video/Progress';
 import HelpDialog from 'components/Dialogs/HelpDialog';
@@ -20,14 +20,14 @@ class Room extends React.Component {
     roomName:  PropTypes.string.isRequired,
     socketURI: PropTypes.string.isRequired,
     username:  PropTypes.string,
-    auth:      PropTypes.object,
+    user:      PropTypes.object,
     layout:    PropTypes.object
   };
 
   constructor(props) {
     super(props);
     if (props.username) {
-      props.dispatch(authUsername(props.username));
+      props.dispatch(userUsername(props.username));
     }
   }
 
@@ -36,11 +36,11 @@ class Room extends React.Component {
   };
 
   render() {
-    const { roomName, socketURI, auth, layout, dispatch } = this.props;
+    const { roomName, socketURI, user, layout, dispatch } = this.props;
 
     return (
       <div>
-        <Nav auth={auth} roomName={roomName} />
+        <Nav user={user} roomName={roomName} />
         <Hidden smUp>
           <VideoNav />
         </Hidden>
@@ -79,7 +79,7 @@ class Room extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    auth:   Object.assign({}, state.auth),
+    user:   Object.assign({}, state.user),
     layout: Object.assign({}, state.layout)
   };
 }

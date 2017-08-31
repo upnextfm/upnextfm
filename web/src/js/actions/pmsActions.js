@@ -43,7 +43,7 @@ function dispatchSocketPayload(dispatch, payload, state) {
  */
 export function pmsSubscribe() {
   return (dispatch, getState, api) => {
-    if (!getState().auth.isAuthenticated) {
+    if (!getState().user.isAuthenticated) {
       return;
     }
 
@@ -85,7 +85,7 @@ export function pmsNumNewMessages(username, numNewMessages) {
  */
 export function pmsLoadConversation(username) {
   return (dispatch, getState, api) => {
-    if (!getState().auth.isAuthenticated) {
+    if (!getState().user.isAuthenticated) {
       return;
     }
 
@@ -104,11 +104,11 @@ export function pmsLoadConversation(username) {
  */
 export function pmsSend(to, message) {
   return (dispatch, getState, api) => {
-    const auth = getState().auth;
-    if (!auth.isAuthenticated) {
+    const user = getState().user;
+    if (!user.isAuthenticated) {
       return;
     }
-    if (auth.username.toLowerCase() === to.toLowerCase()) {
+    if (user.username.toLowerCase() === to.toLowerCase()) {
       dispatch(layoutErrorMessage('Cannot send a PM to yourself.'));
       return;
     }

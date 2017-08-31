@@ -14,7 +14,7 @@ export default {
     colsChatSide:         7,
     colsVideoSide:        5
   },
-  auth: {
+  user: {
     username:        '',
     error:           null,
     isAuthenticated: false,

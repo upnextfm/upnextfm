@@ -1,5 +1,5 @@
 import * as types from 'actions/actionTypes';
-import { authUsername } from 'actions/authActions';
+import { userUsername } from 'actions/userActions';
 import { roomJoin } from 'actions/roomActions';
 
 /**
@@ -69,7 +69,7 @@ export function registerSubmit(details) {
           throw Error(resp.error);
         }
         dispatch(registerComplete());
-        dispatch(authUsername(details.username));
+        dispatch(userUsername(details.username));
 
         const room = getState().room;
         if (room.name !== '') {

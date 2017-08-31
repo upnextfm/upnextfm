@@ -18,7 +18,7 @@ import Info from 'material-ui-icons/Info';
 class NavDrawer extends React.Component {
   static propTypes = {
     roomName:        PropTypes.string.isRequired,
-    auth:            PropTypes.object.isRequired,
+    user:            PropTypes.object.isRequired,
     layout:          PropTypes.object,
     dispatch:        PropTypes.func,
     onClickLogin:    PropTypes.func,
@@ -36,10 +36,10 @@ class NavDrawer extends React.Component {
   };
 
   renderList() {
-    const { auth, onClickLogin, onClickRegister, dispatch } = this.props;
+    const { user, onClickLogin, onClickRegister, dispatch } = this.props;
 
     let authListItems = null;
-    if (auth.isAuthenticated) {
+    if (user.isAuthenticated) {
       authListItems = (
         <div>
           <ListItem onClick={onClickLogin} button>
@@ -48,13 +48,13 @@ class NavDrawer extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Logout" />
           </ListItem>
-          <ListItem onClick={() => { window.open(`/u/${auth.username}`); }} button>
+          <ListItem onClick={() => { window.open(`/u/${user.username}`); }} button>
             <ListItemIcon>
               <Face />
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListItem>
-          <ListItem onClick={() => { window.open(`/u/${auth.username}/favorites`); }} button>
+          <ListItem onClick={() => { window.open(`/u/${user.username}/favorites`); }} button>
             <ListItemIcon>
               <Favorite />
             </ListItemIcon>
