@@ -78,6 +78,10 @@ class RoomTopic extends AbstractTopic
         "messages" => array_reverse($this->serializeMessages($messages))
       ]);
       $conn->event($topic->getId(), [
+        "cmd"   => RoomCommands::ROLES,
+        "roles" => $user->getRoles()
+      ]);
+      $conn->event($topic->getId(), [
         "cmd"   => RoomCommands::REPO_USERS,
         "users" => $repoUsers
       ]);

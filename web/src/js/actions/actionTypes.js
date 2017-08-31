@@ -1,6 +1,7 @@
 export const USER_LOGIN_BEGIN   = 'USER_LOGIN_BEGIN';
 export const USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE';
 export const USER_RESET         = 'USER_RESET';
+export const USER_ROLES         = 'USER_ROLES';
 export const USER_USERNAME      = 'USER_USERNAME';
 
 export const REGISTER_RESET    = 'REGISTER_RESET';
@@ -69,6 +70,7 @@ export const CMD_RECEIVE       = 'receive';
 export const CMD_JOINED        = 'joined';
 export const CMD_PARTED        = 'parted';
 export const CMD_USERS         = 'users';
+export const CMD_ROLES         = 'roles';
 export const CMD_ERROR         = 'error';
 export const CMD_LOAD          = 'load';
 export const CMD_REPO_USERS    = 'repo_users';

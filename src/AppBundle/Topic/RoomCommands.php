@@ -8,6 +8,7 @@ class RoomCommands
   const PM         = "pm";
   const JOINED     = "joined";
   const PARTED     = "parted";
+  const ROLES      = "roles";
   const USERS      = "users";
   const REPO_USERS = "repo_users";
   const MESSAGES   = "messages";

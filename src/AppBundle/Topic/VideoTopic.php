@@ -148,7 +148,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
 
     $videos = [];
     foreach($this->playlist->getAll($room) as $videoLog) {
-      $videos[] = $this->serializeVideo($videoLog->getVideo());
+      $videos[] = $this->serializeVideo($videoLog);
     }
     if ($videos) {
       $conn->event($topic->getId(), [
@@ -164,7 +164,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       $conn->event($topic->getId(), [
         "cmd"   => VideoCommands::START,
         "start" => time() - $current["timeStarted"],
-        "video" => $this->serializeVideo($videoLog->getVideo())
+        "video" => $this->serializeVideo($videoLog)
       ]);
     }
   }
@@ -315,7 +315,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
         $videoLog = $current["videoLog"];
         $this->sendToRoom($room, [
           "cmd"   => VideoCommands::START,
-          "video" => $this->serializeVideo($videoLog->getVideo()),
+          "video" => $this->serializeVideo($videoLog),
           "start" => 0
         ]);
       }
@@ -368,7 +368,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
 
                 $this->sendToRoom($room, [
                   "cmd"   => VideoCommands::START,
-                  "video" => $this->serializeVideo($videoLog->getVideo()),
+                  "video" => $this->serializeVideo($videoLog),
                   "start" => 0
                 ]);
                 $this->sendPlaylistToRoom($room);
@@ -442,7 +442,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   {
     $videos = [];
     foreach($this->playlist->getAll($room) as $videoLog) {
-      $videos[] = $this->serializeVideo($videoLog->getVideo());
+      $videos[] = $this->serializeVideo($videoLog);
     }
     $this->sendToRoom($room, [
       "cmd"    => VideoCommands::VIDEOS,

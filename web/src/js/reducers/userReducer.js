@@ -6,6 +6,7 @@ import initialState from 'store/initialState';
  *
  * state = {
  *    username:        '',
+ *    roles:           [],
  *    error:           null,
  *    isAuthenticated: false,
  *    isSubmitting:    false
@@ -23,6 +24,10 @@ export default function userReducer(state = initialState.user, action = {}) {
         error:           '',
         isSubmitting:    false,
         isAuthenticated: action.username !== ''
+      });
+    case types.USER_ROLES:
+      return Object.assign({}, state, {
+        roles: action.roles
       });
     case types.USER_LOGIN_BEGIN:
       return Object.assign({}, state, {

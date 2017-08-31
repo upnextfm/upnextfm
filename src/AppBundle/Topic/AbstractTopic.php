@@ -4,6 +4,7 @@ namespace AppBundle\Topic;
 use AppBundle\Entity\PrivateMessage;
 use AppBundle\Entity\RoomSettings;
 use AppBundle\Entity\User;
+use AppBundle\Entity\VideoLog;
 use AppBundle\EventListener\Event\CreatedRoomEvent;
 use AppBundle\EventListener\Event\UserEvents;
 use AppBundle\Storage\RoomStorage;
@@ -235,12 +236,15 @@ abstract class AbstractTopic implements TopicInterface
   }
 
   /**
-   * @param Video $video
+   * @param VideoLog $videoLog
    * @return array
    */
-  protected function serializeVideo(Video $video)
+  protected function serializeVideo(VideoLog $videoLog)
   {
+    $video = $videoLog->getVideo();
+
     return [
+      "id"        => $videoLog->getId(),
       "codename"  => $video->getCodename(),
       "provider"  => $video->getProvider(),
       "permalink" => $video->getPermalink(),

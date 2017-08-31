@@ -1,5 +1,6 @@
-import * as types from 'actions/actionTypes';
+import * as types from './actionTypes';
 import { usersRepoAdd, usersRepoAddMulti, usersRepoRemove } from 'actions/usersActions';
+import { userRoles } from 'actions/userActions';
 import { layoutToggleLoginDialog } from 'actions/layoutActions';
 import { playlistSubscribe } from 'actions/playlistActions';
 import { pmsSend } from 'actions/pmsActions';
@@ -11,6 +12,68 @@ let pingInterval = null;
 function nextNoticeID() {
   noticeID += 1;
   return noticeID;
+}
+
+/**
+ * @param {Function} dispatch
+ * @param {*} payload
+ * @param {Function} getState
+ * @returns {*}
+ */
+function dispatchSocketPayload(dispatch, getState, payload) {
+  switch (payload.cmd) {
+    case types.CMD_JOINED:
+      dispatch(usersRepoAdd(payload.user));
+      dispatch({
+        type: types.ROOM_JOINED,
+        user: payload.user
+      });
+      if (getState().user.username !== payload.user.username) {
+        dispatch(roomMessage({
+          type:    'notice',
+          id:      nextNoticeID(),
+          date:    new Date(),
+          message: `${payload.user.username} joined the room.`
+        }));
+      }
+      break;
+    case types.CMD_PARTED:
+      dispatch({
+        type:     types.ROOM_PARTED,
+        username: payload.username
+      });
+      dispatch(roomMessage({
+        type:    'notice',
+        id:      nextNoticeID(),
+        date:    new Date(),
+        message: `${payload.username} left the room.`
+      }));
+      break;
+    case types.CMD_ROLES:
+      dispatch(userRoles(payload.roles));
+      break;
+    case types.CMD_REPO_USERS:
+      dispatch(usersRepoAddMulti(payload.users));
+      break;
+    case types.CMD_USERS:
+      dispatch(roomUsers(payload.users));
+      break;
+    case types.CMD_MESSAGES:
+      dispatch(roomMessages(payload.messages));
+      break;
+    case types.CMD_SETTINGS:
+      dispatch(settingsAll(payload.settings));
+      break;
+    case types.CMD_SEND:
+      dispatch(roomMessage(payload.message));
+      if (!getState().layout.isWindowFocused) {
+        dispatch(roomIncrNumNewMessages());
+      }
+      break;
+    default:
+      console.error('Unknown cmd', payload.cmd);
+      break;
+  }
 }
 
 /**
@@ -196,57 +259,7 @@ export function roomJoin(name) {
       if (payload === 'pong') {
         return;
       }
-
-      switch (payload.cmd) {
-        case types.CMD_JOINED:
-          dispatch(usersRepoAdd(payload.user));
-          dispatch({
-            type: types.ROOM_JOINED,
-            user: payload.user
-          });
-          if (getState().user.username !== payload.user.username) {
-            dispatch(roomMessage({
-              type:    'notice',
-              id:      nextNoticeID(),
-              date:    new Date(),
-              message: `${payload.user.username} joined the room.`
-            }));
-          }
-          break;
-        case types.CMD_PARTED:
-          dispatch({
-            type:     types.ROOM_PARTED,
-            username: payload.username
-          });
-          dispatch(roomMessage({
-            type:    'notice',
-            id:      nextNoticeID(),
-            date:    new Date(),
-            message: `${payload.username} left the room.`
-          }));
-          break;
-        case types.CMD_REPO_USERS:
-          dispatch(usersRepoAddMulti(payload.users));
-          break;
-        case types.CMD_USERS:
-          dispatch(roomUsers(payload.users));
-          break;
-        case types.CMD_MESSAGES:
-          dispatch(roomMessages(payload.messages));
-          break;
-        case types.CMD_SETTINGS:
-          dispatch(settingsAll(payload.settings));
-          break;
-        case types.CMD_SEND:
-          dispatch(roomMessage(payload.message));
-          if (!getState().layout.isWindowFocused) {
-            dispatch(roomIncrNumNewMessages());
-          }
-          break;
-        default:
-          console.error('Unknown cmd', payload.cmd);
-          break;
-      }
+      dispatchSocketPayload(dispatch, getState, payload);
     });
   };
 }

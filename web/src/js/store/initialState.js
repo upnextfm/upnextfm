@@ -16,9 +16,10 @@ export default {
   },
   user: {
     username:        '',
-    error:           null,
+    roles:           [],
     isAuthenticated: false,
-    isSubmitting:    false
+    isSubmitting:    false,
+    error:           null
   },
   register: {
     error:        null,

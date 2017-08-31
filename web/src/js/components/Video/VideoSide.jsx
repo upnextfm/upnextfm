@@ -8,18 +8,19 @@ import Progress from 'components/Video/Progress';
 
 class VideoSide extends React.Component {
   static propTypes = {
-    playlist: PropTypes.object.isRequired
+    user:     PropTypes.object,
+    playlist: PropTypes.object
   };
 
   render() {
-    const { playlist } = this.props;
+    const { user, playlist } = this.props;
 
     return (
       <div className="up-room-side__video">
         <Player video={playlist.current} />
         <Progress />
         <Buttons />
-        <Playlist />
+        <Playlist user={user} />
       </div>
     );
   }
@@ -27,6 +28,7 @@ class VideoSide extends React.Component {
 
 function mapStateToProps(state) {
   return Object.assign({
+    user:     state.user,
     playlist: state.playlist
   });
 }

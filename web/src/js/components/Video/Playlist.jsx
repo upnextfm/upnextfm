@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { playlistAppend } from 'actions/playlistActions';
@@ -7,6 +8,10 @@ import Button from 'material-ui/Button';
 import PlaylistItem from 'components/Video/PlaylistItem';
 
 class PlaylistContainer extends React.Component {
+  static propTypes = {
+    user: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -14,9 +19,13 @@ class PlaylistContainer extends React.Component {
     };
   }
 
-  handleClickPlay = () => {
+  handleClickAppend = () => {
     this.props.dispatch(playlistAppend(this.inputRef.value));
     this.setState({ permalink: '' });
+  };
+
+  handleClickControl = (action, video) => {
+    console.info(action, video.id);
   };
 
   handleChange = (e) => {
@@ -30,8 +39,9 @@ class PlaylistContainer extends React.Component {
   };
 
   render() {
-    const { current, videos } = this.props;
+    const { current, videos, user } = this.props;
     const { permalink } = this.state;
+    const canDelete = user.roles.indexOf('ROLE_ADMIN') !== -1;
 
     return (
       <div className="up-room-playlist">
@@ -44,7 +54,7 @@ class PlaylistContainer extends React.Component {
             onKeyDown={this.handleKeyDown}
             ref={(ref) => { this.inputRef = ref; }}
           />
-          <Button onClick={this.handleClickPlay}>
+          <Button onClick={this.handleClickAppend}>
             Append
           </Button>
         </div>
@@ -52,13 +62,22 @@ class PlaylistContainer extends React.Component {
           <List className="up-room-playlist__items">
             {!current.codename ? null : (
               <ListItem key={current.codename} button>
-                <PlaylistItem video={current} isCurrent />
+                <PlaylistItem
+                  video={current}
+                  canDelete={canDelete}
+                  onClickControl={this.handleClickControl}
+                  isCurrent
+                />
               </ListItem>
             )}
             {videos.map((video) => {
               return (
                 <ListItem key={video.codename} button>
-                  <PlaylistItem video={video} />
+                  <PlaylistItem
+                    video={video}
+                    canDelete={canDelete}
+                    onClickControl={this.handleClickControl}
+                  />
                 </ListItem>
               );
             })}

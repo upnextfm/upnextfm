@@ -42,6 +42,17 @@ export function userUsername(username) {
 }
 
 /**
+ * @param {Array} roles
+ * @returns {{type: string, roles: Array}}
+ */
+export function userRoles(roles) {
+  return {
+    type: types.USER_ROLES,
+    roles
+  };
+}
+
+/**
  * @param {{username: string, password: string}} creds
  * @returns {Function}
  */
