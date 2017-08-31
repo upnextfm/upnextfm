@@ -64,7 +64,6 @@ class Player extends React.Component {
     const duration = parseInt(this.provider.getDuration(), 10);
     videoEventDispatcher.trigger('duration', duration);
     this.props.dispatch(actions.playerReady(duration));
-    // this.provider.seekTo(this.props.player.time);
     setInterval(this.handleInterval, 1000);
   };
 
