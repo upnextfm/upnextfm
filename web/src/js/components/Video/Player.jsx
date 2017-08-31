@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from 'actions/playerActions';
+import { videoEventDispatcher } from 'utils/events';
 import YouTube from 'react-youtube';
 
 class Player extends React.Component {
@@ -54,17 +55,17 @@ class Player extends React.Component {
   };
 
   handleInterval = () => {
-    const time = parseInt(this.provider.getCurrentTime(), 10);
-    this.props.dispatch(actions.playerTime(time));
+    videoEventDispatcher.trigger('time', parseInt(this.provider.getCurrentTime(), 10));
   };
 
   handleReady = (e) => {
     this.provider = e.target;
 
     const duration = parseInt(this.provider.getDuration(), 10);
+    videoEventDispatcher.trigger('duration', duration);
     this.props.dispatch(actions.playerReady(duration));
     // this.provider.seekTo(this.props.player.time);
-    // setInterval(this.handleInterval, 1000);
+    setInterval(this.handleInterval, 1000);
   };
 
   handleStateChange = () => {
