@@ -83,6 +83,7 @@ class LoginDialog extends Component {
     return (
       <FormDialog
         submitText="Login"
+        className="up-dialog up-dialog--login"
         error={user.error}
         open={isOpen}
         submitting={user.isSubmitting}

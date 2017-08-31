@@ -73,11 +73,14 @@ export function userLogin(creds) {
 
     return fetch('/login_check', config)
       .then((resp) => {
-        dispatch(userUsername(creds.username));
-        const room = getState().room;
-        if (room.name !== '') {
-          dispatch(roomJoin(room.name));
-        }
+        api.socket.reconnect()
+          .then(() => {
+            dispatch(userUsername(creds.username));
+            const room = getState().room;
+            if (room.name !== '') {
+              dispatch(roomJoin(room.name));
+            }
+          });
 
         return resp;
       })
@@ -91,13 +94,17 @@ export function userLogin(creds) {
  * @returns {Function}
  */
 export function userLogout() {
-  return (dispatch) => {
+  return (dispatch, getState, api) => {
     dispatch(userLoginBegin());
     return fetch('/logout', {
       credentials: 'same-origin'
     })
       .then((resp) => {
-        dispatch(userUsername(''));
+        api.socket.reconnect()
+          .then(() => {
+            dispatch(userUsername(''));
+          });
+
         return resp;
       })
       .catch((error) => {

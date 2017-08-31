@@ -78,10 +78,6 @@ class RoomTopic extends AbstractTopic
         "messages" => array_reverse($this->serializeMessages($messages))
       ]);
       $conn->event($topic->getId(), [
-        "cmd"   => RoomCommands::ROLES,
-        "roles" => $user->getRoles()
-      ]);
-      $conn->event($topic->getId(), [
         "cmd"   => RoomCommands::REPO_USERS,
         "users" => $repoUsers
       ]);
@@ -91,6 +87,10 @@ class RoomTopic extends AbstractTopic
       ]);
 
       if ($user !== null) {
+        $conn->event($topic->getId(), [
+          "cmd"   => RoomCommands::ROLES,
+          "roles" => $user->getRoles()
+        ]);
         $topic->broadcast([
           "cmd"  => RoomCommands::JOINED,
           "user" => $this->serializeUser($user)

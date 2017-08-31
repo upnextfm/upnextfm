@@ -8,8 +8,8 @@ class Socket {
     this.listeners = [];
     this.session   = null;
     this.connected = false;
-    this.debug     = false;
-    this.reconnect = null;
+    this.debug     = true;
+    this.uri       = null;
   }
 
   /**
@@ -18,6 +18,7 @@ class Socket {
    */
   connect = (uri) => {
     this.info(`Connecting to ${uri}`);
+    this.uri = uri;
 
     return new Promise((resolve, reject) => {
       try {
@@ -55,6 +56,11 @@ class Socket {
         reject(new Error(error));
       }
     });
+  };
+
+  reconnect = () => {
+    this.session.close();
+    return this.connect(this.uri);
   };
 
   /**
