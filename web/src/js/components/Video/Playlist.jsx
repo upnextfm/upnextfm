@@ -23,6 +23,12 @@ class PlaylistContainer extends React.Component {
     this.setState({ permalink: e.target.value });
   };
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      this.handleClickPlay();
+    }
+  };
+
   render() {
     const { current, videos } = this.props;
     const { permalink } = this.state;
@@ -35,6 +41,7 @@ class PlaylistContainer extends React.Component {
             id="up-media-url"
             value={permalink}
             onChange={this.handleChange}
+            onKeyDown={this.handleKeyDown}
             ref={(ref) => { this.inputRef = ref; }}
           />
           <Button onClick={this.handleClickPlay}>
