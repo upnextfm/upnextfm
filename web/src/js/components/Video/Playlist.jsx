@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { playlistAppend } from 'actions/playlistActions';
 import List, { ListItem } from 'material-ui/List';
-import Button from 'material-ui/Button';
+import IconButton from 'material-ui/IconButton';
+import AddIcon from 'material-ui-icons/Add';
+import SearchIcon from 'material-ui-icons/Search';
 import PlaylistItem from 'components/Video/PlaylistItem';
 
 class PlaylistContainer extends React.Component {
@@ -15,7 +17,8 @@ class PlaylistContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      permalink: ''
+      permalink:   '',
+      isSearching: false
     };
   }
 
@@ -29,7 +32,12 @@ class PlaylistContainer extends React.Component {
   };
 
   handleChange = (e) => {
-    this.setState({ permalink: e.target.value });
+    const permalink = e.target.value;
+    if (permalink.length > 3) {
+      this.setState({ permalink, isSearching: permalink.indexOf('http') === -1 });
+    } else {
+      this.setState({ permalink, isSearching: false });
+    }
   };
 
   handleKeyDown = (e) => {
@@ -38,51 +46,71 @@ class PlaylistContainer extends React.Component {
     }
   };
 
-  render() {
+  renderInput() {
+    const iconStyles = {
+      width:  36,
+      height: 36
+    };
+
+    return (
+      <div className="up-room-playlist__input">
+        <input
+          id="up-media-url"
+          placeholder="Media link or search term..."
+          value={this.state.permalink}
+          onChange={this.handleChange}
+          onKeyDown={this.handleKeyDown}
+          ref={(ref) => { this.inputRef = ref; }}
+        />
+        <IconButton onClick={this.handleClickAppend}>
+          {this.state.isSearching ? (
+            <SearchIcon title="Search" style={iconStyles} />
+          ) : (
+            <AddIcon title="Append" style={iconStyles} />
+          )}
+        </IconButton>
+      </div>
+    );
+  }
+
+  renderList() {
     const { current, videos, user } = this.props;
-    const { permalink } = this.state;
     const canDelete = user.roles.indexOf('ROLE_ADMIN') !== -1;
 
     return (
-      <div className="up-room-playlist">
-        <div className="up-room-playlist__input">
-          <label htmlFor="up-media-url">URL</label>
-          <input
-            id="up-media-url"
-            value={permalink}
-            onChange={this.handleChange}
-            onKeyDown={this.handleKeyDown}
-            ref={(ref) => { this.inputRef = ref; }}
-          />
-          <Button onClick={this.handleClickAppend}>
-            Append
-          </Button>
-        </div>
-        <Scrollbars className="up-room-playlist__items-container">
-          <List className="up-room-playlist__items">
-            {!current.codename ? null : (
-              <ListItem key={current.codename} button>
+      <Scrollbars className="up-room-playlist__items-container">
+        <List className="up-room-playlist__items">
+          {!current.codename ? null : (
+            <ListItem key={current.codename} button>
+              <PlaylistItem
+                video={current}
+                canDelete={canDelete}
+                onClickControl={this.handleClickControl}
+                isCurrent
+              />
+            </ListItem>
+          )}
+          {videos.map((video) => {
+            return (
+              <ListItem key={video.codename} button>
                 <PlaylistItem
-                  video={current}
+                  video={video}
                   canDelete={canDelete}
                   onClickControl={this.handleClickControl}
-                  isCurrent
                 />
               </ListItem>
-            )}
-            {videos.map((video) => {
-              return (
-                <ListItem key={video.codename} button>
-                  <PlaylistItem
-                    video={video}
-                    canDelete={canDelete}
-                    onClickControl={this.handleClickControl}
-                  />
-                </ListItem>
-              );
-            })}
-          </List>
-        </Scrollbars>
+            );
+          })}
+        </List>
+      </Scrollbars>
+    );
+  }
+
+  render() {
+    return (
+      <div className="up-room-playlist">
+        {this.renderInput()}
+        {this.renderList()}
       </div>
     );
   }

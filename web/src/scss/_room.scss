@@ -274,23 +274,30 @@ $height-avatar-collapsed: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: $padding-std;
-
-  label {
-    flex-shrink: 0;
-    display: block;
-    padding-right: $padding-std * 2;
-  }
+  padding: ($padding-std / 2);
+  background-color: $card-bg-color;
+  border-bottom: 1px solid #3a3a3a;
 
   input {
     flex-grow: 3;
     display: block;
-    color: black;
+    width: 100%;
+    outline: 0;
+    border: 0;
+    color: $color-fg;
+    font-size: 1rem;
+    padding: 0 $padding-std * 2;
+    background-color: $card-bg-color;
   }
 
   button {
     flex-shrink: 0;
     display: block;
+    color: $color-dim;
+
+    &:hover {
+      color: $color-fg;
+    }
   }
 }
 
