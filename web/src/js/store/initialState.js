@@ -34,8 +34,8 @@ export default {
       pingInterval: 30000,
       uri:          ''
     },
-    site:   {},
-    room:   {}
+    site: {},
+    room: {}
   },
   room: {
     name:           '',
