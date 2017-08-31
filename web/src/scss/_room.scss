@@ -248,9 +248,15 @@ $height-avatar-collapsed: auto;
   text-align: left;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   flex: 0 0 48px;
   background: #000;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.up-room-video__clock {
+  margin-right: 18px;
+  margin-left: auto;
 }
 
 .up-room-playlist {

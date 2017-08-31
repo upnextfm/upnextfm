@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-function formatSeconds(seconds) {
-  const date = new Date(1970, 0, 1);
-  date.setSeconds(seconds);
-  return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
-}
+import { formatSeconds } from 'utils/media';
 
 export default class Component extends React.Component {
   static propTypes = {
