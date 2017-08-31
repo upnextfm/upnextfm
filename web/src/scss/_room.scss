@@ -328,6 +328,10 @@ $height-avatar-collapsed: auto;
   flex-direction: column;
   justify-content: space-between;
 
+  .up-title {
+    font-size: 0.9rem;
+  }
+
   .up-info {
     font-size: 0.8rem;
   }
