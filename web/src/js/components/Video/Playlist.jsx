@@ -28,37 +28,36 @@ class PlaylistContainer extends React.Component {
     const { permalink } = this.state;
 
     return (
-      <Scrollbars>
-        <div className="up-room-playlist up-paper-container">
-          <label htmlFor="up-media-url">Media URL: </label>
+      <div className="up-room-playlist up-paper-container">
+        <div className="up-room-playlist__input">
+          <label htmlFor="up-media-url">URL</label>
           <input
             id="up-media-url"
             value={permalink}
             onChange={this.handleChange}
-            style={{ color: 'black', width: '75%' }}
             ref={(ref) => { this.inputRef = ref; }}
           />
           <Button onClick={this.handleClickPlay}>
             Append
           </Button>
-          <div>
-            <List className="up-room-playlist__items">
-              {!current.codename ? null : (
-                <ListItem key={current.codename} button>
-                  <PlaylistItem video={current} isCurrent />
-                </ListItem>
-              )}
-              {videos.map((video) => {
-                return (
-                  <ListItem key={video.codename} button>
-                    <PlaylistItem video={video} />
-                  </ListItem>
-                );
-              })}
-            </List>
-          </div>
         </div>
-      </Scrollbars>
+        <Scrollbars className="up-room-playlist__items-container">
+          <List className="up-room-playlist__items">
+            {!current.codename ? null : (
+              <ListItem key={current.codename} button>
+                <PlaylistItem video={current} isCurrent />
+              </ListItem>
+            )}
+            {videos.map((video) => {
+              return (
+                <ListItem key={video.codename} button>
+                  <PlaylistItem video={video} />
+                </ListItem>
+              );
+            })}
+          </List>
+        </Scrollbars>
+      </div>
     );
   }
 }

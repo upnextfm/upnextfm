@@ -265,6 +265,37 @@ $height-avatar-collapsed: auto;
   margin-right: 0 !important;
   min-height: 16em;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.up-room-playlist__input {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $padding-std 0;
+
+  label {
+    flex-shrink: 0;
+    display: block;
+    padding-right: $padding-std * 2;
+  }
+
+  input {
+    flex-grow: 3;
+    display: block;
+    color: black;
+  }
+
+  button {
+    flex-shrink: 0;
+    display: block;
+  }
+}
+
+.up-room-playlist__items-container {
+  flex-grow: 2;
 }
 
 .up-room-playlist__items {
