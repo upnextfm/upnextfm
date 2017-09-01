@@ -57,7 +57,8 @@ class ChatSide extends React.Component {
   }
 
   handleSendInput = () => {
-    this.props.dispatch(roomSend(this.props.room.inputValue));
+    const value = this.props.room.inputValue.substr(0, this.props.settings.site.maxInputChars);
+    this.props.dispatch(roomSend(value));
     this.messagesPanelRef.scrollToBottom();
     this.messageInputRef.focus();
   };
@@ -138,6 +139,7 @@ class ChatSide extends React.Component {
     return (
       <MessageInput
         value={this.props.room.inputValue}
+        settings={this.props.settings}
         tabComplete={this.props.room.users}
         onSend={this.handleSendInput}
         onAttach={this.handleAttachInput}

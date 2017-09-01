@@ -12,6 +12,7 @@ const KEY_DOWN  = 40;
 export default class MessageInput extends React.Component {
   static propTypes = {
     value:       PropTypes.string,
+    settings:    PropTypes.object,
     tabComplete: PropTypes.array,
     onSend:      PropTypes.func,
     onAttach:    PropTypes.func,
@@ -53,7 +54,8 @@ export default class MessageInput extends React.Component {
   };
 
   send = () => {
-    this.history.push(this.props.value);
+    const value = this.props.value.substr(0, this.props.settings.site.maxInputChars);
+    this.history.push(value);
     this.historyIndex = this.history.length;
     this.props.onSend();
     this.inputRef.focus();
@@ -132,7 +134,7 @@ export default class MessageInput extends React.Component {
   }
 
   render() {
-    const { value } = this.props;
+    const { value, settings } = this.props;
 
     return (
       <div className="up-room-messages__input">
@@ -140,6 +142,7 @@ export default class MessageInput extends React.Component {
           type="text"
           value={value}
           placeholder="Write message"
+          maxLength={String(settings.site.maxInputChars)}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDownInput}
           ref={(ref) => { this.inputRef = ref; }}

@@ -34,7 +34,10 @@ export default {
       pingInterval: 30000,
       uri:          ''
     },
-    site: {},
+    site: {
+      maxUploadSize: 10485760,
+      maxInputChars: 1000
+    },
     room: {}
   },
   room: {

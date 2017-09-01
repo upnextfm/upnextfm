@@ -68,7 +68,7 @@ class RoomTopic extends AbstractTopic
           "user" => [
             "showNotices" => true
           ],
-          "site" => [],
+          "site" => $this->container->getParameter("app_site_settings"),
           "room" => $this->serializeRoomSettings($room->getSettings())
         ]
       ]);

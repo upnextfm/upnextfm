@@ -82,7 +82,7 @@ export default class MessagesPanel extends React.Component {
       <Dropzone
         className="up-room-dropzone"
         onDrop={this.handleDropFile}
-        maxSize={10485760}
+        maxSize={settings.site.maxUploadSize}
         ref={(ref) => { this.dropzoneRef = ref; }}
         disableClick
         disablePreview
