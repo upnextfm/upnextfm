@@ -60,6 +60,11 @@ export const USERS_REPO_ADD       = 'USERS_REPO_ADD';
 export const USERS_REPO_ADD_MULTI = 'USERS_REPO_ADD_MULTI';
 export const USERS_REPO_REMOVE    = 'USERS_REPO_REMOVE';
 
+export const SEARCH_BEGIN    = 'SEARCH_BEGIN';
+export const SEARCH_ERROR    = 'SEARCH_ERROR';
+export const SEARCH_CLEAR    = 'SEARCH_CLEAR';
+export const SEARCH_COMPLETE = 'SEARCH_COMPLETE';
+
 export const CHAN_ROOM         = 'app/room';
 export const CHAN_PMS          = 'app/pms';
 export const CHAN_VIDEO        = 'app/video';

@@ -49,9 +49,6 @@ export default {
     isSending:     false,
     conversations: {}
   },
-  users: {
-    repo: []
-  },
   player: {
     time:     0,
     duration: 0,
@@ -61,5 +58,13 @@ export default {
   playlist: {
     current: {},
     videos:  []
+  },
+  search: {
+    results:      [],
+    isSubmitting: false,
+    error:        null
+  },
+  users: {
+    repo: []
   }
 };

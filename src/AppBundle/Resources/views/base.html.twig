@@ -27,13 +27,13 @@
         {% endif %}
         {% include "AppBundle:_modals:play.html.twig" %}
         {% block javascripts %}
-            <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+            <script src="//apis.google.com/js/api.js"></script>
+            <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
             {% if materialize|default  %}
                 <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
             {% endif %}
             <script src="{{ asset('js/autobahn.min.js') }}"></script>
             <script src="{{ asset('build/js/app.js') }}"></script>
-            <script src="//apis.google.com/js/client.js?onload=googleApiClientReady"></script>
             {% if app.environment == "dev" %}
                 <script src="http://localhost:35730/livereload.js"></script>
             {% endif %}

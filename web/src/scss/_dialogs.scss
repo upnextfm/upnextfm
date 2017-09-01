@@ -11,6 +11,19 @@
   }
 }
 
+.up-dialog--wide {
+
+  & > div:nth-child(2) {
+    width: 80% !important;
+    max-width: 80% !important;
+    height: 80% !important;
+
+    & > div {
+      min-height: 100%;
+    }
+  }
+}
+
 .up-snackbar > div {
   color: #FFF;
   background-color: $card-bg-color;

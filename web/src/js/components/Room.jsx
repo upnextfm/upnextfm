@@ -5,16 +5,19 @@ import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
 import { settingsSocket } from 'actions/settingsActions';
 import { userUsername } from 'actions/userActions';
+import { searchClear } from 'actions/searchActions';
+import { playlistAppend } from 'actions/playlistActions';
 import { layoutToggleLoginDialog, layoutToggleRegisterDialog, layoutToggleHelpDialog, layoutErrorMessage } from 'actions/layoutActions';
+import ErrorSnackbar from 'components/ErrorSnackbar';
 import Progress from 'components/Video/Progress';
 import HelpDialog from 'components/Dialogs/HelpDialog';
 import LoginDialog from 'components/Dialogs/LoginDialog';
+import SearchResultsDialog from 'components/Dialogs/SearchResultsDialog';
 import RegisterDialog from 'components/Dialogs/RegisterDialog';
 import ChatSide from 'components/Chat/ChatSide';
 import VideoSide from 'components/Video/VideoSide';
 import VideoNav from 'components/VideoNav';
 import Nav from 'components/Nav';
-import ErrorSnackbar from 'components/ErrorSnackbar';
 
 class Room extends React.Component {
   static propTypes = {
@@ -35,8 +38,13 @@ class Room extends React.Component {
     this.props.dispatch(layoutErrorMessage(''));
   };
 
+  handleClickSearchResultsAdd = (item) => {
+    const permalink = `https://youtu.be/${item.id.videoId}`;
+    this.props.dispatch(playlistAppend(permalink));
+  };
+
   render() {
-    const { roomName, user, layout, dispatch } = this.props;
+    const { roomName, user, layout, search, dispatch } = this.props;
 
     return (
       <div>
@@ -72,6 +80,12 @@ class Room extends React.Component {
           isOpen={layout.isRegisterDialogOpen}
           onClose={() => { dispatch(layoutToggleRegisterDialog()); }}
         />
+        <SearchResultsDialog
+          isOpen={search.results.length > 0}
+          searchResults={search.results}
+          onClickAdd={this.handleClickSearchResultsAdd}
+          onClose={() => { dispatch(searchClear()); }}
+        />
       </div>
     );
   }
@@ -80,7 +94,8 @@ class Room extends React.Component {
 function mapStateToProps(state) {
   return {
     user:   Object.assign({}, state.user),
-    layout: Object.assign({}, state.layout)
+    layout: Object.assign({}, state.layout),
+    search: Object.assign({}, state.search)
   };
 }
 

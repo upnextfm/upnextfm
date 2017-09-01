@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { playlistAppend } from 'actions/playlistActions';
+import { search } from 'actions/searchActions';
 import List, { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import AddIcon from 'material-ui-icons/Add';
@@ -23,8 +24,16 @@ class PlaylistContainer extends React.Component {
   }
 
   handleClickAppend = () => {
-    this.props.dispatch(playlistAppend(this.inputRef.value));
+    const value = this.inputRef.value;
     this.setState({ permalink: '' });
+
+    const dispatch = this.props.dispatch;
+    if (this.state.isSearching) {
+      dispatch(search(value));
+      this.setState({ isSearching: false });
+    } else {
+      dispatch(playlistAppend(value));
+    }
   };
 
   handleClickControl = (action, video) => {
@@ -42,7 +51,7 @@ class PlaylistContainer extends React.Component {
 
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      this.handleClickPlay();
+      this.handleClickAppend();
     }
   };
 

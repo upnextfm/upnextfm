@@ -8,6 +8,7 @@ import pms from 'reducers/pmsReducer';
 import users from 'reducers/usersReducer';
 import player from 'reducers/playerReducer';
 import playlist from 'reducers/playlistReducer';
+import search from 'reducers/searchReducer';
 
 const rootReducer = combineReducers({
   layout,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   pms,
   users,
   player,
-  playlist
+  playlist,
+  search
 });
 
 export default rootReducer;
