@@ -62,7 +62,7 @@ class PlaylistContainer extends React.Component {
     };
 
     return (
-      <div className="up-room-playlist__input">
+      <div className="up-room-playlist__input" onClick={() => { this.inputRef.focus(); }}>
         <input
           id="up-media-url"
           placeholder="Media link or search term..."
