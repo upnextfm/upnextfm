@@ -63,6 +63,7 @@ export const USERS_REPO_REMOVE    = 'USERS_REPO_REMOVE';
 export const SEARCH_BEGIN    = 'SEARCH_BEGIN';
 export const SEARCH_ERROR    = 'SEARCH_ERROR';
 export const SEARCH_CLEAR    = 'SEARCH_CLEAR';
+export const SEARCH_TERM     = 'SEARCH_TERM';
 export const SEARCH_COMPLETE = 'SEARCH_COMPLETE';
 
 export const CHAN_ROOM         = 'app/room';

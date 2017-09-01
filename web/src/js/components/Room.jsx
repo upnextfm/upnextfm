@@ -5,7 +5,7 @@ import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
 import { settingsSocket } from 'actions/settingsActions';
 import { userUsername } from 'actions/userActions';
-import { searchClear } from 'actions/searchActions';
+import { search, searchClear, searchTerm } from 'actions/searchActions';
 import { playlistAppend } from 'actions/playlistActions';
 import { layoutToggleLoginDialog, layoutToggleRegisterDialog, layoutToggleHelpDialog, layoutErrorMessage } from 'actions/layoutActions';
 import ErrorSnackbar from 'components/ErrorSnackbar';
@@ -41,6 +41,14 @@ class Room extends React.Component {
   handleClickSearchResultsAdd = (item) => {
     const permalink = `https://youtu.be/${item.id.videoId}`;
     this.props.dispatch(playlistAppend(permalink));
+  };
+
+  handleChangeSearchResults = (e) => {
+    this.props.dispatch(searchTerm(e.target.value));
+  };
+
+  handleSubmitSearchResults = (term) => {
+    this.props.dispatch(search(term));
   };
 
   render() {
@@ -82,7 +90,10 @@ class Room extends React.Component {
         />
         <SearchResultsDialog
           isOpen={search.results.length > 0}
+          searchTerm={search.term}
           searchResults={search.results}
+          onSubmit={this.handleSubmitSearchResults}
+          onChange={this.handleChangeSearchResults}
           onClickAdd={this.handleClickSearchResultsAdd}
           onClose={() => { dispatch(searchClear()); }}
         />

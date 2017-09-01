@@ -17,8 +17,13 @@ export default function searchReducer(state = initialState.search, action = {}) 
     case types.SEARCH_CLEAR:
       return Object.assign({}, state, {
         isSubmitting: false,
+        term:         '',
         results:      [],
         error:        null
+      });
+    case types.SEARCH_TERM:
+      return Object.assign({}, state, {
+        term: action.term
       });
     case types.SEARCH_BEGIN:
       return Object.assign({}, state, {

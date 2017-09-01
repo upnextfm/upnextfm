@@ -11,6 +11,33 @@
   }
 }
 
+.up-dialog-search-results {
+  flex: 1 1 auto;
+  overflow: hidden;
+  padding: ($padding-std * 2);
+  display: flex;
+  flex-direction: column;
+}
+
+.up-dialog-search-results__form {
+  padding-bottom: ($padding-std * 2);
+
+  .up-form-control {
+    margin-top: 0 !important;
+    width: 100%;
+  }
+}
+
+.up-dialog-search-results__grid {
+  width: 100% !important;
+}
+
+.up-dialog-search-results__content {
+  display: flex;
+  overflow: hidden;
+  padding: 0 !important;
+}
+
 .up-dialog--wide {
 
   & > div:nth-child(2) {

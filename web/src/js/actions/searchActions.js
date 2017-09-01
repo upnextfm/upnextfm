@@ -41,12 +41,24 @@ export function searchClear() {
 }
 
 /**
- * @param {string} query
+ * @param {string} term
+ * @returns {{type: string, term: string}}
+ */
+export function searchTerm(term) {
+  return {
+    type: types.SEARCH_TERM,
+    term
+  };
+}
+
+/**
+ * @param {string} term
  * @returns {Function}
  */
-export function search(query) {
+export function search(term) {
   return (dispatch, getState, api) => {
-    api.youtube.search(query)
+    dispatch(searchTerm(term));
+    api.youtube.search(term)
       .then((results) => {
         dispatch(searchComplete(results));
       }).catch((error) => {

@@ -61,6 +61,7 @@ export default {
   },
   search: {
     results:      [],
+    term:         '',
     isSubmitting: false,
     error:        null
   },
