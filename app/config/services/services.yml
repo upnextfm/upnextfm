@@ -82,6 +82,8 @@ services:
       class: Madcoda\Youtube\Youtube
       arguments:
         - { key: "%app_service_youtube_api_key%" }
+      calls:
+        - [setReferer, ["https://upnext.fm"]]
 
     ## ########################################################################
     ## Video Info Service
