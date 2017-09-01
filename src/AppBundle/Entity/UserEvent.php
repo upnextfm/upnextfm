@@ -68,6 +68,7 @@ class UserEvent
 
   /**
    * @var DateTime
+   *
    * @ORM\Column(name="date_created", type="datetime", nullable=false)
    */
   protected $dateCreated;

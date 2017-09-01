@@ -41,6 +41,7 @@
     "react": "^15.6.1",
     "react-custom-scrollbars": "^4.1.2",
     "react-dom": "^15.6.1",
+    "react-dropzone": "^4.1.0",
     "react-moment": "^0.6.4",
     "react-redux": "^5.0.5",
     "react-share": "^1.15.1",

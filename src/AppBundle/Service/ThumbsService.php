@@ -4,6 +4,7 @@ namespace AppBundle\Service;
 use AppBundle\Entity\Room;
 use AppBundle\Entity\User;
 use Identicon\Identicon;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ThumbsService
 {
@@ -70,10 +71,11 @@ class ThumbsService
 
   /**
    * @param Room $room
+   * @param UserInterface $user
    * @param string $size
    * @return string
    */
-  public function getRoomThumb(Room $room, $size)
+  public function getRoomThumb(Room $room, UserInterface $user, $size)
   {
     if ($room && $room->getSettings()) {
       switch($size) {
@@ -105,7 +107,7 @@ class ThumbsService
     ];
     foreach($thumbs as $s => $path) {
       $imageData = $this->identicon->getImageData($roomName, $sizes[$s]);
-      $urls[$s]  = $this->uploadService->uploadData($imageData, $path);
+      $urls[$s]  = $this->uploadService->uploadData($imageData, $path, $user, "image/png");
     }
 
     return $urls[$size];

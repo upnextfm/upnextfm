@@ -112,6 +112,7 @@ services:
       class: AppBundle\Service\UploadService
       arguments:
         - "@aws.s3"
+        - "@=service('doctrine').getRepository('AppBundle:Upload')"
         - "%aws_buckets%"
         - "%app_service_upload_rooturl%"
       calls:

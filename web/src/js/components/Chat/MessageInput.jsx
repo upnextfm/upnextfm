@@ -14,6 +14,7 @@ export default class MessageInput extends React.Component {
     value:       PropTypes.string,
     tabComplete: PropTypes.array,
     onSend:      PropTypes.func,
+    onAttach:    PropTypes.func,
     onChange:    PropTypes.func
   };
 
@@ -21,6 +22,7 @@ export default class MessageInput extends React.Component {
     value:       '',
     tabComplete: [],
     onSend:      () => {},
+    onAttach:    () => {},
     onChange:    () => {}
   };
 
@@ -110,7 +112,7 @@ export default class MessageInput extends React.Component {
         title="Attach File"
         aria-label="Attach File"
         style={{ marginLeft: 6 }}
-        onClick={() => { this.send(); }}
+        onClick={() => { this.props.onAttach(); }}
       >
         <AttachFile />
       </IconButton>

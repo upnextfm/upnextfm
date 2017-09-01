@@ -25,7 +25,7 @@ class Progress extends React.Component {
   }
 
   render() {
-    const { className, duration } = this.props;
+    const { duration } = this.props;
     const { time } = this.state;
     const percent = Math.floor((time / duration) * 100);
 

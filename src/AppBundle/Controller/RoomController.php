@@ -2,8 +2,10 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class RoomController extends Controller
 {
@@ -28,6 +30,35 @@ class RoomController extends Controller
       "hide_navbar" => true,
       "materialize" => false
     ]);
+  }
+
+  /**
+   * @Route("/room/upload", name="room_upload", methods={"POST"})
+   *
+   * @param Request $request
+   * @return Response
+   */
+  public function uploadAction(Request $request)
+  {
+    $user = $this->getUser();
+    if (!is_object($user)) {
+      throw $this->createAccessDeniedException();
+    }
+
+    $file = $request->files->get("file");
+    if ($file->getError()) {
+      return new Response('Upload failed', 500);
+    }
+
+    $us  = $this->get("app.service.upload");
+    $url = $us->upload(
+      $file->getPathname(),
+      sprintf("%s/%s/%s", $user->getUsername(), date("Y-m-d"), $file->getClientOriginalName()),
+      $user,
+      $file->getClientMimeType()
+    );
+
+    return new Response($url);
   }
 
   /**

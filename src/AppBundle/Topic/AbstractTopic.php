@@ -197,9 +197,9 @@ abstract class AbstractTopic implements TopicInterface
       $settings->setRoom($room);
       $settings->setIsPublic(true);
       $settings->setJoinMessage("Welcome to ${roomName}.");
-      $settings->setThumbSm($thumbService->getRoomThumb($room, "sm"));
-      $settings->setThumbMd($thumbService->getRoomThumb($room, "md"));
-      $settings->setThumbLg($thumbService->getRoomThumb($room, "lg"));
+      $settings->setThumbSm($thumbService->getRoomThumb($room, $user, "sm"));
+      $settings->setThumbMd($thumbService->getRoomThumb($room, $user, "md"));
+      $settings->setThumbLg($thumbService->getRoomThumb($room, $user, "lg"));
       $room->setSettings($settings);
       $this->em->persist($room);
       $this->em->flush();

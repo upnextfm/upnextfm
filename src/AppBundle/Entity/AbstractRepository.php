@@ -17,4 +17,14 @@ class AbstractRepository extends EntityRepository
       ->getQuery()
       ->getSingleScalarResult();
   }
+
+  /**
+   * @param object $entity
+   */
+  public function persistAndFlush($entity)
+  {
+    $em = $this->getEntityManager();
+    $em->persist($entity);
+    $em->flush($entity);
+  }
 }

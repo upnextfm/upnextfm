@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as api from 'api';
 import Favico from 'favico.js';
+import Uploads from 'api/Uploads';
 import { connect } from 'react-redux';
 import { pmsSubscribe } from 'actions/pmsActions';
 import { roomJoin, roomSend, roomInputChange } from 'actions/roomActions';
@@ -65,6 +66,10 @@ class ChatSide extends React.Component {
     this.props.dispatch(roomInputChange(value));
   };
 
+  handleAttachInput = () => {
+    this.messagesPanelRef.openUpload();
+  };
+
   handleClickUser = (username) => {
     if (this.props.user.isAuthenticated && username.toLowerCase() !== this.props.user.username) {
       this.props.dispatch(layoutSwitchActiveChat(username));
@@ -81,6 +86,17 @@ class ChatSide extends React.Component {
   handleClickRoomThumb = () => {
     this.props.dispatch(layoutSwitchActiveChat('room'));
     this.messageInputRef.focus();
+  };
+
+  handleUpload = (file) => {
+    Uploads.upload(file)
+      .then((url) => {
+        this.props.dispatch(roomSend(url));
+        this.messagesPanelRef.scrollToBottom();
+        this.messageInputRef.focus();
+      }).catch((error) => {
+        this.props.dispatch(layoutErrorMessage(error.toString()));
+      });
   };
 
   renderUsersPanel() {
@@ -112,6 +128,7 @@ class ChatSide extends React.Component {
         settings={this.props.settings}
         messages={messages}
         users={this.props.users.repo}
+        onUpload={this.handleUpload}
         ref={(ref) => { this.messagesPanelRef = ref; }}
       />
     );
@@ -123,6 +140,7 @@ class ChatSide extends React.Component {
         value={this.props.room.inputValue}
         tabComplete={this.props.room.users}
         onSend={this.handleSendInput}
+        onAttach={this.handleAttachInput}
         onChange={this.handleChangeInput}
         ref={(ref) => { this.messageInputRef = ref; }}
       />
