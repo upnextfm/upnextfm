@@ -318,7 +318,7 @@ $height-avatar-collapsed: auto;
   height: 48px;
   width: 100%;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: $padding-std;
   border-bottom: 1px solid #2d2d2d;
 
@@ -345,6 +345,7 @@ $height-avatar-collapsed: auto;
 }
 
 .up-room-playlist__item__controls {
+  color: $color-dim;
   margin-left: auto;
 }
 

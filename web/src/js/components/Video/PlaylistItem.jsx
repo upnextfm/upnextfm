@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ClearIcon from 'material-ui-icons/Clear';
+import MoreIcon from 'material-ui-icons/MoreVert';
 import { formatSeconds } from 'utils/media';
 
 export default class Component extends React.Component {
@@ -17,24 +17,9 @@ export default class Component extends React.Component {
     onClickControl: () => {}
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showControls: false
-    };
-  }
-
   handleClickControl = (e) => {
     const action = e.currentTarget.getAttribute('data-action');
     this.props.onClickControl(action, this.props.video);
-  };
-
-  handleMouseEnter = () => {
-    this.setState({ showControls: true });
-  };
-
-  handleMouseLeave = () => {
-    this.setState({ showControls: false });
   };
 
   renderThumb() {
@@ -70,25 +55,9 @@ export default class Component extends React.Component {
   }
 
   renderControls() {
-    if (!this.state.showControls) {
-      return null;
-    }
-
-    const { canDelete } = this.props;
-    const controlStyles = {
-      width:  16,
-      height: 16
-    };
-
     return (
       <div className="up-room-playlist__item__controls">
-        {!canDelete ? null : (
-          <ClearIcon
-            data-action="delete"
-            style={controlStyles}
-            onClick={this.handleClickControl}
-          />
-        )}
+        <MoreIcon />
       </div>
     );
   }
