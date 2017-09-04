@@ -402,6 +402,7 @@ $height-avatar-collapsed: auto;
 
 .up-video-progress {
   background-color: #404040 !important;
+  flex-shrink: 0;
 }
 
 .up-video-progress--thin .up-video-progress {
