@@ -26,9 +26,23 @@ class PlaylistContainer extends React.PureComponent {
     };
   }
 
+  datboi() {
+    const el = $('#up-datboi');
+    el.fadeIn().animate({
+      right: '100%'
+    }, 3000, () => {
+      el.hide().css('right', '-400px');
+    });
+  }
+
   handleClickAppend = () => {
     const value = this.inputRef.value;
     this.setState({ permalink: '' });
+
+    if (value.toLowerCase().indexOf('o shit waddup') === 0) {
+      this.datboi();
+      return;
+    }
 
     const dispatch = this.props.dispatch;
     if (this.state.isSearching) {
@@ -89,6 +103,10 @@ class PlaylistContainer extends React.PureComponent {
             <AddIcon title="Append" style={iconStyles} />
           )}
         </IconButton>
+
+        <div id="up-datboi">
+          <img src="/images/datboi.webp" alt="dat boi" />
+        </div>
       </div>
     );
   }

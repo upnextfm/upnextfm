@@ -418,3 +418,13 @@ $height-avatar-collapsed: auto;
   width: 100% !important;
   height: 100% !important;
 }
+
+#up-datboi {
+  position: absolute;
+  right: -400px;
+  bottom: 0;
+  width: 312px;
+  height: 390px;
+  z-index: 1000;
+  display: none;
+}
