@@ -4,7 +4,6 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { usersFindByUsername } from 'utils/users';
 import Dropzone from 'react-dropzone';
 import List from 'material-ui/List';
-import UserMenu from 'components/Chat/UserMenu';
 import MessageType from 'components/Chat/Types/MessageType';
 import NoticeType from 'components/Chat/Types/NoticeType';
 
@@ -22,10 +21,6 @@ export default class MessagesPanel extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      menuAnchor: undefined,
-      menuOpen:   false
-    };
     this.dropzoneRef = null;
   }
 
@@ -50,26 +45,6 @@ export default class MessagesPanel extends React.Component {
       this.props.onUpload(files[0]);
     } else {
       console.error('No acceptable files received.');
-    }
-  };
-
-  handleContextMenuUser = (e) => {
-    e.preventDefault();
-    this.setState({
-      menuOpen:   true,
-      menuAnchor: e.currentTarget
-    });
-  };
-
-  handleCloseMenu = () => {
-    this.setState({ menuOpen: false });
-  };
-
-  handleClickProfile = () => {
-    const username = this.state.menuAnchor.getAttribute('data-username');
-    if (username) {
-      window.open(`/u/${username}`);
-      this.setState({ menuOpen: false });
     }
   };
 
@@ -118,12 +93,6 @@ export default class MessagesPanel extends React.Component {
               return item;
             })}
           </List>
-          <UserMenu
-            anchor={this.state.menuAnchor}
-            isOpen={this.state.menuOpen}
-            onClickProfile={this.handleClickProfile}
-            onRequestClose={this.handleCloseMenu}
-          />
         </Scrollbars>
       </Dropzone>
     );
