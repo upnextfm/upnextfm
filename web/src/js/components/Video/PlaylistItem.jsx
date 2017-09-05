@@ -3,23 +3,18 @@ import PropTypes from 'prop-types';
 import MoreIcon from 'material-ui-icons/MoreVert';
 import { formatSeconds } from 'utils/media';
 
-export default class Component extends React.Component {
+export default class PlaylistItem extends React.Component {
   static propTypes = {
-    video:          PropTypes.object,
-    canDelete:      PropTypes.bool,
-    isCurrent:      PropTypes.bool,
-    onClickControl: PropTypes.func
+    video:       PropTypes.object,
+    canDelete:   PropTypes.bool,
+    isCurrent:   PropTypes.bool,
+    onClickMenu: PropTypes.func
   };
 
   static defaultProps = {
-    canDelete:      false,
-    isCurrent:      false,
-    onClickControl: () => {}
-  };
-
-  handleClickControl = (e) => {
-    const action = e.currentTarget.getAttribute('data-action');
-    this.props.onClickControl(action, this.props.video);
+    canDelete:   false,
+    isCurrent:   false,
+    onClickMenu: () => {}
   };
 
   renderThumb() {
@@ -57,20 +52,17 @@ export default class Component extends React.Component {
   renderControls() {
     return (
       <div className="up-room-playlist__item__controls">
-        <MoreIcon />
+        <MoreIcon onClick={this.props.onClickMenu} />
       </div>
     );
   }
 
   render() {
-    const { video } = this.props;
-
     return (
       <div
         className="up-room-playlist__item"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
-        data-id={video.id}
       >
         {this.renderThumb()}
         {this.renderMeta()}

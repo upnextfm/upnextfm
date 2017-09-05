@@ -9,6 +9,7 @@ import IconButton from 'material-ui/IconButton';
 import AddIcon from 'material-ui-icons/Add';
 import SearchIcon from 'material-ui-icons/Search';
 import PlaylistItem from 'components/Video/PlaylistItem';
+import PlaylistMenu from 'components/Video/PlaylistMenu';
 
 class PlaylistContainer extends React.Component {
   static propTypes = {
@@ -19,7 +20,9 @@ class PlaylistContainer extends React.Component {
     super(props);
     this.state = {
       permalink:   '',
-      isSearching: false
+      isSearching: false,
+      menuAnchor:  undefined,
+      menuOpen:    false
     };
   }
 
@@ -36,8 +39,16 @@ class PlaylistContainer extends React.Component {
     }
   };
 
-  handleClickControl = (action, video) => {
-    console.info(action, video.id);
+  handleCloseMenu = () => {
+    this.setState({ menuOpen: false });
+  };
+
+  handleClickMenu = (e) => {
+    e.preventDefault();
+    this.setState({
+      menuOpen:   true,
+      menuAnchor: e.currentTarget
+    });
   };
 
   handleChange = (e) => {
@@ -94,7 +105,7 @@ class PlaylistContainer extends React.Component {
               <PlaylistItem
                 video={current}
                 canDelete={canDelete}
-                onClickControl={this.handleClickControl}
+                onClickMenu={this.handleClickMenu}
                 isCurrent
               />
             </ListItem>
@@ -105,7 +116,7 @@ class PlaylistContainer extends React.Component {
                 <PlaylistItem
                   video={video}
                   canDelete={canDelete}
-                  onClickControl={this.handleClickControl}
+                  onClickMenu={this.handleClickMenu}
                 />
               </ListItem>
             );
@@ -120,6 +131,11 @@ class PlaylistContainer extends React.Component {
       <div className="up-room-playlist">
         {this.renderInput()}
         {this.renderList()}
+        <PlaylistMenu
+          anchor={this.state.menuAnchor}
+          isOpen={this.state.menuOpen}
+          onRequestClose={this.handleCloseMenu}
+        />
       </div>
     );
   }
