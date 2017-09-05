@@ -5,7 +5,7 @@ import Favico from 'favico.js';
 import Uploads from 'api/Uploads';
 import { connect } from 'react-redux';
 import { pmsSubscribe } from 'actions/pmsActions';
-import { roomJoin, roomSend, roomInputChange } from 'actions/roomActions';
+import { roomJoin, roomSend } from 'actions/roomActions';
 import { layoutWindowFocused, layoutToggleUsersCollapsed, layoutSwitchActiveChat, layoutErrorMessage } from 'actions/layoutActions';
 import { domOnWindowBlur } from 'utils/dom';
 import { findActiveChatMessages } from 'utils/messages';
@@ -13,7 +13,7 @@ import UsersPanel from 'components/Chat/UsersPanel';
 import MessagesPanel from 'components/Chat/MessagesPanel';
 import MessageInput from 'components/Chat/MessageInput';
 
-class ChatSide extends React.Component {
+class ChatSide extends React.PureComponent {
   static propTypes = {
     roomName: PropTypes.string.isRequired
   };
@@ -56,15 +56,10 @@ class ChatSide extends React.Component {
     }
   }
 
-  handleSendInput = () => {
-    const value = this.props.room.inputValue.substr(0, this.props.settings.site.maxInputChars);
-    this.props.dispatch(roomSend(value));
+  handleSendInput = (inputValue) => {
+    this.props.dispatch(roomSend(inputValue));
     this.messagesPanelRef.scrollToBottom();
     this.messageInputRef.focus();
-  };
-
-  handleChangeInput = (value) => {
-    this.props.dispatch(roomInputChange(value));
   };
 
   handleAttachInput = () => {
@@ -126,8 +121,8 @@ class ChatSide extends React.Component {
 
     return (
       <MessagesPanel
-        settings={this.props.settings}
         messages={messages}
+        settings={this.props.settings}
         users={this.props.users.repo}
         onUpload={this.handleUpload}
         ref={(ref) => { this.messagesPanelRef = ref; }}
@@ -138,12 +133,10 @@ class ChatSide extends React.Component {
   renderMessageInput() {
     return (
       <MessageInput
-        value={this.props.room.inputValue}
         settings={this.props.settings}
         tabComplete={this.props.room.users}
         onSend={this.handleSendInput}
         onAttach={this.handleAttachInput}
-        onChange={this.handleChangeInput}
         ref={(ref) => { this.messageInputRef = ref; }}
       />
     );

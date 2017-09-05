@@ -42,7 +42,6 @@ export default {
   },
   room: {
     name:           '',
-    inputValue:     '',
     numNewMessages: 0,
     users:          [],
     messages:       []

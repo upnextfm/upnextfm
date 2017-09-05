@@ -32,7 +32,6 @@ export const ROOM_SEND                   = 'ROOM_SEND';
 export const ROOM_USERS                  = 'ROOM_USERS';
 export const ROOM_MESSAGE                = 'ROOM_MESSAGE';
 export const ROOM_MESSAGES               = 'ROOM_MESSAGES';
-export const ROOM_INPUT_CHANGE           = 'ROOM_INPUT_CHANGE';
 export const ROOM_RESET_NUM_NEW_MESSAGES = 'ROOM_RESET_NUM_NEW_MESSAGES';
 export const ROOM_INCR_NUM_NEW_MESSAGES  = 'ROOM_INCR_NUM_NEW_MESSAGES';
 

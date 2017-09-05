@@ -209,18 +209,6 @@ export function roomLeave() {
 }
 
 /**
- *
- * @param {string} inputValue
- * @returns {{type: string, inputValue: *}}
- */
-export function roomInputChange(inputValue) {
-  return {
-    type: types.ROOM_INPUT_CHANGE,
-    inputValue
-  };
-}
-
-/**
  * @returns {{type: string}}
  */
 export function roomResetNumNewMessages() {

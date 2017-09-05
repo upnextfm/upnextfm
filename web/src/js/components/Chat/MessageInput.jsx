@@ -9,26 +9,25 @@ const KEY_ENTER = 13;
 const KEY_UP    = 38;
 const KEY_DOWN  = 40;
 
-export default class MessageInput extends React.Component {
+export default class MessageInput extends React.PureComponent {
   static propTypes = {
-    value:       PropTypes.string,
     settings:    PropTypes.object,
     tabComplete: PropTypes.array,
     onSend:      PropTypes.func,
-    onAttach:    PropTypes.func,
-    onChange:    PropTypes.func
+    onAttach:    PropTypes.func
   };
 
   static defaultProps = {
-    value:       '',
     tabComplete: [],
     onSend:      () => {},
-    onAttach:    () => {},
-    onChange:    () => {}
+    onAttach:    () => {}
   };
 
   constructor(props) {
     super(props);
+    this.state = {
+      value: ''
+    };
 
     this.inputRef      = null;
     this.history       = [];
@@ -54,11 +53,13 @@ export default class MessageInput extends React.Component {
   };
 
   send = () => {
-    const value = this.props.value.substr(0, this.props.settings.site.maxInputChars);
+    const value = this.state.value.substr(0, this.props.settings.site.maxInputChars);
     this.history.push(value);
     this.historyIndex = this.history.length;
-    this.props.onSend();
-    this.inputRef.focus();
+    this.props.onSend(value);
+    this.setState({ value: '' }, () => {
+      this.inputRef.focus();
+    });
   };
 
   moveCaretToEnd = () => {
@@ -68,12 +69,8 @@ export default class MessageInput extends React.Component {
     }, 0);
   };
 
-  handleChange = (e) => {
-    this.props.onChange(e.target.value);
-  };
-
   handleKeyDownInput = (e) => {
-    const { value, tabComplete, onChange } = this.props;
+    const { value, tabComplete } = this.props;
 
     switch (e.keyCode) { // eslint-disable-line default-case
       case KEY_ENTER:
@@ -84,7 +81,7 @@ export default class MessageInput extends React.Component {
           for (let i = 0; i < tabComplete.length; i++) {
             if (tabComplete[i].toLowerCase().indexOf(value.toLowerCase()) === 0) {
               this.historyMoving = true;
-              onChange(`${tabComplete[i]} `);
+              this.setState({ value: `${tabComplete[i]} ` });
             }
           }
         }
@@ -93,16 +90,16 @@ export default class MessageInput extends React.Component {
         if (this.historyIndex > 0) {
           this.historyIndex -= 1;
           this.historyMoving = true;
-          onChange(this.history[this.historyIndex]);
+          this.setState({ value: this.history[this.historyIndex] });
         }
         break;
       case KEY_DOWN:
         if (this.history.length > this.historyIndex + 1) {
           this.historyIndex += 1;
           this.historyMoving = true;
-          onChange(this.history[this.historyIndex]);
+          this.setState({ value: this.history[this.historyIndex] });
         } else if (this.history.length === this.historyIndex + 1) {
-          onChange('');
+          this.setState({ value: '' });
         }
         break;
     }
@@ -134,7 +131,8 @@ export default class MessageInput extends React.Component {
   }
 
   render() {
-    const { value, settings } = this.props;
+    const { settings } = this.props;
+    const { value } = this.state;
 
     return (
       <div className="up-room-messages__input">
@@ -143,7 +141,7 @@ export default class MessageInput extends React.Component {
           value={value}
           placeholder="Write message"
           maxLength={String(settings.site.maxInputChars)}
-          onChange={this.handleChange}
+          onChange={(e) => { this.setState({ value: e.target.value }); }}
           onKeyDown={this.handleKeyDownInput}
           ref={(ref) => { this.inputRef = ref; }}
         />
@@ -153,4 +151,3 @@ export default class MessageInput extends React.Component {
     );
   }
 }
-

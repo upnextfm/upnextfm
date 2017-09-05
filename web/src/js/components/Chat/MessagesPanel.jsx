@@ -7,7 +7,7 @@ import List from 'material-ui/List';
 import MessageType from 'components/Chat/Types/MessageType';
 import NoticeType from 'components/Chat/Types/NoticeType';
 
-export default class MessagesPanel extends React.Component {
+export default class MessagesPanel extends React.PureComponent {
   static propTypes = {
     messages: PropTypes.array,
     users:    PropTypes.array,

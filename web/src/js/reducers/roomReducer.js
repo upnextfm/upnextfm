@@ -90,7 +90,6 @@ function message(state, action) {
  *
  * state = {
  *    name:           '',
- *    inputValue:     '',
  *    users:          [],
  *    messages:       [],
  *    numNewMessages: 0
@@ -105,10 +104,6 @@ export default function roomReducer(state = initialState.room, action = {}) {
     case types.ROOM_NAME:
       return Object.assign({}, state, {
         name: action.name
-      });
-    case types.ROOM_INPUT_CHANGE:
-      return Object.assign({}, state, {
-        inputValue: action.inputValue
       });
     case types.ROOM_SEND:
       return Object.assign({}, state, {
