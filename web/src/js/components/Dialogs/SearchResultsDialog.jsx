@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { CircularProgress } from 'material-ui/Progress';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -11,7 +11,7 @@ import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
 import Grid from 'material-ui/Grid';
 
-export default class SearchResultsDialog extends Component {
+export default class SearchResultsDialog extends React.PureComponent {
   static propTypes = {
     isOpen:        PropTypes.bool,
     searchTerm:    PropTypes.string,

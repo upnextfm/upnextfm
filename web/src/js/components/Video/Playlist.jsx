@@ -11,7 +11,7 @@ import SearchIcon from 'material-ui-icons/Search';
 import PlaylistItem from 'components/Video/PlaylistItem';
 import PlaylistMenu from 'components/Video/PlaylistMenu';
 
-class PlaylistContainer extends React.Component {
+class PlaylistContainer extends React.PureComponent {
   static propTypes = {
     user: PropTypes.object
   };
@@ -101,7 +101,7 @@ class PlaylistContainer extends React.Component {
       <Scrollbars className="up-room-playlist__items-container">
         <List className="up-room-playlist__items">
           {!current.codename ? null : (
-            <ListItem key={current.codename} button>
+            <ListItem key={current.codename}>
               <PlaylistItem
                 video={current}
                 canDelete={canDelete}
@@ -112,7 +112,7 @@ class PlaylistContainer extends React.Component {
           )}
           {videos.map((video) => {
             return (
-              <ListItem key={video.codename} button>
+              <ListItem key={video.codename}>
                 <PlaylistItem
                   video={video}
                   canDelete={canDelete}

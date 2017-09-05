@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MoreIcon from 'material-ui-icons/MoreVert';
 import { formatSeconds } from 'utils/media';
 
-export default class PlaylistItem extends React.Component {
+export default class PlaylistItem extends React.PureComponent {
   static propTypes = {
     video:       PropTypes.object,
     canDelete:   PropTypes.bool,

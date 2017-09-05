@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { registerSubmit, registerReset } from 'actions/registerActions';
@@ -20,7 +20,7 @@ const FORM_STATE = {
   password2Error: false
 };
 
-class RegisterDialog extends Component {
+class RegisterDialog extends React.PureComponent {
   static propTypes = {
     isOpen:   PropTypes.bool,
     onClose:  PropTypes.func,

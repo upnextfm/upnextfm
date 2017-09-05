@@ -5,7 +5,7 @@ import * as actions from 'actions/playerActions';
 import eventDispatcher from 'utils/events';
 import YouTube from 'react-youtube';
 
-class Player extends React.Component {
+class Player extends React.PureComponent {
   static propTypes = {
     video:  PropTypes.object,
     player: PropTypes.object
@@ -15,11 +15,6 @@ class Player extends React.Component {
     super(props);
     this.interval = null;
     this.provider = null;
-  }
-
-  shouldComponentUpdate(nextProps) {
-    // return nextProps.player.time === this.props.player.time;
-    return true;
   }
 
   componentDidUpdate(prevProps) {

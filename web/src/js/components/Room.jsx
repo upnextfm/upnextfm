@@ -19,7 +19,7 @@ import VideoSide from 'components/Video/VideoSide';
 import VideoNav from 'components/VideoNav';
 import Nav from 'components/Nav';
 
-class Room extends React.Component {
+class Room extends React.PureComponent {
   static propTypes = {
     roomName:       PropTypes.string.isRequired,
     socketSettings: PropTypes.object.isRequired,

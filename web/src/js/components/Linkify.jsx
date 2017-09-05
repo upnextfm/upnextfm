@@ -9,7 +9,7 @@ const bbcode  = new Parser(['color']);
 const linkify = new LinkifyIt();
 linkify.tlds(tlds);
 
-class Linkify extends React.Component {
+class Linkify extends React.PureComponent {
   static propTypes = {
     className:  PropTypes.string,
     properties: PropTypes.object
@@ -23,10 +23,6 @@ class Linkify extends React.Component {
   constructor(props) {
     super(props);
     this.parseCounter = 0;
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return nextProps.children !== this.props.children;
   }
 
   /**

@@ -15,7 +15,7 @@ import Favorite from 'material-ui-icons/Favorite';
 import Help from 'material-ui-icons/Help';
 import Info from 'material-ui-icons/Info';
 
-class NavDrawer extends React.Component {
+class NavDrawer extends React.PureComponent {
   static propTypes = {
     roomName:        PropTypes.string.isRequired,
     user:            PropTypes.object.isRequired,

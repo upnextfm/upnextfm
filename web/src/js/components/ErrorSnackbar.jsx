@@ -5,7 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 import ErrorIcon from 'material-ui-icons/Error';
 
-export default class ErrorSnackbar extends React.Component {
+export default class ErrorSnackbar extends React.PureComponent {
   static propTypes = {
     errorMessage: PropTypes.string,
     duration:     PropTypes.number,

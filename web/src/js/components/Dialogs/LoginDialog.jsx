@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { userReset, userLogin } from 'actions/userActions';
@@ -6,7 +6,7 @@ import FormControl from 'material-ui/Form/FormControl';
 import TextField from 'material-ui/TextField';
 import FormDialog from 'components/Dialogs/FormDialog';
 
-class LoginDialog extends Component {
+class LoginDialog extends React.PureComponent {
   static propTypes = {
     user:     PropTypes.object,
     isOpen:   PropTypes.bool,

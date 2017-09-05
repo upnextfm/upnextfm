@@ -16,7 +16,7 @@ import NavDrawer from 'components/NavDrawer';
 import MuteIcon from 'components/Icons/MuteIcon';
 import PlayIcon from 'components/Icons/PlayIcon';
 
-class Nav extends React.Component {
+class Nav extends React.PureComponent {
   static propTypes = {
     roomName: PropTypes.string.isRequired,
     user:     PropTypes.object,

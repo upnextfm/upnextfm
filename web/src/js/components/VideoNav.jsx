@@ -5,7 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import ArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import { animateScrollLeft } from 'utils/animate';
 
-export default class VideoNav extends React.Component {
+export default class VideoNav extends React.PureComponent {
 
   handleClickScroll = () => {
     animateScrollLeft(document.body, 0, 50);

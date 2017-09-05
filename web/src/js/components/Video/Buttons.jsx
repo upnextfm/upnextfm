@@ -8,7 +8,7 @@ import SkipNext from 'material-ui-icons/SkipNext';
 import MuteIcon from 'components/Icons/MuteIcon';
 import PlayIcon from 'components/Icons/PlayIcon';
 
-class Buttons extends React.Component {
+class Buttons extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {

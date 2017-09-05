@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
-export default class UserMenu extends React.Component {
+export default class UserMenu extends React.PureComponent {
   static propTypes = {
     anchor:         PropTypes.any,
     isOpen:         PropTypes.bool,

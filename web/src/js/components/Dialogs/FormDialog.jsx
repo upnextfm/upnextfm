@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { objectKeyFilter } from 'utils/objects';
 import { CircularProgress } from 'material-ui/Progress';
@@ -6,7 +6,7 @@ import Dialog, { DialogActions, DialogContent, DialogContentText } from 'materia
 import Slide from 'material-ui/transitions/Slide';
 import Button from 'material-ui/Button';
 
-export default class FormDialog extends Component {
+export default class FormDialog extends React.Component {
   static propTypes = {
     open:         PropTypes.bool,
     isSubmitting: PropTypes.bool,

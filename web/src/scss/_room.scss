@@ -345,8 +345,13 @@ $height-avatar-collapsed: auto;
 }
 
 .up-room-playlist__item__controls {
+  cursor: pointer;
   color: $color-dim;
   margin-left: auto;
+
+  &:hover {
+    color: #FFF;
+  }
 }
 
 /******************************************************************************
