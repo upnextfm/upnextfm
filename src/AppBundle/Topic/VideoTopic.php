@@ -236,6 +236,9 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
         case VideoCommands::REMOVE:
           $this->handleRemove($conn, $topic, $req, $room, $user, $event);
           break;
+        case VideoCommands::PLAYNEXT:
+          $this->handlePlayNext($conn, $topic, $req, $room, $user, $event);
+          break;
       }
     } catch (\Exception $e) {
       $this->logger->error($e->getMessage());
@@ -361,6 +364,36 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
         "start" => 0
       ]);
     }
+
+    return $this->sendPlaylistToRoom($room);
+  }
+
+  /**
+   * @param ConnectionInterface $conn
+   * @param Topic $topic
+   * @param WampRequest $req
+   * @param Room $room
+   * @param UserInterface|User $user
+   * @param array $event
+   * @return mixed|void
+   */
+  protected function handlePlayNext(
+    ConnectionInterface $conn,
+    Topic $topic,
+    WampRequest $req,
+    Room $room,
+    UserInterface $user,
+    array $event
+  )
+  {
+    if (empty($event["videoID"])) {
+      return $this->connSendError($conn, $topic,
+        "Invalid command."
+      );
+    }
+
+    $this->playlist->playNext($room, $event["videoID"]);
+    usleep(500);
 
     return $this->sendPlaylistToRoom($room);
   }

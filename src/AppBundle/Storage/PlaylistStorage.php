@@ -171,6 +171,20 @@ class PlaylistStorage extends AbstractStorage
 
   /**
    * @param Room $room
+   * @param int $videoID
+   * @return int
+   */
+  public function playNext(Room $room, $videoID)
+  {
+    $this->redis->lrem($this->keyRoomPlaylist($room), 0, $videoID);
+    return $this->redis->lpush(
+      $this->keyRoomPlaylist($room),
+      [$videoID]
+    );
+  }
+
+  /**
+   * @param Room $room
    * @return int
    */
   public function getLength(Room $room)
