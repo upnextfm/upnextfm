@@ -202,6 +202,7 @@ $height-avatar-collapsed: auto;
   text-align: left;
   padding-left: 30px + $padding-std;
   padding-top: $padding-std / 2;
+  word-break: break-word;
 
   a {
     color: $color-primary;
