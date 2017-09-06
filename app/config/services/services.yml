@@ -91,6 +91,7 @@ services:
     app.service.video:
       class: AppBundle\Service\VideoService
       arguments:
+        - "%app_service_video_params%"
         - "@monolog.logger"
       calls:
         - [setYoutube, ["@madcoda.youtube.youtube"]]

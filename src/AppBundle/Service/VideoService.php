@@ -19,13 +19,20 @@ class VideoService
   protected $logger;
 
   /**
+   * @var array
+   */
+  protected $settings = [];
+
+  /**
    * Constructor
    *
+   * @param array $settings
    * @param LoggerInterface $logger
    */
-  public function __construct(LoggerInterface $logger)
+  public function __construct(array $settings, LoggerInterface $logger)
   {
-    $this->logger = $logger;
+    $this->settings = $settings;
+    $this->logger   = $logger;
   }
 
   /**
@@ -77,7 +84,7 @@ class VideoService
 
     switch($provider) {
       case Providers::YOUTUBE:
-        $resp = $this->youtube->getPlaylistItemsByPlaylistId($codename, 25);
+        $resp = $this->youtube->getPlaylistItemsByPlaylistId($codename, $this->settings["maxPlaylistSize"]);
         if ($resp) {
           $codenames = [];
           foreach($resp as $r) {

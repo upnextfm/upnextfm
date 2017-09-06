@@ -11,7 +11,7 @@ import SearchIcon from 'material-ui-icons/Search';
 import PlaylistItem from 'components/Video/PlaylistItem';
 import PlaylistMenu from 'components/Video/PlaylistMenu';
 
-class PlaylistContainer extends React.PureComponent {
+class Playlist extends React.PureComponent {
   static propTypes = {
     user: PropTypes.object
   };
@@ -186,4 +186,4 @@ function mapStateToProps(state) {
   return Object.assign({}, state.playlist);
 }
 
-export default connect(mapStateToProps)(PlaylistContainer);
+export default connect(mapStateToProps)(Playlist);
