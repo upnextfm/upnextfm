@@ -1,7 +1,28 @@
 import * as types from 'actions/actionTypes';
 import { userToggleLoginDialog } from 'actions/userActions';
 import { layoutErrorMessage } from 'actions/layoutActions';
-import { playerTime } from 'actions/playerActions';
+
+/**
+ *
+ * @param {Function} dispatch
+ * @param {Function} getState
+ * @returns {boolean|*|settings.room|{}|room|{name, numNewMessages, users, messages}}
+ */
+function subscribe(dispatch, getState) {
+  if (!getState().playlist.subscribed) {
+    dispatch(playlistSubscribe());
+  }
+
+  const room = getState().room;
+  if (room.name !== '') {
+    if (!getState().user.isAuthenticated) {
+      dispatch(userToggleLoginDialog());
+      return null;
+    }
+  }
+
+  return room;
+}
 
 export function playlistSubscribe() {
   return (dispatch, getState, api) => {
@@ -49,16 +70,8 @@ export function playlistSubscribe() {
  */
 export function playlistAppend(url) {
   return (dispatch, getState, api) => { // eslint-disable-line
-    if (!getState().playlist.subscribed) {
-      dispatch(playlistSubscribe());
-    }
-
-    const room = getState().room;
-    if (room.name !== '') {
-      if (!getState().user.isAuthenticated) {
-        return dispatch(userToggleLoginDialog());
-      }
-
+    const room = subscribe(dispatch, getState);
+    if (room && room.name !== '') {
       api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
         cmd: types.CMD_VIDEO_APPEND,
         url
@@ -67,18 +80,14 @@ export function playlistAppend(url) {
   };
 }
 
+/**
+ * @param {number} videoID
+ * @returns {Function}
+ */
 export function playlistRemove(videoID) {
   return (dispatch, getState, api) => { // eslint-disable-line
-    if (!getState().playlist.subscribed) {
-      dispatch(playlistSubscribe());
-    }
-
-    const room = getState().room;
-    if (room.name !== '') {
-      if (!getState().user.isAuthenticated) {
-        return dispatch(userToggleLoginDialog());
-      }
-
+    const room = subscribe(dispatch, getState);
+    if (room && room.name !== '') {
       api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
         cmd: types.CMD_VIDEO_REMOVE,
         videoID
@@ -87,18 +96,14 @@ export function playlistRemove(videoID) {
   };
 }
 
+/**
+ * @param {number} videoID
+ * @returns {Function}
+ */
 export function playlistPlayNext(videoID) {
   return (dispatch, getState, api) => { // eslint-disable-line
-    if (!getState().playlist.subscribed) {
-      dispatch(playlistSubscribe());
-    }
-
-    const room = getState().room;
-    if (room.name !== '') {
-      if (!getState().user.isAuthenticated) {
-        return dispatch(userToggleLoginDialog());
-      }
-
+    const room = subscribe(dispatch, getState);
+    if (room && room.name !== '') {
       api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
         cmd: types.CMD_VIDEO_PLAYNEXT,
         videoID
