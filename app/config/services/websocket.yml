@@ -43,6 +43,7 @@ services:
       calls:
         - [setVideoLogRepository, ["@=service('doctrine').getRepository('AppBundle:VideoLog')"]]
         - [setSiteSettings, ["%app_site_settings%"]]
+        - [setMutex, ["@app_mutex_playlist"]]
 
 
     ## ########################################################################

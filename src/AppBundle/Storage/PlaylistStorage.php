@@ -4,6 +4,7 @@ namespace AppBundle\Storage;
 use AppBundle\Entity\Room;
 use AppBundle\Entity\VideoLog;
 use AppBundle\Entity\VideoLogRepository;
+use malkusch\lock\mutex\LockMutex;
 
 class PlaylistStorage extends AbstractStorage
 {
@@ -11,6 +12,11 @@ class PlaylistStorage extends AbstractStorage
    * @var VideoLogRepository
    */
   private $videoLogRepository;
+
+  /**
+   * @var LockMutex
+   */
+  private $mutex;
 
   /**
    * @var array
@@ -24,6 +30,16 @@ class PlaylistStorage extends AbstractStorage
   public function setVideoLogRepository(VideoLogRepository $videoLogRepository)
   {
     $this->videoLogRepository = $videoLogRepository;
+    return $this;
+  }
+
+  /**
+   * @param LockMutex $mutex
+   * @return $this
+   */
+  public function setMutex(LockMutex $mutex)
+  {
+    $this->mutex = $mutex;
     return $this;
   }
 

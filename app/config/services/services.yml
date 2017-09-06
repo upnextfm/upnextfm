@@ -26,6 +26,16 @@ services:
             - "@snc_redis.session.handler"
 
     ## ########################################################################
+    ## Mutex Playlist
+    ## ########################################################################
+    app_mutex_playlist:
+      class: malkusch\lock\mutex\PredisMutex
+      arguments:
+        - ["@snc_redis.default"]
+        - "playlist"
+        - 15
+
+    ## ########################################################################
     ## API Request Listener
     ## ########################################################################
     api.request_listener:
