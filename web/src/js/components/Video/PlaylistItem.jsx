@@ -52,7 +52,9 @@ export default class PlaylistItem extends React.PureComponent {
   renderControls() {
     return (
       <div className="up-room-playlist__item__controls">
-        <MoreIcon onClick={this.props.onClickMenu} />
+        <MoreIcon
+          onClick={(e) => { this.props.onClickMenu(e, this.props.video.id); }}
+        />
       </div>
     );
   }

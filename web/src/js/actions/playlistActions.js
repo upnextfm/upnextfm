@@ -66,3 +66,43 @@ export function playlistAppend(url) {
     }
   };
 }
+
+export function playlistRemove(videoID) {
+  return (dispatch, getState, api) => { // eslint-disable-line
+    if (!getState().playlist.subscribed) {
+      dispatch(playlistSubscribe());
+    }
+
+    const room = getState().room;
+    if (room.name !== '') {
+      if (!getState().user.isAuthenticated) {
+        return dispatch(userToggleLoginDialog());
+      }
+
+      api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
+        cmd: types.CMD_VIDEO_REMOVE,
+        videoID
+      });
+    }
+  };
+}
+
+export function playlistPlayNext(videoID) {
+  return (dispatch, getState, api) => { // eslint-disable-line
+    if (!getState().playlist.subscribed) {
+      dispatch(playlistSubscribe());
+    }
+
+    const room = getState().room;
+    if (room.name !== '') {
+      if (!getState().user.isAuthenticated) {
+        return dispatch(userToggleLoginDialog());
+      }
+
+      api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
+        cmd: types.CMD_VIDEO_PLAYNEXT,
+        videoID
+      });
+    }
+  };
+}

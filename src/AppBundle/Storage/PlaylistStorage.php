@@ -13,6 +13,11 @@ class PlaylistStorage extends AbstractStorage
   private $videoLogRepository;
 
   /**
+   * @var array
+   */
+  private $siteSettings = [];
+
+  /**
    * @param VideoLogRepository $videoLogRepository
    * @return $this
    */
@@ -23,13 +28,24 @@ class PlaylistStorage extends AbstractStorage
   }
 
   /**
+   * @param array $siteSettings
+   * @return $this
+   */
+  public function setSiteSettings(array $siteSettings)
+  {
+    $this->siteSettings = $siteSettings;
+    return $this;
+  }
+
+  /**
    * @param Room $room
    * @return VideoLog[]
    */
   public function getAll(Room $room)
   {
-    $videoLogs = [];
-    foreach($this->redis->lrange($this->keyRoomPlaylist($room), 0, 1000) as $videoLogID) {
+    $videoLogs        = [];
+    $maxPlaylistItems = $this->siteSettings["maxPlaylistItems"];
+    foreach($this->redis->lrange($this->keyRoomPlaylist($room), 0, $maxPlaylistItems) as $videoLogID) {
       if ($videoLog = $this->videoLogRepository->findByID($videoLogID)) {
         $videoLogs[] = $videoLog;
       }
@@ -131,6 +147,26 @@ class PlaylistStorage extends AbstractStorage
   public function clearCurrent(Room $room)
   {
     return $this->redis->del($this->keyRoomCurrent($room));
+  }
+
+  /**
+   * @param Room $room
+   * @param int $videoID
+   * @return bool|array
+   */
+  public function removeByID(Room $room, $videoID)
+  {
+    if ($this->redis->lrem($this->keyRoomPlaylist($room), 0, $videoID)) {
+      return true;
+    }
+    if ($encoded = $this->redis->get($this->keyRoomCurrent($room))) {
+      $decoded = json_decode($encoded, true);
+      if ($decoded["videoLogID"] == $videoID) {
+        return $this->popToCurrent($room);
+      }
+    }
+
+    return false;
   }
 
   /**

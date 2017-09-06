@@ -4,19 +4,26 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 
 export default class PlaylistMenu extends React.Component {
   static propTypes = {
+    videoID:        PropTypes.number.isRequired,
     anchor:         PropTypes.any,
     isOpen:         PropTypes.bool,
+    permissions:    PropTypes.object,
+    onClick:        PropTypes.func,
     onRequestClose: PropTypes.func
   };
 
   static defaultProps = {
-    anchor:         undefined,
-    isOpen:         false,
+    anchor:      undefined,
+    isOpen:      false,
+    permissions: {
+      remove: false
+    },
+    onClick:        () => {},
     onRequestClose: () => {}
   };
 
   render() {
-    const { isOpen, anchor, onRequestClose } = this.props;
+    const { videoID, isOpen, anchor, permissions, onClick, onRequestClose } = this.props;
 
     return (
       <Menu
@@ -24,12 +31,16 @@ export default class PlaylistMenu extends React.Component {
         open={isOpen}
         onRequestClose={onRequestClose}
       >
-        <MenuItem onClick={onRequestClose}>
-          Remove
-        </MenuItem>
-        <MenuItem onClick={onRequestClose}>
-          Play Next
-        </MenuItem>
+        {!permissions.remove ? null : (
+          <MenuItem onClick={(e) => { onClick(e, 'remove', videoID); }}>
+            Remove
+          </MenuItem>
+        )}
+        {!permissions.playNext ? null : (
+          <MenuItem onClick={(e) => { onClick(e, 'playNext', videoID); }}>
+            Play Next
+          </MenuItem>
+        )}
       </Menu>
     );
   }

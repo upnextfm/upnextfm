@@ -42,6 +42,7 @@ services:
       parent: app.ws.storage.parent
       calls:
         - [setVideoLogRepository, ["@=service('doctrine').getRepository('AppBundle:VideoLog')"]]
+        - [setSiteSettings, ["%app_site_settings%"]]
 
 
     ## ########################################################################

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { playlistAppend } from 'actions/playlistActions';
+import * as actions from 'actions/playlistActions';
 import { search } from 'actions/searchActions';
 import List, { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
@@ -49,7 +49,7 @@ class PlaylistContainer extends React.PureComponent {
       dispatch(search(value));
       this.setState({ isSearching: false });
     } else {
-      dispatch(playlistAppend(value));
+      dispatch(actions.playlistAppend(value));
     }
   };
 
@@ -57,11 +57,29 @@ class PlaylistContainer extends React.PureComponent {
     this.setState({ menuOpen: false });
   };
 
-  handleClickMenu = (e) => {
+  handleClickMenuAction = (e, action, videoID) => {
+    const dispatch = this.props.dispatch;
+    switch (action) {
+      case 'remove':
+        dispatch(actions.playlistRemove(videoID));
+        break;
+      case 'playNext':
+        dispatch(actions.playlistPlayNext(videoID));
+        break;
+      default:
+        console.error(`Unknown playlist action "${action}".`);
+        break;
+    }
+
+    this.handleCloseMenu();
+  };
+
+  handleClickMenu = (e, videoID) => {
     e.preventDefault();
     this.setState({
-      menuOpen:   true,
-      menuAnchor: e.currentTarget
+      menuOpen:    true,
+      menuAnchor:  e.currentTarget,
+      menuVideoID: videoID
     });
   };
 
@@ -112,8 +130,7 @@ class PlaylistContainer extends React.PureComponent {
   }
 
   renderList() {
-    const { current, videos, user } = this.props;
-    const canDelete = user.roles.indexOf('ROLE_ADMIN') !== -1;
+    const { current, videos } = this.props;
 
     return (
       <Scrollbars className="up-room-playlist__items-container">
@@ -122,7 +139,6 @@ class PlaylistContainer extends React.PureComponent {
             <ListItem key={current.codename}>
               <PlaylistItem
                 video={current}
-                canDelete={canDelete}
                 onClickMenu={this.handleClickMenu}
                 isCurrent
               />
@@ -133,7 +149,6 @@ class PlaylistContainer extends React.PureComponent {
               <ListItem key={video.codename}>
                 <PlaylistItem
                   video={video}
-                  canDelete={canDelete}
                   onClickMenu={this.handleClickMenu}
                 />
               </ListItem>
@@ -145,13 +160,21 @@ class PlaylistContainer extends React.PureComponent {
   }
 
   render() {
+    const { user } = this.props;
+
     return (
       <div className="up-room-playlist">
         {this.renderInput()}
         {this.renderList()}
         <PlaylistMenu
+          videoID={this.state.menuVideoID}
           anchor={this.state.menuAnchor}
           isOpen={this.state.menuOpen}
+          permissions={{
+            remove:   user.roles.indexOf('ROLE_ADMIN') !== -1,
+            playNext: user.roles.indexOf('ROLE_ADMIN') !== -1
+          }}
+          onClick={this.handleClickMenuAction}
           onRequestClose={this.handleCloseMenu}
         />
       </div>
