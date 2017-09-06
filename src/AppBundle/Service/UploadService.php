@@ -94,10 +94,11 @@ class UploadService
     }
 
     $resp = $this->s3->putObject([
-      "Bucket" => $this->buckets[$bucket],
-      "Key"    => $dest,
-      "Body"   => $data,
-      "ACL"    => "public-read",
+      "Bucket"      => $this->buckets[$bucket],
+      "Key"         => $dest,
+      "Body"        => $data,
+      "ContentType" => $mime,
+      "ACL"         => "public-read",
     ]);
 
     $upload = new Upload();
