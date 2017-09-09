@@ -148,26 +148,6 @@ class VideoService
       $thumbColor    = sprintf("%02x%02x%02x", $dominantColor[0], $dominantColor[1], $dominantColor[2]);
     } catch (\Exception $e) {}
 
-    return $this->adjustLuminance($thumbColor, 0.3);
-  }
-
-  /**
-   * @param string $hex
-   * @param float $percent
-   * @return string
-   */
-  protected function adjustLuminance($hex, $percent)
-  {
-    $newHex = '';
-    if (strlen($hex) < 6) {
-      $hex = $hex[0] + $hex[0] + $hex[1] + $hex[1] + $hex[2] + $hex[2];
-    }
-    for ($i = 0; $i < 3; $i++) {
-      $dec = hexdec(substr( $hex, $i*2, 2 ));
-      $dec = min(max(0, $dec + $dec * $percent), 255);
-      $newHex .= str_pad(dechex($dec), 2, 0, STR_PAD_LEFT);
-    }
-
-    return $newHex;
+    return $thumbColor;
   }
 }
