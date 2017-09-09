@@ -1,17 +1,30 @@
 @import "vars";
 @import "mixins";
 @import "utils";
+@import "layout";
+@import "loader";
+
+body {
+  color: #000;
+  background: #FFF;
+}
 
 * {
   box-sizing: border-box;
 }
 
-.container {
-  width: 100%;
-  margin: 0 $padding-std;
+.upa-container {
+  height: calc(100% - 65px);
+  padding-top: 15px;
+
+  & > div {
+    height: 100%;
+  }
 }
 
-nav {
+.upa-nav-wrapper {
+  display: flex;
+  align-items: center;
 
   .brand-logo {
     height: 34px;
@@ -26,15 +39,40 @@ nav {
       height: 100%;
     }
   }
-}
-
-.nav-wrapper {
-  display: flex;
-  align-items: center;
 
   .upa-buttons {
     margin-left: 250px;
   }
 }
 
+.upa-table {
+  width: 100%;
+  border: 1px solid #d0d0d0;
 
+  thead tr {
+    th:first-child {
+      padding-left: 15px;
+    }
+  }
+
+  tbody tr {
+    cursor: pointer;
+
+    &:hover {
+      color: #fff !important;
+      background-color: lighten($color-secondary, 15%) !important;
+    }
+
+    &:active {
+      background-color: lighten($color-secondary, 20%) !important;
+    }
+
+    td:first-child {
+      padding-left: 15px;
+    }
+  }
+}
+
+.upa-spinner-primary {
+  border-color: $color-primary;
+}

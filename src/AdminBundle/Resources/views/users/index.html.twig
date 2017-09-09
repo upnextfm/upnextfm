@@ -1,4 +1,33 @@
+{% import "AdminBundle::macros.html.twig" as macros %}
 {% extends "AdminBundle::base.html.twig" %}
 {% block body %}
-    Users
+<table class="striped responsive-table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Last Login</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in paginator %}
+            <tr>
+                <td class="upa-action-icons">
+                    <a href="{{ path("admin_users_edit", {id: user.id}) }}" class="upa-action-icon" title="Edit user">
+                        <i class="material-icons">edit</i>
+                    </a>
+                </td>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.lastLogin|date }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="center-align">
+    {{ macros.pagination(page, totalPages, "admin_users") }}
+</div>
 {% endblock %}

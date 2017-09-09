@@ -2,6 +2,7 @@
 namespace AppBundle\Api;
 
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
@@ -15,11 +16,18 @@ abstract class EventListener
   protected $serializer;
 
   /**
-   * @param Serializer $serializer
+   * @var ObjectNormalizer
    */
-  public function __construct(Serializer $serializer)
+  protected $normalizer;
+
+  /**
+   * @param Serializer $serializer
+   * @param ObjectNormalizer $normalizer
+   */
+  public function __construct(Serializer $serializer, ObjectNormalizer $normalizer)
   {
     $this->serializer = $serializer;
+    $this->normalizer = $normalizer;
   }
 
   /**
@@ -35,6 +43,17 @@ abstract class EventListener
    */
   public function createJsonResponse($data, $status = 200, array $headers = [])
   {
+    array_walk_recursive($data, function(&$data) {
+      if (is_object($data)) {
+        $data = $this->normalizer->normalize($data);
+        array_walk($data, function(&$d) {
+          if (is_array($d) && isset($d["timezone"]) && isset($d["timestamp"])) {
+            $d = date(\DateTime::RFC3339, $d["timestamp"]);
+          }
+        });
+      }
+    });
+
     $headers["Content-Type"][] = "application/json";
     $json = $this->serializer->serialize($data, "json");
 

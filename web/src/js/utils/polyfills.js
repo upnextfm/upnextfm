@@ -1,4 +1,6 @@
 /* eslint-disable */
+window.assign = Object.assign;
+
 import Promise from 'promise-polyfill';
 if (!window.Promise) {
   window.Promise = Promise;

@@ -11,7 +11,7 @@ Encore
 
   .addEntry('js/app', './web/src/js/app.jsx')
   .addEntry('js/room', './web/src/js/room.jsx')
-  .addEntry('js/admin', './web/src/js/admin.js')
+  .addEntry('js/admin', './web/src/js/admin.jsx')
   .addStyleEntry('css/app', './web/src/scss/app.scss')
   .addStyleEntry('css/admin', './web/src/scss/admin.scss')
   .addStyleEntry('css/loader', './web/src/scss/loader.scss')

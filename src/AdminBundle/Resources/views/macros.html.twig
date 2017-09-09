@@ -1,0 +1,19 @@
+{% macro pagination(page, totalPages, route) %}
+    <ul class="pagination pagination-sm">
+        <li {{ page == 1 ? 'class="disabled"' }}>
+            <a href="{{ path(route, {page: page-1 < 1 ? 1 : page-1}) }}">
+                <i class="material-icons">chevron_left</i>
+            </a>
+        </li>
+        {% for i in 1..totalPages %}
+            <li {{ page == i ? 'class="active"' }}>
+                <a href="{{ path(route, {page: i}) }}">{{ i }}</a>
+            </li>
+        {% endfor %}
+        <li {{ page == totalPages ? 'class="disabled"' }}>
+            <a href="{{ path(route, {page: page+1 <= totalPages ? page+1 : page}) }}">
+                <i class="material-icons">chevron_right</i>
+            </a>
+        </li>
+    </ul>
+{% endmacro %}

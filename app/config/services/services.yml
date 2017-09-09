@@ -42,6 +42,7 @@ services:
         class: "%api.request_listener.class%"
         arguments:
           - "@serializer_json"
+          - "@normalizer_object"
         tags:
           - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
@@ -52,6 +53,7 @@ services:
         class: "%api.controller_response_listener.class%"
         arguments:
           - "@serializer_json"
+          - "@normalizer_object"
         tags:
           - { name: kernel.event_listener, event: kernel.view, method: onKernelView }
 
@@ -62,6 +64,7 @@ services:
         class: "%api.exception_listener.class%"
         arguments:
           - "@serializer_json"
+          - "@normalizer_object"
         tags:
           - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 

@@ -15,9 +15,8 @@
         {% endblock %}
     </head>
     <body>
-        {% include "AdminBundle:_layout:nav.html.twig" %}
-        <div class="container">
-            {% block body %}{% endblock %}
+        <div id="mount">
+            {% include "AppBundle:_layout:loader.html.twig" %}
         </div>
         {% block javascripts %}
             <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>

@@ -44,10 +44,13 @@
     "react-dropzone": "^4.1.0",
     "react-moment": "^0.6.4",
     "react-redux": "^5.0.5",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "react-share": "^1.15.1",
     "react-tap-event-plugin": "^2.0.1",
     "react-youtube": "^7.4.0",
     "redux": "^3.7.0",
+    "redux-form": "^7.0.4",
     "redux-thunk": "^2.2.0",
     "tlds": "^1.194.0",
     "whatwg-fetch": "^2.0.3"
