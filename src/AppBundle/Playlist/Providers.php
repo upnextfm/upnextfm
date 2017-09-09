@@ -24,7 +24,13 @@ class Providers implements ProvidersInterface
 
     if (preg_match('/youtube\.com\/watch\?([^#]+)/i', $mediaURL, $matches)) {
       parse_str($matches[1], $query);
-      if (!empty($query["v"])) {
+      if (!empty($query["list"])) {
+        return [
+          "codename" => $query["list"],
+          "provider" => self::YOUTUBE,
+          "playlist" => true
+        ];
+      } else if (!empty($query["v"])) {
         return [
           "codename" => $query["v"],
           "provider" => self::YOUTUBE,
