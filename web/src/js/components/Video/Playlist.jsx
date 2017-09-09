@@ -8,6 +8,7 @@ import List, { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import AddIcon from 'material-ui-icons/Add';
 import SearchIcon from 'material-ui-icons/Search';
+import MoreIcon from 'material-ui-icons/MoreVert';
 import { formatSeconds } from 'utils/media';
 import PlaylistItem from 'components/Video/PlaylistItem';
 import PlaylistMenu from 'components/Video/PlaylistMenu';
@@ -145,9 +146,10 @@ class Playlist extends React.PureComponent {
 
     return (
       <div className="up-room-playlist__details">
-        <span>{numVideos} {numVideos === 1 ? 'video' : 'videos'}</span>
-        <span>&middot;</span>
         <span>{formatSeconds(seconds)}</span>
+        <span>&middot;</span>
+        <span>{numVideos} {numVideos === 1 ? 'video' : 'videos'}</span>
+        <span style={{ marginLeft: 'auto', paddingRight: 0 }}><MoreIcon className="up-icon" /></span>
       </div>
     );
   }
