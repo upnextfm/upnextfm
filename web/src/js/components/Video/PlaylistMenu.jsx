@@ -4,7 +4,7 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 
 export default class PlaylistMenu extends React.Component {
   static propTypes = {
-    videoID:        PropTypes.number.isRequired,
+    videoID:        PropTypes.number,
     anchor:         PropTypes.any,
     isOpen:         PropTypes.bool,
     permissions:    PropTypes.object,

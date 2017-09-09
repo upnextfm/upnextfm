@@ -302,6 +302,18 @@ $height-avatar-collapsed: auto;
   }
 }
 
+.up-room-playlist__details {
+  display: flex;
+  justify-content: flex-end;
+  color: $color-dim;
+  padding: $padding-std ($padding-std * 2);
+  border-bottom: 1px solid #3a3a3a;
+
+  span {
+    padding-left: $padding-std;
+  }
+}
+
 .up-room-playlist__items-container {
   flex-grow: 2;
 }

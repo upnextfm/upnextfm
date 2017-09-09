@@ -8,6 +8,7 @@ import List, { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import AddIcon from 'material-ui-icons/Add';
 import SearchIcon from 'material-ui-icons/Search';
+import { formatSeconds } from 'utils/media';
 import PlaylistItem from 'components/Video/PlaylistItem';
 import PlaylistMenu from 'components/Video/PlaylistMenu';
 
@@ -129,6 +130,28 @@ class Playlist extends React.PureComponent {
     );
   }
 
+  renderDetails() {
+    const { current, videos } = this.props;
+
+    let numVideos = videos.length;
+    let seconds   = 0;
+    for (let i = 0; i < numVideos; i += 1) {
+      seconds += videos[i].seconds;
+    }
+    if (current.id !== undefined) {
+      numVideos += 1;
+      seconds += current.seconds;
+    }
+
+    return (
+      <div className="up-room-playlist__details">
+        <span>{numVideos} {numVideos === 1 ? 'video' : 'videos'}</span>
+        <span>&middot;</span>
+        <span>{formatSeconds(seconds)}</span>
+      </div>
+    );
+  }
+
   renderList() {
     const { current, videos } = this.props;
 
@@ -165,6 +188,7 @@ class Playlist extends React.PureComponent {
     return (
       <div className="up-room-playlist">
         {this.renderInput()}
+        {this.renderDetails()}
         {this.renderList()}
         <PlaylistMenu
           videoID={this.state.menuVideoID}
