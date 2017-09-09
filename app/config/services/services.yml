@@ -93,7 +93,7 @@ services:
       arguments:
         - { key: "%app_service_youtube_api_key%" }
       calls:
-        - [setReferer, ["https://upnext.fm"]]
+        - [setReferer, ["%app_url%"]]
 
     ## ########################################################################
     ## Video Info Service

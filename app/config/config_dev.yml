@@ -35,7 +35,7 @@ monolog:
 gos_web_socket:
     server:
         port: 8081
-        host: dev.upnext.fm
+        host: "%app_domain%"
         router:
             resources:
                 - "%kernel.root_dir%/config/pubsub.yml"
