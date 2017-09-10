@@ -46,11 +46,30 @@ class UsersController extends Controller
    */
   public function postAction(User $user, Request $request)
   {
-    $em = $this->getDoctrine();
-    $em->getRepository('AppBundle:User')
-      ->hydrateFromArray($user, $request->request->all());
+    $em   = $this->getDoctrine();
+    $repo = $em->getRepository('AppBundle:User');
+
+    $keep   = array_flip(["username", "email", "enabled", "newPassword", "info"]);
+    $values = array_intersect_key($request->request->all(), $keep);
+    if ($values["username"] !== $user->getUsername()) {
+      if ($repo->findByUsername($values["username"])) {
+        return new Response(["validationErrors" => ["username" => "Username taken."]], 400);
+      }
+    }
+    if ($values["email"] !== $user->getEmail()) {
+      if ($repo->findByEmail($values["email"])) {
+        return new Response(["validationErrors" => ["email" => "Email taken."]], 400);
+      }
+    }
+    if (!empty($values["newPassword"])) {
+      $user->setPlainPassword($values["newPassword"]);
+    }
+
+    $repo->hydrateFromArray($user, $values);
+    $user->setUsernameCanonical($user->getUsername());
+    $user->setEmailCanonical($user->getEmail());
     $em->getManager()->flush();
 
-    return new Response(['status' => 'ok']);
+    return new Response($user);
   }
 }

@@ -16,10 +16,6 @@ body {
 .upa-container {
   height: calc(100% - 65px);
   padding-top: 15px;
-
-  & > div {
-    height: 100%;
-  }
 }
 
 .upa-nav-wrapper {
@@ -84,4 +80,30 @@ body {
   &:active {
     background-color: lighten($color-secondary, 5%);
   }
+}
+
+.upa-card {
+  color: #000;
+  background-color: #FFF;
+
+  .card-title {
+    margin-bottom: $padding-std * 4 !important;
+  }
+}
+
+.upa-form {
+  button {
+    margin-right: $padding-std;
+  }
+
+  label {
+    width: 100%;
+  }
+}
+
+.upa-form-error {
+  color: red;
+  display: block;
+  font-weight: 500;
+  margin-bottom: $padding-std * 4 !important;
 }
