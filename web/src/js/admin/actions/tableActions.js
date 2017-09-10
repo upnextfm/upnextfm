@@ -20,7 +20,7 @@ export function tableLoad(path, page = 1) {
     return fetch(`/admin/${path}/${page}`, config)
       .then((resp) => {
         if (!resp.ok) {
-          throw new Error('Upload failed.');
+          throw new Error('Table load failed.');
         }
         return resp.json();
       })

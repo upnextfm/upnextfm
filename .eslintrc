@@ -18,6 +18,7 @@
         "ignorePattern": "^import\\s.+"
       }
     ],
+    "quote-props": 0,
     "no-unreachable": 0,
     "arrow-body-style": 0,
     "no-trailing-spaces": 0,
@@ -99,6 +100,7 @@
     "$": true,
     "gapi": true,
     "assign": true,
+    "Materialize": true,
     "_WS_SETTINGS": true,
     "PRODUCTION": true
   },

@@ -2,7 +2,10 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class AbstractRepository extends EntityRepository
 {
@@ -68,5 +71,52 @@ class AbstractRepository extends EntityRepository
       ->setMaxResults($limit);
 
     return $paginator;
+  }
+
+  /**
+   * @param object $target
+   * @param array $values
+   * @return object
+   */
+  public function hydrateFromArray($target, array $values)
+  {
+    $metaData  = $this->getClassMetadata();
+    return $this->hydrateFromMetaDataArray($metaData, $target, $values);
+  }
+
+  /**
+   * @param ClassMetadata $metaData
+   * @param object $target
+   * @param array $values
+   * @return object
+   * @throws \Doctrine\ORM\Mapping\MappingException
+   * @throws \Doctrine\ORM\ORMException
+   */
+  private function hydrateFromMetaDataArray(ClassMetadata $metaData, $target, array $values)
+  {
+    $accessor  = PropertyAccess::createPropertyAccessor();
+    $em        = $this->getEntityManager();
+
+    foreach($values as $key => $value) {
+      if ($key === 'id') {
+        continue;
+      }
+
+      if ($metaData->hasField($key)) {
+        if ($metaData->getTypeOfField($key) === 'datetime') {
+          $value = new \DateTime($value);
+        }
+        $accessor->setValue($target, $key, $value);
+      } else if ($metaData->hasAssociation($key)) {
+        $assoc       = $metaData->getAssociationMapping($key);
+        $ref         = $em->getReference($assoc['targetEntity'], $value);
+        $repo        = $em->getRepository($assoc['targetEntity']);
+        $refMetaData = $repo->getClassMetadata();
+        $this->hydrateFromMetaDataArray($refMetaData, $ref, $value);
+        $accessor->setValue($target, $key, $ref);
+      }
+    }
+
+    return $target;
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { tableChangeFilter } from 'admin/actions/tableActions';
+import Pagination from 'admin/components/Pagination';
 import Loader from 'components/Loader';
 
 function filterRows(columnKeys, rows) {
@@ -40,11 +41,13 @@ TableRow.defaultProps = {
 class Table extends React.Component {
   static propTypes = {
     onClickRow:     PropTypes.func,
+    onChangePage:   PropTypes.func,
     onSubmitFilter: PropTypes.func
   };
 
   static defaultProps = {
     onClickRow:     () => {},
+    onChangePage:   () => {},
     onSubmitFilter: () => {}
   };
 
@@ -59,17 +62,16 @@ class Table extends React.Component {
   };
 
   render() {
-    const { columns, rows, filter, isLoading, onClickRow } = this.props;
+    const { columns, rows, filter, numPages, currentPage, isLoading, onClickRow, onChangePage } = this.props;
+    const columnKeys = Object.keys(columns);
 
     if (isLoading) {
       return <Loader />;
     }
 
-    const columnKeys = Object.keys(columns);
-
     return (
       <div className="row">
-        <div className="input-field col s6">
+        <div className="input-field col s12">
           <input
             type="text"
             id="table-filter"
@@ -96,6 +98,9 @@ class Table extends React.Component {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="col s12 center-align">
+          <Pagination page={currentPage} total={numPages} onClick={onChangePage} />
         </div>
       </div>
     );

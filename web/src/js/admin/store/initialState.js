@@ -8,5 +8,9 @@ export default {
     currentOrder: {},
     columns:      {},
     rows:         []
+  },
+  entity: {
+    isLoading: false,
+    data:      {}
   }
 };

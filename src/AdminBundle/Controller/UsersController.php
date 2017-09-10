@@ -1,8 +1,10 @@
 <?php
 namespace AdminBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use AdminBundle\UI\TableResponse;
+use AppBundle\Api\Response;
 use AppBundle\Entity\User;
 
 class UsersController extends Controller
@@ -24,5 +26,31 @@ class UsersController extends Controller
     $table->setNumPages(ceil($paginator->count() / $limit));
 
     return $table;
+  }
+
+  /**
+   * @Route("/entity/user/{id}", name="admin_entity_user_get", methods={"GET"})
+   * @param User $user
+   * @return Response
+   */
+  public function getAction(User $user)
+  {
+    return new Response($user);
+  }
+
+  /**
+   * @Route("/entity/user/{id}", name="admin_entity_user_post", methods={"POST"})
+   * @param User $user
+   * @param Request $request
+   * @return Response
+   */
+  public function postAction(User $user, Request $request)
+  {
+    $em = $this->getDoctrine();
+    $em->getRepository('AppBundle:User')
+      ->hydrateFromArray($user, $request->request->all());
+    $em->getManager()->flush();
+
+    return new Response(['status' => 'ok']);
   }
 }

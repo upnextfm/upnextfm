@@ -46,11 +46,15 @@ abstract class EventListener
     array_walk_recursive($data, function(&$data) {
       if (is_object($data)) {
         $data = $this->normalizer->normalize($data);
-        array_walk($data, function(&$d) {
-          if (is_array($d) && isset($d["timezone"]) && isset($d["timestamp"])) {
-            $d = date(\DateTime::RFC3339, $d["timestamp"]);
-          }
-        });
+        if (is_array($data) && isset($data["timezone"]) && isset($data["timestamp"])) {
+          $data = date(\DateTime::RFC3339, $data["timestamp"]);
+        } else {
+          array_walk($data, function(&$d) {
+            if (is_array($d) && isset($d["timezone"]) && isset($d["timestamp"])) {
+              $d = date(\DateTime::RFC3339, $d["timestamp"]);
+            }
+          });
+        }
       }
     });
 

@@ -15,6 +15,26 @@
 }
 
 .pagination {
+  li {
+    span {
+      cursor: pointer;
+      color: #444;
+      display: inline-block;
+      font-size: 1.2rem;
+      padding: 0 10px;
+      line-height: 30px;
+    }
+
+    &.active span { color: #fff; }
+
+    &.active { background-color: $primary-color; }
+
+    &.disabled span {
+      cursor: default;
+      color: #999;
+    }
+  }
+
   a:hover {
     color: #666;
   }

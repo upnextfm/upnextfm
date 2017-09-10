@@ -76,3 +76,12 @@ body {
 .upa-spinner-primary {
   border-color: $color-primary;
 }
+
+.upa-btn-secondary {
+  background-color: $color-secondary;
+
+  &:hover,
+  &:active {
+    background-color: lighten($color-secondary, 5%);
+  }
+}
