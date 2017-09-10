@@ -2,22 +2,21 @@ import * as types from '../actions/types';
 import initialState from '../store/initialState';
 
 /**
- * Entity reducer
+ * UI reducer
  *
  * state = {
- *    data: {}
+ *    isLoading: false
  * }
  *
  * @param {*} state
  * @param {*} action
  * @returns {*}
  */
-export default function entityReducer(state = initialState.entity, action = {}) {
+export default function uiReducer(state = initialState.ui, action = {}) {
   switch (action.type) {
-    case types.ENTITY_LOAD:
+    case types.UI_LOADING:
       return assign({}, state, {
-        isLoading: false,
-        data:      action.data
+        isLoading: action.isLoading
       });
     default:
       return state;

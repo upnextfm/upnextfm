@@ -61,54 +61,79 @@ class Table extends React.Component {
     }
   };
 
-  render() {
-    const { columns, rows, filter, numPages, currentPage, isLoading, onClickRow, onChangePage } = this.props;
+  renderFilter() {
+    const { table: { filter } } = this.props;
+
+    return (
+      <div className="input-field col s12">
+        <input
+          type="text"
+          id="table-filter"
+          value={filter}
+          onChange={this.handleChangeFilter}
+          onKeyDown={this.handleKeyDownFilter}
+        />
+        <label htmlFor="table-filter">Filter</label>
+      </div>
+    );
+  }
+
+  renderTable() {
+    const { table: { columns, rows }, onClickRow } = this.props;
     const columnKeys = Object.keys(columns);
 
-    if (isLoading) {
+    return (
+      <div className="col s12">
+        <table className="striped responsive-table upa-table">
+          <thead>
+            <tr>
+              {Object.keys(columns).map(key => (
+                <th key={key}>
+                  {columns[key]}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filterRows(columnKeys, rows).map((row, i) => (
+              <TableRow key={i} row={row} onClick={onClickRow} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  renderPagination() {
+    const { table: { numPages, currentPage }, onChangePage } = this.props;
+
+    return (
+      <div className="col s12 center-align">
+        <Pagination page={currentPage} total={numPages} onClick={onChangePage} />
+      </div>
+    );
+  }
+
+  render() {
+    if (this.props.ui.isLoading) {
       return <Loader />;
     }
 
     return (
       <div className="row">
-        <div className="input-field col s12">
-          <input
-            type="text"
-            id="table-filter"
-            value={filter}
-            onChange={this.handleChangeFilter}
-            onKeyDown={this.handleKeyDownFilter}
-          />
-          <label htmlFor="table-filter">Filter</label>
-        </div>
-        <div className="col s12">
-          <table className="striped responsive-table upa-table">
-            <thead>
-              <tr>
-                {Object.keys(columns).map(key => (
-                  <th key={key}>
-                    {columns[key]}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filterRows(columnKeys, rows).map((row, i) => (
-                <TableRow key={i} row={row} onClick={onClickRow} />
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="col s12 center-align">
-          <Pagination page={currentPage} total={numPages} onClick={onChangePage} />
-        </div>
+        {this.renderFilter()}
+        {this.renderTable()}
+        {this.renderPagination()}
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  return assign({}, state.table);
+  return {
+    ui:    assign({}, state.ui),
+    table: assign({}, state.table)
+  };
 }
 
 export default connect(mapStateToProps)(Table);

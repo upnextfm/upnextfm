@@ -1,6 +1,8 @@
 export default {
+  ui: {
+    isLoading: false
+  },
   table: {
-    isLoading:    false,
     filter:       '',
     numPages:     1,
     currentPage:  1,
@@ -10,7 +12,6 @@ export default {
     rows:         []
   },
   entity: {
-    isLoading: false,
-    data:      {}
+    data: {}
   }
 };

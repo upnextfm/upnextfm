@@ -1,4 +1,5 @@
 import * as types from './types';
+import { uiLoading } from './uiActions';
 
 /**
  * @param {string} path
@@ -7,7 +8,7 @@ import * as types from './types';
  */
 export function tableLoad(path, page = 1) {
   return (dispatch) => {
-    dispatch(tableLoading());
+    dispatch(uiLoading(true));
 
     const config = {
       method:      'GET',
@@ -19,6 +20,8 @@ export function tableLoad(path, page = 1) {
 
     return fetch(`/admin/${path}/${page}`, config)
       .then((resp) => {
+        dispatch(uiLoading(false));
+
         if (!resp.ok) {
           throw new Error('Table load failed.');
         }
@@ -31,17 +34,9 @@ export function tableLoad(path, page = 1) {
         });
       })
       .catch((error) => {
+        dispatch(uiLoading(false));
         console.error(error);
       });
-  };
-}
-
-/**
- * @returns {{type: TABLE_LOADING}}
- */
-export function tableLoading() {
-  return {
-    type: types.TABLE_LOADING
   };
 }
 

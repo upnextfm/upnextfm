@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { entityLoad, entityUpdate } from 'admin/actions/entityActions';
+import Card from 'admin/components/Card';
 import Loader from 'components/Loader';
 import SubmitButton from './SubmitButton';
 
 class EntityForm extends React.Component {
   static propTypes = {
-    entityID:   PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    entityID: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]).isRequired,
     entityName: PropTypes.string.isRequired
   };
 
@@ -31,30 +35,26 @@ class EntityForm extends React.Component {
   };
 
   render() {
-    const { handleSubmit, entity, submitting, reset, children } = this.props;
+    const { handleSubmit, entity, ui, submitting, reset, children } = this.props;
 
-    if (entity.isLoading) {
+    if (ui.isLoading) {
       return <Loader />;
     }
 
+    const actions = [
+      <SubmitButton key="submit" isSubmitting={submitting}>
+        Update
+      </SubmitButton>,
+      <button key="reset" type="button" className="btn" onClick={reset} disabled={submitting}>
+        Reset
+      </button>
+    ];
+
     return (
       <form className="upa-form" onSubmit={handleSubmit(this.handleSubmit)}>
-        <div className="card upa-card">
-          <div className="card-content">
-            <span className="card-title">
-              Editing {entity.data.username}
-            </span>
-            {children}
-          </div>
-          <div className="card-action">
-            <SubmitButton isSubmitting={submitting}>
-              Update
-            </SubmitButton>
-            <button type="button" className="btn" onClick={reset} disabled={submitting}>
-              Reset
-            </button>
-          </div>
-        </div>
+        <Card title={`Editing ${entity.data.username}`} actions={actions}>
+          {children}
+        </Card>
       </form>
     );
   }
@@ -62,6 +62,7 @@ class EntityForm extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    ui:            assign({}, state.ui),
     entity:        assign({}, state.entity),
     initialValues: assign({}, state.entity.data)
   };

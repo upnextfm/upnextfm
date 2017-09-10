@@ -19,7 +19,6 @@ function load(state, action) {
  * Table reducer
  *
  * state = {
- *    isLoading:    false,
  *    filter:       '',
  *    numPages:     1,
  *    currentPage:  1,
@@ -37,10 +36,6 @@ export default function tableReducer(state = initialState.table, action = {}) {
   switch (action.type) {
     case types.TABLE_LOAD:
       return load(state, action);
-    case types.TABLE_LOADING:
-      return assign({}, state, {
-        isLoading: true
-      });
     case types.TABLE_CHANGE_FILTER:
       return assign({}, state, {
         filter: action.filter

@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
-import table from 'admin/reducers/tableReducer';
-import entity from 'admin/reducers/entityReducer';
+import ui from './uiReducer';
+import table from './tableReducer';
+import entity from './entityReducer';
 
 const rootReducer = combineReducers({
   form,
+  ui,
   entity,
   table
 });
