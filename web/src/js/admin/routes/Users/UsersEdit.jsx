@@ -2,7 +2,7 @@ import React from 'react';
 import { EntityForm, InputField } from 'admin/forms';
 import { Field } from 'redux-form';
 
-const Edit = props => (
+const UsersEdit = props => (
   <EntityForm entityName="user" entityID={props.match.params.id}>
     <Field type="text" name="username" label="Username" component={InputField} />
     <Field type="email" name="email" label="Email" component={InputField} />
@@ -14,5 +14,5 @@ const Edit = props => (
   </EntityForm>
 );
 
-export default Edit;
+export default UsersEdit;
 
