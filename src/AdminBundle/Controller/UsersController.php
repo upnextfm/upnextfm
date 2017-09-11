@@ -11,19 +11,27 @@ class UsersController extends Controller
 {
   /**
    * @Route("/users/{page}", name="admin_users", defaults={"page"=1})
+   * @param Request $request
    * @param int $page
    * @return TableResponse
    */
-  public function indexAction($page = 1)
+  public function indexAction(Request $request, $page = 1)
   {
+    $filters = [];
+    $filter  = $request->query->get("filter");
+    if ($filter) {
+      $filters["username"] = $filter;
+    }
+
     $limit = 25;
     $paginator = $this->getDoctrine()->getRepository("AppBundle:User")
-      ->findAllByPage($page, $limit);
+      ->findAllByPage($page, $limit, $filters);
 
     $columns = ["id" => "ID", "username" => "Username", "email" => "Email", "lastLogin" => "Last Login"];
     $table   = new TableResponse($columns, $paginator->getIterator());
     $table->setCurrentPage($page);
     $table->setNumPages(ceil($paginator->count() / $limit));
+    $table->setFilter($filter);
 
     return $table;
   }

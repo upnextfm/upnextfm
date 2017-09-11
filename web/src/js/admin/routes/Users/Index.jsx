@@ -1,23 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import queryString from 'query-string';
 import { tableLoad } from 'admin/actions/tableActions';
 import Table from 'admin/components/Table';
 
 class Index extends React.Component {
   componentDidMount() {
-    this.props.dispatch(tableLoad('users', 1));
+    const query = queryString.parse(this.props.location.search);
+    this.props.dispatch(tableLoad('users', this.page(), query.filter || ''));
   }
 
-  handleChangePage = (e, page) => {
-    this.props.dispatch(tableLoad('users', page));
+  componentDidUpdate(prevProps) {
+    if (prevProps.location !== this.props.location) {
+      const query = queryString.parse(this.props.location.search);
+      this.props.dispatch(tableLoad('users', this.page(), query.filter || ''));
+    }
+  }
+
+  page = () => {
+    let page = this.props.match.params.page || 1;
+    if (page < 1) {
+      page = 1;
+    }
+
+    return page;
   };
 
   handleSubmitFilter = (e, value) => {
-    console.info(value);
+    this.props.history.push(`/users?filter=${encodeURIComponent(value)}`);
+  };
+
+  handleChangePage = (e, page) => {
+    this.props.history.push(`/users/${page}`);
   };
 
   handleClickRow = (e, row) => {
-    this.props.history.push(`/users/${row.id}`);
+    this.props.history.push(`/users/edit/${row.id}`);
   };
 
   render() {
@@ -31,10 +49,4 @@ class Index extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    table: assign({}, state.table)
-  };
-}
-
-export default connect(mapStateToProps)(Index);
+export default connect()(Index);

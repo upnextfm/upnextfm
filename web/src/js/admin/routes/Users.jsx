@@ -5,8 +5,8 @@ import Edit from './Users/Edit';
 
 const Users = () => (
   <Switch>
-    <Route exact path="/users" component={Index} />
-    <Route exact path="/users/:id" component={Edit} />
+    <Route exact path="/users/:page?" component={Index} />
+    <Route exact path="/users/edit/:id" component={Edit} />
   </Switch>
 );
 

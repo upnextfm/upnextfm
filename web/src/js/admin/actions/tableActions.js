@@ -4,12 +4,14 @@ import { uiLoading } from './uiActions';
 /**
  * @param {string} path
  * @param {number} page
+ * @param {string} filter
  * @returns {Function}
  */
-export function tableLoad(path, page = 1) {
+export function tableLoad(path, page = 1, filter = '') {
   return (dispatch) => {
     dispatch(uiLoading(true));
 
+    const filterParam = encodeURIComponent(filter);
     const config = {
       method:      'GET',
       credentials: 'same-origin',
@@ -18,7 +20,7 @@ export function tableLoad(path, page = 1) {
       }
     };
 
-    return fetch(`/admin/${path}/${page}`, config)
+    return fetch(`/admin/${path}/${page}?filter=${filterParam}`, config)
       .then((resp) => {
         dispatch(uiLoading(false));
 

@@ -12,15 +12,28 @@ class AbstractRepository extends EntityRepository
   /**
    * @param int $currentPage
    * @param int $limit
+   * @param array $filters
    * @return \Doctrine\ORM\Tools\Pagination\Paginator
    */
-  public function findAllByPage($currentPage, $limit)
+  public function findAllByPage($currentPage, $limit, $filters = [])
   {
     $query = $this->createQueryBuilder('e')
-      ->orderBy('e.id', 'DESC')
-      ->getQuery();
+      ->orderBy('e.id', 'DESC');
 
-    return $this->paginate($query, $currentPage, $limit);
+    if ($filters) {
+      foreach($filters as $column => $value) {
+        if (preg_match('/[^a-z]/i', $column)) {
+          throw new \InvalidArgumentException(sprintf(
+            'Invalid filter column "%s". Contains special characters.',
+            $column
+          ));
+        }
+        $query->andWhere("e.${column} = :${column}");
+        $query->setParameter($column, $value);
+      }
+    }
+
+    return $this->paginate($query->getQuery(), $currentPage, $limit);
   }
 
   /**

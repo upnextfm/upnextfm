@@ -51,13 +51,19 @@ class Table extends React.Component {
     onSubmitFilter: () => {}
   };
 
+  componentDidUpdate() {
+    if (Materialize.updateTextFields) {
+      Materialize.updateTextFields();
+    }
+  }
+
   handleChangeFilter = (e) => {
     this.props.dispatch(tableChangeFilter(e.target.value));
   };
 
   handleKeyDownFilter = (e) => {
     if (e.keyCode === 13) {
-      this.props.onSubmitFilter(e, this.props.filter);
+      this.props.onSubmitFilter(e, this.props.table.filter);
     }
   };
 
@@ -122,6 +128,7 @@ class Table extends React.Component {
     return (
       <div className="row">
         {this.renderFilter()}
+        {this.renderPagination()}
         {this.renderTable()}
         {this.renderPagination()}
       </div>
