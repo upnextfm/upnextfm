@@ -16,8 +16,7 @@ export default function entityReducer(state = initialState.entity, action = {}) 
   switch (action.type) {
     case types.ENTITY_LOAD:
       return assign({}, state, {
-        isLoading: false,
-        data:      action.data
+        data: action.data
       });
     default:
       return state;

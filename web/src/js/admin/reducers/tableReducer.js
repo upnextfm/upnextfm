@@ -8,7 +8,6 @@ import initialState from '../store/initialState';
  */
 function load(state, action) {
   const table = assign({}, action.table);
-  table.isLoading   = false;
   table.numPages    = parseInt(table.numPages, 10);
   table.currentPage = parseInt(table.currentPage, 10);
 

@@ -1,6 +1,7 @@
 <?php
 namespace AdminBundle\Controller;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use AdminBundle\UI\TableResponse;
@@ -54,6 +55,11 @@ class UsersController extends Controller
    */
   public function postAction(User $user, Request $request)
   {
+    if ($avatar = $request->files->get('file')) {
+      $urls = $this->uploadAvatar($user, $avatar);
+      return new Response($urls);
+    }
+
     $em   = $this->getDoctrine();
     $repo = $em->getRepository('AppBundle:User');
 
@@ -79,5 +85,31 @@ class UsersController extends Controller
     $em->getManager()->flush();
 
     return new Response($user);
+  }
+
+  /**
+   * @param User $user
+   * @param UploadedFile $avatar
+   * @return array
+   */
+  private function uploadAvatar(User $user, UploadedFile $avatar)
+  {
+    $thumbService  = $this->get("app.service.thumbs");
+    $uploadService = $this->get("app.service.upload");
+    $tempFiles     = $thumbService->create($avatar->getPathname());
+    $avatarURLs    = [];
+
+    foreach($tempFiles as $size => $tempFile) {
+      $avatarName = sprintf("avatar%s", ucwords($size));
+      $uploadName = sprintf("%s/%s/%s", $user->getUsername(), date("Y-m-d"), sprintf("%s.png", $avatarName));
+      $avatarURLs[$avatarName] = $uploadService->upload(
+        $tempFile,
+        $uploadName,
+        $user,
+        "image/png"
+      );
+    }
+
+    return $avatarURLs;
   }
 }

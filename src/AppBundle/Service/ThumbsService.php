@@ -1,10 +1,11 @@
 <?php
 namespace AppBundle\Service;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Entity\Room;
 use AppBundle\Entity\User;
 use Identicon\Identicon;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Imagick;
 
 class ThumbsService
 {
@@ -21,20 +22,46 @@ class ThumbsService
   /**
    * @var array
    */
-  protected $defaults = [];
+  protected $settings = [];
 
   /**
    * Constructor
    *
    * @param Identicon $identicon
    * @param UploadService $uploadService
-   * @param array $defaults
+   * @param array $settings
    */
-  public function __construct(Identicon $identicon, UploadService $uploadService, array $defaults)
+  public function __construct(Identicon $identicon, UploadService $uploadService, array $settings)
   {
     $this->identicon     = $identicon;
     $this->uploadService = $uploadService;
-    $this->defaults      = $defaults;
+    $this->settings      = $settings;
+  }
+
+  /**
+   * Create thumbs in the 3 sizes, sm, md, and lg
+   *
+   * @param string $imagePath
+   * @param string $extension
+   * @return array
+   */
+  public function create($imagePath, $extension = 'png')
+  {
+    $tempFiles = [];
+    foreach($this->settings["sizes"] as $name => $width) {
+      $tempFiles[$name] = sprintf(
+        '%s.%s',
+        tempnam(sys_get_temp_dir(), "thumb"),
+        $extension
+      );
+
+      $imagick = new Imagick($imagePath);
+      $imagick->resizeImage($width, $width, Imagick::FILTER_CATROM, 1, true);
+      $imagick->writeImage($tempFiles[$name]);
+      $imagick->destroy();
+    }
+
+    return $tempFiles;
   }
 
   /**
@@ -45,7 +72,7 @@ class ThumbsService
   public function getUserAvatar(User $user, $size)
   {
     if (!$user || !$user->getInfo()) {
-      return str_replace("{name}", $user->getUsername(), $this->defaults["avatar_${size}"]);
+      return str_replace("{name}", $user->getUsername(), $this->settings["avatar_${size}"]);
     }
 
     switch($size) {
@@ -66,7 +93,7 @@ class ThumbsService
       return $avatar;
     }
 
-    return str_replace("{name}", $user->getUsername(), $this->defaults["avatar_${size}"]);
+    return str_replace("{name}", $user->getUsername(), $this->settings["avatar_${size}"]);
   }
 
   /**
@@ -99,14 +126,13 @@ class ThumbsService
 
     $roomName = $room->getName();
     $urls     = [];
-    $sizes    = ["sm" => 50, "md" => 250, "lg" => 500];
     $thumbs   = [
       "sm" => sprintf("%s/thumb-sm.png", $roomName),
       "md" => sprintf("%s/thumb-md.png", $roomName),
       "lg" => sprintf("%s/thumb-lg.png", $roomName)
     ];
     foreach($thumbs as $s => $path) {
-      $imageData = $this->identicon->getImageData($roomName, $sizes[$s]);
+      $imageData = $this->identicon->getImageData($roomName, $this->settings["sizes"][$s]);
       $urls[$s]  = $this->uploadService->uploadData($imageData, $path, $user, "image/png");
     }
 

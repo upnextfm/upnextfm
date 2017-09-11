@@ -13,17 +13,17 @@ export function entityUpdating() {
 }
 
 /**
- * @param {string} entity
+ * @param {string} entityName
  * @param {number} id
  * @returns {Function}
  */
-export function entityLoad(entity, id) {
+export function entityLoad(entityName, id) {
   return (dispatch) => {
     dispatch(uiLoading(true));
 
     const config = fetchConfig('GET');
 
-    return fetch(`/admin/entity/${entity}/${id}`, config)
+    return fetch(`/admin/entity/${entityName}/${id}`, config)
       .then((resp) => {
         dispatch(uiLoading(false));
 
@@ -46,30 +46,73 @@ export function entityLoad(entity, id) {
 }
 
 /**
- * @param {string} entity
+ * @param {string} entityName
+ * @param {number} id
+ * @param {File} file
+ * @returns {Function}
+ */
+export function entityUpload(entityName, id, file) {
+  return () => {
+    const form = new FormData();
+    form.append('file', file);
+
+    const config = fetchConfig('POST', form);
+    delete config.headers['Content-Type'];
+
+    return fetch(`/admin/entity/${entityName}/${id}`, config)
+      .then(resp => resp.json());
+  };
+}
+
+/**
+ * @param {string} entityName
  * @param {number} id
  * @param {*} values
  * @returns {Function}
  */
-export function entityUpdate(entity, id, values) {
+export function entityUpdate(entityName, id, values) {
   return (dispatch) => {
     dispatch(uiLoading(true));
 
-    const config = fetchConfig('POST', JSON.stringify(values));
+    const update = () => {
+      const config = fetchConfig('POST', JSON.stringify(values));
 
-    return fetch(`/admin/entity/${entity}/${id}`, config)
-      .then(resp => resp.json())
-      .then((data) => {
-        dispatch(uiLoading(false));
+      return fetch(`/admin/entity/${entityName}/${id}`, config)
+        .then(resp => resp.json())
+        .then((data) => {
+          dispatch(uiLoading(false));
 
-        if (data.error !== undefined) {
-          throw new Error(data.error);
-        } else if (data.validationErrors) {
-          throw new SubmissionError(data.validationErrors);
-        }
-        Materialize.toast('Updated!', 4000);
+          if (data.error !== undefined) {
+            throw new Error(data.error);
+          } else if (data.validationErrors) {
+            throw new SubmissionError(data.validationErrors);
+          }
+          Materialize.toast('Updated!', 4000);
 
-        return data;
-      });
+          return data;
+        });
+    };
+
+    if (values.avatar !== undefined) {
+      return dispatch(entityUpload(entityName, id, values.avatar))
+        .then((data) => {
+          delete values.avatar;
+          values.info.avatarSm = data.avatarSm;
+          values.info.avatarMd = data.avatarMd;
+          values.info.avatarLg = data.avatarLg;
+          return update();
+        });
+    } else if (values.thumb !== undefined) {
+      return dispatch(entityUpload(entityName, id, values.thumb))
+        .then((data) => {
+          delete values.thumb;
+          values.info.thumbSm = data.thumbSm;
+          values.info.thumbMd = data.thumbMd;
+          values.info.thumbLg = data.thumbLg;
+          return update();
+        });
+    }
+
+    return update();
   };
 }
