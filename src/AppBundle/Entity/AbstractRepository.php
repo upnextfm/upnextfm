@@ -10,6 +10,17 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 class AbstractRepository extends EntityRepository
 {
   /**
+   * @param int $id
+   * @return null|object
+   */
+  public function findByID($id)
+  {
+    return $this->findOneBy([
+      "id" => $id
+    ]);
+  }
+
+  /**
    * @param int $currentPage
    * @param int $limit
    * @param array $filters

@@ -2,12 +2,12 @@ import * as types from './types';
 import { uiLoading } from './uiActions';
 
 /**
- * @param {string} path
+ * @param {string} entityName
  * @param {number} page
  * @param {string} filter
  * @returns {Function}
  */
-export function tableLoad(path, page = 1, filter = '') {
+export function tableLoad(entityName, page = 1, filter = '') {
   return (dispatch) => {
     dispatch(uiLoading(true));
 
@@ -20,7 +20,7 @@ export function tableLoad(path, page = 1, filter = '') {
       }
     };
 
-    return fetch(`/admin/${path}/${page}?filter=${filterParam}`, config)
+    return fetch(`/admin/entity/${entityName}/collection/${page}?filter=${filterParam}`, config)
       .then((resp) => {
         dispatch(uiLoading(false));
 

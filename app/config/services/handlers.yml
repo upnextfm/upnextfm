@@ -1,0 +1,16 @@
+services:
+  ## ########################################################################
+  ## Parent AbstractHandler
+  ## ########################################################################
+  admin.handler.parent:
+    class: AdminBundle\Handler\AbstractHandler
+    arguments:
+      - "@doctrine"
+      - "@service_container"
+
+  ## ########################################################################
+  ## Users
+  ## ########################################################################
+  admin.handler.user:
+    class: AdminBundle\Handler\UsersHandler
+    parent: admin.handler.parent

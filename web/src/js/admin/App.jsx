@@ -13,8 +13,11 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Dashboard} />
         <Route path="/users" component={Users} />
+        <Route path="/user" component={Users} />
         <Route path="/rooms" component={Rooms} />
+        <Route path="/room" component={Rooms} />
         <Route path="/playlists" component={Playlists} />
+        <Route path="/playlist" component={Playlists} />
       </Switch>
     </div>
   </div>

@@ -6,9 +6,9 @@ import UsersEdit from './Users/UsersEdit';
 const Users = () => (
   <Switch>
     <Route exact path="/users/:page?">
-      <EntityIndex entityName="users" />
+      <EntityIndex entityName="user" />
     </Route>
-    <Route exact path="/users/edit/:id" component={UsersEdit} />
+    <Route exact path="/user/edit/:id" component={UsersEdit} />
   </Switch>
 );
 

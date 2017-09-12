@@ -2,6 +2,7 @@ imports:
   - { resource: parameters.yml }
   - { resource: security.yml }
   - { resource: services/services.yml }
+  - { resource: services/handlers.yml }
   - { resource: services/websocket.yml }
   - { resource: "@AdminBundle/Resources/config/services.yml" }
 

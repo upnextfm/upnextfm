@@ -48,10 +48,10 @@ class ThumbsService
   public function create($imagePath, $extension = 'png')
   {
     $tempFiles = [];
-    foreach($this->settings["sizes"] as $name => $width) {
+    foreach($this->settings['sizes'] as $name => $width) {
       $tempFiles[$name] = sprintf(
         '%s.%s',
-        tempnam(sys_get_temp_dir(), "thumb"),
+        tempnam(sys_get_temp_dir(), 'thumb'),
         $extension
       );
 
