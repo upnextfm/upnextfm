@@ -20,7 +20,8 @@ class EntityIndex extends React.Component {
    */
   constructor(props, context) {
     super(props, context);
-    this.dispatch = context.store.dispatch;
+    this.dispatch       = context.store.dispatch;
+    this.paginationPath = this.props.location.pathname.split('/').filter(p => p)[0];
   }
 
   /**
@@ -78,7 +79,7 @@ class EntityIndex extends React.Component {
    */
   handleChangePage = (e, page) => {
     this.props.history.push(
-      `/${this.props.entityName}/${page}`
+      `/${this.paginationPath}/${page}`
     );
   };
 
