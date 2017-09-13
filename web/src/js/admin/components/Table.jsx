@@ -8,17 +8,31 @@ import Loader from 'components/Loader';
 function filterRows(columnKeys, rows) {
   return rows.map((row) => {
     const newRow = {};
+
     Object.keys(row).forEach((key) => {
-      if (columnKeys.indexOf(key) !== -1) {
+      if (typeof row[key] !== 'object' && columnKeys.indexOf(key) !== -1) {
         newRow[key] = row[key];
+        return;
       }
+
+      Object.keys(row[key]).forEach((subKey) => {
+        columnKeys.forEach((colKey) => {
+          if (colKey.indexOf('.') !== -1) {
+            colKey = colKey.split('.')[1];
+            if (colKey === subKey) {
+              newRow[key] = row[key][subKey];
+            }
+          }
+        });
+      });
     });
 
     return newRow;
   });
 }
 
-function cleanValue(value) {
+function cleanValue(key, row) {
+  const value = row[key];
   if (typeof value === 'boolean') {
     return value ? 'Yes' : 'No';
   }
@@ -30,7 +44,7 @@ const TableRow = ({ row, onClick }) => (
     {Object.keys(row).map(key => {
       return (
         <td key={key}>
-          {cleanValue(row[key])}
+          {cleanValue(key, row)}
         </td>
       );
     })}

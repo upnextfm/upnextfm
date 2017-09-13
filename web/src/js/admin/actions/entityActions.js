@@ -106,9 +106,9 @@ export function entityUpdate(entityName, id, values) {
       return dispatch(entityUpload(entityName, id, values.thumb))
         .then((data) => {
           delete values.thumb;
-          values.info.thumbSm = data.thumbSm;
-          values.info.thumbMd = data.thumbMd;
-          values.info.thumbLg = data.thumbLg;
+          values.settings.thumbSm = data.thumbSm;
+          values.settings.thumbMd = data.thumbMd;
+          values.settings.thumbLg = data.thumbLg;
           return update();
         });
     }
