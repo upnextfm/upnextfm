@@ -1,20 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
+import EntityIndex from 'admin/components/EntityIndex';
+import RoomsEdit from './Rooms/RoomsEdit';
 
-class Rooms extends React.Component {
-  render() {
-    const { table } = this.props;
+const Rooms = () => (
+  <Switch>
+    <Route exact path="/rooms/:page?">
+      <EntityIndex entityName="room" />
+    </Route>
+    <Route exact path="/room/edit/:id" component={RoomsEdit} />
+  </Switch>
+);
 
-    return (
-      <div>Rooms</div>
-    );
-  }
-}
-
-function mapStateToProps(state) {
-  return {
-    table: Object.assign({}, state.table)
-  };
-}
-
-export default connect(mapStateToProps)(Rooms);
+export default Rooms;

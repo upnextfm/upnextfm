@@ -224,7 +224,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
         return;
       }
       $room = $this->getRoom($req->getAttributes()->get("room"), $user);
-      if (!$room || $room->isDeleted()) {
+      if (!$room || $room->getIsDeleted()) {
         $this->logger->error("Room not found.", $event);
         return;
       }

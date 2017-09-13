@@ -18,13 +18,22 @@ function filterRows(columnKeys, rows) {
   });
 }
 
+function cleanValue(value) {
+  if (typeof value === 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+  return value;
+}
+
 const TableRow = ({ row, onClick }) => (
   <tr onClick={(e) => { onClick(e, row); }}>
-    {Object.keys(row).map(key => (
-      <td key={key}>
-        {row[key]}
-      </td>
-    ))}
+    {Object.keys(row).map(key => {
+      return (
+        <td key={key}>
+          {cleanValue(row[key])}
+        </td>
+      );
+    })}
   </tr>
 );
 

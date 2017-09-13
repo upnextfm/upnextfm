@@ -155,7 +155,7 @@ class RoomTopic extends AbstractTopic
         return true;
       }
       $room = $this->getRoom($req->getAttributes()->get("room"), $user);
-      if (!$room || $room->isDeleted()) {
+      if (!$room || $room->getIsDeleted()) {
         $this->logger->error("Room not found.", $event);
         return true;
       }

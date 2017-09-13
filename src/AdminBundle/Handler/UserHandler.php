@@ -8,7 +8,7 @@ use AppBundle\Entity\UserRepository;
 use AppBundle\Api\Response;
 use AppBundle\Entity\User;
 
-class UsersHandler extends AbstractHandler
+class UserHandler extends AbstractHandler
 {
   /**
    * @return AbstractRepository

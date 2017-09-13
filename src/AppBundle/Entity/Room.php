@@ -152,7 +152,7 @@ class Room
   /**
    * @return boolean
    */
-  public function isPrivate()
+  public function getIsPrivate()
   {
     return $this->isPrivate;
   }
@@ -170,7 +170,7 @@ class Room
   /**
    * @return boolean
    */
-  public function isDeleted()
+  public function getIsDeleted()
   {
     return $this->isDeleted;
   }

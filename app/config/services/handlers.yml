@@ -9,8 +9,15 @@ services:
       - "@service_container"
 
   ## ########################################################################
-  ## Users
+  ## User
   ## ########################################################################
   admin.handler.user:
-    class: AdminBundle\Handler\UsersHandler
+    class: AdminBundle\Handler\UserHandler
+    parent: admin.handler.parent
+
+  ## ########################################################################
+  ## Room
+  ## ########################################################################
+  admin.handler.room:
+    class: AdminBundle\Handler\RoomHandler
     parent: admin.handler.parent
