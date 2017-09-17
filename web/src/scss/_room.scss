@@ -325,6 +325,7 @@ $height-avatar-collapsed: auto;
 }
 
 .up-room-playlist__items {
+  overflow: hidden;
   border-top: 1px solid #2d2d2d;
   padding: 0 !important;
 
