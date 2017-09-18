@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "jest",
-    "watch": "bin/encore dev --watch",
+    "watch": "php bin/encore dev --watch",
     "server": "php bin/console gos:websocket:server",
     "build": "php bin/encore production",
     "migrate": "php bin/console doctrine:migrations:migrate --no-interaction",
