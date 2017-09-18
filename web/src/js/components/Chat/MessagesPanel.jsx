@@ -6,6 +6,7 @@ import Dropzone from 'react-dropzone';
 import List from 'material-ui/List';
 import MessageType from 'components/Chat/Types/MessageType';
 import NoticeType from 'components/Chat/Types/NoticeType';
+import MeType from 'components/Chat/Types/MeType';
 
 export default class MessagesPanel extends React.Component {
   static propTypes = {
@@ -81,6 +82,14 @@ export default class MessagesPanel extends React.Component {
               } else if (message.type === 'notice' && settings.user.showNotices) {
                 item = (
                   <NoticeType
+                    key={message.id}
+                    user={user}
+                    message={message}
+                  />
+                );
+              } else if (message.type === 'me') {
+                item = (
+                  <MeType
                     key={message.id}
                     user={user}
                     message={message}

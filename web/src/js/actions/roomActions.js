@@ -70,6 +70,12 @@ function dispatchSocketPayload(dispatch, getState, payload) {
         dispatch(roomIncrNumNewMessages());
       }
       break;
+    case types.CMD_ME:
+      dispatch(roomMessage(payload.message));
+      if (!getState().layout.isWindowFocused) {
+        dispatch(roomIncrNumNewMessages());
+      }
+      break;
     default:
       console.error('Unknown cmd', payload.cmd);
       break;
@@ -87,6 +93,29 @@ function handleCommandPM(msg, dispatch) {
   const message = messageParts.join(' ').trim();
   if (toUsername !== '' && message !== '') {
     dispatch(pmsSend(toUsername, message));
+  }
+}
+
+/**
+ * Handles the /me command
+ *
+ * @param {string} msg
+ * @param {Function} dispatch
+ * @param {Function} getState
+ * @param {*} api
+ */
+function handleCommandMe(msg, dispatch, getState, api) {
+  const room = getState().room;
+  if (room.name !== '') {
+    if (!getState().user.isAuthenticated) {
+      dispatch(layoutToggleLoginDialog());
+    } else {
+      api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
+        cmd:     types.CMD_ME,
+        date:    (new Date()).toString(),
+        message: msg
+      });
+    }
   }
 }
 
@@ -115,7 +144,8 @@ function handleCommandSend(msg, dispatch, getState, api) {
 
 const commands = {
   '/send': handleCommandSend,
-  '/pm':   handleCommandPM
+  '/pm':   handleCommandPM,
+  '/me':   handleCommandMe
 };
 
 /**
@@ -181,6 +211,18 @@ export function roomMessages(messages) {
 export function roomMessage(message) {
   return {
     type: types.ROOM_MESSAGE,
+    message
+  };
+}
+
+/**
+ *
+ * @param {Array} message
+ * @returns {{type: *, message: *}}
+ */
+export function roomMe(message) {
+  return {
+    type: types.ROOM_ME,
     message
   };
 }

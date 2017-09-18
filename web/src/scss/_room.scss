@@ -216,13 +216,18 @@ $height-avatar-collapsed: auto;
   }
 }
 
-.up-room-notice {
+.up-room-notice, .up-room-me {
   @extend .up-room-message;
   padding-left: 30px + $padding-std + $padding-std;
   padding-top: $padding-std;
 
   color: darken($color-primary, 20%);
   font-size: 0.8rem;
+}
+
+.up-room-me {
+  color: $color-dim;
+  font-style: italic;
 }
 
 /******************************************************************************

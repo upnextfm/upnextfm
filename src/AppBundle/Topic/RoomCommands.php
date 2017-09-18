@@ -5,6 +5,7 @@ class RoomCommands
 {
   const AUTH       = "auth";
   const SEND       = "send";
+  const ME         = "me";
   const PM         = "pm";
   const JOINED     = "joined";
   const PARTED     = "parted";

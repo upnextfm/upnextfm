@@ -70,6 +70,20 @@ function messages(state, action) {
 }
 
 /**
+ * @param {*} state
+ * @param {{type: string, messages: Array}} action
+ * @returns {*}
+ */
+function me(state, action) {
+  const msgs = state.messages.slice();
+  msgs.push(sanitizeMessage(action.message));
+
+  return Object.assign({}, state, {
+    messages: msgs
+  });
+}
+
+/**
  * Adds a message
  *
  * @param {*} state
@@ -100,6 +114,7 @@ function message(state, action) {
  * @returns {*}
  */
 export default function roomReducer(state = initialState.room, action = {}) {
+  console.log(action);
   switch (action.type) {
     case types.ROOM_NAME:
       return Object.assign({}, state, {
@@ -127,6 +142,8 @@ export default function roomReducer(state = initialState.room, action = {}) {
       return messages(state, action);
     case types.ROOM_MESSAGE:
       return message(state, action);
+    case types.ROOM_ME:
+      return me(state, action);
     default:
       return state;
   }

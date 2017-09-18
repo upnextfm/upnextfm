@@ -261,12 +261,13 @@ abstract class AbstractTopic implements TopicInterface
 
   /**
    * @param ChatLog $message
+   * @param string $type
    * @return array
    */
-  protected function serializeMessage(ChatLog $message)
+  protected function serializeMessage(ChatLog $message, $type = "message")
   {
     return [
-      "type"    => "message",
+      "type"    => $type,
       "id"      => $message->getId(),
       "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
       "from"    => $message->getUser()->getUsername(),

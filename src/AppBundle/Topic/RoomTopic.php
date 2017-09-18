@@ -164,6 +164,9 @@ class RoomTopic extends AbstractTopic
         case RoomCommands::SEND:
           $this->handleSend($conn, $topic, $req, $room, $user, $event);
           break;
+        case RoomCommands::ME:
+          $this->handleMe($conn, $topic, $req, $room, $user, $event);
+          break;
       }
     } catch (Exception $e) {
       $this->handleError($e);
@@ -200,6 +203,37 @@ class RoomTopic extends AbstractTopic
     $topic->broadcast([
       "cmd"     => RoomCommands::SEND,
       "message" => $this->serializeMessage($chatLog)
+    ]);
+  }
+
+  /**
+   * @param ConnectionInterface $conn
+   * @param Topic $topic
+   * @param WampRequest $req
+   * @param Room $room
+   * @param UserInterface|User $user
+   * @param array $event
+   */
+  protected function handleMe(
+    ConnectionInterface $conn,
+    Topic $topic,
+    WampRequest $req,
+    Room $room,
+    UserInterface $user,
+    array $event)
+  {
+    $message = $this->sanitizeMessage($event["message"]);
+    if (empty($message)) {
+      return;
+    }
+
+    /** @var ChatLog $chatLog */
+    $chatLog = new ChatLog($room, $user, $message);
+    $chatLog = $this->em->merge($chatLog);
+    $this->em->flush();
+    $topic->broadcast([
+      "cmd"     => RoomCommands::ME,
+      "message" => $this->serializeMessage($chatLog, "me")
     ]);
   }
 }
