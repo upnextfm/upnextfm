@@ -12,9 +12,9 @@
   "scripts": {
     "test": "jest",
     "watch": "bin/encore dev --watch",
-    "server": "bin/console gos:websocket:server",
-    "build": "bin/encore production",
-    "migrate": "bin/console doctrine:migrations:migrate --no-interaction",
+    "server": "php bin/console gos:websocket:server",
+    "build": "php bin/encore production",
+    "migrate": "php bin/console doctrine:migrations:migrate --no-interaction",
     "deploy": "ssh ubuntu@upnext.fm 'cd /var/www/upnext.fm && npm run pull'",
     "deploy:assets": "ssh ubuntu@upnext.fm 'cd /var/www/upnext.fm && npm install && composer update && bin/console cache:clear --no-warmup'",
     "deploy:params": "scp app/config/parameters.yml ubuntu@upnext.fm:/var/www/upnext.fm/app/config/parameters.yml && ssh ubuntu@upnext.fm 'cd /var/www/upnext.fm && bin/console cache:clear --no-warmup'",
