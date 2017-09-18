@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Hidden from 'material-ui/Hidden';
-import AppBar from 'material-ui/AppBar';
+import AppBar from './Nav/AppBar';
 import Toolbar from './Nav/Toolbar';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
@@ -68,7 +68,7 @@ class Nav extends React.PureComponent {
     const { roomName, user, video } = this.props;
 
     return (
-      <AppBar position="static" color="default">
+      <AppBar>
         <Toolbar>
           <IconButton aria-label="Menu" onClick={this.handleClickMenu}>
             <MenuIcon />
