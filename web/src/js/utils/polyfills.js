@@ -6,6 +6,7 @@ if (!window.Promise) {
   window.Promise = Promise;
 }
 import 'whatwg-fetch';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 
-injectTapEventPlugin();
+// Disabled because it does not play nice with React 16.
+// import injectTapEventPlugin from 'react-tap-event-plugin';
+// injectTapEventPlugin();
