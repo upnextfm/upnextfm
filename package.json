@@ -11,9 +11,9 @@
   },
   "scripts": {
     "test": "jest",
-    "watch": "php bin/encore dev --watch",
+    "watch": "encore dev --watch",
     "server": "php bin/console gos:websocket:server",
-    "build": "php bin/encore production",
+    "build": "encore production",
     "migrate": "php bin/console doctrine:migrations:migrate --no-interaction",
     "deploy": "ssh ubuntu@upnext.fm 'cd /var/www/upnext.fm && npm run pull'",
     "deploy:assets": "ssh ubuntu@upnext.fm 'cd /var/www/upnext.fm && npm install && composer update && bin/console cache:clear --no-warmup'",
