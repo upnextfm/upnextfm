@@ -179,39 +179,39 @@ snc_redis:
 ## ########################################################################
 ## Elasticsearch
 ## ########################################################################
-fos_elastica:
-    clients:
-      default:
-        host: localhost
-        port: 9200
-    serializer: ~
-    indexes:
-      app:
-        types:
-          video:
-            serializer:
-              groups: [elastica]
-            persistence:
-              driver: orm
-              model: AppBundle\Entity\Video
-              provider: ~
-              finder: ~
-          video_log:
-            serializer:
-              groups: [elastica]
-            persistence:
-              driver: orm
-              model: AppBundle\Entity\VideoLog
-              provider: ~
-              finder: ~
-          chat_log:
-            serializer:
-              groups: [elastica]
-            persistence:
-              driver: orm
-              model: AppBundle\Entity\ChatLog
-              provider: ~
-              finder: ~
+#fos_elastica:
+#    clients:
+#      default:
+#        host: localhost
+#        port: 9200
+#    serializer: ~
+#    indexes:
+#      app:
+#        types:
+#          video:
+#            serializer:
+#              groups: [elastica]
+#            persistence:
+#              driver: orm
+#              model: AppBundle\Entity\Video
+#              provider: ~
+#              finder: ~
+#          video_log:
+#            serializer:
+#              groups: [elastica]
+#            persistence:
+#              driver: orm
+#              model: AppBundle\Entity\VideoLog
+#              provider: ~
+#              finder: ~
+#          chat_log:
+#            serializer:
+#              groups: [elastica]
+#            persistence:
+#              driver: orm
+#              model: AppBundle\Entity\ChatLog
+#              provider: ~
+#              finder: ~
 
 ## ########################################################################
 ## Websockets
@@ -233,31 +233,31 @@ gos_web_socket:
 ## ########################################################################
 ## RabbitMQ
 ## ########################################################################
-old_sound_rabbit_mq:
-  connections:
-    default:
-      host:     "%rabbit_mq_connections_default_host%"
-      port:     "%rabbit_mq_connections_default_port%"
-      user:     "%rabbit_mq_connections_default_user%"
-      password: "%rabbit_mq_connections_default_pass%"
-      vhost:    "/"
-      lazy:     true
-  producers:
-    save_video:
-      connection: default
-      exchange_options:
-        name: "save-video"
-        type: direct
-      service_alias: my_app_service # no alias by default
-  consumers:
-    save_video:
-      connection: default
-      exchange_options:
-        name: "save-video"
-        type: direct
-      queue_options:
-        name: "save-video"
-      callback: app_rabbitmq_save_video_consumer
+#old_sound_rabbit_mq:
+#  connections:
+#    default:
+#      host:     "%rabbit_mq_connections_default_host%"
+#      port:     "%rabbit_mq_connections_default_port%"
+#      user:     "%rabbit_mq_connections_default_user%"
+#      password: "%rabbit_mq_connections_default_pass%"
+#      vhost:    "/"
+#      lazy:     true
+#  producers:
+#    save_video:
+#      connection: default
+#      exchange_options:
+#        name: "save-video"
+#        type: direct
+#      service_alias: my_app_service # no alias by default
+#  consumers:
+#    save_video:
+#      connection: default
+#      exchange_options:
+#        name: "save-video"
+#        type: direct
+#      queue_options:
+#        name: "save-video"
+#      callback: app_rabbitmq_save_video_consumer
 
 ## ########################################################################
 ## AWS
