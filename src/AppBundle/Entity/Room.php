@@ -29,7 +29,7 @@ class Room
   /**
    * @var string
    * @Groups({"elastica"})
-   * @ORM\Column(name="display_name", type="string", length=50, nullable=false)
+   * @ORM\Column(name="display_name", type="string", length=50, nullable=true)
    */
   protected $displayName = "";
 
