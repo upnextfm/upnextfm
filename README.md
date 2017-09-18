@@ -18,9 +18,20 @@ git clone git@github.com:upnextfm/upnextfm.git
 cd upnextfm
 npm install
 composer install
+npm run build
 ```
 
-Setup Nginx using the [example configuration](docs/nginx.md).
+Install the parameters.yml file per @headzoo's instructions, and then run the database migrations.
+
+```
+php bin/console doctrine:migrations:migrate
+```
+
+Setup Nginx using the [example configuration](docs/nginx.md) or run the Symfony dev web server using the following command.
+
+```
+php bin/console server:run
+```
 
 ## Running
 The app has a socket server which needs to be running in order for the chat rooms to work. It can be started using the following command:
