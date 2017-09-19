@@ -114,7 +114,6 @@ function message(state, action) {
  * @returns {*}
  */
 export default function roomReducer(state = initialState.room, action = {}) {
-  console.log(action);
   switch (action.type) {
     case types.ROOM_NAME:
       return Object.assign({}, state, {
