@@ -27,13 +27,15 @@ Install the parameters.yml file per @headzoo's instructions, and then run the da
 php bin/console doctrine:migrations:migrate
 ```
 
+Out of the box the dev site is configured to run on the domain dev.upnext.fm. You can create the domain on your PC by adding `127.0.0.1 dev.upnext.fm` to your _hosts_ file. See [the instructions here](https://support.rackspace.com/how-to/modify-your-hosts-file/) for editing the file.
+
+## Running
 Setup Nginx using the [example configuration](docs/nginx.md) or run the Symfony dev web server using the following command.
 
 ```
 php bin/console server:run
 ```
 
-## Running
 The app has a socket server which needs to be running in order for the chat rooms to work. It can be started using the following command:
 
 ```
