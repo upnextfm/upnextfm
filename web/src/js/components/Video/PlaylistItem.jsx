@@ -43,7 +43,7 @@ export default class PlaylistItem extends React.PureComponent {
           {video.title}
         </div>
         <div className="up-info">
-          {formatSeconds(video.seconds)} &middot; Played by {video.playedBy}
+          {formatSeconds(video.seconds)} &middot; Queued by {video.playedBy} &middot; First played by {video.createdBy}
         </div>
       </div>
     );
