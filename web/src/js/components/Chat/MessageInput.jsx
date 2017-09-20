@@ -40,6 +40,7 @@ export default class MessageInput extends React.PureComponent {
 
   componentDidMount() {
     this.focus();
+    document.addEventListener('click', this.handleDocumentClick);
   }
 
   componentDidUpdate() {
@@ -47,6 +48,10 @@ export default class MessageInput extends React.PureComponent {
       this.historyMoving = false;
       this.moveCaretToEnd();
     }
+  }
+
+  componentDidUnmount() {
+    document.removeEventListener('click', this.handleDocumentClick);
   }
 
   focus = () => {
@@ -109,14 +114,21 @@ export default class MessageInput extends React.PureComponent {
   };
 
   handleChangeTextColor = (e) => {
-    this.setState({ pickerOpen: false });
     this.props.onColorChange(e.hex);
   };
 
   handleClickSwatch = () => {
-    if (!this.state.pickerOpen) {
-      this.setState({ pickerOpen: !this.state.pickerOpen });
+    this.setState({ pickerOpen: !this.state.pickerOpen });
+  };
+
+  handleDocumentClick = (e) => {
+    if (!e.target.classList.contains('up-room-color__swatch')) {
+      this.setState({ pickerOpen: false });
     }
+  };
+
+  handleClickPicker = (e) => {
+    e.stopPropagation();
   };
 
   renderButtonColor() {
@@ -130,7 +142,7 @@ export default class MessageInput extends React.PureComponent {
         onClick={this.handleClickSwatch}
       >
         {pickerOpen && (
-          <div className="up-room-color__container">
+          <div className="up-room-color__container" onClick={this.handleClickPicker}>
             <ChromePicker
               color={settings.user.textColor}
               className="up-room-color__picker"
