@@ -101,7 +101,7 @@ class Nav extends React.PureComponent {
                 <MuteIcon isMuted={video.isMuted} />
               </IconButton>
               <IconButton onClick={this.handleClickScroll}>
-                <Icon name="arrow_right" />
+                <Icon name="keyboard_arrow_right" />
               </IconButton>
             </div>
           </Hidden>
