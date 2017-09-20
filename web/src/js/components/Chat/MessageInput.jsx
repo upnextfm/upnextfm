@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
+import { ChromePicker } from 'react-color';
 import Icon from 'components/Icon';
 
 const KEY_TAB   = 9;
@@ -10,22 +11,25 @@ const KEY_DOWN  = 40;
 
 export default class MessageInput extends React.PureComponent {
   static propTypes = {
-    settings:    PropTypes.object,
-    tabComplete: PropTypes.array,
-    onSend:      PropTypes.func,
-    onAttach:    PropTypes.func
+    settings:      PropTypes.object,
+    tabComplete:   PropTypes.array,
+    onSend:        PropTypes.func,
+    onAttach:      PropTypes.func,
+    onColorChange: PropTypes.func
   };
 
   static defaultProps = {
-    tabComplete: [],
-    onSend:      () => {},
-    onAttach:    () => {}
+    tabComplete:   [],
+    onSend:        () => {},
+    onAttach:      () => {},
+    onColorChange: () => {}
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      value: ''
+      value:      '',
+      pickerOpen: false
     };
 
     this.inputRef      = null;
@@ -104,6 +108,41 @@ export default class MessageInput extends React.PureComponent {
     }
   };
 
+  handleChangeTextColor = (e) => {
+    this.setState({ pickerOpen: false });
+    this.props.onColorChange(e.hex);
+  };
+
+  handleClickSwatch = () => {
+    if (!this.state.pickerOpen) {
+      this.setState({ pickerOpen: !this.state.pickerOpen });
+    }
+  };
+
+  renderButtonColor() {
+    const { settings } = this.props;
+    const { pickerOpen } = this.state;
+
+    return (
+      <div
+        className="up-room-color__swatch"
+        style={{ backgroundColor: settings.user.textColor, marginLeft: 6 }}
+        onClick={this.handleClickSwatch}
+      >
+        {pickerOpen && (
+          <div className="up-room-color__container">
+            <ChromePicker
+              color={settings.user.textColor}
+              className="up-room-color__picker"
+              onChangeComplete={this.handleChangeTextColor}
+              disableAlpha
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+
   renderButtonAttach() {
     return (
       <IconButton
@@ -144,6 +183,7 @@ export default class MessageInput extends React.PureComponent {
           onKeyDown={this.handleKeyDownInput}
           ref={(ref) => { this.inputRef = ref; }}
         />
+        {this.renderButtonColor()}
         {this.renderButtonAttach()}
         {this.renderButtonSend()}
       </div>

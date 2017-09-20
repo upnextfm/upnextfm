@@ -468,6 +468,35 @@ $height-avatar-collapsed: auto;
   height: 100% !important;
 }
 
+.up-room-color__picker {
+  background: $color-bg !important;
+
+  & > div {
+    background: $color-bg !important;
+  }
+
+  input {
+    color: #FFF !important;
+  }
+}
+
+.up-room-color__swatch {
+  width: 48px;
+  height: 26px;
+  margin-top: 10px;
+  border-radius: 1px;
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+}
+
+.up-room-color__container {
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  right: 0;
+}
+
 #up-datboi {
   position: absolute;
   right: -400px;

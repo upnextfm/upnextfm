@@ -28,7 +28,8 @@ export default {
   },
   settings: {
     user: {
-      showNotices: true
+      showNotices: true,
+      textColor:   '#FFFFFF'
     },
     socket: {
       pingInterval: 30000,

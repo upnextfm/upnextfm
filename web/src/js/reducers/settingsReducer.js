@@ -19,22 +19,28 @@ import initialState from 'store/initialState';
 export default function settingsReducer(state = initialState.settings, action = {}) {
   switch (action.type) {
     case types.SETTINGS_ALL:
+      return Object.assign({}, state, {
+        user:   Object.assign({}, state.user, action.settings.user),
+        room:   Object.assign({}, state.room, action.settings.room),
+        site:   Object.assign({}, state.site, action.settings.site),
+        socket: Object.assign({}, state.socket, action.settings.socket)
+      });
       return Object.assign({}, state, action.settings);
     case types.SETTINGS_USER:
       return Object.assign({}, state, {
-        user: action.settings
+        user: Object.assign({}, state.user,  action.settings)
       });
     case types.SETTINGS_SITE:
       return Object.assign({}, state, {
-        site: action.settings
+        site: Object.assign({}, state.site,  action.settings)
       });
     case types.SETTINGS_ROOM:
       return Object.assign({}, state, {
-        room: action.settings
+        room: Object.assign({}, state.room,  action.settings)
       });
     case types.SETTINGS_SOCKET:
       return Object.assign({}, state, {
-        socket: action.settings
+        socket: Object.assign({}, state.socket,  action.settings)
       });
     default:
       return state;

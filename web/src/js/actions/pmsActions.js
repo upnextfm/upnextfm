@@ -114,11 +114,12 @@ export function pmsSend(to, message) {
     }
 
     dispatch(pmsSending(true));
+    const textColor = getState().settings.user.textColor;
     api.socket.publish(types.CHAN_PMS, {
       cmd:     types.CMD_SEND,
       message: {
         to,
-        message
+        message: `[${textColor}]${message}[/#]`
       }
     });
   };

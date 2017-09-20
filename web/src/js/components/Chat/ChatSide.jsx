@@ -5,6 +5,7 @@ import Favico from 'favico.js';
 import Uploads from 'api/Uploads';
 import { connect } from 'react-redux';
 import { pmsSubscribe } from 'actions/pmsActions';
+import { settingsUser } from 'actions/settingsActions';
 import { roomJoin, roomSend } from 'actions/roomActions';
 import { layoutWindowFocused, layoutToggleUsersCollapsed, layoutSwitchActiveChat, layoutErrorMessage } from 'actions/layoutActions';
 import { domOnWindowBlur } from 'utils/dom';
@@ -64,6 +65,10 @@ class ChatSide extends React.PureComponent {
 
   handleAttachInput = () => {
     this.messagesPanelRef.openUpload();
+  };
+
+  handleColorChangeInput = (textColor) => {
+    this.props.dispatch(settingsUser({ textColor }));
   };
 
   handleClickUser = (username) => {
@@ -137,6 +142,7 @@ class ChatSide extends React.PureComponent {
         tabComplete={this.props.room.users}
         onSend={this.handleSendInput}
         onAttach={this.handleAttachInput}
+        onColorChange={this.handleColorChangeInput}
         ref={(ref) => { this.messageInputRef = ref; }}
       />
     );

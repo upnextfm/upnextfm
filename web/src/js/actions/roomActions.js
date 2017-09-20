@@ -133,10 +133,12 @@ function handleCommandSend(msg, dispatch, getState, api) {
     if (!getState().user.isAuthenticated) {
       dispatch(layoutToggleLoginDialog());
     } else {
+      const textColor = getState().settings.user.textColor;
       api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-        cmd:     types.CMD_SEND,
-        date:    (new Date()).toString(),
-        message: msg
+        cmd:       types.CMD_SEND,
+        date:      (new Date()).toString(),
+        textColor: getState().settings.user.textColor,
+        message:   `[${textColor}]${msg}[/#]`
       });
     }
   }
