@@ -43,7 +43,9 @@ export default class PlaylistItem extends React.PureComponent {
           {video.title}
         </div>
         <div className="up-info">
-          {formatSeconds(video.seconds)} &middot; Queued by {video.playedBy} &middot; First played by {video.createdBy}
+          {formatSeconds(video.seconds)} {''}
+          &middot; Queued by <a href={`/u/${video.playedBy}`} target="_blank">{video.playedBy}</a> {''}
+          &middot; First played by <a href={`/u/${video.createdBy}`} target="_blank">{video.createdBy}</a>
         </div>
       </div>
     );

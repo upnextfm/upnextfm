@@ -367,6 +367,13 @@ $height-avatar-collapsed: auto;
   .up-info {
     font-size: 0.8rem;
   }
+
+  a {
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .up-room-playlist__item__controls {
