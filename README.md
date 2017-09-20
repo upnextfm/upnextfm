@@ -14,7 +14,7 @@ The new and improved upnext.fm website.
 Clone the repo to your web root and install the dependencies. You will need to get a copy of the parameters.yml from @headzoo, which needs to be saved to the project directory after cloning.
 
 ```
-git clone git@github.com:upnextfm/upnextfm.git
+git clone https://github.com/upnextfm/upnextfm.git
 cd upnextfm
 npm install
 composer install
