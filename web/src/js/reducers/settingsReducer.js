@@ -1,5 +1,19 @@
 import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
+import Storage from 'api/Storage';
+
+/**
+ * @param {*} state
+ * @param {*} action
+ * @returns {*}
+ */
+function user(state, action) {
+  const user = Object.assign({}, state.user,  action.settings);
+  Storage.setItem('settings:user:textColor', user.textColor);
+  return Object.assign({}, state, {
+    user
+  });
+}
 
 /**
  * Settings reducer
@@ -27,9 +41,7 @@ export default function settingsReducer(state = initialState.settings, action = 
       });
       return Object.assign({}, state, action.settings);
     case types.SETTINGS_USER:
-      return Object.assign({}, state, {
-        user: Object.assign({}, state.user,  action.settings)
-      });
+      return user(state, action);
     case types.SETTINGS_SITE:
       return Object.assign({}, state, {
         site: Object.assign({}, state.site,  action.settings)
