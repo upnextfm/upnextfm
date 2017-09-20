@@ -43,6 +43,7 @@ $dropdown-color: #FFF;
 $dropdown-bg-color: lighten($color-secondary, 5%);
 $dropdown-hover-bg-color: lighten($color-secondary, 10%);
 $button-flat-color: #FFF;
+$button-background-focus: none;
 
 // Shadows
 $shadow-inset: inset 0 2px 2px 0 rgba(0,0,0,.14);
