@@ -7,8 +7,8 @@ import Card, { CardContent, CardMedia } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
 import Slide from 'material-ui/transitions/Slide';
-import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
+import Button from 'components/Button';
 import Icon from 'components/Icon';
 
 export default class SearchResultsDialog extends React.PureComponent {

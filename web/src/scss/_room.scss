@@ -144,14 +144,22 @@ $height-avatar-collapsed: auto;
 
   input {
     width: 100%;
+    height: auto !important;
     flex-grow: 1;
     outline: 0;
     border: 0;
     color: $color-fg;
     font-size: 1rem;
-    padding: 0 $padding-std * 2;
+    margin: 0 !important;
+    padding: 0 $padding-std * 2 !important;
     background-color: $color-bg;
+    border-bottom: 0 !important;
     border-radius: $border-radius-sm;
+
+    &:focus {
+      border-bottom: 0 !important;
+      box-shadow: none !important;
+    }
   }
 
   button {
@@ -292,8 +300,17 @@ $height-avatar-collapsed: auto;
     border: 0;
     color: $color-fg;
     font-size: 1rem;
-    padding: 0 $padding-std * 2;
     background-color: $card-bg-color;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 $padding-std * 2 !important;
+    border-bottom: 0 !important;
+    border-radius: $border-radius-sm;
+
+    &:focus {
+      border-bottom: 0 !important;
+      box-shadow: none !important;
+    }
   }
 
   button {

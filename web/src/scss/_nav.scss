@@ -1,17 +1,16 @@
 @import "vars";
 @import "mixins";
 
-nav {
-  background-color: $color-nav;
-}
-
-.up-nav-wrapper {
+.up-nav {
   color: #FFF !important;
   height: $nav-height !important;
   min-height: $nav-height !important;
+  padding: $padding-std !important;
   display: flex;
   align-items: center;
-  background-color: $color-nav !important;
+  z-index: 3;
+  background-color: $color-nav;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 
   .right {
     margin-left: auto;
@@ -23,6 +22,17 @@ nav {
     margin-left: 190px;
     display: flex;
     align-items: center;
+  }
+
+  .up-btn {
+    background-color: $color-nav;
+    box-shadow: none;
+  }
+
+  .up-icon {
+    font-size: 24px;
+    height: 42px;
+    line-height: 42px;
   }
 }
 
@@ -50,6 +60,7 @@ nav {
 }
 
 .up-nav__user {
+
   a {
     display: flex;
     align-items: center;
@@ -74,19 +85,6 @@ nav ul a {
   &.up-active {
     background-color: lighten($color-nav, 5%);
   }
-}
-
-.up-nav {
-  color: #FFF !important;
-  height: $nav-height !important;
-  min-height: $nav-height !important;
-  padding: $padding-std !important;
-  display: flex;
-  text-align: left;
-  position: relative;
-  align-items: center;
-  z-index: 3;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .up-nav--video {

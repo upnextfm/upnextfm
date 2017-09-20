@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog, { DialogActions, DialogContent, DialogTitle, DialogContentText } from 'material-ui/Dialog';
 import Slide from 'material-ui/transitions/Slide';
-import Button from 'material-ui/Button';
+import Button from 'components/Button';
 
 export default class Component extends React.PureComponent {
   static propTypes = {

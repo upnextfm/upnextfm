@@ -1,0 +1,15 @@
+@import "vars";
+@import "mixins";
+
+.up-btn {
+  background-color: $color-nav;
+
+  &:hover,
+  &.up-active {
+    background-color: lighten($color-nav, 5%);
+  }
+}
+
+.up-btn.btn-floating .up-icon {
+  line-height: 36px;
+}

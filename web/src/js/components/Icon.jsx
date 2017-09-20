@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 const Icon = ({ name, className, ...props }) => (
-  <i className={classNames('material-icons', className)} {...props}>
+  <i className={classNames('up-icon material-icons', className)} {...props}>
     {name}
   </i>
 );

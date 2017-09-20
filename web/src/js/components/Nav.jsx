@@ -2,18 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Hidden from 'material-ui/Hidden';
-import AppBar from './Nav/AppBar';
-import Toolbar from './Nav/Toolbar';
-import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import { animateScrollLeft } from 'utils/animate';
 import { playerToggleMute, playerTogglePlay } from 'actions/playerActions';
 import { layoutToggleNavDrawer, layoutToggleLoginDialog, layoutToggleRegisterDialog } from 'actions/layoutActions';
 import { userLogout } from 'actions/userActions';
+import AppBar from 'components/Nav/AppBar';
+import Navbar from 'components/Nav/Navbar';
 import NavDrawer from 'components/NavDrawer';
 import MuteIcon from 'components/Icons/MuteIcon';
 import PlayIcon from 'components/Icons/PlayIcon';
 import Icon from 'components/Icon';
+import Button from 'components/Button';
 
 class Nav extends React.PureComponent {
   static propTypes = {
@@ -68,7 +68,7 @@ class Nav extends React.PureComponent {
 
     return (
       <AppBar>
-        <Toolbar>
+        <Navbar>
           <IconButton aria-label="Menu" onClick={this.handleClickMenu}>
             <Icon name="menu" />
           </IconButton>
@@ -105,7 +105,7 @@ class Nav extends React.PureComponent {
               </IconButton>
             </div>
           </Hidden>
-        </Toolbar>
+        </Navbar>
         <NavDrawer
           user={user}
           roomName={roomName}

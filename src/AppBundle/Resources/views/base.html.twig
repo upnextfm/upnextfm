@@ -11,9 +11,7 @@
             <link href="{{ asset('build/css/loader.css') }}" rel="stylesheet" />
             <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
             <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-            {% if materialize|default  %}
-                <link href="{{ asset('build/css/materialize.css') }}" rel="stylesheet" />
-            {% endif %}
+            <link href="{{ asset('build/css/materialize.css') }}" rel="stylesheet" />
             <link href="{{ asset('build/css/app.css') }}" rel="stylesheet" />
         {% endblock %}
     </head>
@@ -29,9 +27,7 @@
         {% block javascripts %}
             <script src="//apis.google.com/js/api.js"></script>
             <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-            {% if materialize|default  %}
-                <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
-            {% endif %}
+            <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
             <script src="{{ asset('js/autobahn.min.js') }}"></script>
             <script src="{{ asset('build/js/app.js') }}"></script>
             {% if app.environment == "dev" %}

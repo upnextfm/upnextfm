@@ -1,42 +1,40 @@
 <nav class="up-nav">
-    <div class="nav-wrapper up-nav-wrapper">
-        <a href="/" class="brand-logo">
-            <img src="{{ asset('images/logo-brand.png') }}" />
-        </a>
-        <a href="#" id="up-nav-toggle" data-activates="slide-out" class="button-collapse">
-            <i class="material-icons">menu</i>
-        </a>
-        <ul id="nav-mobile" class="left">
-            <li class="hide-on-med-and-down">
-                <a href="#!" class="{% if activeTab == "charts" %}up-active{% endif %}">Charts</a>
-            </li>
-            <li class="hide-on-med-and-down">
-                <a href="{{ path("playlist_recent") }}" class="{% if activeTab == "recent" %}up-active{% endif %}">Recent</a>
-            </li>
-            <li class="hide-on-med-and-down">
-                <a href="{{ path("chat_logs") }}" class="{% if activeTab == "chat_logs" %}up-active{% endif %}">Logs</a>
-            </li>
-        </ul>
+    <a href="/" class="brand-logo">
+        <img src="{{ asset('images/logo-brand.png') }}" />
+    </a>
+    <a href="#" id="up-nav-toggle" data-activates="slide-out" class="button-collapse">
+        <i class="material-icons">menu</i>
+    </a>
+    <ul id="nav-mobile" class="left">
+        <li class="hide-on-med-and-down">
+            <a href="#!" class="{% if activeTab == "charts" %}up-active{% endif %}">Charts</a>
+        </li>
+        <li class="hide-on-med-and-down">
+            <a href="{{ path("playlist_recent") }}" class="{% if activeTab == "recent" %}up-active{% endif %}">Recent</a>
+        </li>
+        <li class="hide-on-med-and-down">
+            <a href="{{ path("chat_logs") }}" class="{% if activeTab == "chat_logs" %}up-active{% endif %}">Logs</a>
+        </li>
+    </ul>
 
-        <ul class="right">
-            {% if app.user %}
-                <li class="up-nav__user">
-                    <a href="#!" class="dropdown-button" data-activates="up-user-dropdown">
-                        <img src="{{ app.user.info.avatarSm }}" class="up-avatar" />
-                        <span class="up-username hide-on-med-and-down">
-                            {{ app.user.username }}
-                        </span>
-                    </a>
-                </li>
-            {% else %}
-                <li>
-                    {% if not app.user %}
-                        <a href="{{ path("fos_user_security_login") }}">Login</a>
-                    {% endif %}
-                </li>
-            {% endif %}
-        </ul>
-    </div>
+    <ul class="right">
+        {% if app.user %}
+            <li class="up-nav__user">
+                <a href="#!" class="dropdown-button" data-activates="up-user-dropdown">
+                    <img src="{{ app.user.info.avatarSm }}" class="up-avatar" />
+                    <span class="up-username hide-on-med-and-down">
+                        {{ app.user.username }}
+                    </span>
+                </a>
+            </li>
+        {% else %}
+            <li>
+                {% if not app.user %}
+                    <a href="{{ path("fos_user_security_login") }}">Login</a>
+                {% endif %}
+            </li>
+        {% endif %}
+    </ul>
 </nav>
 {% if app.user %}
     <ul id="up-user-dropdown" class="dropdown-content">
