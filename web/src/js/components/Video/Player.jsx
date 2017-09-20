@@ -44,6 +44,10 @@ class Player extends React.PureComponent {
     clearInterval(this.interval);
   }
 
+  componentDidCatch(error) {
+    console.error(error);
+  }
+
   shouldSeekTo = () => {
     const diff = this.props.player.time - this.provider.getCurrentTime();
     return diff > 5;

@@ -34,6 +34,10 @@ class Room extends React.PureComponent {
     props.dispatch(userUsername(props.username));
   }
 
+  componentDidCatch(error) {
+    console.error(error);
+  }
+
   handleCloseErrorSnackbar = () => {
     this.props.dispatch(layoutErrorMessage(''));
   };
