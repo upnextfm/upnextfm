@@ -40,7 +40,8 @@ $(() => {
     const room    = $target.data('room');
     if (room && playID) {
       fetch(`/api/r/${room}/playlist/${playID}`, {
-        method: 'PUT'
+        method:      'PUT',
+        credentials: 'same-origin'
       })
         .then(() => {
           modal.modal('close');

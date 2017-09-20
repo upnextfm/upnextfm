@@ -70,6 +70,11 @@ class RoomController extends Controller
    */
   public function apiPlaylistAddAction($name, $playID)
   {
+    $user = $this->getUser();
+    if (!($user instanceof UserInterface)) {
+      throw $this->createAccessDeniedException();
+    }
+
     $em = $this->getDoctrine();
     $videoRepo = $em->getRepository("AppBundle:VideoLog");
 
@@ -80,10 +85,11 @@ class RoomController extends Controller
     }
 
     $redis = $this->get("snc_redis.video");
-    $redis->set("playlist:play", json_encode([
+    $redis->rpush("playlist:append", [json_encode([
+      "username" => $user->getUsername(),
       "roomName" => $room->getName(),
       "videoID"  => $videoLog->getVideo()->getId()
-    ]));
+    ])]);
 
     return new Response(json_encode([
       "name"   => $room->getName(),

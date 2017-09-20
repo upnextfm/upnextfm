@@ -316,17 +316,6 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       usleep(500);
     }
 
-    if (!$this->playlist->getCurrent($room)) {
-      if ($current = $this->playlist->popToCurrent($room)) {
-        $videoLog = $current["videoLog"];
-        $this->sendToRoom($room, [
-          "cmd"   => VideoCommands::START,
-          "video" => $this->serializeVideo($videoLog),
-          "start" => 0
-        ]);
-      }
-    }
-
     return $this->sendPlaylistToRoom($room);
   }
 
@@ -459,6 +448,35 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
           }
         }
     });
+
+    $this->periodicTimer->addPeriodicTimer(
+      $this,
+      "append",
+      1,
+      function() use ($topic) {
+        $item = $this->redis->lpop("playlist:append");
+        if ($item) {
+          $item  = json_decode($item, true);
+          $user  = $this->em->getRepository("AppBundle:User")->findByUsername($item["username"]);
+          $room  = $this->em->getRepository("AppBundle:Room")->findByName($item["roomName"]);
+          $video = $this->em->getRepository("AppBundle:Video")->findByID($item["videoID"]);
+
+          /** @var VideoLog $videoLog */
+          $video->setDateLastPlayed(new \DateTime());
+          $video->incrNumPlays();
+          $videoLog = new VideoLog($video, $room, $user);
+          $videoLog = $this->em->merge($videoLog);
+          $this->em->flush();
+
+          $this->playlist->append($videoLog);
+          $event = new PlayedVideoEvent($user, $room, $videoLog->getVideo());
+          $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
+          usleep(500);
+
+          $this->sendPlaylistToRoom($room);
+        }
+      }
+    );
   }
 
   /**
@@ -510,10 +528,24 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
 
   /**
    * @param Room $room
+   * @param bool $playOnEmpty
    * @return bool
    */
-  private function sendPlaylistToRoom(Room $room)
+  private function sendPlaylistToRoom(Room $room, $playOnEmpty = true)
   {
+    if ($playOnEmpty) {
+      if (!$this->playlist->getCurrent($room)) {
+        if ($current = $this->playlist->popToCurrent($room)) {
+          $videoLog = $current["videoLog"];
+          $this->sendToRoom($room, [
+            "cmd"   => VideoCommands::START,
+            "video" => $this->serializeVideo($videoLog),
+            "start" => 0
+          ]);
+        }
+      }
+    }
+
     $videos = [];
     foreach($this->playlist->getAll($room) as $videoLog) {
       $videos[] = $this->serializeVideo($videoLog);
