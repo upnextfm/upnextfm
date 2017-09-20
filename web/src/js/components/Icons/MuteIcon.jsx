@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import VolumeOff from 'material-ui-icons/VolumeOff';
-import VolumeUp from 'material-ui-icons/VolumeUp';
+import Icon from 'components/Icon';
 
 const MuteIcon = ({ isMuted, ...props }) => (
-  isMuted ? <VolumeOff {...props} /> : <VolumeUp {...props} />
+  isMuted ? <Icon name="volume_off" {...props} /> : <Icon name="volume_up" {...props} />
 );
 
 MuteIcon.propTypes = {

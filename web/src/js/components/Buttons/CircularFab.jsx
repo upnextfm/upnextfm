@@ -4,8 +4,7 @@ import { withStyles, createStyleSheet } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import green from 'material-ui/colors/green';
 import Button from 'material-ui/Button';
-import CheckIcon from 'material-ui-icons/Check';
-import SaveIcon from 'material-ui-icons/Save';
+import Icon from 'components/Icon';
 
 const styleSheet = createStyleSheet({
   wrapper: {
@@ -50,7 +49,7 @@ class CircularFab extends Component {
     return (
       <div className={classes.wrapper}>
         <Button fab color="primary" className={buttonClass} onClick={this.props.onClick}>
-          {success ? <CheckIcon /> : <SaveIcon />}
+          {success ?  <Icon name="check" /> : <Icon name="save" />}
         </Button>
         {loading && <CircularProgress size={60} className={classes.progress} />}
       </div>

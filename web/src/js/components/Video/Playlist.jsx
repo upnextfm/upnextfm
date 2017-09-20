@@ -6,12 +6,10 @@ import * as actions from 'actions/playlistActions';
 import { search } from 'actions/searchActions';
 import List, { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
-import AddIcon from 'material-ui-icons/Add';
-import SearchIcon from 'material-ui-icons/Search';
-import MoreIcon from 'material-ui-icons/MoreVert';
 import { formatSeconds } from 'utils/media';
 import PlaylistItem from 'components/Video/PlaylistItem';
 import PlaylistMenu from 'components/Video/PlaylistMenu';
+import Icon from 'components/Icon';
 
 class Playlist extends React.PureComponent {
   static propTypes = {
@@ -102,8 +100,7 @@ class Playlist extends React.PureComponent {
 
   renderInput() {
     const iconStyles = {
-      width:  36,
-      height: 36
+      fontSize: 36
     };
 
     return (
@@ -118,9 +115,9 @@ class Playlist extends React.PureComponent {
         />
         <IconButton onClick={this.handleClickAppend}>
           {this.state.isSearching ? (
-            <SearchIcon title="Search" style={iconStyles} />
+            <Icon name="search" title="Search" style={iconStyles} />
           ) : (
-            <AddIcon title="Append" style={iconStyles} />
+            <Icon name="add" title="Append" style={iconStyles} />
           )}
         </IconButton>
 
@@ -149,7 +146,7 @@ class Playlist extends React.PureComponent {
         <span>{formatSeconds(seconds)}</span>
         <span>&middot;</span>
         <span>{numVideos} {numVideos === 1 ? 'video' : 'videos'}</span>
-        <span style={{ marginLeft: 'auto', paddingRight: 0 }}><MoreIcon className="up-icon" /></span>
+        <span style={{ marginLeft: 'auto', paddingRight: 0 }}><Icon name="more_vert" className="up-icon" /></span>
       </div>
     );
   }

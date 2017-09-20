@@ -6,14 +6,7 @@ import { layoutToggleNavDrawer, layoutToggleHelpDialog } from 'actions/layoutAct
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
-import StarIcon from 'material-ui-icons/Star';
-import CompareArrows from 'material-ui-icons/CompareArrows';
-import AccountCircle from 'material-ui-icons/AccountCircle';
-import Comment from 'material-ui-icons/Comment';
-import Face from 'material-ui-icons/Face';
-import Favorite from 'material-ui-icons/Favorite';
-import Help from 'material-ui-icons/Help';
-import Info from 'material-ui-icons/Info';
+import Icon from 'components/Icon';
 
 class NavDrawer extends React.PureComponent {
   static propTypes = {
@@ -44,25 +37,25 @@ class NavDrawer extends React.PureComponent {
         <div>
           <ListItem onClick={onClickLogin} button>
             <ListItemIcon>
-              <CompareArrows />
+              <Icon name="compare_arrows" />
             </ListItemIcon>
             <ListItemText primary="Logout" />
           </ListItem>
           <ListItem onClick={() => { window.open(`/u/${user.username}`); }} button>
             <ListItemIcon>
-              <Face />
+              <Icon name="face" />
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListItem>
           <ListItem onClick={() => { window.open(`/u/${user.username}/favorites`); }} button>
             <ListItemIcon>
-              <Favorite />
+              <Icon name="favorite" />
             </ListItemIcon>
             <ListItemText primary="Favorites" />
           </ListItem>
           <ListItem onClick={() => { window.open('/account'); }} button>
             <ListItemIcon>
-              <AccountCircle />
+              <Icon name="account_circle" />
             </ListItemIcon>
             <ListItemText primary="Account" />
           </ListItem>
@@ -73,13 +66,13 @@ class NavDrawer extends React.PureComponent {
         <div>
           <ListItem onClick={onClickLogin} button>
             <ListItemIcon>
-              <CompareArrows />
+              <Icon name="compare_arrows" />
             </ListItemIcon>
             <ListItemText primary="Login" />
           </ListItem>
           <ListItem onClick={onClickRegister} button>
             <ListItemIcon>
-              <StarIcon />
+              <Icon name="star" />
             </ListItemIcon>
             <ListItemText primary="Register" />
           </ListItem>
@@ -91,7 +84,7 @@ class NavDrawer extends React.PureComponent {
       <div>
         <ListItem onClick={() => { window.open(`/chat/logs/${this.props.roomName}`); }} button>
           <ListItemIcon>
-            <Comment />
+            <Icon name="comment" />
           </ListItemIcon>
           <ListItemText primary="Chat Logs" />
         </ListItem>
@@ -102,13 +95,13 @@ class NavDrawer extends React.PureComponent {
       <div>
         <ListItem onClick={() => { dispatch(layoutToggleHelpDialog()); }} button>
           <ListItemIcon>
-            <Help />
+            <Icon name="help" />
           </ListItemIcon>
           <ListItemText primary="Help" />
         </ListItem>
         <ListItem onClick={() => { window.open('/about'); }} button>
           <ListItemIcon>
-            <Info />
+            <Icon name="info" />
           </ListItemIcon>
           <ListItemText primary="About Us" />
         </ListItem>

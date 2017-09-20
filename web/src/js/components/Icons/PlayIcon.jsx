@@ -1,20 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PlayArrow from 'material-ui-icons/PlayArrow';
-import Pause from 'material-ui-icons/Pause';
-import Stop from 'material-ui-icons/Stop';
+import Icon from 'components/Icon';
 
 const PlayIcon = ({ status, ...props }) => {
   let icon;
   switch (status) {
     case -1:
-      icon = <Stop {...props} />;
+      icon = <Icon name="stop" {...props} />;
       break;
     case 2:
-      icon = <PlayArrow {...props} />;
+      icon = <Icon name="play_arrow" {...props} />;
       break;
     default:
-      icon = <Pause {...props} />;
+      icon = <Icon name="pause" {...props} />;
       break;
   }
 

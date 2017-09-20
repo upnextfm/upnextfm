@@ -4,9 +4,9 @@ import { playerTogglePlay, playerToggleMute } from 'actions/playerActions';
 import { formatSeconds } from 'utils/media';
 import eventDispatcher from 'utils/events';
 import IconButton from 'material-ui/IconButton';
-import SkipNext from 'material-ui-icons/SkipNext';
 import MuteIcon from 'components/Icons/MuteIcon';
 import PlayIcon from 'components/Icons/PlayIcon';
+import Icon from 'components/Icon';
 
 class Buttons extends React.PureComponent {
   constructor(props) {
@@ -48,7 +48,7 @@ class Buttons extends React.PureComponent {
           <MuteIcon isMuted={player.isMuted} />
         </IconButton>
         <IconButton title="Vote Skip">
-          <SkipNext />
+          <Icon name="skip_next" />
         </IconButton>
         <div className="up-room-video__clock">
           {formatSeconds(time)} / {formatSeconds(player.duration)}

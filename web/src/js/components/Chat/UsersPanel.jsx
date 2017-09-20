@@ -7,9 +7,9 @@ import Hidden from 'material-ui/Hidden';
 import Avatar from 'material-ui/Avatar';
 import List, { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
-import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import User from 'components/Chat/User';
 import UserMenu from 'components/Chat/UserMenu';
+import Icon from 'components/Icon';
 
 export default class UsersPanel extends React.Component {
   static propTypes = {
@@ -118,11 +118,13 @@ export default class UsersPanel extends React.Component {
         <Hidden xsDown>
           <div className="up-room-users__controls">
             <IconButton className="up-collapse" onClick={onCollapse}>
-              <KeyboardArrowLeft className={classNames(
-                'up-collapse__icon',
-                {
-                  'up-collapsed': isCollapsed
-                }
+              <Icon
+                name="keyboard_arrow_left"
+                className={classNames(
+                  'up-collapse__icon',
+                  {
+                    'up-collapsed': isCollapsed
+                  }
                )}
               />
             </IconButton>

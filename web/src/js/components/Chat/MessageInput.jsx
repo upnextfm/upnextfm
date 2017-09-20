@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
-import Send from 'material-ui-icons/Send';
-import AttachFile from 'material-ui-icons/AttachFile';
+import Icon from 'components/Icon';
 
 const KEY_TAB   = 9;
 const KEY_ENTER = 13;
@@ -113,7 +112,7 @@ export default class MessageInput extends React.PureComponent {
         style={{ marginLeft: 6 }}
         onClick={() => { this.props.onAttach(); }}
       >
-        <AttachFile />
+        <Icon name="attach_file" />
       </IconButton>
     );
   }
@@ -125,7 +124,7 @@ export default class MessageInput extends React.PureComponent {
         aria-label="Send"
         onClick={() => { this.send(); }}
       >
-        <Send />
+        <Icon name="send" />
       </IconButton>
     );
   }

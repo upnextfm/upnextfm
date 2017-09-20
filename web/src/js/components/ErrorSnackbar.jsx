@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui-icons/Close';
-import ErrorIcon from 'material-ui-icons/Error';
+import Icon from 'components/Icon';
 
 export default class ErrorSnackbar extends React.PureComponent {
   static propTypes = {
@@ -36,7 +35,7 @@ export default class ErrorSnackbar extends React.PureComponent {
         }}
         message={(
           <span id="snackbar-message-id" className="up-snackbar__message">
-            <ErrorIcon className="up-icon" />
+            <Icon name="error" className="up-icon" />
             {errorMessage}
           </span>
         )}
@@ -47,7 +46,7 @@ export default class ErrorSnackbar extends React.PureComponent {
             color="inherit"
             onClick={onClose}
           >
-            <CloseIcon />
+            <Icon name="close" />
           </IconButton>
         ]}
       />

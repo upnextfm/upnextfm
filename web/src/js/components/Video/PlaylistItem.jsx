@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MoreIcon from 'material-ui-icons/MoreVert';
 import { formatSeconds } from 'utils/media';
+import Icon from 'components/Icon';
 
 export default class PlaylistItem extends React.PureComponent {
   static propTypes = {
@@ -54,7 +54,8 @@ export default class PlaylistItem extends React.PureComponent {
   renderControls() {
     return (
       <div className="up-room-playlist__item__controls">
-        <MoreIcon
+        <Icon
+          name="more_vert"
           onClick={(e) => { this.props.onClickMenu(e, this.props.video.id); }}
         />
       </div>

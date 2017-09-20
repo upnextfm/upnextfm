@@ -8,8 +8,8 @@ import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
 import Slide from 'material-ui/transitions/Slide';
 import Button from 'material-ui/Button';
-import AddIcon from 'material-ui-icons/Add';
 import Grid from 'material-ui/Grid';
+import Icon from 'components/Icon';
 
 export default class SearchResultsDialog extends React.PureComponent {
   static propTypes = {
@@ -76,7 +76,7 @@ export default class SearchResultsDialog extends React.PureComponent {
                       }}
                       fab
                     >
-                      <AddIcon />
+                      <Icon name="add" />
                     </Button>
                   </CardMedia>
                   <CardContent className="up-card__content">

@@ -6,8 +6,6 @@ import AppBar from './Nav/AppBar';
 import Toolbar from './Nav/Toolbar';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
-import ArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import { animateScrollLeft } from 'utils/animate';
 import { playerToggleMute, playerTogglePlay } from 'actions/playerActions';
 import { layoutToggleNavDrawer, layoutToggleLoginDialog, layoutToggleRegisterDialog } from 'actions/layoutActions';
@@ -15,6 +13,7 @@ import { userLogout } from 'actions/userActions';
 import NavDrawer from 'components/NavDrawer';
 import MuteIcon from 'components/Icons/MuteIcon';
 import PlayIcon from 'components/Icons/PlayIcon';
+import Icon from 'components/Icon';
 
 class Nav extends React.PureComponent {
   static propTypes = {
@@ -71,7 +70,7 @@ class Nav extends React.PureComponent {
       <AppBar>
         <Toolbar>
           <IconButton aria-label="Menu" onClick={this.handleClickMenu}>
-            <MenuIcon />
+            <Icon name="menu" />
           </IconButton>
           <a href="/" className="up-brand">
             <img src="/images/logo-brand.png" alt="Logo" />
@@ -102,7 +101,7 @@ class Nav extends React.PureComponent {
                 <MuteIcon isMuted={video.isMuted} />
               </IconButton>
               <IconButton onClick={this.handleClickScroll}>
-                <ArrowRight />
+                <Icon name="arrow_right" />
               </IconButton>
             </div>
           </Hidden>
