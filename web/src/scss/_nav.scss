@@ -1,13 +1,17 @@
 @import "vars";
 @import "mixins";
 
+nav {
+  background-color: $color-nav;
+}
+
 .up-nav-wrapper {
   color: #FFF !important;
   height: $nav-height !important;
   min-height: $nav-height !important;
   display: flex;
   align-items: center;
-  background-color: $color-secondary !important;
+  background-color: $color-nav !important;
 
   .right {
     margin-left: auto;
@@ -68,7 +72,7 @@ nav ul a {
 
   &:hover,
   &.up-active {
-    background-color: lighten($color-secondary, 5%);
+    background-color: lighten($color-nav, 5%);
   }
 }
 
