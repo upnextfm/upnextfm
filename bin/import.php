@@ -5,7 +5,7 @@ use Madcoda\Youtube\Youtube;
 include(__DIR__ . "/../vendor/autoload.php");
 $params = Yaml::parse(file_get_contents(__DIR__ . "/../app/config/parameters.yml"));
 $params = $params["parameters"];
-
+var_dump($params["database_user"]);
 $pdoUpnext = new \PDO(
   "mysql:dbname=${params['database_name']};host=${params['database_host']};charset=utf8",
   $params["database_user"],
@@ -17,15 +17,15 @@ $pdoCytube = new \PDO(
   $params["database_cytube_password"]
 );
 
-// importUserInfo();
-// importRooms();
-// importRoomSettings();
-// importVideos();
-// importVideoLogs();
-// importChatLogs();
-// importUserEvents();
-// importFavorites();
-importVotes();
+importUserInfo();
+importRooms();
+importRoomSettings();
+importVideos();
+importVideoLogs();
+importChatLogs();
+importUserEvents();
+importFavorites();
+// importVotes();
 
 /**
  *
