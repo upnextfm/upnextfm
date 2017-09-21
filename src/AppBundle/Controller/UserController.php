@@ -2,7 +2,9 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends Controller
 {
@@ -61,6 +63,29 @@ class UserController extends Controller
       "currentPage"    => $page,
       "minPage"        => $minPage,
       "maxPage"        => $maxPage
+    ]);
+  }
+
+  /**
+   * @Route("/account", name="profile")
+   *
+   * @param Request $request
+   * @return Response
+   */
+  public function accountAction(Request $request)
+  {
+    $user = $this->getUser();
+    if (!($user instanceof UserInterface)) {
+      throw $this->createNotFoundException();
+    }
+
+    if ($request->getMethod() === "POST") {
+      dump($request->request->all());
+      die();
+    }
+
+    return $this->render("AppBundle:user:account.html.twig", [
+      "user" => $user
     ]);
   }
 
