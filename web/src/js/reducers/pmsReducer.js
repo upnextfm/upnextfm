@@ -28,10 +28,11 @@ function load(state, action) {
     conversations[key].numNewMessages = 0;
   }
 
-  return Object.assign({}, state, {
+  return {
+    ...state,
     isSending: false,
     conversations
-  });
+  };
 }
 
 /**
@@ -59,10 +60,11 @@ function receive(state, action) {
     }
   }
 
-  return Object.assign({}, state, {
+  return {
+    ...state,
     isSending: false,
     conversations
-  });
+  };
 }
 
 /**
@@ -86,10 +88,11 @@ function sent(state, action) {
     conversations[key].messages.push(msg);
   }
 
-  return Object.assign({}, state, {
+  return {
+    ...state,
     isSending: false,
     conversations
-  });
+  };
 }
 
 /**
@@ -103,9 +106,10 @@ function numNewMessages(state, action) {
   if (state.conversations[action.username] !== undefined) {
     const conversations = Object.assign({}, state.conversations);
     conversations[action.username].numNewMessages = action.numNewMessages;
-    return Object.assign({}, state, {
+    return {
+      ...state,
       conversations
-    });
+    };
   }
 
   return state;
@@ -130,10 +134,16 @@ function numNewMessages(state, action) {
 export default function pmsReducer(state = initialState.pms, action = {}) {
   switch (action.type) {
     case types.PMS_SUBSCRIBED:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isSubscribed: true,
         isSending:    false
-      });
+      };
+    case types.PMS_SENDING:
+      return {
+        ...state,
+        isSending: true
+      };
     case types.PMS_LOAD:
       return load(state, action);
     case types.PMS_SENT:
@@ -142,10 +152,6 @@ export default function pmsReducer(state = initialState.pms, action = {}) {
       return receive(state, action);
     case types.PMS_NUM_NEW_MESSAGES:
       return numNewMessages(state, action);
-    case types.PMS_SENDING:
-      return Object.assign({}, state, {
-        isSending: true
-      });
     default:
       return state;
   }

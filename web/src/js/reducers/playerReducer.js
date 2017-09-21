@@ -18,30 +18,36 @@ import initialState from 'store/initialState';
 export default function playerReducer(state = initialState.player, action = {}) {
   switch (action.type) {
     case types.PLAYER_READY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isMuted:  action.isMuted,
         duration: action.duration
-      });
+      };
     case types.PLAYER_TIME:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         time: action.time
-      });
+      };
     case types.PLAYER_DURATION:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         duration: action.duration
-      });
+      };
     case types.PLAYER_STATUS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         status: action.status
-      });
+      };
     case types.PLAYER_TOGGLE_PLAY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         status: state.status === 1 ? 2 : 1
-      });
+      };
     case types.PLAYER_TOGGLE_MUTE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isMuted: !state.isMuted
-      });
+      };
     default:
       return state;
   }

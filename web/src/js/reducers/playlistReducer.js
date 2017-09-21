@@ -12,9 +12,7 @@ function start(state, action) {
   const current = Object.assign({}, action.current);
   current.start = action.start;
 
-  return Object.assign({}, state, {
-    current
-  });
+  return { ...state, current };
 }
 
 /**
@@ -41,19 +39,22 @@ function start(state, action) {
 export default function playlistReducer(state = initialState.playlist, action = {}) {
   switch (action.type) {
     case types.PLAYLIST_SUBSCRIBE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         subscribed: true
-      });
+      };
     case types.PLAYLIST_VIDEOS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         videos: action.videos
-      });
+      };
+    case types.PLAYLIST_STOP:
+      return {
+        ...state,
+        current: {}
+      };
     case types.PLAYLIST_START:
       return start(state, action);
-    case types.PLAYLIST_STOP:
-      return Object.assign({}, state, {
-        current: {}
-      });
     default:
       return state;
   }

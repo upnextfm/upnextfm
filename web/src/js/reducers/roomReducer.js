@@ -46,9 +46,8 @@ function users(state, action) {
   action.users.forEach((username) => {
     newUsers.push(username);
   });
-  return Object.assign({}, state, {
-    users: newUsers
-  });
+
+  return { ...state, users: newUsers };
 }
 
 /**
@@ -64,9 +63,7 @@ function messages(state, action) {
     newMessages.push(sanitizeMessage(msg));
   });
 
-  return Object.assign({}, state, {
-    messages: newMessages
-  });
+  return { ...state, messages: newMessages };
 }
 
 /**
@@ -78,9 +75,7 @@ function me(state, action) {
   const msgs = state.messages.slice();
   msgs.push(sanitizeMessage(action.message));
 
-  return Object.assign({}, state, {
-    messages: msgs
-  });
+  return { ...state, messages: msgs };
 }
 
 /**
@@ -94,9 +89,7 @@ function message(state, action) {
   const msgs = state.messages.slice();
   msgs.push(sanitizeMessage(action.message));
 
-  return Object.assign({}, state, {
-    messages: msgs
-  });
+  return { ...state, messages: msgs };
 }
 
 /**
@@ -116,21 +109,25 @@ function message(state, action) {
 export default function roomReducer(state = initialState.room, action = {}) {
   switch (action.type) {
     case types.ROOM_NAME:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         name: action.name
-      });
+      };
     case types.ROOM_SEND:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         inputValue: ''
-      });
+      };
     case types.ROOM_INCR_NUM_NEW_MESSAGES:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         numNewMessages: state.numNewMessages + 1
-      });
+      };
     case types.ROOM_RESET_NUM_NEW_MESSAGES:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         numNewMessages: 0
-      });
+      };
     case types.ROOM_JOINED:
       return joined(state, action);
     case types.ROOM_PARTED:

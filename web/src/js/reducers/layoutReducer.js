@@ -24,43 +24,52 @@ import initialState from 'store/initialState';
 export default function layoutReducer(state = initialState.layout, action = {}) {
   switch (action.type) {
     case types.LAYOUT_ERROR_MESSAGE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         errorMessage:  action.errorMessage,
         errorDuration: action.errorDuration
-      });
+      };
     case types.LAYOUT_SWITCH_ACTIVE_CHAT:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         activeChat: action.activeChat.toLowerCase()
-      });
+      };
     case types.LAYOUT_WINDOW_FOCUS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isWindowFocused: action.status === 'focus'
-      });
+      };
     case types.LAYOUT_TOGGLE_NAV_DRAWER:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isNavDrawerOpen: !state.isNavDrawerOpen
-      });
+      };
     case types.LAYOUT_TOGGLE_LOGIN_DIALOG:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isLoginDialogOpen: !state.isLoginDialogOpen
-      });
+      };
     case types.LAYOUT_TOGGLE_REGISTER_DIALOG:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isRegisterDialogOpen: !state.isRegisterDialogOpen
-      });
+      };
     case types.LAYOUT_TOGGLE_HELP_DIALOG:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isHelpDialogOpen: !state.isHelpDialogOpen
-      });
+      };
     case types.LAYOUT_COLS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         colsChatSide:  action.chatSide,
         colsVideoSide: action.videoSide
-      });
+      };
     case types.LAYOUT_TOGGLE_USERS_COLLAPSED:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isUsersCollapsed: !state.isUsersCollapsed
-      });
+      };
     default:
       return state;
   }

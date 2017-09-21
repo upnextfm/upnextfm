@@ -26,9 +26,7 @@ function addRepoUser(state, action) {
  * @returns {*}
  */
 function addRepoUsers(state, action) {
-  return Object.assign({}, state, {
-    repo: action.users
-  });
+  return { ...state, repo: action.users };
 }
 
 /**
