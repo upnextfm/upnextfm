@@ -40,7 +40,7 @@
     <ul id="up-user-dropdown" class="dropdown-content">
         <li><a href="{{ path("profile", {username: app.user.username}) }}">Profile</a></li>
         <li><a href="{{ path("favorites", {username: app.user.username}) }}">Favorites</a></li>
-        <li><a href="#!">Account</a></li>
+        <li><a href="{{ path("account") }}">Account</a></li>
         <li class="divider"></li>
         <li><a href="{{ path("fos_user_security_logout") }}">Logout</a></li>
     </ul>

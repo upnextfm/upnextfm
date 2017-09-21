@@ -67,7 +67,7 @@ class UserController extends Controller
   }
 
   /**
-   * @Route("/account", name="profile")
+   * @Route("/account", name="account")
    *
    * @param Request $request
    * @return Response
