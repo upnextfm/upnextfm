@@ -85,6 +85,7 @@ class Room
     $this->name          = $name;
     $this->createdByUser = $createdByUser;
     $this->dateCreated   = new DateTime();
+    $this->settings      = new RoomSettings();
   }
 
   /**

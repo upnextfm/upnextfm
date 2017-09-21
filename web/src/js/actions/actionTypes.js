@@ -74,6 +74,7 @@ export const CMD_SEND           = 'send';
 export const CMD_ME             = 'me';
 export const CMD_SENT           = 'sent';
 export const CMD_SETTINGS       = 'settings';
+export const CMD_SAVE_SETTINGS  = 'save_settings';
 export const CMD_RECEIVE        = 'receive';
 export const CMD_JOINED         = 'joined';
 export const CMD_PARTED         = 'parted';

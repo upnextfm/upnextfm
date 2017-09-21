@@ -4,6 +4,7 @@ namespace AppBundle\Topic;
 use AppBundle\Entity\ChatLog;
 use AppBundle\Entity\Room;
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserSettings;
 use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
@@ -29,6 +30,7 @@ class RoomTopic extends AbstractTopic
   public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
     try {
+      /** @var User $user */
       $user = $this->getUser($conn);
       if (!($user instanceof UserInterface)) {
         $user = null;
@@ -62,12 +64,15 @@ class RoomTopic extends AbstractTopic
         }
       }
 
+      $settings = $user->getSettings();
+      if (!$settings) {
+        $settings = new UserSettings();
+      }
+
       $conn->event($topic->getId(), [
         "cmd"      => RoomCommands::SETTINGS,
         "settings" => [
-          "user" => [
-            "showNotices" => true
-          ],
+          "user" => $this->serializeUserSettings($settings),
           "site" => $this->container->getParameter("app_site_settings"),
           "room" => $this->serializeRoomSettings($room->getSettings())
         ]
@@ -143,7 +148,6 @@ class RoomTopic extends AbstractTopic
 
       $this->logger->info("Got command " . $event["cmd"], $event);
 
-      $event = array_map("trim", $event);
       if (empty($event["cmd"])) {
         $this->logger->error("cmd not set.", $event);
         return true;
@@ -166,6 +170,9 @@ class RoomTopic extends AbstractTopic
           break;
         case RoomCommands::ME:
           $this->handleMe($conn, $topic, $req, $room, $user, $event);
+          break;
+        case RoomCommands::SAVE_SETTINGS:
+          $this->handleSaveSettings($conn, $topic, $req, $room, $user, $event);
           break;
       }
     } catch (Exception $e) {
@@ -235,5 +242,42 @@ class RoomTopic extends AbstractTopic
       "cmd"     => RoomCommands::ME,
       "message" => $this->serializeMessage($chatLog, "me")
     ]);
+  }
+
+  /**
+   * @param ConnectionInterface $conn
+   * @param Topic $topic
+   * @param WampRequest $req
+   * @param Room $room
+   * @param UserInterface|User $user
+   * @param array $event
+   */
+  protected function handleSaveSettings(
+    ConnectionInterface $conn,
+    Topic $topic,
+    WampRequest $req,
+    Room $room,
+    UserInterface $user,
+    array $event)
+  {
+    if (!isset($event["settings"])) {
+      $event["settings"] = [];
+    }
+    $event["settings"]["showNotices"] = isset($event["settings"]["showNotices"])
+      ? $event["settings"]["showNotices"]
+      : true;
+    $event["settings"]["textColor"] = isset($event["settings"]["textColor"])
+      ? $event["settings"]["textColor"]
+      : "#FFFFFF";
+
+    $settings = $user->getSettings();
+    if (!$settings) {
+      $settings = new UserSettings();
+      $settings->setUser($user);
+      $user->setSettings($settings);
+    }
+    $settings->setShowNotices($event["settings"]["showNotices"]);
+    $settings->setTextColor($event["settings"]["textColor"]);
+    $this->em->flush();
   }
 }

@@ -4,6 +4,7 @@ namespace AppBundle\Topic;
 use AppBundle\Entity\PrivateMessage;
 use AppBundle\Entity\RoomSettings;
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserSettings;
 use AppBundle\Entity\VideoLog;
 use AppBundle\EventListener\Event\CreatedRoomEvent;
 use AppBundle\EventListener\Event\UserEvents;
@@ -162,7 +163,7 @@ abstract class AbstractTopic implements TopicInterface
   }
 
   /**
-   * @param ConnectionInterface $connection
+   * @param ConnectionInterface|User $connection
    * @param array $event
    * @return UserInterface
    */
@@ -222,6 +223,18 @@ abstract class AbstractTopic implements TopicInterface
       "thumbSm"  => $settings->getThumbSm(),
       "thumbMd"  => $settings->getThumbMd(),
       "thumbLg"  => $settings->getThumbLg()
+    ];
+  }
+
+  /**
+   * @param UserSettings $settings
+   * @return array
+   */
+  protected function serializeUserSettings(UserSettings $settings)
+  {
+    return [
+      "showNotices" => $settings->getShowNotices(),
+      "textColor"   => $settings->getTextColor()
     ];
   }
 

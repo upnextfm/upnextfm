@@ -24,6 +24,13 @@ class User extends BaseUser
     protected $info;
 
     /**
+     * @var UserSettings
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\UserSettings", mappedBy="user", fetch="EAGER", cascade={"persist"})
+     */
+    protected $settings;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -47,6 +54,24 @@ class User extends BaseUser
     public function setInfo(UserInfo $info)
     {
       $this->info = $info;
+      return $this;
+    }
+
+  /**
+   * @return UserSettings
+   */
+    public function getSettings()
+    {
+      return $this->settings;
+    }
+
+  /**
+   * @param UserSettings $settings
+   * @return $this
+   */
+    public function setSettings(UserSettings $settings)
+    {
+      $this->settings = $settings;
       return $this;
     }
 }

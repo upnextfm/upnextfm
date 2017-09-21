@@ -1,4 +1,5 @@
 import * as types from 'actions/actionTypes';
+import { roomSaveUserSettings } from 'actions/roomActions';
 
 /**
  *
@@ -15,12 +16,15 @@ export function settingsAll(settings) {
 /**
  *
  * @param {*} settings
- * @returns {{type: string, settings: *}}
+ * @returns {Function}
  */
 export function settingsUser(settings) {
-  return {
-    type: types.SETTINGS_USER,
-    settings
+  return (dispatch, getState) => {
+    dispatch({
+      type: types.SETTINGS_USER,
+      settings
+    });
+    dispatch(roomSaveUserSettings(getState().settings.user));
   };
 }
 

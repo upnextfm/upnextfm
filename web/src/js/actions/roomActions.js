@@ -151,6 +151,27 @@ const commands = {
 };
 
 /**
+ * @param {*} settings
+ * @returns {Function}
+ */
+export function roomSaveUserSettings(settings) {
+  return (dispatch, getState, api) => {
+    const room = getState().room;
+    if (room.name !== '') {
+      if (!getState().user.isAuthenticated) {
+        dispatch(layoutToggleLoginDialog());
+      } else {
+        api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
+          cmd:  types.CMD_SAVE_SETTINGS,
+          type: 'user',
+          settings
+        });
+      }
+    }
+  };
+}
+
+/**
  * @param {string} inputValue
  * @returns {Function}
  */

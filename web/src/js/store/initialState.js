@@ -29,7 +29,7 @@ export default {
   settings: {
     user: {
       showNotices: true,
-      textColor:   Storage.getItem('settings:user:textColor', '#FFFFFF')
+      textColor:   '#FFFFFF'
     },
     socket: {
       pingInterval: 30000,

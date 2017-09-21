@@ -1,6 +1,5 @@
 import * as types from 'actions/actionTypes';
 import initialState from 'store/initialState';
-import Storage from 'api/Storage';
 
 /**
  * @param {*} state
@@ -8,10 +7,8 @@ import Storage from 'api/Storage';
  * @returns {*}
  */
 function user(state, action) {
-  const user = Object.assign({}, state.user,  action.settings);
-  Storage.setItem('settings:user:textColor', user.textColor);
   return Object.assign({}, state, {
-    user
+    user: Object.assign({}, state.user,  action.settings)
   });
 }
 
