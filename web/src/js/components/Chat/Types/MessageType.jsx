@@ -23,7 +23,7 @@ const MessageType = ({ message, user, prevMessage, prevUser, onClickUser, ...pro
         </div>
       )}
       <div className="up-room-message__body">
-        <Parser properties={{ target: '_blank' }}>
+        <Parser>
           {message.message}
         </Parser>
       </div>
