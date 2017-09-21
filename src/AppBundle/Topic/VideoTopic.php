@@ -5,6 +5,7 @@ use AppBundle\Entity\VideoRepository;
 use AppBundle\EventListener\Event\PlayedVideoEvent;
 use AppBundle\EventListener\Event\UserEvents;
 use AppBundle\Playlist\ProvidersInterface;
+use AppBundle\Playlist\RngMod;
 use AppBundle\Service\VideoInfo;
 use AppBundle\Service\VideoService;
 use AppBundle\Storage\PlaylistStorage;
@@ -38,6 +39,11 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
    * @var PlaylistStorage
    */
   protected $playlist;
+
+  /**
+   * @var RngMod
+   */
+  protected $rngmod;
 
   /**
    * @var Redis
@@ -74,6 +80,16 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   public function setPlaylistStorage(PlaylistStorage $playlist)
   {
     $this->playlist = $playlist;
+    return $this;
+  }
+
+  /**
+   * @param RngMod $rngMod
+   * @return $this
+   */
+  public function setRngMod(RngMod $rngMod)
+  {
+    $this->rngmod = $rngMod;
     return $this;
   }
 
@@ -444,6 +460,14 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
               }
             }
           } else {
+            if ($logs = $this->rngmod->findByRoom($room, 3)) {
+              foreach($logs as $videoLog) {
+                $this->playlist->append($videoLog);
+                $event = new PlayedVideoEvent($videoLog->getUser(), $room, $videoLog->getVideo());
+                $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
+              }
+            }
+
             $this->sendPlaylistToRoom($room);
           }
         }

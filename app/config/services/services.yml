@@ -3,6 +3,7 @@ parameters:
     api.controller_response_listener.class: AppBundle\EventListener\ControllerResponseListener
     api.exception_listener.class: AppBundle\EventListener\ExceptionListener
     app.events.user_action_subscriber.class: AppBundle\EventListener\UserEventSubscriber
+    app.playlist.rngmod.class: AppBundle\Playlist\RngMod
 
 services:
     encoder_json:
@@ -170,3 +171,11 @@ services:
     ## ########################################################################
     app.identicon:
       class: Identicon\Identicon
+
+    ## ########################################################################
+    ## RNGMod
+    ## ########################################################################
+    app.playlist.rngmod:
+      class: "%app.playlist.rngmod.class%"
+      arguments:
+        - "@=service('doctrine').getRepository('AppBundle:VideoLog')"
