@@ -52,6 +52,26 @@
     </div>
 {% endmacro %}
 
+{% macro videoCard(played, size = "3") %}
+    <div class="col s12 m4 l{{ size }}">
+        <div class="card up-playlist-card" data-id="{{ played.id }}">
+            <div class="card-image" style="background-color: #{{ played.video.thumbColor }};" aria-hidden="true">
+                <a
+                    class="up-card-image"
+                    href="{{ played.video.permalink }}"
+                    style="background-image: url({{ played.video.thumbSm }});"
+                >
+                </a>
+            </div>
+            <div class="card-content">
+                <h2 class="card-title">
+                    {{ played.video.title }}
+                </h2>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
 {% macro chatLog(log) %}
     <li>
         {{ log.user.username }}
@@ -77,6 +97,30 @@
 
         <li {{ currentPage == maxPage ? 'class="disabled"' }}>
             <a href="{{ path(route, {page: currentPage + 1 <= maxPage ? currentPage+1 : currentPage}) }}">
+                <i class="material-icons">chevron_right</i>
+            </a>
+        </li>
+    </ul>
+{% endmacro %}
+
+{% macro paginationUser(route, username, currentPage, minPage, maxPage) %}
+    <ul class="pagination">
+        <li {{ currentPage == 1 ? 'class="disabled"' }}>
+            <a href="{{ path(route, {username: username, page: currentPage - 1 < 1 ? 1 : currentPage-1}) }}">
+                <i class="material-icons">chevron_left</i>
+            </a>
+        </li>
+
+        {% for i in minPage..maxPage %}
+            <li class="waves-effect{{ currentPage == i ? ' active' }}">
+                <a href="{{ path(route, {username: username, page: i}) }}">
+                    {{ i }}
+                </a>
+            </li>
+        {% endfor %}
+
+        <li {{ currentPage == maxPage ? 'class="disabled"' }}>
+            <a href="{{ path(route, {username: username, page: currentPage + 1 <= maxPage ? currentPage+1 : currentPage}) }}">
                 <i class="material-icons">chevron_right</i>
             </a>
         </li>

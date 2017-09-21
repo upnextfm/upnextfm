@@ -26,16 +26,41 @@ class UserController extends Controller
   }
 
   /**
-   * @Route("/u/{username}/favorites", name="favorites")
+   * @Route("/u/{username}/favorites/{page}", name="favorites", defaults={"page" = 1})
    *
    * @param string $username
+   * @param int $page
    * @return Response
    */
-  public function favoritesAction($username)
+  public function favoritesAction($username, $page = 1)
   {
     $user = $this->findUserOrThrow($username);
+
+    $limit  = 30;
+    $offset = ($page - 1) * 30;
+
+    $em             = $this->getDoctrine()->getManager();
+    $repo           = $em->getRepository("AppBundle:Favorite");
+    $favorites      = $repo->findByUser($user, $limit, $offset);
+    $favoritesCount = $repo->countByUser($user);
+
+    $pages   = ceil($favoritesCount / $limit);
+    $minPage = $page - 4;
+    $maxPage = $page + 4;
+    if ($minPage < 1) {
+      $minPage = 1;
+    }
+    if ($maxPage > $pages) {
+      $maxPage = $pages;
+    }
+
     return $this->render("AppBundle:user:favorites.html.twig", [
-      "user" => $user
+      "user"           => $user,
+      "favorites"      => $favorites,
+      "favoritesCount" => $favoritesCount,
+      "currentPage"    => $page,
+      "minPage"        => $minPage,
+      "maxPage"        => $maxPage
     ]);
   }
 

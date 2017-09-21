@@ -1,8 +1,16 @@
 {% import "AppBundle::macros.html.twig" as macros %}
 {% extends "AppBundle::base.html.twig" %}
-{% block title %}{{ user.username }}'s Favorites{% endblock %}
+{% block title %}Favorites{% endblock %}
 {% block body %}
-    <div class="up-main">
-        Favorites
+    <div class="center-align up-pagination-container" style="margin-bottom: 6px; margin-top: 12px;">
+        {{ macros.paginationUser('favorites', user.username, currentPage, minPage, maxPage) }}
+    </div>
+    <div class="row">
+        {% for favorite in favorites %}
+            {{ macros.videoCard(favorite, 2) }}
+        {% endfor %}
+    </div>
+    <div class="center-align up-pagination-container">
+        {{ macros.paginationUser('favorites', user.username, currentPage, minPage, maxPage) }}
     </div>
 {% endblock %}

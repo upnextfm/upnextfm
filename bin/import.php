@@ -24,6 +24,7 @@ $pdoCytube = new \PDO(
 // importVideoLogs();
 // importChatLogs();
 // importUserEvents();
+importFavorites();
 
 /**
  *
@@ -247,6 +248,40 @@ function importChatLogs()
     ";
     $stmt = $pdoUpnext->prepare($sql);
     $stmt->execute($exec);
+  }
+}
+
+/**
+ *
+ */
+function importFavorites()
+{
+  global $pdoUpnext, $pdoCytube;
+
+  foreach($pdoCytube->query("SELECT * FROM `favorites`") as $row) {
+    $media = fetchCytubeMediaByID($row["media_id"]);
+    if ($media) {
+      $media = fetchVideoByCodename($media["uid"]);
+      $user  = fetchCytubeUserByID($row["user_id"]);
+      if ($media && $user) {
+        $user  = fetchUserByUsername($user["name"]);
+        println($media["codename"]);
+
+        $exec  = [
+          ":video_id"     => $media["id"],
+          ":user_id"      => $user["id"],
+          ":date_created" => timeToDate($row["time"])
+        ];
+        $sql = "
+          INSERT INTO `favorite`
+          (`video_id`, `user_id`, `date_created`)
+          VALUES
+          (:video_id, :user_id, :date_created)
+        ";
+        $stmt = $pdoUpnext->prepare($sql);
+        $stmt->execute($exec);
+      }
+    }
   }
 }
 
