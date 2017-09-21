@@ -24,7 +24,8 @@ $pdoCytube = new \PDO(
 // importVideoLogs();
 // importChatLogs();
 // importUserEvents();
-importFavorites();
+// importFavorites();
+importVotes();
 
 /**
  *
