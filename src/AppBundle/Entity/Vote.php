@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Vote
  *
  * @ORM\Table(name="vote")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\VoteRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\VoteRepository")
  */
 class Vote
 {
@@ -66,6 +66,44 @@ class Vote
         return $this->id;
     }
 
+
+      /**
+       * @return Video
+       */
+      public function getVideo()
+      {
+        return $this->video;
+      }
+
+      /**
+       * @param Video $video
+       * @return Favorite
+       */
+      public function setVideo(Video $video)
+      {
+        $this->video = $video;
+        return $this;
+      }
+
+      /**
+       * @return User
+       */
+      public function getUser()
+      {
+        return $this->user;
+      }
+
+      /**
+       * @param User $user
+       * @return Favorite
+       */
+      public function setUser(User $user)
+      {
+        $this->user = $user;
+        return $this;
+      }
+
+
     /**
      * Set value
      *
@@ -89,7 +127,7 @@ class Vote
     {
         return $this->value;
     }
-    
+
       /**
        * @return DateTime
        */
