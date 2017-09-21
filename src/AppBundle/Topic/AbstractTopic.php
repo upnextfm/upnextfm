@@ -326,7 +326,7 @@ abstract class AbstractTopic implements TopicInterface
    */
   protected function sanitizeMessage($message)
   {
-    return trim(strip_tags($message));
+    return trim(htmlspecialchars($message));
   }
 
   /**

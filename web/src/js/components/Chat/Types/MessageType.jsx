@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import { UserPropType, MessagePropType } from 'utils/props';
-import Linkify from 'components/Linkify';
+import Parser from 'components/Parser';
 import Avatar from 'material-ui/Avatar';
 
 const MessageType = ({ message, user, prevMessage, prevUser, onClickUser, ...props }) => {
@@ -23,9 +23,9 @@ const MessageType = ({ message, user, prevMessage, prevUser, onClickUser, ...pro
         </div>
       )}
       <div className="up-room-message__body">
-        <Linkify properties={{ target: '_blank' }}>
+        <Parser properties={{ target: '_blank' }}>
           {message.message}
-        </Linkify>
+        </Parser>
       </div>
     </li>
   );
