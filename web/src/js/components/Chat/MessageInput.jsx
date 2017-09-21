@@ -50,7 +50,7 @@ export default class MessageInput extends React.PureComponent {
     }
   }
 
-  componentDidUnmount() {
+  componentWillUnmount() {
     document.removeEventListener('click', this.handleDocumentClick);
   }
 
