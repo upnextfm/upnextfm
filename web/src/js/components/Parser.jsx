@@ -6,9 +6,9 @@ const REGEXPS = {
   colors: /\[#([a-fA-F0-9]{6})\](.*?)\[\/#\]/g,
   markdown: [
     [/_([^_]+)_/g, 'em'],
-    [/\*\*([^_]+)\*\*/g, 'strong'],
-    [/\*([^_]+)\*/g, 'em'],
-    [/`([^_]+)`/g, 'code']
+    [/\*\*([^\*]+)\*\*/g, 'strong'],
+    [/\*([^\*]+)\*/g, 'em'],
+    [/`([^`]+)`/g, 'code']
   ]
 };
 const linkify = new LinkifyIt();
