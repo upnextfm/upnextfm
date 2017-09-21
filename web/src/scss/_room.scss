@@ -222,6 +222,20 @@ $height-avatar-collapsed: auto;
     max-height: 80px;
     vertical-align: top;
   }
+
+  em {
+    font-style: italic;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
+  code {
+    background-color: #444;
+    padding: 4px 6px;
+    font-family: monospace;
+  }
 }
 
 .up-room-notice, .up-room-me {

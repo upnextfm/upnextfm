@@ -2,24 +2,47 @@ import React from 'react';
 import LinkifyIt from 'linkify-it';
 import tlds from 'tlds';
 
-const REGEXP_COLORS = /\[#([a-fA-F0-9]{6})\](.*?)\[\/#\]/g;
+const REGEXPS = {
+  colors: /\[#([a-fA-F0-9]{6})\](.*?)\[\/#\]/g,
+  markdown: [
+    [/_([^_]+)_/g, 'em'],
+    [/\*\*([^_]+)\*\*/g, 'strong'],
+    [/\*([^_]+)\*/g, 'em'],
+    [/`([^_]+)`/g, 'code']
+  ]
+};
 const linkify = new LinkifyIt();
 linkify.tlds(tlds);
 
 class Parser extends React.PureComponent {
   /**
    * @param {string} string
-   * @returns {*}
+   * @returns {string}
    */
   parseColors = (string) => {
-    return string.replace(REGEXP_COLORS, (all, color, text) => {
+    return string.replace(REGEXPS.colors, (all, color, text) => {
       return `<span style="color: #${color}">${text}</span>`;
     });
   };
 
   /**
    * @param {string} string
-   * @returns {*}
+   * @returns {string}
+   */
+  parseMarkdown = (string) => {
+    let parsed = string;
+    REGEXPS.markdown.forEach((markdown) => {
+      parsed = parsed.replace(markdown[0], (all, text) => {
+        return `<${markdown[1]}>${text}</${markdown[1]}>`;
+      });
+    });
+
+    return parsed;
+  };
+
+  /**
+   * @param {string} string
+   * @returns {string}
    */
   parseLinks = (string) => {
     const matches = linkify.match(string);
@@ -49,6 +72,7 @@ class Parser extends React.PureComponent {
   parse = (string) => {
     let parsed = string;
     parsed = this.parseColors(parsed);
+    parsed = this.parseMarkdown(parsed);
     parsed = this.parseLinks(parsed);
 
     return { __html: parsed };
