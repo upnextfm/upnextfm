@@ -18,7 +18,7 @@ class Version20170918205302 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE room ADD display_name VARCHAR(50) NOT NULL COLLATE utf8_unicode_ci');
+        //$this->addSql('ALTER TABLE room ADD display_name VARCHAR(50) NOT NULL COLLATE utf8_unicode_ci');
     }
 
     /**
@@ -29,6 +29,6 @@ class Version20170918205302 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE room DROP display_name');
+        //$this->addSql('ALTER TABLE room DROP display_name');
     }
 }
