@@ -288,6 +288,41 @@ function importFavorites()
 /**
  *
  */
+function importVotes()
+{
+  global $pdoUpnext, $pdoCytube;
+
+  foreach($pdoCytube->query("SELECT * FROM `votes`") as $row) {
+    $media = fetchCytubeMediaByID($row["media_id"]);
+    if ($media) {
+      $media = fetchVideoByCodename($media["uid"]);
+      $user  = fetchCytubeUserByID($row["user_id"]);
+      if ($media && $user) {
+        $user  = fetchUserByUsername($user["name"]);
+        println($media["codename"]);
+
+        $exec  = [
+          ":video_id"     => $media["id"],
+          ":user_id"      => $user["id"],
+          ":value"        => $row["value"],
+          ":date_created" => timeToDate($row["time"])
+        ];
+        $sql = "
+          INSERT INTO `vote`
+          (`video_id`, `user_id`, `value`, `date_created`)
+          VALUES
+          (:video_id, :user_id, :value, :date_created)
+        ";
+        $stmt = $pdoUpnext->prepare($sql);
+        $stmt->execute($exec);
+      }
+    }
+  }
+}
+
+/**
+ *
+ */
 function importVideoLogs()
 {
   global $pdoUpnext, $pdoCytube;
