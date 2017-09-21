@@ -64,9 +64,12 @@ class RoomTopic extends AbstractTopic
         }
       }
 
-      $settings = $user->getSettings();
-      if (!$settings) {
-        $settings = new UserSettings();
+      $settings = new UserSettings();
+      if ($user) {
+        $settings = $user->getSettings();
+        if (!$settings) {
+          $settings = new UserSettings();
+        }
       }
 
       $conn->event($topic->getId(), [
