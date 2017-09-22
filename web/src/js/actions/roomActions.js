@@ -28,18 +28,19 @@ function dispatchSocketPayload(dispatch, getState, payload) {
         type: types.ROOM_JOINED,
         user: payload.user
       });
-      dispatch(roomMessage({
-        type:    'joinMessage',
-        id:      nextNoticeID(),
-        date:    new Date(),
-        message: getState().settings.room.joinMessage
-      }));
       if (getState().user.username !== payload.user.username) {
         dispatch(roomMessage({
           type:    'notice',
           id:      nextNoticeID(),
           date:    new Date(),
           message: `${payload.user.username} joined the room.`
+        }));
+      } else {
+        dispatch(roomMessage({
+          type:    'joinMessage',
+          id:      nextNoticeID(),
+          date:    new Date(),
+          message: getState().settings.room.joinMessage
         }));
       }
       break;
