@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\User;
+use AppBundle\Entity\Vote;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,8 +17,13 @@ class ChartController extends Controller
    */
     public function mostUpvotedAction()
     {
+    	$em = $this->getDoctrine()->getManager();
+
+    	$votes = $em->getRepository('AppBundle:Vote')
+    						->findMostUpvotedVideos();
+
 	    return $this->render("AppBundle:chart:upvoted.html.twig", [
-	      "user" => $user
+	      "votes" => $votes
 	    ]);
     }
 }
