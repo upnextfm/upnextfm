@@ -11,17 +11,17 @@ class UserEvent extends Event
   /**
    * @var Room
    */
-  protected $room;
+    protected $room;
 
   /**
    * @var Video
    */
-  protected $video;
+    protected $video;
 
   /**
    * @var User
    */
-  protected $user;
+    protected $user;
 
   /**
    * Constructor
@@ -30,64 +30,64 @@ class UserEvent extends Event
    * @param Room $room
    * @param Video $video
    */
-  public function __construct(User $user, Room $room, Video $video)
-  {
-    $this->setUser($user);
-    $this->setRoom($room);
-    $this->setVideo($video);
-  }
+    public function __construct(User $user, Room $room, Video $video)
+    {
+        $this->setUser($user);
+        $this->setRoom($room);
+        $this->setVideo($video);
+    }
 
   /**
    * @return Room
    */
-  public function getRoom()
-  {
-    return $this->room;
-  }
+    public function getRoom()
+    {
+        return $this->room;
+    }
 
   /**
    * @param Room $room
    * @return $this
    */
-  public function setRoom($room)
-  {
-    $this->room = $room;
-    return $this;
-  }
+    public function setRoom($room)
+    {
+        $this->room = $room;
+        return $this;
+    }
 
   /**
    * @return Video
    */
-  public function getVideo()
-  {
-    return $this->video;
-  }
+    public function getVideo()
+    {
+        return $this->video;
+    }
 
   /**
    * @param Video $video
    * @return $this
    */
-  public function setVideo($video)
-  {
-    $this->video = $video;
-    return $this;
-  }
+    public function setVideo($video)
+    {
+        $this->video = $video;
+        return $this;
+    }
 
   /**
    * @return User
    */
-  public function getUser()
-  {
-    return $this->user;
-  }
+    public function getUser()
+    {
+        return $this->user;
+    }
 
   /**
    * @param User $user
    * @return $this
    */
-  public function setUser(User $user)
-  {
-    $this->user = $user;
-    return $this;
-  }
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
 }

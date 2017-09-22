@@ -9,95 +9,95 @@ class ContactModel
    * @var string
    * @Assert\NotBlank()
    */
-  protected $name;
+    protected $name;
 
   /**
    * @var string
    * @Assert\NotBlank()
    * @Assert\Email()
    */
-  protected $email;
+    protected $email;
 
   /**
    * @var string
    * @Assert\NotBlank()
    */
-  protected $message;
+    protected $message;
 
   /**
    * @var string
    */
-  protected $nonce;
+    protected $nonce;
 
   /**
    * @return string
    */
-  public function getName()
-  {
-    return $this->name;
-  }
+    public function getName()
+    {
+        return $this->name;
+    }
 
   /**
    * @param string $name
    * @return ContactModel
    */
-  public function setName($name)
-  {
-    $this->name = $name;
-    return $this;
-  }
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
 
   /**
    * @return string
    */
-  public function getEmail()
-  {
-    return $this->email;
-  }
+    public function getEmail()
+    {
+        return $this->email;
+    }
 
   /**
    * @param string $email
    * @return ContactModel
    */
-  public function setEmail($email)
-  {
-    $this->email = $email;
-    return $this;
-  }
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        return $this;
+    }
 
   /**
    * @return string
    */
-  public function getMessage()
-  {
-    return $this->message;
-  }
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
   /**
    * @param string $message
    * @return ContactModel
    */
-  public function setMessage($message)
-  {
-    $this->message = $message;
-    return $this;
-  }
+    public function setMessage($message)
+    {
+        $this->message = $message;
+        return $this;
+    }
 
   /**
    * @return string
    */
-  public function getNonce()
-  {
-    return $this->nonce;
-  }
+    public function getNonce()
+    {
+        return $this->nonce;
+    }
 
   /**
    * @param string $nonce
    * @return ContactModel
    */
-  public function setNonce($nonce)
-  {
-    $this->nonce = $nonce;
-    return $this;
-  }
+    public function setNonce($nonce)
+    {
+        $this->nonce = $nonce;
+        return $this;
+    }
 }

@@ -3,5 +3,5 @@ namespace AppBundle\Topic;
 
 class Commands
 {
-  const ERROR = "error";
+    const ERROR = "error";
 }

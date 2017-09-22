@@ -14,15 +14,15 @@ class LoginType extends AbstractType
    * @param FormBuilderInterface $builder
    * @param array $options
    */
-  public function buildForm(FormBuilderInterface $builder, array $options)
-  {
-    $builder
-      ->add("username", TextType::class)
-      ->add("password", PasswordType::class)
-      ->add("remember", CheckboxType::class, [
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+        ->add("username", TextType::class)
+        ->add("password", PasswordType::class)
+        ->add("remember", CheckboxType::class, [
         "required" => false
-      ])
-      ->add("login", SubmitType::class)
-    ;
-  }
+        ])
+        ->add("login", SubmitType::class)
+        ;
+    }
 }

@@ -9,17 +9,17 @@ class Response
   /**
    * @var mixed
    */
-  private $data;
+    private $data;
 
   /**
    * @var int
    */
-  private $statusCode = 200;
+    private $statusCode = 200;
 
   /**
    * @var array
    */
-  private $headers = [];
+    private $headers = [];
 
   /**
    * Constructor
@@ -28,64 +28,64 @@ class Response
    * @param int $statusCode
    * @param array $headers
    */
-  public function __construct($data, $statusCode = 200, $headers = [])
-  {
-    $this->setData($data);
-    $this->setStatusCode($statusCode);
-    $this->setHeaders($headers);
-  }
+    public function __construct($data, $statusCode = 200, $headers = [])
+    {
+        $this->setData($data);
+        $this->setStatusCode($statusCode);
+        $this->setHeaders($headers);
+    }
 
   /**
    * @return mixed
    */
-  public function getData()
-  {
-    return $this->data;
-  }
+    public function getData()
+    {
+        return $this->data;
+    }
 
   /**
    * @param mixed $data
    * @return $this
    */
-  public function setData($data)
-  {
-    $this->data = $data;
-    return $this;
-  }
+    public function setData($data)
+    {
+        $this->data = $data;
+        return $this;
+    }
 
   /**
    * @return int
    */
-  public function getStatusCode()
-  {
-    return $this->statusCode;
-  }
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
 
   /**
    * @param int $statusCode
    * @return $this
    */
-  public function setStatusCode($statusCode)
-  {
-    $this->statusCode = $statusCode;
-    return $this;
-  }
+    public function setStatusCode($statusCode)
+    {
+        $this->statusCode = $statusCode;
+        return $this;
+    }
 
   /**
    * @return array
    */
-  public function getHeaders()
-  {
-    return $this->headers;
-  }
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
 
   /**
    * @param array $headers
    * @return $this
    */
-  public function setHeaders($headers)
-  {
-    $this->headers = $headers;
-    return $this;
-  }
+    public function setHeaders($headers)
+    {
+        $this->headers = $headers;
+        return $this;
+    }
 }

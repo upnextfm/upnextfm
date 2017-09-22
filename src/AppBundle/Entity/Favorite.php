@@ -17,7 +17,7 @@ class Favorite
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue(strategy="AUTO")
    */
-  protected $id;
+    protected $id;
 
   /**
    * @var \AppBundle\Entity\Video
@@ -27,7 +27,7 @@ class Favorite
    *   @ORM\JoinColumn(name="video_id", referencedColumnName="id")
    * })
    */
-  protected $video;
+    protected $video;
 
   /**
    * @var \AppBundle\Entity\User
@@ -37,82 +37,82 @@ class Favorite
    *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
    * })
    */
-  protected $user;
+    protected $user;
 
   /**
    * @var DateTime
    *
    * @ORM\Column(name="date_created", type="datetime", nullable=false)
    */
-  protected $dateCreated;
+    protected $dateCreated;
 
   /**
    * Constructor
    */
-  public function __construct()
-  {
-    $this->dateUpdated = new DateTime();
-  }
+    public function __construct()
+    {
+        $this->dateUpdated = new DateTime();
+    }
 
   /**
    * @return int
    */
-  public function getId()
-  {
-    return $this->id;
-  }
+    public function getId()
+    {
+        return $this->id;
+    }
 
   /**
    * @return Video
    */
-  public function getVideo()
-  {
-    return $this->video;
-  }
+    public function getVideo()
+    {
+        return $this->video;
+    }
 
   /**
    * @param Video $video
    * @return Favorite
    */
-  public function setVideo(Video $video)
-  {
-    $this->video = $video;
-    return $this;
-  }
+    public function setVideo(Video $video)
+    {
+        $this->video = $video;
+        return $this;
+    }
 
   /**
    * @return User
    */
-  public function getUser()
-  {
-    return $this->user;
-  }
+    public function getUser()
+    {
+        return $this->user;
+    }
 
   /**
    * @param User $user
    * @return Favorite
    */
-  public function setUser(User $user)
-  {
-    $this->user = $user;
-    return $this;
-  }
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
 
   /**
    * @return DateTime
    */
-  public function getDateCreated()
-  {
-    return $this->dateCreated;
-  }
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
+    }
 
   /**
    * @param DateTime $dateCreated
    * @return Favorite
    */
-  public function setDateCreated(DateTime $dateCreated)
-  {
-    $this->dateCreated = $dateCreated;
-    return $this;
-  }
+    public function setDateCreated(DateTime $dateCreated)
+    {
+        $this->dateCreated = $dateCreated;
+        return $this;
+    }
 }

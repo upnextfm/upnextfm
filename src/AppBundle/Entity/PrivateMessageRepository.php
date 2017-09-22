@@ -7,12 +7,12 @@ class PrivateMessageRepository extends AbstractRepository
    * @param int $id
    * @return PrivateMessage
    */
-  public function findByID($id)
-  {
-    return $this->findOneBy([
-      "id" => $id
-    ]);
-  }
+    public function findByID($id)
+    {
+        return $this->findOneBy([
+        "id" => $id
+        ]);
+    }
 
   /**
    * @param User $user
@@ -20,17 +20,17 @@ class PrivateMessageRepository extends AbstractRepository
    * @param int $offset
    * @return PrivateMessage[]
    */
-  public function fetchToUser(User $user, $limit, $offset = 0)
-  {
-    return $this->createQueryBuilder("pm")
-      ->where("pm.toUser = :user")
-      ->setParameter("user", $user)
-      ->setFirstResult($offset)
-      ->setMaxResults($limit)
-      ->orderBy("id", "desc")
-      ->getQuery()
-      ->execute();
-  }
+    public function fetchToUser(User $user, $limit, $offset = 0)
+    {
+        return $this->createQueryBuilder("pm")
+        ->where("pm.toUser = :user")
+        ->setParameter("user", $user)
+        ->setFirstResult($offset)
+        ->setMaxResults($limit)
+        ->orderBy("id", "desc")
+        ->getQuery()
+        ->execute();
+    }
 
   /**
    * @param User $user
@@ -38,17 +38,17 @@ class PrivateMessageRepository extends AbstractRepository
    * @param int $offset
    * @return PrivateMessage[]
    */
-  public function fetchFromUser(User $user, $limit, $offset = 0)
-  {
-    return $this->createQueryBuilder("pm")
-      ->where("pm.fromUser = :user")
-      ->setParameter("user", $user)
-      ->setFirstResult($offset)
-      ->setMaxResults($limit)
-      ->orderBy("id", "desc")
-      ->getQuery()
-      ->execute();
-  }
+    public function fetchFromUser(User $user, $limit, $offset = 0)
+    {
+        return $this->createQueryBuilder("pm")
+        ->where("pm.fromUser = :user")
+        ->setParameter("user", $user)
+        ->setFirstResult($offset)
+        ->setMaxResults($limit)
+        ->orderBy("id", "desc")
+        ->getQuery()
+        ->execute();
+    }
 
   /**
    * @param User $toUser
@@ -57,17 +57,17 @@ class PrivateMessageRepository extends AbstractRepository
    * @param int $offset
    * @return PrivateMessage[]
    */
-  public function fetchConversation(User $toUser, User $fromUser, $limit, $offset = 0)
-  {
-    return $this->createQueryBuilder("pm")
-      ->where("(pm.toUser = :toUser AND pm.fromUser = :fromUser)")
-      ->orWhere("(pm.toUser = :fromUser ANd pm.fromUser = :toUser)")
-      ->setParameter("toUser", $toUser)
-      ->setParameter("fromUser", $fromUser)
-      ->setFirstResult($offset)
-      ->setMaxResults($limit)
-      ->orderBy("pm.id", "desc")
-      ->getQuery()
-      ->execute();
-  }
+    public function fetchConversation(User $toUser, User $fromUser, $limit, $offset = 0)
+    {
+        return $this->createQueryBuilder("pm")
+        ->where("(pm.toUser = :toUser AND pm.fromUser = :fromUser)")
+        ->orWhere("(pm.toUser = :fromUser ANd pm.fromUser = :toUser)")
+        ->setParameter("toUser", $toUser)
+        ->setParameter("fromUser", $fromUser)
+        ->setFirstResult($offset)
+        ->setMaxResults($limit)
+        ->orderBy("pm.id", "desc")
+        ->getQuery()
+        ->execute();
+    }
 }

@@ -12,9 +12,9 @@ class CreatedRoomEvent extends UserEvent
    * @param User $user
    * @param Room $room
    */
-  public function __construct(User $user, Room $room)
-  {
-    $this->setUser($user);
-    $this->setRoom($room);
-  }
+    public function __construct(User $user, Room $room)
+    {
+        $this->setUser($user);
+        $this->setRoom($room);
+    }
 }

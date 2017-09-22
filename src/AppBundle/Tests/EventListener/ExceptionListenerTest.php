@@ -17,57 +17,57 @@ class ExceptionListenerTest extends KernelTestCase
   /**
    * @var EventDispatcher
    */
-  private $dispatcher;
+    private $dispatcher;
 
   /**
    * Called before each test
    */
-  protected function setUp()
-  {
-    self::bootKernel();
-    $container = self::$kernel->getContainer();
-    $this->dispatcher = new EventDispatcher();
-    $listener = new ExceptionListener($container->get("serializer_json"));
-    $this->dispatcher->addListener(KernelEvents::EXCEPTION, array($listener, 'onKernelException'));
-  }
+    protected function setUp()
+    {
+        self::bootKernel();
+        $container = self::$kernel->getContainer();
+        $this->dispatcher = new EventDispatcher();
+        $listener = new ExceptionListener($container->get("serializer_json"));
+        $this->dispatcher->addListener(KernelEvents::EXCEPTION, array($listener, 'onKernelException'));
+    }
 
   /**
    * Called after each test
    */
-  protected function tearDown()
-  {
-    $this->dispatcher = null;
-  }
+    protected function tearDown()
+    {
+        $this->dispatcher = null;
+    }
 
   /**
    * @covers ::onKernelException
    */
-  public function testDoesNotChangeResponse()
-  {
-    $event = new GetResponseForExceptionEvent(
-      self::$kernel,
-      new Request(),
-      HttpKernelInterface::MASTER_REQUEST,
-      new \Exception("Testing")
-    );
-    $this->dispatcher->dispatch(KernelEvents::EXCEPTION, $event);
-    $this->assertNull($event->getResponse());
-  }
+    public function testDoesNotChangeResponse()
+    {
+        $event = new GetResponseForExceptionEvent(
+            self::$kernel,
+            new Request(),
+            HttpKernelInterface::MASTER_REQUEST,
+            new \Exception("Testing")
+        );
+        $this->dispatcher->dispatch(KernelEvents::EXCEPTION, $event);
+        $this->assertNull($event->getResponse());
+    }
 
   /**
    * @covers ::onKernelException
    */
-  public function testChangesResponse()
-  {
-    $request = new Request();
-    $request->headers->set("Accept", "application/json");
-    $event = new GetResponseForExceptionEvent(
-      self::$kernel,
-      $request,
-      HttpKernelInterface::MASTER_REQUEST,
-      new \Exception("Testing")
-    );
-    $this->dispatcher->dispatch(KernelEvents::EXCEPTION, $event);
-    $this->assertEquals("application/json", $event->getResponse()->headers->get("content-type"));
-  }
+    public function testChangesResponse()
+    {
+        $request = new Request();
+        $request->headers->set("Accept", "application/json");
+        $event = new GetResponseForExceptionEvent(
+            self::$kernel,
+            $request,
+            HttpKernelInterface::MASTER_REQUEST,
+            new \Exception("Testing")
+        );
+        $this->dispatcher->dispatch(KernelEvents::EXCEPTION, $event);
+        $this->assertEquals("application/json", $event->getResponse()->headers->get("content-type"));
+    }
 }

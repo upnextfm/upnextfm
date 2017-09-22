@@ -9,12 +9,12 @@ abstract class AbstractStorage
   /**
    * @var Redis
    */
-  protected $redis;
+    protected $redis;
 
   /**
    * @var LoggerInterface
    */
-  protected $logger;
+    protected $logger;
 
   /**
    * Constructor
@@ -22,9 +22,9 @@ abstract class AbstractStorage
    * @param Redis $redis
    * @param LoggerInterface $logger
    */
-  public function __construct(Redis $redis, LoggerInterface $logger)
-  {
-    $this->redis  = $redis;
-    $this->logger = $logger;
-  }
+    public function __construct(Redis $redis, LoggerInterface $logger)
+    {
+        $this->redis  = $redis;
+        $this->logger = $logger;
+    }
 }

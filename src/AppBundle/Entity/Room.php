@@ -17,39 +17,39 @@ class Room
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue(strategy="AUTO")
    */
-  protected $id;
+    protected $id;
 
   /**
    * @var string
    * @Groups({"elastica"})
    * @ORM\Column(name="name", type="string", length=25, nullable=false, unique=true)
    */
-  protected $name = "";
+    protected $name = "";
 
   /**
    * @var string
    * @Groups({"elastica"})
    * @ORM\Column(name="display_name", type="string", length=50, nullable=true)
    */
-  protected $displayName = "";
+    protected $displayName = "";
 
   /**
    * @var string
    * @ORM\Column(name="description", type="text", nullable=true)
    */
-  protected $description = "";
+    protected $description = "";
 
   /**
    * @var boolean
    * @ORM\Column(name="is_private", type="boolean", nullable=false)
    */
-  protected $isPrivate = false;
+    protected $isPrivate = false;
 
   /**
    * @var boolean
    * @ORM\Column(name="is_deleted", type="boolean", nullable=false)
    */
-  protected $isDeleted = false;
+    protected $isDeleted = false;
 
   /**
    * @var \AppBundle\Entity\User
@@ -59,20 +59,20 @@ class Room
    *   @ORM\JoinColumn(name="created_by_user_id", referencedColumnName="id")
    * })
    */
-  protected $createdByUser;
+    protected $createdByUser;
 
   /**
    * @var DateTime
    * @ORM\Column(name="date_created", type="datetime", nullable=false)
    */
-  protected $dateCreated;
+    protected $dateCreated;
 
   /**
    * @var RoomSettings
    *
    * @ORM\OneToOne(targetEntity="AppBundle\Entity\RoomSettings", mappedBy="room", fetch="EAGER", cascade={"persist"})
    */
-  protected $settings;
+    protected $settings;
 
   /**
    * Constructor
@@ -80,163 +80,163 @@ class Room
    * @param string $name
    * @param null $createdByUser
    */
-  public function __construct($name = "", $createdByUser = null)
-  {
-    $this->name          = $name;
-    $this->createdByUser = $createdByUser;
-    $this->dateCreated   = new DateTime();
-    $this->settings      = new RoomSettings();
-  }
+    public function __construct($name = "", $createdByUser = null)
+    {
+        $this->name          = $name;
+        $this->createdByUser = $createdByUser;
+        $this->dateCreated   = new DateTime();
+        $this->settings      = new RoomSettings();
+    }
 
   /**
    * @return int
    */
-  public function getId()
-  {
-    return $this->id;
-  }
+    public function getId()
+    {
+        return $this->id;
+    }
 
   /**
    * @return string
    */
-  public function getName()
-  {
-    return $this->name;
-  }
+    public function getName()
+    {
+        return $this->name;
+    }
 
   /**
    * @param string $name
    * @return $this
    */
-  public function setName($name)
-  {
-    $this->name = $name;
-    return $this;
-  }
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
 
   /**
    * @return string
    */
-  public function getDisplayName()
-  {
-    return $this->displayName;
-  }
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
 
   /**
    * @param string $displayName
    * @return $this
    */
-  public function setDisplayName($displayName)
-  {
-    $this->displayName = $displayName;
-    return $this;
-  }
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+        return $this;
+    }
 
   /**
    * @return string
    */
-  public function getDescription()
-  {
-    return $this->description;
-  }
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
   /**
    * @param string $description
    * @return $this
    */
-  public function setDescription($description)
-  {
-    $this->description = $description;
-    return $this;
-  }
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
 
   /**
    * @return boolean
    */
-  public function getIsPrivate()
-  {
-    return $this->isPrivate;
-  }
+    public function getIsPrivate()
+    {
+        return $this->isPrivate;
+    }
 
   /**
    * @param boolean $isPrivate
    * @return $this
    */
-  public function setIsPrivate($isPrivate)
-  {
-    $this->isPrivate = $isPrivate;
-    return $this;
-  }
+    public function setIsPrivate($isPrivate)
+    {
+        $this->isPrivate = $isPrivate;
+        return $this;
+    }
 
   /**
    * @return boolean
    */
-  public function getIsDeleted()
-  {
-    return $this->isDeleted;
-  }
+    public function getIsDeleted()
+    {
+        return $this->isDeleted;
+    }
 
   /**
    * @param boolean $isDeleted
    * @return $this
    */
-  public function setIsDeleted($isDeleted)
-  {
-    $this->isDeleted = $isDeleted;
-    return $this;
-  }
+    public function setIsDeleted($isDeleted)
+    {
+        $this->isDeleted = $isDeleted;
+        return $this;
+    }
 
   /**
    * @return User
    */
-  public function getCreatedByUser()
-  {
-    return $this->createdByUser;
-  }
+    public function getCreatedByUser()
+    {
+        return $this->createdByUser;
+    }
 
   /**
    * @param User $createdByUser
    * @return $this
    */
-  public function setCreatedByUser($createdByUser)
-  {
-    $this->createdByUser = $createdByUser;
-    return $this;
-  }
+    public function setCreatedByUser($createdByUser)
+    {
+        $this->createdByUser = $createdByUser;
+        return $this;
+    }
 
   /**
    * @return DateTime
    */
-  public function getDateCreated()
-  {
-    return $this->dateCreated;
-  }
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
+    }
 
   /**
    * @param DateTime $dateCreated
    * @return $this
    */
-  public function setDateCreated($dateCreated)
-  {
-    $this->dateCreated = $dateCreated;
-    return $this;
-  }
+    public function setDateCreated($dateCreated)
+    {
+        $this->dateCreated = $dateCreated;
+        return $this;
+    }
 
   /**
    * @return RoomSettings
    */
-  public function getSettings()
-  {
-    return $this->settings;
-  }
+    public function getSettings()
+    {
+        return $this->settings;
+    }
 
   /**
    * @param RoomSettings $settings
    * @return $this
    */
-  public function setSettings($settings)
-  {
-    $this->settings = $settings;
-    return $this;
-  }
+    public function setSettings($settings)
+    {
+        $this->settings = $settings;
+        return $this;
+    }
 }

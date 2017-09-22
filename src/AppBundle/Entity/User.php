@@ -44,7 +44,7 @@ class User extends BaseUser
     */
     public function getInfo()
     {
-      return $this->info;
+        return $this->info;
     }
 
    /**
@@ -53,8 +53,8 @@ class User extends BaseUser
     */
     public function setInfo(UserInfo $info)
     {
-      $this->info = $info;
-      return $this;
+        $this->info = $info;
+        return $this;
     }
 
   /**
@@ -62,7 +62,7 @@ class User extends BaseUser
    */
     public function getSettings()
     {
-      return $this->settings;
+        return $this->settings;
     }
 
   /**
@@ -71,7 +71,7 @@ class User extends BaseUser
    */
     public function setSettings(UserSettings $settings)
     {
-      $this->settings = $settings;
-      return $this;
+        $this->settings = $settings;
+        return $this;
     }
 }

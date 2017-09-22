@@ -11,27 +11,27 @@ use InvalidArgumentException;
 
 class UploadService
 {
-  use LoggerAwareTrait;
+    use LoggerAwareTrait;
 
   /**
    * @var S3Client
    */
-  protected $s3;
+    protected $s3;
 
   /**
    * @var UploadRepository
    */
-  protected $uploadRepository;
+    protected $uploadRepository;
 
   /**
    * @var array
    */
-  protected $buckets = [];
+    protected $buckets = [];
 
   /**
    * @var string
    */
-  protected $uploadRootURL;
+    protected $uploadRootURL;
 
   /**
    * @param S3Client $s3
@@ -39,13 +39,13 @@ class UploadService
    * @param array $buckets
    * @param string $uploadRootURL
    */
-  public function __construct(S3Client $s3, UploadRepository $uploadRepository, array $buckets, $uploadRootURL)
-  {
-    $this->s3               = $s3;
-    $this->uploadRepository = $uploadRepository;
-    $this->buckets          = $buckets;
-    $this->uploadRootURL    = $uploadRootURL;
-  }
+    public function __construct(S3Client $s3, UploadRepository $uploadRepository, array $buckets, $uploadRootURL)
+    {
+        $this->s3               = $s3;
+        $this->uploadRepository = $uploadRepository;
+        $this->buckets          = $buckets;
+        $this->uploadRootURL    = $uploadRootURL;
+    }
 
   /**
    * @param string $source
@@ -55,16 +55,16 @@ class UploadService
    * @param string $bucket
    * @return string
    */
-  public function upload($source, $dest, UserInterface $user, $mime, $bucket = "uploads")
-  {
-    return $this->uploadData(
-      fopen($source, "r"),
-      $dest,
-      $user,
-      $mime,
-      $bucket
-    );
-  }
+    public function upload($source, $dest, UserInterface $user, $mime, $bucket = "uploads")
+    {
+        return $this->uploadData(
+            fopen($source, "r"),
+            $dest,
+            $user,
+            $mime,
+            $bucket
+        );
+    }
 
   /**
    * @param string $data
@@ -74,40 +74,40 @@ class UploadService
    * @param string $bucket
    * @return string
    */
-  public function uploadData($data, $dest, UserInterface $user, $mime, $bucket = "uploads")
-  {
-    $dest = trim($dest, '/ ');
-    if (!isset($this->buckets[$bucket])) {
-      throw new InvalidArgumentException(sprintf(
-        'Invalid upload bucket "%s".',
-        $bucket
-      ));
+    public function uploadData($data, $dest, UserInterface $user, $mime, $bucket = "uploads")
+    {
+        $dest = trim($dest, '/ ');
+        if (!isset($this->buckets[$bucket])) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid upload bucket "%s".',
+                $bucket
+            ));
+        }
+
+        if (is_resource($data)) {
+            $stat = fstat($data);
+            $size = $stat["size"];
+        } elseif (is_string($data)) {
+            $size = strlen($data);
+        } else {
+            throw new InvalidArgumentException("Upload data must be resource or string.");
+        }
+
+        $resp = $this->s3->putObject([
+        "Bucket"      => $this->buckets[$bucket],
+        "Key"         => $dest,
+        "Body"        => $data,
+        "ContentType" => $mime,
+        "ACL"         => "public-read",
+        ]);
+
+        $upload = new Upload();
+        $upload->setUser($user);
+        $upload->setSize($size);
+        $upload->setMime($mime);
+        $upload->setPath($dest);
+        $this->uploadRepository->persistAndFlush($upload);
+
+        return $resp->get("ObjectURL");
     }
-
-    if (is_resource($data)) {
-      $stat = fstat($data);
-      $size = $stat["size"];
-    } else if (is_string($data)) {
-      $size = strlen($data);
-    } else {
-      throw new InvalidArgumentException("Upload data must be resource or string.");
-    }
-
-    $resp = $this->s3->putObject([
-      "Bucket"      => $this->buckets[$bucket],
-      "Key"         => $dest,
-      "Body"        => $data,
-      "ContentType" => $mime,
-      "ACL"         => "public-read",
-    ]);
-
-    $upload = new Upload();
-    $upload->setUser($user);
-    $upload->setSize($size);
-    $upload->setMime($mime);
-    $upload->setPath($dest);
-    $this->uploadRepository->persistAndFlush($upload);
-
-    return $resp->get("ObjectURL");
-  }
 }

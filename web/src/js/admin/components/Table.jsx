@@ -41,7 +41,7 @@ function cleanValue(key, row) {
 
 const TableRow = ({ row, onClick }) => (
   <tr onClick={(e) => { onClick(e, row); }}>
-    {Object.keys(row).map(key => {
+    {Object.keys(row).map((key) => {
       return (
         <td key={key}>
           {cleanValue(key, row)}

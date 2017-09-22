@@ -13,12 +13,12 @@ class AbstractRepository extends EntityRepository
    * @param int $id
    * @return null|object
    */
-  public function findByID($id)
-  {
-    return $this->findOneBy([
-      "id" => $id
-    ]);
-  }
+    public function findByID($id)
+    {
+        return $this->findOneBy([
+        "id" => $id
+        ]);
+    }
 
   /**
    * @param int $currentPage
@@ -26,49 +26,49 @@ class AbstractRepository extends EntityRepository
    * @param array $filters
    * @return \Doctrine\ORM\Tools\Pagination\Paginator
    */
-  public function findAllByPage($currentPage, $limit, $filters = [])
-  {
-    $query = $this->createQueryBuilder('e')
-      ->orderBy('e.id', 'DESC');
+    public function findAllByPage($currentPage, $limit, $filters = [])
+    {
+        $query = $this->createQueryBuilder('e')
+        ->orderBy('e.id', 'DESC');
 
-    if ($filters) {
-      foreach($filters as $column => $value) {
-        if (preg_match('/[^a-z]/i', $column)) {
-          throw new \InvalidArgumentException(sprintf(
-            'Invalid filter column "%s". Contains special characters.',
-            $column
-          ));
+        if ($filters) {
+            foreach ($filters as $column => $value) {
+                if (preg_match('/[^a-z]/i', $column)) {
+                    throw new \InvalidArgumentException(sprintf(
+                        'Invalid filter column "%s". Contains special characters.',
+                        $column
+                    ));
+                }
+                $query->andWhere("e.${column} = :${column}");
+                $query->setParameter($column, $value);
+            }
         }
-        $query->andWhere("e.${column} = :${column}");
-        $query->setParameter($column, $value);
-      }
-    }
 
-    return $this->paginate($query->getQuery(), $currentPage, $limit);
-  }
+        return $this->paginate($query->getQuery(), $currentPage, $limit);
+    }
 
   /**
    * Returns the total number of entities in the table
    *
    * @return int
    */
-  public function countAll()
-  {
-    return $this->createQueryBuilder("e")
-      ->select("COUNT(e)")
-      ->getQuery()
-      ->getSingleScalarResult();
-  }
+    public function countAll()
+    {
+        return $this->createQueryBuilder("e")
+        ->select("COUNT(e)")
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
 
   /**
    * @param object $entity
    */
-  public function persistAndFlush($entity)
-  {
-    $em = $this->getEntityManager();
-    $em->persist($entity);
-    $em->flush($entity);
-  }
+    public function persistAndFlush($entity)
+    {
+        $em = $this->getEntityManager();
+        $em->persist($entity);
+        $em->flush($entity);
+    }
 
   /**
    * Paginator Helper
@@ -87,26 +87,26 @@ class AbstractRepository extends EntityRepository
    *
    * @return \Doctrine\ORM\Tools\Pagination\Paginator
    */
-  public function paginate($dql, $page = 1, $limit = 5)
-  {
-    $paginator = new Paginator($dql);
-    $paginator->getQuery()
-      ->setFirstResult($limit * ($page - 1))
-      ->setMaxResults($limit);
+    public function paginate($dql, $page = 1, $limit = 5)
+    {
+        $paginator = new Paginator($dql);
+        $paginator->getQuery()
+        ->setFirstResult($limit * ($page - 1))
+        ->setMaxResults($limit);
 
-    return $paginator;
-  }
+        return $paginator;
+    }
 
   /**
    * @param object $target
    * @param array $values
    * @return object
    */
-  public function hydrateFromArray($target, array $values)
-  {
-    $metaData  = $this->getClassMetadata();
-    return $this->hydrateFromMetaDataArray($metaData, $target, $values);
-  }
+    public function hydrateFromArray($target, array $values)
+    {
+        $metaData  = $this->getClassMetadata();
+        return $this->hydrateFromMetaDataArray($metaData, $target, $values);
+    }
 
   /**
    * @param ClassMetadata $metaData
@@ -116,31 +116,31 @@ class AbstractRepository extends EntityRepository
    * @throws \Doctrine\ORM\Mapping\MappingException
    * @throws \Doctrine\ORM\ORMException
    */
-  private function hydrateFromMetaDataArray(ClassMetadata $metaData, $target, array $values)
-  {
-    $accessor  = PropertyAccess::createPropertyAccessor();
-    $em        = $this->getEntityManager();
+    private function hydrateFromMetaDataArray(ClassMetadata $metaData, $target, array $values)
+    {
+        $accessor  = PropertyAccess::createPropertyAccessor();
+        $em        = $this->getEntityManager();
 
-    foreach($values as $key => $value) {
-      if ($key === 'id') {
-        continue;
-      }
+        foreach ($values as $key => $value) {
+            if ($key === 'id') {
+                continue;
+            }
 
-      if ($metaData->hasField($key)) {
-        if ($metaData->getTypeOfField($key) === 'datetime') {
-          $value = new \DateTime($value);
+            if ($metaData->hasField($key)) {
+                if ($metaData->getTypeOfField($key) === 'datetime') {
+                    $value = new \DateTime($value);
+                }
+                $accessor->setValue($target, $key, $value);
+            } elseif ($metaData->hasAssociation($key)) {
+                $assoc       = $metaData->getAssociationMapping($key);
+                $ref         = $em->getReference($assoc['targetEntity'], $value);
+                $repo        = $em->getRepository($assoc['targetEntity']);
+                $refMetaData = $repo->getClassMetadata();
+                $this->hydrateFromMetaDataArray($refMetaData, $ref, $value);
+                $accessor->setValue($target, $key, $ref);
+            }
         }
-        $accessor->setValue($target, $key, $value);
-      } else if ($metaData->hasAssociation($key)) {
-        $assoc       = $metaData->getAssociationMapping($key);
-        $ref         = $em->getReference($assoc['targetEntity'], $value);
-        $repo        = $em->getRepository($assoc['targetEntity']);
-        $refMetaData = $repo->getClassMetadata();
-        $this->hydrateFromMetaDataArray($refMetaData, $ref, $value);
-        $accessor->setValue($target, $key, $ref);
-      }
-    }
 
-    return $target;
-  }
+        return $target;
+    }
 }

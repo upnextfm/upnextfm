@@ -3,7 +3,7 @@ import LinkifyIt from 'linkify-it';
 import tlds from 'tlds';
 
 const REGEXPS = {
-  colors: /\[#([a-fA-F0-9]{6})\](.*?)\[\/#\]/g,
+  colors:   /\[#([a-fA-F0-9]{6})\](.*?)\[\/#\]/g,
   markdown: [
     [/_([^_]+)_/g, 'em'],
     [/\*\*([^\*]+)\*\*/g, 'strong'],

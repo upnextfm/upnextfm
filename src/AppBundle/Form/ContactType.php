@@ -15,35 +15,35 @@ class ContactType extends AbstractType
    * @param FormBuilderInterface $builder
    * @param array $options
    */
-  public function buildForm(FormBuilderInterface $builder, array $options)
-  {
-    $builder
-      ->add("name", TextType::class, [
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+        ->add("name", TextType::class, [
         "required" => true,
         "label"    => "Name",
         "attr"     => [
           "class" => "validate"
         ]
-      ])
-      ->add("email", EmailType::class, [
+        ])
+        ->add("email", EmailType::class, [
         "required" => true,
         "label"    => "Email",
         "attr"     => [
           "class" => "validate"
         ]
-      ])
-      ->add("message", TextareaType::class, [
+        ])
+        ->add("message", TextareaType::class, [
         "required" => true,
         "label"    => "Message",
         "attr"     => [
           "class" => "materialize-textarea validate",
           "rows"  => 10
         ]
-      ])
-      ->add("nonce", HiddenType::class, [
+        ])
+        ->add("nonce", HiddenType::class, [
         "attr" => ["class" => "up-nonce"]
-      ])
-      ->add("submit", SubmitType::class)
-    ;
-  }
+        ])
+        ->add("submit", SubmitType::class)
+        ;
+    }
 }

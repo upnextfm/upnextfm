@@ -7,20 +7,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RegistrationType extends AbstractType
 {
-  public function getParent()
-  {
-    return RegistrationFormType::class;
-  }
+    public function getParent()
+    {
+        return RegistrationFormType::class;
+    }
 
-  public function getBlockPrefix()
-  {
-    return "registration";
-  }
+    public function getBlockPrefix()
+    {
+        return "registration";
+    }
 
-  public function configureOptions(OptionsResolver $resolver)
-  {
-    $resolver->setDefaults([
-      "csrf_protection" => false,
-    ]);
-  }
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+        "csrf_protection" => false,
+        ]);
+    }
 }

@@ -14,15 +14,15 @@ class RequestListener extends EventListener
   /**
    * @param GetResponseEvent $event
    */
-  public function onKernelRequest(GetResponseEvent $event)
-  {
-    $request = $event->getRequest();
-    if ($request->headers->get("Content-Type") === "application/json" && $this->isDecodeable($request)) {
-      $content = $request->getContent();
-      $data    = $this->serializer->decode($content, "json");
-      $request->request = new ParameterBag($data);
+    public function onKernelRequest(GetResponseEvent $event)
+    {
+        $request = $event->getRequest();
+        if ($request->headers->get("Content-Type") === "application/json" && $this->isDecodeable($request)) {
+            $content = $request->getContent();
+            $data    = $this->serializer->decode($content, "json");
+            $request->request = new ParameterBag($data);
+        }
     }
-  }
 
   /**
    * Check if we should try to decode the body.
@@ -31,11 +31,11 @@ class RequestListener extends EventListener
    *
    * @return bool
    */
-  protected function isDecodeable(Request $request)
-  {
-    if (!in_array($request->getMethod(), ["POST", "PUT", "PATCH", "DELETE"])) {
-      return false;
+    protected function isDecodeable(Request $request)
+    {
+        if (!in_array($request->getMethod(), ["POST", "PUT", "PATCH", "DELETE"])) {
+            return false;
+        }
+        return true;
     }
-    return true;
-  }
 }

@@ -13,18 +13,17 @@ use Ratchet\Wamp\WampConnection;
 use Ratchet\ConnectionInterface;
 use Psr\Log\LoggerInterface;
 
-class WebsocketAuthenticationProvider
-  extends \Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProvider
+class WebsocketAuthenticationProvider extends \Gos\Bundle\WebSocketBundle\Client\Auth\WebsocketAuthenticationProvider
 {
   /**
    * @var JWTTokenAuthenticator
    */
-  protected $tokenAuthenticator;
+    protected $tokenAuthenticator;
 
   /**
    * @var UserProviderInterface
    */
-  protected $userProvider;
+    protected $userProvider;
 
   /**
    * @param TokenStorageInterface $tokenStorage
@@ -34,18 +33,18 @@ class WebsocketAuthenticationProvider
    * @param UserProviderInterface $userProvider
    * @param LoggerInterface $logger
    */
-  public function __construct(
-    $tokenStorage,
-    $firewalls = array(),
-    ClientStorageInterface $clientStorage,
-    JWTTokenAuthenticator $tokenAuthenticator,
-    UserProviderInterface $userProvider,
-    LoggerInterface $logger = null
-  ) {
-    parent::__construct($tokenStorage, $firewalls, $clientStorage, $logger);
-    $this->tokenAuthenticator = $tokenAuthenticator;
-    $this->userProvider       = $userProvider;
-  }
+    public function __construct(
+        $tokenStorage,
+        $firewalls = array(),
+        ClientStorageInterface $clientStorage,
+        JWTTokenAuthenticator $tokenAuthenticator,
+        UserProviderInterface $userProvider,
+        LoggerInterface $logger = null
+    ) {
+        parent::__construct($tokenStorage, $firewalls, $clientStorage, $logger);
+        $this->tokenAuthenticator = $tokenAuthenticator;
+        $this->userProvider       = $userProvider;
+    }
 
   /**
    * @param ConnectionInterface|WampConnection $conn
@@ -55,42 +54,42 @@ class WebsocketAuthenticationProvider
    * @throws StorageException
    * @throws \Exception
    */
-  public function authenticate(ConnectionInterface $conn)
-  {
-    if ($jwt = $conn->WebSocket->request->getQuery()->get("token")) {
-      $request = new Request();
-      $request->headers->set("Authorization", "Bearer " . $jwt);
+    public function authenticate(ConnectionInterface $conn)
+    {
+        if ($jwt = $conn->WebSocket->request->getQuery()->get("token")) {
+            $request = new Request();
+            $request->headers->set("Authorization", "Bearer " . $jwt);
 
-      if ($token = $this->tokenAuthenticator->getCredentials($request)) {
-        $user          = $this->tokenAuthenticator->getUser($token, $this->userProvider);
-        $username      = $user instanceof UserInterface ? $user->getUsername() : $user;
-        $loggerContext = [
-          "connection_id" => $conn->resourceId,
-          "session_id"    => $conn->WAMP->sessionId,
-        ];
+            if ($token = $this->tokenAuthenticator->getCredentials($request)) {
+                $user          = $this->tokenAuthenticator->getUser($token, $this->userProvider);
+                $username      = $user instanceof UserInterface ? $user->getUsername() : $user;
+                $loggerContext = [
+                "connection_id" => $conn->resourceId,
+                "session_id"    => $conn->WAMP->sessionId,
+                ];
 
-        try {
-          $identifier = $this->clientStorage->getStorageId($conn, $username);
-        } catch (StorageException $e) {
-          $this->logger->error(
-            $e->getMessage(),
-            $loggerContext
-          );
-          throw $e;
+                try {
+                    $identifier = $this->clientStorage->getStorageId($conn, $username);
+                } catch (StorageException $e) {
+                    $this->logger->error(
+                        $e->getMessage(),
+                        $loggerContext
+                    );
+                    throw $e;
+                }
+
+                $loggerContext["storage_id"] = $identifier;
+                $this->clientStorage->addClient($identifier, $user);
+                $conn->WAMP->clientStorageId = $identifier;
+                $this->logger->info(sprintf(
+                    "%s connected",
+                    $username
+                ), $loggerContext);
+
+                return $token;
+            }
         }
 
-        $loggerContext["storage_id"] = $identifier;
-        $this->clientStorage->addClient($identifier, $user);
-        $conn->WAMP->clientStorageId = $identifier;
-        $this->logger->info(sprintf(
-          "%s connected",
-          $username
-        ), $loggerContext);
-
-        return $token;
-      }
+        return parent::authenticate($conn);
     }
-
-    return parent::authenticate($conn);
-  }
 }

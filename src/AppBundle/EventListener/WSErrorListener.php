@@ -10,11 +10,11 @@ class WSErrorListener
    *
    * @param ClientErrorEvent $event
    */
-  public function onClientError(ClientErrorEvent $event)
-  {
-    $conn = $event->getConnection();
-    $e = $event->getException();
+    public function onClientError(ClientErrorEvent $event)
+    {
+        $conn = $event->getConnection();
+        $e = $event->getException();
 
-    echo "connection error occurred: " . $e->getMessage() . PHP_EOL;
-  }
+        echo "connection error occurred: " . $e->getMessage() . PHP_EOL;
+    }
 }

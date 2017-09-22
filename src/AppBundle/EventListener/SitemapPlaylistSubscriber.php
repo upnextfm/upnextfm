@@ -7,8 +7,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
-class SitemapPlaylistSubscriber
-    implements EventSubscriberInterface
+class SitemapPlaylistSubscriber implements EventSubscriberInterface
 {
     /**
      * @var UrlGeneratorInterface
@@ -45,13 +44,13 @@ class SitemapPlaylistSubscriber
      */
     public function registerPages(SitemapPopulateEvent $event)
     {
-      $event->getUrlContainer()->addUrl(
-        new UrlConcrete(
-          'https://upnext.fm/recent',
-          new \DateTime(),
-          UrlConcrete::CHANGEFREQ_HOURLY
-        ),
-        'playlists'
-      );
+        $event->getUrlContainer()->addUrl(
+            new UrlConcrete(
+                'https://upnext.fm/recent',
+                new \DateTime(),
+                UrlConcrete::CHANGEFREQ_HOURLY
+            ),
+            'playlists'
+        );
     }
 }

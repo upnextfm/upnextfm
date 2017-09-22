@@ -14,11 +14,11 @@ interface ProvidersInterface
    * @param string $provider
    * @return bool
    */
-  public static function isValidProvider($provider);
+    public static function isValidProvider($provider);
 
   /**
    * @param $mediaURL
    * @return array|null
    */
-  public function parseURL($mediaURL);
+    public function parseURL($mediaURL);
 }

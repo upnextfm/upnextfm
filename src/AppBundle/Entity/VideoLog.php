@@ -17,7 +17,7 @@ class VideoLog
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue(strategy="AUTO")
    */
-  protected $id;
+    protected $id;
 
   /**
    * @var \AppBundle\Entity\Video
@@ -28,7 +28,7 @@ class VideoLog
    *   @ORM\JoinColumn(name="video_id", referencedColumnName="id")
    * })
    */
-  protected $video;
+    protected $video;
 
   /**
    * @var \AppBundle\Entity\Room
@@ -38,7 +38,7 @@ class VideoLog
    *   @ORM\JoinColumn(name="room_id", referencedColumnName="id")
    * })
    */
-  protected $room;
+    protected $room;
 
   /**
    * @var \AppBundle\Entity\User
@@ -48,13 +48,13 @@ class VideoLog
    *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
    * })
    */
-  protected $user;
+    protected $user;
 
   /**
    * @var DateTime
    * @ORM\Column(name="date_created", type="datetime", nullable=false)
    */
-  protected $dateCreated;
+    protected $dateCreated;
 
   /**
    * Constructor
@@ -63,91 +63,91 @@ class VideoLog
    * @param Room $room
    * @param User $user
    */
-  public function __construct(Video $video = null, Room $room = null, User $user = null)
-  {
-    $this->video       = $video;
-    $this->room        = $room;
-    $this->user        = $user;
-    $this->dateCreated = new DateTime();
-  }
+    public function __construct(Video $video = null, Room $room = null, User $user = null)
+    {
+        $this->video       = $video;
+        $this->room        = $room;
+        $this->user        = $user;
+        $this->dateCreated = new DateTime();
+    }
 
   /**
    * @return int
    */
-  public function getId()
-  {
-    return $this->id;
-  }
+    public function getId()
+    {
+        return $this->id;
+    }
 
   /**
    * @return Video
    */
-  public function getVideo()
-  {
-    return $this->video;
-  }
+    public function getVideo()
+    {
+        return $this->video;
+    }
 
   /**
    * @param Video $video
    * @return $this
    */
-  public function setVideo(Video $video)
-  {
-    $this->video = $video;
-    return $this;
-  }
+    public function setVideo(Video $video)
+    {
+        $this->video = $video;
+        return $this;
+    }
 
   /**
    * @return Room
    */
-  public function getRoom()
-  {
-    return $this->room;
-  }
+    public function getRoom()
+    {
+        return $this->room;
+    }
 
   /**
    * @param Room $room
    * @return $this
    */
-  public function setRoom(Room $room)
-  {
-    $this->room = $room;
-    return $this;
-  }
+    public function setRoom(Room $room)
+    {
+        $this->room = $room;
+        return $this;
+    }
 
   /**
    * @return User
    */
-  public function getUser()
-  {
-    return $this->user;
-  }
+    public function getUser()
+    {
+        return $this->user;
+    }
 
   /**
    * @param User $user
    * @return $this
    */
-  public function setUser(User $user)
-  {
-    $this->user = $user;
-    return $this;
-  }
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
 
   /**
    * @return DateTime
    */
-  public function getDateCreated()
-  {
-    return $this->dateCreated;
-  }
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
+    }
 
   /**
    * @param DateTime $dateCreated
    * @return $this
    */
-  public function setDateCreated(DateTime $dateCreated)
-  {
-    $this->dateCreated = $dateCreated;
-    return $this;
-  }
+    public function setDateCreated(DateTime $dateCreated)
+    {
+        $this->dateCreated = $dateCreated;
+        return $this;
+    }
 }

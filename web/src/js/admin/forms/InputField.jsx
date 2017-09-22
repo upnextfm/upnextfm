@@ -55,8 +55,6 @@ const InputField = ({ input, label, type, meta }) => {
       );
       break;
   }
-
-
 };
 
 export default InputField;
