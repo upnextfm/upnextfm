@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog';
 import { roomSaveSettings } from 'actions/roomActions';
 import Slide from 'material-ui/transitions/Slide';
-import FormControl from 'material-ui/Form/FormControl';
-import TextField from 'material-ui/TextField';
 import Button from 'components/Button';
+import InputGroup from 'components/Forms/InputGroup';
 
 class RoomSettingsDialog extends React.PureComponent {
   static propTypes = {
@@ -28,6 +27,9 @@ class RoomSettingsDialog extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    if (Materialize.updateTextFields) {
+      Materialize.updateTextFields();
+    }
     if (prevProps.settings !== this.props.settings) {
       this.setState({ values: this.props.settings }); // eslint-disable-line
     }
@@ -57,16 +59,16 @@ class RoomSettingsDialog extends React.PureComponent {
       >
         <DialogTitle>Room Settings</DialogTitle>
         <DialogContent>
-          <FormControl fullWidth>
-            <TextField
-              label="Join Message"
-              name="joinMessage"
+          <InputGroup label="Join Message">
+            <textarea
               rows="4"
+              name="joinMessage"
+              id="input-join-message"
+              className="materialize-textarea"
               value={values.joinMessage}
               onChange={this.handleChange}
-              multiline
             />
-          </FormControl>
+          </InputGroup>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>

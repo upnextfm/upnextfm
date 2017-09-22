@@ -24,12 +24,15 @@ class LoginDialog extends React.PureComponent {
     this.state = {
       username:      '',
       password:      '',
-      usernameError: false,
-      passwordError: false
+      usernameError: '',
+      passwordError: ''
     };
   }
 
   componentDidUpdate(prevProps) {
+    if (Materialize.updateTextFields) {
+      Materialize.updateTextFields();
+    }
     if (prevProps.user.isSubmitting !== this.props.user.isSubmitting && this.props.user.isAuthenticated) {
       this.props.onClose();
     }
@@ -51,15 +54,15 @@ class LoginDialog extends React.PureComponent {
     const username = this.state.username.trim();
     const password = this.state.password.trim();
     if (!username) {
-      this.setState({ usernameError: true });
+      this.setState({ usernameError: 'Required value' });
       return;
     }
-    this.setState({ usernameError: false });
+    this.setState({ usernameError: '' });
     if (!password) {
-      this.setState({ passwordError: true });
+      this.setState({ passwordError: 'Required value' });
       return;
     }
-    this.setState({ passwordError: false });
+    this.setState({ passwordError: '' });
 
     this.props.dispatch(userLogin({ username, password }));
   };
@@ -69,8 +72,8 @@ class LoginDialog extends React.PureComponent {
     this.setState({
       username:      '',
       password:      '',
-      usernameError: false,
-      passwordError: false
+      usernameError: '',
+      passwordError: ''
     });
     this.props.onClose();
   };

@@ -4,7 +4,6 @@ import { CircularProgress } from 'material-ui/Progress';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Dialog, { DialogActions, DialogContent, DialogContentText } from 'material-ui/Dialog';
 import Card, { CardContent, CardMedia } from 'material-ui/Card';
-import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
 import Slide from 'material-ui/transitions/Slide';
 import Grid from 'material-ui/Grid';
@@ -44,9 +43,8 @@ export default class SearchResultsDialog extends React.PureComponent {
   renderSearchForm() {
     return (
       <div className="up-dialog-search-results__form">
-        <TextField
+        <input
           id="name"
-          margin="normal"
           className="up-form-control"
           value={this.props.searchTerm}
           onChange={this.props.onChange}
