@@ -11,11 +11,11 @@ const FORM_STATE = {
   password2:      '',
   email:          '',
   tos:            false,
-  tosError:       false,
-  usernameError:  false,
-  emailError:     false,
-  passwordError:  false,
-  password2Error: false
+  tosError:       '',
+  usernameError:  '',
+  emailError:     '',
+  passwordError:  '',
+  password2Error: ''
 };
 
 class RegisterDialog extends React.PureComponent {
@@ -37,6 +37,9 @@ class RegisterDialog extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    if (Materialize.updateTextFields) {
+      Materialize.updateTextFields();
+    }
     if (prevProps.register.isSubmitting !== this.props.register.isSubmitting && this.props.register.isRegistered) {
       this.props.onClose();
     }
@@ -57,35 +60,35 @@ class RegisterDialog extends React.PureComponent {
     const tos       = this.state.tos;
 
     if (!username) {
-      this.setState({ usernameError: true });
+      this.setState({ usernameError: 'Required value' });
       return;
     }
-    this.setState({ usernameError: false });
+    this.setState({ usernameError: '' });
     if (!email) {
-      this.setState({ emailError: true });
+      this.setState({ emailError: 'Required value' });
       return;
     }
-    this.setState({ emailError: false });
+    this.setState({ emailError: '' });
     if (!password) {
-      this.setState({ passwordError: true });
+      this.setState({ passwordError: 'Required value' });
       return;
     }
-    this.setState({ passwordError: false });
+    this.setState({ passwordError: '' });
     if (!password2) {
-      this.setState({ password2Error: true });
+      this.setState({ password2Error: 'Required value' });
       return;
     }
-    this.setState({ password2Error: false });
+    this.setState({ password2Error: '' });
     if (password !== password2) {
-      this.setState({ passwordError: true });
+      this.setState({ passwordError: 'Required value' });
       return;
     }
 
     if (!tos) {
-      this.setState({ tosError: true });
+      this.setState({ tosError: 'Required value' });
       return;
     }
-    this.setState({ tosError: false });
+    this.setState({ tosError: '' });
 
     this.props.dispatch(registerSubmit({ username, email, password }));
   };
