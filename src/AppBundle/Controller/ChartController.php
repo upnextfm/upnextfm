@@ -24,8 +24,18 @@ class ChartController extends Controller
     						->findVideosWithVotes(500);
 
     	foreach ($videosRaw as $video) {
+    		$netUpVotes = 0;
+
+    		foreach ($video->getVotes() as $vote) {
+    			if ($vote->getValue() === 1) {
+    				$netUpVotes++;
+    			} else if ($vote->getValue() === -1) {
+    				$netUpVotes--;
+    			}
+    		}
+
     		$videos[] = new ValueDecorator($video, [
-    			"voteCount" => count($video->getVotes())
+    			"voteCount" => $netUpVotes
     		]);
     	}
 
