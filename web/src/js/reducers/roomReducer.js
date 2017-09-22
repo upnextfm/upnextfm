@@ -15,6 +15,7 @@ function joined(state, action) {
   if (newState.users.indexOf(username) === -1) {
     newState.users.push(username);
   }
+
   return newState;
 }
 

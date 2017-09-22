@@ -1,5 +1,5 @@
 import * as types from 'actions/actionTypes';
-import { roomSaveUserSettings } from 'actions/roomActions';
+import { roomSaveSettings } from 'actions/roomActions';
 
 /**
  *
@@ -24,7 +24,7 @@ export function settingsUser(settings) {
       type: types.SETTINGS_USER,
       settings
     });
-    dispatch(roomSaveUserSettings(getState().settings.user));
+    dispatch(roomSaveSettings(getState().settings.user, 'user'));
   };
 }
 

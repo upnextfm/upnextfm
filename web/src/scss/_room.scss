@@ -238,7 +238,7 @@ $height-avatar-collapsed: auto;
   }
 }
 
-.up-room-notice, .up-room-me {
+.up-room-notice, .up-room-me, .up-room-join-message {
   @extend .up-room-message;
   padding-left: 30px + $padding-std + $padding-std;
   padding-top: $padding-std;
@@ -250,6 +250,10 @@ $height-avatar-collapsed: auto;
 .up-room-me {
   color: $color-dim;
   font-style: italic;
+}
+
+.up-room-join-message {
+  font-size: 1rem;
 }
 
 /******************************************************************************

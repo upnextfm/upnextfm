@@ -34,79 +34,79 @@ abstract class AbstractTopic implements TopicInterface
   /**
    * @var ContainerInterface
    */
-    protected $container;
+  protected $container;
 
   /**
    * @var array
    */
-    protected $socketSettings = [];
+  protected $socketSettings = [];
 
   /**
    * @var EventDispatcherInterface
    */
-    protected $eventDispatcher;
+  protected $eventDispatcher;
 
   /**
    * @var ClientManipulatorInterface
    */
-    protected $clientManipulator;
+  protected $clientManipulator;
 
   /**
    * @var JWTTokenAuthenticator
    */
-    protected $tokenAuthenticator;
+  protected $tokenAuthenticator;
 
   /**
    * @var UserProviderInterface
    */
-    protected $userProvider;
+  protected $userProvider;
 
   /**
    * @var WebsocketAuthenticationProviderInterface
    */
-    protected $authenticationProvider;
+  protected $authenticationProvider;
 
   /**
    * @var EntityManagerInterface
    */
-    protected $em;
+  protected $em;
 
   /**
    * @var RoomStorage
    */
-    protected $roomStorage;
+  protected $roomStorage;
 
   /**
    * @var LoggerInterface
    */
-    protected $logger;
+  protected $logger;
 
   /**
    * @param ContainerInterface $container
    * @param LoggerInterface $logger
    */
-    public function __construct(ContainerInterface $container, LoggerInterface $logger)
-    {
-        $this->container              = $container;
-        $this->socketSettings         = $container->getParameter("app_ws_settings");
-        $this->eventDispatcher        = $container->get("event_dispatcher");
-        $this->clientManipulator      = $container->get("gos_web_socket.websocket.client_manipulator");
-        $this->tokenAuthenticator     = $container->get("lexik_jwt_authentication.security.guard.jwt_token_authenticator");
-        $this->userProvider           = $container->get("fos_user.user_provider.username");
-        $this->authenticationProvider = $container->get("gos_web_socket.websocket_authentification.provider");
-        $this->em                     = $container->get("doctrine.orm.default_entity_manager");
-        $this->logger                 = $logger;
-    }
+  public function __construct(ContainerInterface $container, LoggerInterface $logger)
+  {
+    $this->container = $container;
+    $this->socketSettings = $container->getParameter("app_ws_settings");
+    $this->eventDispatcher = $container->get("event_dispatcher");
+    $this->clientManipulator = $container->get("gos_web_socket.websocket.client_manipulator");
+    $this->tokenAuthenticator = $container->get("lexik_jwt_authentication.security.guard.jwt_token_authenticator");
+    $this->userProvider = $container->get("fos_user.user_provider.username");
+    $this->authenticationProvider = $container->get("gos_web_socket.websocket_authentification.provider");
+    $this->em = $container->get("doctrine.orm.default_entity_manager");
+    $this->logger = $logger;
+  }
 
   /**
    * @param RoomStorage $roomStorage
    * @return $this
    */
-    public function setRoomStorage(RoomStorage $roomStorage)
-    {
-        $this->roomStorage = $roomStorage;
-        return $this;
-    }
+  public function setRoomStorage(RoomStorage $roomStorage)
+  {
+    $this->roomStorage = $roomStorage;
+    return $this;
+  }
 
   /**
    * This will receive any Subscription requests for this topic.
@@ -116,13 +116,13 @@ abstract class AbstractTopic implements TopicInterface
    * @param WampRequest $request
    * @return void
    */
-    public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
-    {
-  /*    $topic->broadcast([
-        'cmd' => Commands::JOIN,
-        'msg' => $connection->resourceId . " has joined " . $topic->getId()
-      ]);*/
-    }
+  public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
+  {
+    /*    $topic->broadcast([
+          'cmd' => Commands::JOIN,
+          'msg' => $connection->resourceId . " has joined " . $topic->getId()
+        ]);*/
+  }
 
   /**
    * This will receive any UnSubscription requests for this topic.
@@ -132,13 +132,13 @@ abstract class AbstractTopic implements TopicInterface
    * @param WampRequest $request
    * @return void
    */
-    public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
-    {
-  /*    $topic->broadcast([
-        'cmd' => Commands::LEAVE,
-        'msg' => $connection->resourceId . " has left " . $topic->getId()
-      ]);*/
-    }
+  public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+  {
+    /*    $topic->broadcast([
+          'cmd' => Commands::LEAVE,
+          'msg' => $connection->resourceId . " has left " . $topic->getId()
+        ]);*/
+  }
 
   /**
    * Authenticates the user
@@ -147,217 +147,218 @@ abstract class AbstractTopic implements TopicInterface
    * @param string $token
    * @return \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
    */
-    protected function authenticate(ConnectionInterface $connection, $token)
-    {
-        $connection->WebSocket->request->getQuery()->set("token", $token);
-        return $this->authenticationProvider->authenticate($connection);
-    }
+  protected function authenticate(ConnectionInterface $connection, $token)
+  {
+    $connection->WebSocket->request->getQuery()->set("token", $token);
+    return $this->authenticationProvider->authenticate($connection);
+  }
 
   /**
    * @param string $key
    * @return mixed
    */
-    protected function getParameter($key)
-    {
-        return $this->container->getParameter($key);
-    }
+  protected function getParameter($key)
+  {
+    return $this->container->getParameter($key);
+  }
 
   /**
    * @param ConnectionInterface|User $connection
    * @param array $event
    * @return UserInterface
    */
-    protected function getUser(ConnectionInterface $connection, array $event = [])
-    {
-        $user = $this->clientManipulator->getClient($connection);
-        if ($user instanceof UserInterface) {
-            $username = $user->getUsername();
-            if ($username) {
-                $user = $this->em->getRepository("AppBundle:User")
-                ->findByUsername($user->getUsername());
-            }
-        }
-
-        return $user;
+  protected function getUser(ConnectionInterface $connection, array $event = [])
+  {
+    $user = $this->clientManipulator->getClient($connection);
+    if ($user instanceof UserInterface) {
+      $username = $user->getUsername();
+      if ($username) {
+        $user = $this->em->getRepository("AppBundle:User")
+          ->findByUsername($user->getUsername());
+      }
     }
+
+    return $user;
+  }
 
   /**
    * @param string $roomName
    * @param UserInterface|User $user
    * @return Room
    */
-    protected function getRoom($roomName, UserInterface $user = null)
-    {
-        $repo = $this->em->getRepository("AppBundle:Room");
-        $room = $repo->findByName($roomName);
-        if (!$room && $user !== null) {
-            $thumbService = $this->container->get("app.service.thumbs");
+  protected function getRoom($roomName, UserInterface $user = null)
+  {
+    $repo = $this->em->getRepository("AppBundle:Room");
+    $room = $repo->findByName($roomName);
+    if (!$room && $user !== null) {
+      $thumbService = $this->container->get("app.service.thumbs");
 
-            $room     = new Room($roomName, $user);
-            $settings = new RoomSettings();
-            $settings->setRoom($room);
-            $settings->setIsPublic(true);
-            $settings->setJoinMessage("Welcome to ${roomName}.");
-            $settings->setThumbSm($thumbService->getRoomThumb($room, $user, "sm"));
-            $settings->setThumbMd($thumbService->getRoomThumb($room, $user, "md"));
-            $settings->setThumbLg($thumbService->getRoomThumb($room, $user, "lg"));
-            $room->setSettings($settings);
-            $this->em->persist($room);
-            $this->em->flush();
+      $room = new Room($roomName, $user);
+      $settings = new RoomSettings();
+      $settings->setRoom($room);
+      $settings->setIsPublic(true);
+      $settings->setJoinMessage("Welcome to ${roomName}.");
+      $settings->setThumbSm($thumbService->getRoomThumb($room, $user, "sm"));
+      $settings->setThumbMd($thumbService->getRoomThumb($room, $user, "md"));
+      $settings->setThumbLg($thumbService->getRoomThumb($room, $user, "lg"));
+      $room->setSettings($settings);
+      $this->em->persist($room);
+      $this->em->flush();
 
-            $event = new CreatedRoomEvent($user, $room);
-            $this->eventDispatcher->dispatch(UserEvents::CREATED_ROOM, $event);
-        }
-
-        return $room;
+      $event = new CreatedRoomEvent($user, $room);
+      $this->eventDispatcher->dispatch(UserEvents::CREATED_ROOM, $event);
     }
+
+    return $room;
+  }
 
   /**
    * @param RoomSettings $settings
    * @return array
    */
-    protected function serializeRoomSettings(RoomSettings $settings)
-    {
-        return [
-        "isPublic" => $settings->isPublic(),
-        "thumbSm"  => $settings->getThumbSm(),
-        "thumbMd"  => $settings->getThumbMd(),
-        "thumbLg"  => $settings->getThumbLg()
-        ];
-    }
+  protected function serializeRoomSettings(RoomSettings $settings)
+  {
+    return [
+      "isPublic"    => $settings->isPublic(),
+      "joinMessage" => $settings->getJoinMessage(),
+      "thumbSm"     => $settings->getThumbSm(),
+      "thumbMd"     => $settings->getThumbMd(),
+      "thumbLg"     => $settings->getThumbLg()
+    ];
+  }
 
   /**
    * @param UserSettings $settings
    * @return array
    */
-    protected function serializeUserSettings(UserSettings $settings)
-    {
-        return [
-        "showNotices" => $settings->getShowNotices(),
-        "textColor"   => $settings->getTextColor()
-        ];
-    }
+  protected function serializeUserSettings(UserSettings $settings)
+  {
+    return [
+      "showNotices" => $settings->getShowNotices(),
+      "textColor"   => $settings->getTextColor()
+    ];
+  }
 
   /**
    * @param UserInterface|User $user
    * @return array
    */
-    protected function serializeUser(UserInterface $user)
-    {
-        $username = $user->getUsername();
-        return [
-        "username" => $username,
-        "avatar"   => $user->getInfo()->getAvatarSm(),
-        "profile"  => "https://upnext.fm/u/${username}",
-        "roles"    => $user->getRoles()
-        ];
-    }
+  protected function serializeUser(UserInterface $user)
+  {
+    $username = $user->getUsername();
+    return [
+      "username" => $username,
+      "avatar"   => $user->getInfo()->getAvatarSm(),
+      "profile"  => "https://upnext.fm/u/${username}",
+      "roles"    => $user->getRoles()
+    ];
+  }
 
   /**
    * @param VideoLog $videoLog
    * @return array
    */
-    protected function serializeVideo(VideoLog $videoLog)
-    {
-        $video = $videoLog->getVideo();
+  protected function serializeVideo(VideoLog $videoLog)
+  {
+    $video = $videoLog->getVideo();
 
-        return [
-        "id"        => $videoLog->getId(),
-        "codename"  => $video->getCodename(),
-        "provider"  => $video->getProvider(),
-        "permalink" => $video->getPermalink(),
-        "thumbnail" => $video->getThumbSm(),
-        "title"     => $video->getTitle(),
-        "seconds"   => $video->getSeconds(),
-        "playedBy"  => $videoLog->getUser()->getUsername(),
-        "createdBy" => $video->getCreatedByUser()->getUsername()
-        ];
-    }
+    return [
+      "id"        => $videoLog->getId(),
+      "codename"  => $video->getCodename(),
+      "provider"  => $video->getProvider(),
+      "permalink" => $video->getPermalink(),
+      "thumbnail" => $video->getThumbSm(),
+      "title"     => $video->getTitle(),
+      "seconds"   => $video->getSeconds(),
+      "playedBy"  => $videoLog->getUser()->getUsername(),
+      "createdBy" => $video->getCreatedByUser()->getUsername()
+    ];
+  }
 
   /**
    * @param ChatLog $message
    * @param string $type
    * @return array
    */
-    protected function serializeMessage(ChatLog $message, $type = "message")
-    {
-        return [
-        "type"    => $type,
-        "id"      => $message->getId(),
-        "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
-        "from"    => $message->getUser()->getUsername(),
-        "message" => $message->getMessage()
-        ];
-    }
+  protected function serializeMessage(ChatLog $message, $type = "message")
+  {
+    return [
+      "type"    => $type,
+      "id"      => $message->getId(),
+      "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
+      "from"    => $message->getUser()->getUsername(),
+      "message" => $message->getMessage()
+    ];
+  }
 
   /**
    * @param ChatLog[] $messages
    * @return array
    */
-    protected function serializeMessages($messages)
-    {
-        $serialized = [];
-        foreach ($messages as $message) {
-            $serialized[] = $this->serializeMessage($message);
-        }
-
-        return $serialized;
+  protected function serializeMessages($messages)
+  {
+    $serialized = [];
+    foreach ($messages as $message) {
+      $serialized[] = $this->serializeMessage($message);
     }
+
+    return $serialized;
+  }
 
   /**
    * @param PrivateMessage $pm
    * @return array
    */
-    protected function serializePrivateMessage(PrivateMessage $pm)
-    {
-        return [
-        "id"      => $pm->getId(),
-        "type"    => "message",
-        "to"      => $pm->getToUser()->getUsername(),
-        "from"    => $pm->getFromUser()->getUsername(),
-        "date"    => $pm->getDateCreated()->format("D M d Y H:i:s O"),
-        "message" => $pm->getMessage()
-        ];
-    }
+  protected function serializePrivateMessage(PrivateMessage $pm)
+  {
+    return [
+      "id"      => $pm->getId(),
+      "type"    => "message",
+      "to"      => $pm->getToUser()->getUsername(),
+      "from"    => $pm->getFromUser()->getUsername(),
+      "date"    => $pm->getDateCreated()->format("D M d Y H:i:s O"),
+      "message" => $pm->getMessage()
+    ];
+  }
 
   /**
    * @param string $message
    * @return string
    */
-    protected function sanitizeMessage($message)
-    {
-        return trim(htmlspecialchars($message));
-    }
+  protected function sanitizeMessage($message)
+  {
+    return trim(htmlspecialchars($message));
+  }
 
   /**
    * @return bool
    * @throws \Doctrine\ORM\ORMException
    */
-    protected function reopenEntityManager()
-    {
-        if (!$this->em->isOpen()) {
-            $this->em = $this->em->create(
-                $this->em->getConnection(),
-                $this->em->getConfiguration()
-            );
-            return true;
-        }
-
-        return false;
+  protected function reopenEntityManager()
+  {
+    if (!$this->em->isOpen()) {
+      $this->em = $this->em->create(
+        $this->em->getConnection(),
+        $this->em->getConfiguration()
+      );
+      return true;
     }
+
+    return false;
+  }
 
   /**
    * @param \Exception $e
    */
-    protected function handleError(Exception $e)
-    {
-        $this->logger->error($e);
-        if ($e instanceof ORMException) {
-            if (stripos($e->getMessage(), 'closed') !== -1) {
-                $this->reopenEntityManager();
-            }
-        }
+  protected function handleError(Exception $e)
+  {
+    $this->logger->error($e);
+    if ($e instanceof ORMException) {
+      if (stripos($e->getMessage(), 'closed') !== -1) {
+        $this->reopenEntityManager();
+      }
     }
+  }
 
   /**
    * @param ConnectionInterface $conn
@@ -365,11 +366,11 @@ abstract class AbstractTopic implements TopicInterface
    * @param string $error
    * @return mixed
    */
-    protected function connSendError(ConnectionInterface $conn, Topic $topic, $error)
-    {
-        return $conn->event($topic->getId(), [
-        "cmd"   => Commands::ERROR,
-        "error" => $error
-        ]);
-    }
+  protected function connSendError(ConnectionInterface $conn, Topic $topic, $error)
+  {
+    return $conn->event($topic->getId(), [
+      "cmd"   => Commands::ERROR,
+      "error" => $error
+    ]);
+  }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ShareButtons, generateShareIcon } from 'react-share';
-import { layoutToggleNavDrawer, layoutToggleHelpDialog } from 'actions/layoutActions';
+import { layoutToggleNavDrawer, layoutToggleHelpDialog, layoutToggleRoomSettingsDialog } from 'actions/layoutActions';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
@@ -82,6 +82,14 @@ class NavDrawer extends React.PureComponent {
 
     const roomListItems = (
       <div>
+        {user.roles.indexOf('ROLE_ADMIN') === -1 ? null : (
+          <ListItem onClick={() => { dispatch(layoutToggleRoomSettingsDialog()); }} button>
+            <ListItemIcon>
+              <Icon name="settings" />
+            </ListItemIcon>
+            <ListItemText primary="Room Settings" />
+          </ListItem>
+        )}
         <ListItem onClick={() => { window.open(`/chat/logs/${this.props.roomName}`); }} button>
           <ListItemIcon>
             <Icon name="comment" />

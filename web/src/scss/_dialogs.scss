@@ -39,7 +39,6 @@
 }
 
 .up-dialog--wide {
-
   & > div:nth-child(2) {
     width: 80% !important;
     max-width: 80% !important;
@@ -47,6 +46,14 @@
 
     & > div {
       min-height: 100%;
+    }
+  }
+}
+
+.up-dialog--auto {
+  & > div:nth-child(2) {
+    & > div {
+      min-height: 0;
     }
   }
 }

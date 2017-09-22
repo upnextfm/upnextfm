@@ -6,6 +6,7 @@ import Dropzone from 'react-dropzone';
 import List from 'material-ui/List';
 import MessageType from 'components/Chat/Types/MessageType';
 import NoticeType from 'components/Chat/Types/NoticeType';
+import JoinMessageType from 'components/Chat/Types/JoinMessageType';
 import MeType from 'components/Chat/Types/MeType';
 
 export default class MessagesPanel extends React.Component {
@@ -92,6 +93,13 @@ export default class MessagesPanel extends React.Component {
                   <MeType
                     key={message.id}
                     user={user}
+                    message={message}
+                  />
+                );
+              } else if (message.type === 'joinMessage') {
+                item = (
+                  <JoinMessageType
+                    key={message.id}
                     message={message}
                   />
                 );

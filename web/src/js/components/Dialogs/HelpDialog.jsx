@@ -4,7 +4,7 @@ import Dialog, { DialogActions, DialogContent, DialogTitle, DialogContentText } 
 import Slide from 'material-ui/transitions/Slide';
 import Button from 'components/Button';
 
-export default class Component extends React.PureComponent {
+export default class HelpDialog extends React.PureComponent {
   static propTypes = {
     isOpen:  PropTypes.bool,
     onClose: PropTypes.func

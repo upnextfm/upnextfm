@@ -4,7 +4,7 @@ import { userRoles } from 'actions/userActions';
 import { layoutToggleLoginDialog } from 'actions/layoutActions';
 import { playlistSubscribe } from 'actions/playlistActions';
 import { pmsSend } from 'actions/pmsActions';
-import { settingsAll } from 'actions/settingsActions';
+import { settingsAll, settingsRoom, settingsUser } from 'actions/settingsActions';
 
 let noticeID     = 0;
 let pingInterval = null;
@@ -28,6 +28,12 @@ function dispatchSocketPayload(dispatch, getState, payload) {
         type: types.ROOM_JOINED,
         user: payload.user
       });
+      dispatch(roomMessage({
+        type:    'joinMessage',
+        id:      nextNoticeID(),
+        date:    new Date(),
+        message: getState().settings.room.joinMessage
+      }));
       if (getState().user.username !== payload.user.username) {
         dispatch(roomMessage({
           type:    'notice',
@@ -152,9 +158,10 @@ const commands = {
 
 /**
  * @param {*} settings
+ * @param {string} type
  * @returns {Function}
  */
-export function roomSaveUserSettings(settings) {
+export function roomSaveSettings(settings, type) {
   return (dispatch, getState, api) => {
     const room = getState().room;
     if (room.name !== '') {
@@ -162,10 +169,19 @@ export function roomSaveUserSettings(settings) {
         dispatch(layoutToggleLoginDialog());
       } else {
         api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-          cmd:  types.CMD_SAVE_SETTINGS,
-          type: 'user',
+          cmd: types.CMD_SAVE_SETTINGS,
+          type,
           settings
         });
+        switch (type) {
+          case 'user':
+            return dispatch(settingsUser(settings));
+          case 'room':
+            return dispatch(settingsRoom(settings));
+          default:
+            console.log(`Invalid settings type "${type}".`);
+            break;
+        }
       }
     }
   };

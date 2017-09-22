@@ -59,6 +59,11 @@ export default function layoutReducer(state = initialState.layout, action = {}) 
         ...state,
         isHelpDialogOpen: !state.isHelpDialogOpen
       };
+    case types.LAYOUT_TOGGLE_ROOM_SETTINGS_DIALOG:
+      return {
+        ...state,
+        isRoomSettingsDialogOpen: !state.isRoomSettingsDialogOpen
+      };
     case types.LAYOUT_COLS:
       return {
         ...state,

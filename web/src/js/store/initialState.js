@@ -2,17 +2,18 @@ import Storage from 'api/Storage';
 
 export default {
   layout: {
-    isNavDrawerOpen:      false,
-    isWindowFocused:      true,
-    isLoginDialogOpen:    false,
-    isRegisterDialogOpen: false,
-    isHelpDialogOpen:     false,
-    isUsersCollapsed:     Storage.getItem('layout:isUsersCollapsed', false),
-    activeChat:           'room',
-    errorMessage:         '',
-    errorDuration:        30000,
-    colsChatSide:         7,
-    colsVideoSide:        5
+    isNavDrawerOpen:          false,
+    isWindowFocused:          true,
+    isLoginDialogOpen:        false,
+    isRegisterDialogOpen:     false,
+    isHelpDialogOpen:         false,
+    isRoomSettingsDialogOpen: false,
+    isUsersCollapsed:         Storage.getItem('layout:isUsersCollapsed', false),
+    activeChat:               'room',
+    errorMessage:             '',
+    errorDuration:            30000,
+    colsChatSide:             7,
+    colsVideoSide:            5
   },
   user: {
     username:        '',
@@ -39,7 +40,9 @@ export default {
       maxUploadSize: 10485760,
       maxInputChars: 1000
     },
-    room: {}
+    room: {
+      joinMessage: 'Welcome to the room.'
+    }
   },
   room: {
     name:           '',

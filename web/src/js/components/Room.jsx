@@ -7,9 +7,16 @@ import { settingsSocket } from 'actions/settingsActions';
 import { userUsername } from 'actions/userActions';
 import { search, searchClear, searchTerm } from 'actions/searchActions';
 import { playlistAppend } from 'actions/playlistActions';
-import { layoutToggleLoginDialog, layoutToggleRegisterDialog, layoutToggleHelpDialog, layoutErrorMessage } from 'actions/layoutActions';
+import {
+  layoutToggleLoginDialog,
+  layoutToggleRegisterDialog,
+  layoutToggleHelpDialog,
+  layoutToggleRoomSettingsDialog,
+  layoutErrorMessage
+} from 'actions/layoutActions';
 import ErrorSnackbar from 'components/ErrorSnackbar';
 import Progress from 'components/Video/Progress';
+import RoomSettingsDialog from 'components/Dialogs/RoomSettingsDialog';
 import HelpDialog from 'components/Dialogs/HelpDialog';
 import LoginDialog from 'components/Dialogs/LoginDialog';
 import SearchResultsDialog from 'components/Dialogs/SearchResultsDialog';
@@ -83,6 +90,10 @@ class Room extends React.PureComponent {
         <HelpDialog
           isOpen={layout.isHelpDialogOpen}
           onClose={() => { dispatch(layoutToggleHelpDialog()); }}
+        />
+        <RoomSettingsDialog
+          isOpen={layout.isRoomSettingsDialogOpen}
+          onClose={() => { dispatch(layoutToggleRoomSettingsDialog()); }}
         />
         <LoginDialog
           isOpen={layout.isLoginDialogOpen}

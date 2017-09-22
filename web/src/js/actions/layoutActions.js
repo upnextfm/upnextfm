@@ -95,6 +95,15 @@ export function layoutToggleHelpDialog() {
 }
 
 /**
+ * @returns {{type: string}}
+ */
+export function layoutToggleRoomSettingsDialog() {
+  return {
+    type: types.LAYOUT_TOGGLE_ROOM_SETTINGS_DIALOG
+  };
+}
+
+/**
  * @param {number} chatSide
  * @param {number} videoSide
  * @returns {{type: string, chatSide: number, videoSide: number}}
