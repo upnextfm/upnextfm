@@ -123,6 +123,7 @@ class RegisterDialog extends React.PureComponent {
           <input
             name="username"
             id="input-username"
+            type="text"
             value={username}
             disabled={register.isSubmitting}
             onChange={this.handleChangeInput}
