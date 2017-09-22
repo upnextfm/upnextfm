@@ -250,6 +250,9 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       }
 
       switch ($event["cmd"]) {
+        case VideoCommands::UPVOTE:
+          $this->handleUpvote($conn, $topic, $req, $room, $user, $event);
+          break;
         case VideoCommands::APPEND:
           $this->handleAppend($conn, $topic, $req, $room, $user, $event);
           break;
@@ -379,6 +382,37 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
         "video" => $this->serializeVideo($videoLog),
         "start" => 0
       ]);
+    }
+
+    return $this->sendPlaylistToRoom($room);
+  }
+
+
+  /**
+   * @param ConnectionInterface $conn
+   * @param Topic $topic
+   * @param WampRequest $req
+   * @param Room $room
+   * @param UserInterface|User $user
+   * @param array $event
+   * @return mixed|void
+   */
+  protected function handleUpvote(
+    ConnectionInterface $conn,
+    Topic $topic,
+    WampRequest $req,
+    Room $room,
+    UserInterface $user,
+    array $event
+  )
+  {
+
+    if (empty($event["videoID"])) {
+      return $this->connSendError(
+        $conn,
+        $topic,
+        "Invalid command."
+      );
     }
 
     return $this->sendPlaylistToRoom($room);

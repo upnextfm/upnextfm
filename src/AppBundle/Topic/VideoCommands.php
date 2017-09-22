@@ -9,6 +9,7 @@ class VideoCommands
     const PLAYNEXT    = "playNext";
     const START       = "start";
     const STOP        = "stop";
+    const UPVOTE      = "upVote";
     const VIDEOS      = "videos";
     const TIME_UPDATE = "time_update";
 }
