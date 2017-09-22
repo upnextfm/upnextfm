@@ -100,6 +100,22 @@ export function playlistRemove(videoID) {
  * @param {number} videoID
  * @returns {Function}
  */
+export function playlistUpvote(videoID) {
+  return (dispatch, getState, api) => { // eslint-disable-line
+    const room = subscribe(dispatch, getState);
+    if (room && room.name !== '') {
+      api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
+        cmd: types.CMD_VIDEO_UPVOTE,
+        videoID
+      });
+    }
+  };  
+}
+
+/**
+ * @param {number} videoID
+ * @returns {Function}
+ */
 export function playlistPlayNext(videoID) {
   return (dispatch, getState, api) => { // eslint-disable-line
     const room = subscribe(dispatch, getState);

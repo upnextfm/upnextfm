@@ -60,6 +60,9 @@ class Playlist extends React.PureComponent {
   handleClickMenuAction = (e, action, videoID) => {
     const dispatch = this.props.dispatch;
     switch (action) {
+      case 'upvote':
+        dispatch(actions.playlistUpvote(videoID));
+        break;
       case 'remove':
         dispatch(actions.playlistRemove(videoID));
         break;

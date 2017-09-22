@@ -88,6 +88,7 @@ export const CMD_MESSAGES       = 'messages';
 export const CMD_VIDEO_APPEND   = 'append';
 export const CMD_VIDEO_REMOVE   = 'remove';
 export const CMD_VIDEO_PLAYNEXT = 'playNext';
+export const CMD_VIDEO_UPVOTE   = 'upVote';
 export const CMD_VIDEO_START    = 'start';
 export const CMD_VIDEO_STOP     = 'stop';
 export const CMD_VIDEO_VIDEOS   = 'videos';
