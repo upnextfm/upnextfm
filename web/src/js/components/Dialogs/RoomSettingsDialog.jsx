@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog';
 import { roomSaveSettings } from 'actions/roomActions';
 import Slide from 'material-ui/transitions/Slide';
-import FormControl from 'material-ui/Form/FormControl';
-import TextField from 'material-ui/TextField';
 import Button from 'components/Button';
 import InputGroup from 'components/Forms/InputGroup';
 
