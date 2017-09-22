@@ -16,7 +16,8 @@ export default class PlaylistMenu extends React.Component {
     anchor:      undefined,
     isOpen:      false,
     permissions: {
-      remove: false
+      remove: false,
+      vote: false
     },
     onClick:        () => {},
     onRequestClose: () => {}
@@ -30,12 +31,7 @@ export default class PlaylistMenu extends React.Component {
         anchorEl={anchor}
         open={isOpen}
         onRequestClose={onRequestClose}
-      >
-        {!permissions.vote ? null : (
-          <MenuItem onClick={(e) => { onClick(e, 'upvote', videoID); }}>
-            Upvote
-          </MenuItem>
-        )}      
+      >     
         {!permissions.remove ? null : (
           <MenuItem onClick={(e) => { onClick(e, 'remove', videoID); }}>
             Remove
