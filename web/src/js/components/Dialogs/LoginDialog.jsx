@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { userReset, userLogin } from 'actions/userActions';
-import FormControl from 'material-ui/Form/FormControl';
-import TextField from 'material-ui/TextField';
 import FormDialog from 'components/Dialogs/FormDialog';
+import InputGroup from 'components/Forms/InputGroup';
 
 class LoginDialog extends React.PureComponent {
   static propTypes = {
@@ -90,28 +89,28 @@ class LoginDialog extends React.PureComponent {
         onSubmit={this.handleSubmit}
         onClose={this.handleClose}
       >
-        <FormControl disabled={user.isSubmitting} fullWidth>
-          <TextField
-            label="Username"
+        <InputGroup label="Username" error={usernameError}>
+          <input
             name="username"
+            id="input-username"
             value={username}
-            error={usernameError}
+            disabled={user.isSubmitting}
             onKeyDown={this.handleKeyDown}
             onChange={this.handleChangeInput}
             autoFocus
           />
-        </FormControl>
-        <FormControl disabled={user.isSubmitting} fullWidth>
-          <TextField
-            label="Password"
+        </InputGroup>
+        <InputGroup label="Password" error={passwordError}>
+          <input
             name="password"
+            id="input-password"
             type="password"
             value={password}
-            error={passwordError}
+            disabled={user.isSubmitting}
             onKeyDown={this.handleKeyDown}
             onChange={this.handleChangeInput}
           />
-        </FormControl>
+        </InputGroup>
       </FormDialog>
     );
   }

@@ -15,3 +15,11 @@ select:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px $card-bg-color inset !important;
   }
 }
+
+.up-form-group {
+  width: 100%;
+}
+
+.up-form-error {
+  color: red;
+}

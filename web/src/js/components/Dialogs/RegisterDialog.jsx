@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { registerSubmit, registerReset } from 'actions/registerActions';
-import { FormControl, FormControlLabel } from 'material-ui/Form';
-import TextField from 'material-ui/TextField';
-import Checkbox from 'material-ui/Checkbox';
 import FormDialog from 'components/Dialogs/FormDialog';
+import InputGroup from 'components/Forms/InputGroup';
 
 const FORM_STATE = {
   username:       '',
@@ -121,67 +119,65 @@ class RegisterDialog extends React.PureComponent {
         onSubmit={this.handleSubmit}
         onClose={this.handleClose}
       >
-        <FormControl disabled={register.isSubmitting} fullWidth>
-          <TextField
-            label="Username"
+        <InputGroup label="Username" error={usernameError}>
+          <input
             name="username"
+            id="input-username"
+            type="text"
             value={username}
-            error={usernameError}
+            disabled={register.isSubmitting}
             onChange={this.handleChangeInput}
             required
-            fullWidth
             autoFocus
           />
-        </FormControl>
-        <FormControl disabled={register.isSubmitting} fullWidth>
-          <TextField
-            label="Email"
+        </InputGroup>
+        <InputGroup label="Email" error={emailError}>
+          <input
             name="email"
+            id="input-email"
             type="email"
             value={email}
-            error={emailError}
+            disabled={register.isSubmitting}
             onChange={this.handleChangeInput}
             required
-            fullWidth
           />
-        </FormControl>
-        <FormControl disabled={register.isSubmitting} fullWidth>
-          <TextField
-            label="Password"
+        </InputGroup>
+        <InputGroup label="Password" error={passwordError}>
+          <input
             name="password"
+            id="input-password"
             type="password"
             value={password}
-            error={passwordError}
+            disabled={register.isSubmitting}
             onChange={this.handleChangeInput}
             required
-            fullWidth
           />
-        </FormControl>
-        <FormControl disabled={register.isSubmitting} fullWidth>
-          <TextField
-            label="Password Verify"
+        </InputGroup>
+        <InputGroup label="Password Verify" error={password2Error}>
+          <input
             name="password2"
+            id="input-password2"
             type="password"
             value={password2}
-            error={password2Error}
+            disabled={register.isSubmitting}
             onChange={this.handleChangeInput}
             required
-            fullWidth
           />
-        </FormControl>
-        <FormControl disabled={register.isSubmitting} fullWidth>
-          <FormControlLabel
-            label="Agree to Terms of Service"
-            control={
-              <Checkbox
-                name="tos"
-                checked={tos}
-                onChange={this.handleChangeInput}
-                required
-              />
-            }
+        </InputGroup>
+        <p>
+          <input
+            name="tos"
+            id="input-tos"
+            type="checkbox"
+            checked={tos}
+            disabled={register.isSubmitting}
+            onChange={this.handleChangeInput}
+            required
           />
-        </FormControl>
+          <label htmlFor="input-tos">
+            Agree to Terms of Service
+          </label>
+        </p>
       </FormDialog>
     );
   }
