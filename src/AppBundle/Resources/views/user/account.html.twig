@@ -1,23 +1,33 @@
-{% extends "AppBundle::base.html.twig" %}
-{% block title %}Account{% endblock %}
-{% block body %}
-    <div class="container">
-        <h2 class="center-align up-page-title flow-text">
+{% extends "AppBundle::base.html.twig" %} {% block title %}Account{% endblock %} {% block body %}
+<div class="container">
+    <h2 class="center-align up-page-title flow-text">
             Account
         </h2>
-        <form method="post">
-            <div class="row">
-                <div class="input-field col s6">
-                    <input id="username" name="username" type="text" class="validate" value="{{ user.username }}">
-                    <label for="username">Username</label>
-                </div>
-                <div class="input-field col s6">
-                    <input id="email" name="email" type="email" class="validate" value="{{ user.email }}">
-                    <label for="email">Email</label>
-                </div>
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="username" name="username" type="text" class="validate" value="{{ user.username }}">
+                <label for="username">Username</label>
             </div>
-
-            <button type="submit" class="waves-effect waves-light btn">Save</button>
-        </form>
-    </div>
-{% endblock %}
+            <div class="input-field col s6">
+                <input id="email" name="email" type="email" class="validate" value="{{ user.email }}">
+                <label for="email">Email</label>
+            </div>
+        </div>
+        <!-- End first form row -->
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="password" name="password" type="password" class="validate" value="******">
+                <label for="password">Password</label>
+            </div>
+            <div class="file-field input-field col s6">
+                <div class="btn"> <span>Avatar Upload</span>
+                    <input type="file"> </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text"> </div>
+            </div>
+        </div>
+        <!-- End second form row -->
+        <button type="submit" class="waves-effect waves-light btn">Save</button>
+    </form>
+</div> {% endblock %}
