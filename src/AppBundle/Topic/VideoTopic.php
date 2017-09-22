@@ -415,6 +415,26 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       );
     }
 
+    $user = $this->getUser($connection);
+    if (!($user instanceof UserInterface)) {
+      $user = null;
+      return $this->connSendError(
+        $conn,
+        $topic,
+        "Invalid command. You must be signed in"
+      );
+    }
+
+    $video = $this->em->getRepository("AppBundle:Video")->findByID($item["videoID"]);
+
+    $vote = new Vote();
+    $vote->setValue(1);
+    $vote->setVideo($video);
+    $vote->setUser($user);
+
+    $this->em->persist($vote);
+    $this->em->flush();
+
     return $this->sendPlaylistToRoom($room);
   }
 
