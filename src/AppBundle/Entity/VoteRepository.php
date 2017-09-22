@@ -23,7 +23,7 @@ class VoteRepository extends AbstractRepository
     {
         return $this->createQueryBuilder("vt")
         		->join("AppBundle:Video", "vd", "with", "vt.video = vd")
-        		->orderBy("vt.value", "desc")
+        		->orderBy("vt.value", "asc")
         		->setMaxResults("25")
         		->getQuery()
         		->execute();

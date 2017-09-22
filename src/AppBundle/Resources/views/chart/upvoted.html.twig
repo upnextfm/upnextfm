@@ -5,6 +5,10 @@
     </h2>
 
 
-    
+    <ul>
+    	{% for vote in votes %}
+    			<li>{{ vote.video.title }} - {{ vote.value }} votes </li>
+    	{% endfor %}
+    </ul>
 
 </div> {% endblock %}
