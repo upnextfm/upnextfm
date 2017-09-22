@@ -6,8 +6,8 @@
 
 
     <ul>
-    	{% for vote in votes %}
-    			<li>{{ vote.video.title }} - {{ vote.value }} votes </li>
+    	{% for video in videos %}
+    			<li>{{ video.title }} {{ video.voteCount }} votes </li>
     	{% endfor %}
     </ul>
 

@@ -14,18 +14,4 @@ class VoteRepository extends AbstractRepository
         "id" => $id
         ]);
     }
-
-
-		/**
-		 * @return Vote[]
-		 */
-    public function findMostUpvotedVideos()
-    {
-        return $this->createQueryBuilder("vt")
-        		->join("AppBundle:Video", "vd", "with", "vt.video = vd")
-        		->orderBy("vt.value", "asc")
-        		->setMaxResults("25")
-        		->getQuery()
-        		->execute();
-    }
 }

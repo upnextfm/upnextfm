@@ -59,6 +59,12 @@ class Video
    */
     protected $numPlays = 0;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Vote", mappedBy="video")
+     */
+    private $votes;
+
+
   /**
    * @var string
    *
@@ -255,6 +261,14 @@ class Video
     {
         $this->numPlays++;
         return $this;
+    }
+
+    /**
+     * @return Vote
+     */
+    public function getVotes()
+    {
+        return $this->votes;
     }
 
   /**

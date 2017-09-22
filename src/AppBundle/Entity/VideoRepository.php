@@ -28,4 +28,16 @@ class VideoRepository extends AbstractRepository
         "provider" => $provider
         ]);
     }
+
+    /**
+     * @return Video[]
+     */
+    public function findVideosWithVotes($limit)
+    {
+        return $this->createQueryBuilder("vd")
+            ->leftJoin("AppBundle:Vote", "vt", "with", "vt.video = vd")
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->execute();
+    }
 }
