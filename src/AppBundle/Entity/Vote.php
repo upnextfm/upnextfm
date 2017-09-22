@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 /**
  * Vote
@@ -77,7 +78,7 @@ class Vote
 
       /**
        * @param Video $video
-       * @return Favorite
+       * @return Vote
        */
       public function setVideo(Video $video)
       {
@@ -95,7 +96,7 @@ class Vote
 
       /**
        * @param User $user
-       * @return Favorite
+       * @return Vote
        */
       public function setUser(User $user)
       {
@@ -138,7 +139,7 @@ class Vote
 
       /**
        * @param DateTime $dateCreated
-       * @return Favorite
+       * @return Vote
        */
       public function setDateCreated(DateTime $dateCreated)
       {

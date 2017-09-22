@@ -1,5 +1,40 @@
+{% trans_default_domain 'FOSUserBundle' %}
 {% extends "AppBundle::base.html.twig" %}
 {% block title %}Register{% endblock %}
 {% block body %}
-    {% block fos_user_content %}{% endblock %}
+    <div class="up-main">
+        <div class="row">
+            <div class="col s12">
+                <div class="card up-w400 up-center up-buffer-vert">
+                    <form action="{{ path("fos_user_registration_register") }}" method="post">
+                        <div class="card-content">
+                            <div class="card-title">
+                                Register
+                            </div>
+                            {{ form_errors(form) }}
+                            <div class="input-field">
+                                <input type="text" name="fos_user_registration_form[username]" id="input-username" maxlength="180" pattern=".{2,}" required  />
+                                <label for="input-username">Username</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="email" name="fos_user_registration_form[email]" id="input-email" required />
+                                <label for="input-email">Email</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="password" name="fos_user_registration_form[plainPassword][first]" id="input-password" required />
+                                <label for="input-password">Password</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="password" name="fos_user_registration_form[plainPassword][second]" id="input-password" required />
+                                <label for="input-password">Confirm Password</label>
+                            </div>
+                        </div>
+                        <div class="card-action">
+                            <button type="submit" value="Register" class="btn waves-effect waves-light up-fill">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

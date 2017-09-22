@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import * as api from 'api';
 import rootReducer from '../reducers/rootReducer';
 
-const composeEnhancers = (PRODUCTION || window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === undefined)
+const composeEnhancers = document.location.search.indexOf('debug') === -1
   ? compose
   : window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 

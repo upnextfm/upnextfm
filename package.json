@@ -49,6 +49,7 @@
     "react-share": "^1.15.1",
     "react-youtube": "^7.4.0",
     "redux": "^3.7.0",
+    "redux-devtools": "^3.4.0",
     "redux-form": "^7.0.4",
     "redux-thunk": "^2.2.0",
     "tlds": "^1.194.0",
@@ -72,7 +73,6 @@
     "jest": "^20.0.4",
     "node-sass": "^4.5.3",
     "postcss-loader": "^2.0.6",
-    "redux-devtools": "^3.4.0",
     "sass-loader": "^6.0.6",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-livereload-plugin": "^0.11.0"
