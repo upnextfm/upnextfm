@@ -1,0 +1,18 @@
+{% for flashMessage in app.session.flashbag.get('success') %}
+    <div class="up-alert up-alert-success">
+        <i class="material-icons">done</i>
+        {{ flashMessage }}
+    </div>
+{% endfor %}
+{% for flashMessage in app.session.flashbag.get('warning') %}
+    <div class="up-alert up-alert-warning">
+        <i class="material-icons">info</i>
+        {{ flashMessage }}
+    </div>
+{% endfor %}
+{% for flashMessage in app.session.flashbag.get('error') %}
+    <div class="up-alert up-alert-error">
+        <i class="material-icons">error</i>
+        {{ flashMessage }}
+    </div>
+{% endfor %}
