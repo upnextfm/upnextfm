@@ -101,7 +101,7 @@ class UserController extends Controller
       }
 
       $this->getDoctrine()->getEntityManager()->flush();
-      $this->addFlash("success", "Accounted updated.");
+      $this->addFlash("success", "Account updated.");
     }
 
     return $this->render("AppBundle:user:account.html.twig", [
