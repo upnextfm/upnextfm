@@ -5,9 +5,9 @@
 	padding-top: $padding-std * 2;
 
 	.up-avatar {
-	margin-bottom: -50px;
-	margin-left: .5rem;
-	max-width: 200px;
+		margin-bottom: -50px;
+		margin-left: .5rem;
+		max-width: 200px;
 
 		@include media-xs {
 			margin: 0 auto -50px auto;
@@ -16,9 +16,9 @@
 	}
 
 	.up-username {
-	font-size: 1.5em;
-	padding: 3.5rem .5rem .5rem;
-	background: $color-secondary;
+		font-size: 1.5em;
+		padding: 3.5rem .5rem .5rem;
+		background: $color-secondary;
 
 		@include media-xs {
 			text-align: center;
