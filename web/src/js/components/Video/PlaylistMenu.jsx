@@ -17,7 +17,8 @@ export default class PlaylistMenu extends React.Component {
     isOpen:      false,
     permissions: {
       remove: false,
-      vote: false
+      vote: false,
+      playNext: false
     },
     onClick:        () => {},
     onRequestClose: () => {}
@@ -37,6 +38,11 @@ export default class PlaylistMenu extends React.Component {
             Remove
           </MenuItem>
         )}
+        {!permissions.vote ? null : (
+          <MenuItem onClick={(e) => { onClick(e, 'upVote', videoID); }}>
+            Upvote
+          </MenuItem>
+        )}        
         {!permissions.playNext ? null : (
           <MenuItem onClick={(e) => { onClick(e, 'playNext', videoID); }}>
             Play Next

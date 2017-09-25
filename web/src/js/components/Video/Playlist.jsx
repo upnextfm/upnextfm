@@ -60,7 +60,7 @@ class Playlist extends React.PureComponent {
   handleClickMenuAction = (e, action, videoID) => {
     const dispatch = this.props.dispatch;
     switch (action) {
-      case 'upvote':
+      case 'upVote':
         dispatch(actions.playlistUpvote(videoID));
         break;
       case 'remove':
@@ -198,6 +198,7 @@ class Playlist extends React.PureComponent {
           isOpen={this.state.menuOpen}
           permissions={{
             remove:   user.roles.indexOf('ROLE_ADMIN') !== -1,
+            vote:     user.roles.indexOf('ROLE_ADMIN') !== -1,
             playNext: user.roles.indexOf('ROLE_ADMIN') !== -1
           }}
           onClick={this.handleClickMenuAction}
