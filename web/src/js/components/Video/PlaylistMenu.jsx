@@ -31,7 +31,7 @@ export default class PlaylistMenu extends React.Component {
         anchorEl={anchor}
         open={isOpen}
         onRequestClose={onRequestClose}
-      >     
+      >    
         {!permissions.remove ? null : (
           <MenuItem onClick={(e) => { onClick(e, 'remove', videoID); }}>
             Remove

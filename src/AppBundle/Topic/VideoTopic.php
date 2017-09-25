@@ -435,6 +435,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     $this->em->persist($vote);
     $this->em->flush();
 
+    var_dump($vote);
+
     return $this->sendPlaylistToRoom($room);
   }
 
