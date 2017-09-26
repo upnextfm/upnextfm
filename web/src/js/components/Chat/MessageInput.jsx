@@ -78,7 +78,8 @@ export default class MessageInput extends React.PureComponent {
   };
 
   handleKeyDownInput = (e) => {
-    const { value, tabComplete } = this.props;
+    const { tabComplete } = this.props;
+    const { value } = this.state;
 
     switch (e.keyCode) { // eslint-disable-line default-case
       case KEY_ENTER:
@@ -86,10 +87,16 @@ export default class MessageInput extends React.PureComponent {
         break;
       case KEY_TAB:
         if (value !== '') {
+          const parts = value.split(' ');
+          const username = parts.pop().toLowerCase();
           for (let i = 0; i < tabComplete.length; i++) {
-            if (tabComplete[i].toLowerCase().indexOf(value.toLowerCase()) === 0) {
+            if (tabComplete[i].toLowerCase().indexOf(username) === 0) {
+              let toComplete = tabComplete[i];
+              if (parts.length > 0) {
+                toComplete = ` ${toComplete}`;
+              }
               this.historyMoving = true;
-              this.setState({ value: `${tabComplete[i]} ` });
+              this.setState({ value: `${parts.join(' ')}${toComplete} ` });
             }
           }
         }
