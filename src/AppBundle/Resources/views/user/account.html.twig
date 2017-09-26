@@ -41,6 +41,16 @@
             <!-- End avatar upload -->
         </div>
         <!-- End third form row -->
-        <button type="submit" class="waves-effect waves-light btn">Save</button>
+        
+        <!-- Modal Trigger -->
+        <a class="waves-effect waves-light btn modal-trigger" href="#trigger">Save Changes</a>
+        <div id="trigger" class="modal up-modal">
+            <div class="modal-content">
+                <p>Are you sure you want to save changes?</p>
+            </div>
+            <!-- Submit Button -->
+            <div class="modal-footer">  <button type="submit" class="waves-effect waves-light btn">Accept</button> </div>
+        </div>
     </div>
+    <!-- End container -->
 </form> {% endblock %}
