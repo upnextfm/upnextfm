@@ -7,10 +7,11 @@ select:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px $card-bg-color inset !important;
 }
 
-#bio {
+/* Prevents text area from expanding */
+textarea.up-biotextarea {
   overflow-y: scroll;
-  min-height: 6rem;
-  max-height: 6rem;
+  min-height: 6rem; 
+  max-height: 6rem; 
 }
 
 .card {
