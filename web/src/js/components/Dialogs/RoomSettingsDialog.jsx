@@ -27,9 +27,7 @@ class RoomSettingsDialog extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (Materialize.updateTextFields) {
-      Materialize.updateTextFields();
-    }
+    Materialize.updateTextFields();
     if (prevProps.settings !== this.props.settings) {
       this.setState({ values: this.props.settings }); // eslint-disable-line
     }

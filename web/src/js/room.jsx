@@ -17,16 +17,20 @@ const theme = createMuiTheme({
     primary: orange
   })
 });
-const mount    = document.getElementById('mount');
-const name     = mount.getAttribute('data-room');
-const username = mount.getAttribute('data-username');
 
-ReactDOM.render(
-  <Provider store={store}>
-    <MuiThemeProvider theme={theme}>
-      <Room roomName={name} username={username} socketSettings={_WS_SETTINGS} />
-    </MuiThemeProvider>
-  </Provider>
-  ,
-  mount
-);
+// Materialize defines some functions after page load.
+$(() => {
+  const mount    = document.getElementById('mount');
+  const name     = mount.getAttribute('data-room');
+  const username = mount.getAttribute('data-username');
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <MuiThemeProvider theme={theme}>
+        <Room roomName={name} username={username} socketSettings={_WS_SETTINGS} />
+      </MuiThemeProvider>
+    </Provider>
+    ,
+    mount
+  );
+});

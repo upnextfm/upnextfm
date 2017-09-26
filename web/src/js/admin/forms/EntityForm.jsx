@@ -23,9 +23,7 @@ class EntityForm extends React.Component {
   }
 
   componentDidUpdate() {
-    if (Materialize.updateTextFields) {
-      Materialize.updateTextFields();
-    }
+    Materialize.updateTextFields();
   }
 
   handleSubmit = (values) => {

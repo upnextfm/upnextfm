@@ -30,9 +30,7 @@ class LoginDialog extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (Materialize.updateTextFields) {
-      Materialize.updateTextFields();
-    }
+    Materialize.updateTextFields();
     if (prevProps.user.isSubmitting !== this.props.user.isSubmitting && this.props.user.isAuthenticated) {
       this.props.onClose();
     }

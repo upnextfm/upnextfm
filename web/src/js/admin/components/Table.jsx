@@ -75,9 +75,7 @@ class Table extends React.Component {
   };
 
   componentDidUpdate() {
-    if (Materialize.updateTextFields) {
-      Materialize.updateTextFields();
-    }
+    Materialize.updateTextFields();
   }
 
   handleChangeFilter = (e) => {

@@ -37,9 +37,7 @@ class RegisterDialog extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (Materialize.updateTextFields) {
-      Materialize.updateTextFields();
-    }
+    Materialize.updateTextFields();
     if (prevProps.register.isSubmitting !== this.props.register.isSubmitting && this.props.register.isRegistered) {
       this.props.onClose();
     }
