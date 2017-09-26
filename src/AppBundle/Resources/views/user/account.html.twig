@@ -1,10 +1,9 @@
 {% extends "AppBundle::base.html.twig" %} {% block title %}Account{% endblock %} {% block body %}
-<div class="container">
-    <h2 class="center-align up-page-title flow-text">
+<h2 class="center-align up-page-title flow-text">
         Account
-    </h2>
-    {% include "AppBundle:_layout:flash-messages.html.twig" %}
-    <form method="post" enctype="multipart/form-data">
+    </h2> {% include "AppBundle:_layout:flash-messages.html.twig" %}
+<form method="post" enctype="multipart/form-data">
+    <div class="container">
         <div class="row">
             <div class="input-field col s6">
                 <input id="password" name="password" type="password" class="validate" autocomplete="off" />
@@ -16,17 +15,32 @@
             </div>
         </div>
         <div class="row">
-            <div class="file-field input-field col s6">
-                <div class="btn">
-                    <span>Avatar Upload</span>
-                    <input type="file" name="avatar" accept="image/*" />
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" />
-                </div>
+            <div class="input-field col s6">
+                <input id="location" name="location" type="text" class="validate" />
+                <label for="location">Location</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="website" name="website" type="text" class="validate" />
+                <label for="website">Website</label>
+            </div>
+            <!-- End second form row -->
+        </div>
+        <div class="row">
+            <div class="input-field col s12" style="">
+                <textarea id="bio" class="biotextarea materialize-textarea"></textarea>
+                <label for="bio">Bio Profile</label>
             </div>
         </div>
-        <!-- End second form row -->
+        <div class="row">
+            <div class="file-field input-field col s6">
+                <div class="btn"> <span>Select Avatar Image</span>
+                    <input id="avatar" type="file" name="avatar" accept="image/*" /> </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" /> </div>
+            </div>
+            <!-- End avatar upload -->
+        </div>
+        <!-- End third form row -->
         <button type="submit" class="waves-effect waves-light btn">Save</button>
-    </form>
-</div> {% endblock %}
+    </div>
+</form> {% endblock %}

@@ -7,6 +7,12 @@ select:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px $card-bg-color inset !important;
 }
 
+#bio {
+  overflow-y: scroll;
+  min-height: 6rem;
+  max-height: 6rem;
+}
+
 .card {
   input:-webkit-autofill,
   textarea:-webkit-autofill,
@@ -23,3 +29,4 @@ select:-webkit-autofill {
 .up-form-error {
   color: red;
 }
+
