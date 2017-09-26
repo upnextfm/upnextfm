@@ -53,6 +53,8 @@ export default function playlistReducer(state = initialState.playlist, action = 
         ...state,
         current: {}
       };
+    case types.PLAYLIST_TIME_UPDATE:
+      console.log(action);
     case types.PLAYLIST_START:
       return start(state, action);
     default:

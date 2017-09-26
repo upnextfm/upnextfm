@@ -494,8 +494,9 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
           }
 
           if ($current) {
-            $videoLog = $current["videoLog"];
-            $timeFinishes = $current["timeStarted"] + $videoLog->getVideo()->getSeconds();
+            $videoLog      = $current["videoLog"];
+            $videoSecs     = $videoLog->getVideo()->getSeconds();
+            $timeFinishes  = $current["timeStarted"] + $videoSecs;
             $timeRemaining = $timeFinishes - time();
 
             $this->logger->debug(sprintf(
@@ -527,6 +528,11 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
                 ]);
                 $this->sendPlaylistToRoom($room);
               }
+            } else {
+              $this->sendToRoom($room, [
+                "cmd"  => VideoCommands::TIME_UPDATE,
+                "time" => $videoSecs - $timeRemaining
+              ]);
             }
           } else {
             if ($logs = $this->rngmod->findByRoom($room, 3)) {

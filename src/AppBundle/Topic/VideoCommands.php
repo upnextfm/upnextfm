@@ -11,5 +11,5 @@ class VideoCommands
     const STOP        = "stop";
     const UPVOTE      = "upVote";
     const VIDEOS      = "videos";
-    const TIME_UPDATE = "time_update";
+    const TIME_UPDATE = "timeUpdate";
 }

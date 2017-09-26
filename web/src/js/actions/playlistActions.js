@@ -1,6 +1,7 @@
 import * as types from 'actions/actionTypes';
 import { userToggleLoginDialog } from 'actions/userActions';
 import { layoutErrorMessage } from 'actions/layoutActions';
+import { playerTime } from 'actions/playerActions';
 
 /**
  *
@@ -47,6 +48,9 @@ export function playlistSubscribe() {
             dispatch({
               type: types.PLAYLIST_STOP
             });
+            break;
+          case types.CMD_VIDEO_TIME_UPDATE:
+            dispatch(playerTime(payload.time));
             break;
           case types.CMD_ERROR:
             dispatch(layoutErrorMessage(payload.error));
@@ -109,7 +113,7 @@ export function playlistUpvote(videoID) {
         videoID
       });
     }
-  };  
+  };
 }
 
 /**
