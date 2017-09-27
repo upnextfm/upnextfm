@@ -411,17 +411,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       return $this->connSendError(
         $conn,
         $topic,
-        "Invalid command."
-      );
-    }
-
-    $user = $this->getUser($connection);
-    if (!($user instanceof UserInterface)) {
-      $user = null;
-      return $this->connSendError(
-        $conn,
-        $topic,
-        "Invalid command. You must be signed in"
+        "Invalid video ID in the handleUpvote method."
       );
     }
 
