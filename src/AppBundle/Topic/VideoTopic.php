@@ -1,7 +1,12 @@
 <?php
 namespace AppBundle\Topic;
 
+use AppBundle\Entity\Room;
+use AppBundle\Entity\User;
+use AppBundle\Entity\Video;
+use AppBundle\Entity\VideoLog;
 use AppBundle\Entity\VideoRepository;
+use AppBundle\Entity\Vote;
 use AppBundle\EventListener\Event\PlayedVideoEvent;
 use AppBundle\EventListener\Event\UserEvents;
 use AppBundle\Playlist\ProvidersInterface;
@@ -10,16 +15,12 @@ use AppBundle\Service\VideoInfo;
 use AppBundle\Service\VideoService;
 use AppBundle\Storage\PlaylistStorage;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
-use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerTrait;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerTrait;
+use Predis\Client as Redis;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
-use AppBundle\Entity\Room;
-use AppBundle\Entity\User;
-use AppBundle\Entity\Video;
-use AppBundle\Entity\VideoLog;
-use Predis\Client as Redis;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
 {
@@ -415,6 +416,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       );
     }
 
+    var_dump($event);
+
     $video = $this->em->getRepository("AppBundle:Video")->findByID($event["videoID"]);
 
     $vote = new Vote();
@@ -425,7 +428,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     $this->em->persist($vote);
     $this->em->flush();
 
-    var_dump($vote);
+    // var_dump($vote);
 
     return $this->sendPlaylistToRoom($room);
   }
