@@ -21,6 +21,9 @@ class Player extends React.PureComponent {
     if (this.provider) {
       if (this.shouldSeekTo()) {
         this.provider.seekTo(this.props.player.time);
+        if (this.props.player.status === 2) {
+          this.provider.playVideo();
+        }
       }
       if (prevProps.player.status !== this.props.player.status) {
         switch (this.props.player.status) { // eslint-disable-line

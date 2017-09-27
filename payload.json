@@ -1,0 +1,12 @@
+{
+  "dispatch": [
+    {
+      "action": "usersRepoAdd",
+      "args": [...]
+    },
+    {
+      "action": "roomJoined",
+      "args": [...]
+    }
+  ]
+}
