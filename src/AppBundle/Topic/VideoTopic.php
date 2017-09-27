@@ -419,13 +419,20 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     $video = $this->em->getRepository("AppBundle:VideoLog")
                 ->findByID($event["videoID"])->getVideo();
 
-    $vote = new Vote();
-    $vote->setValue(1);
-    $vote->setVideo($video);
-    $vote->setUser($user);
+    $hasVoted = $this->em->getRepository("AppBundle:Vote")
+                  ->hasVoted($user, $video);
 
-    $this->em->persist($vote);
-    $this->em->flush();
+    if (!$hasVoted) {
+      $vote = new Vote();
+      $vote->setValue(1);
+      $vote->setVideo($video);
+      $vote->setUser($user);
+
+      $this->em->persist($vote);
+      $this->em->flush();      
+    } else {
+      var_dump("You have already voted on this video!");
+    }
 
     return $this->sendPlaylistToRoom($room);
   }
