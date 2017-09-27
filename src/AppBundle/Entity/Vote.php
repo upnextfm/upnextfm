@@ -1,14 +1,17 @@
 <?php
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Vote
  *
- * @ORM\Table(name="vote")
+ * @ORM\Table(name="vote",uniqueConstraints={@UniqueConstraint(name="user_vote", columns={"video_id", "user_id"})})
  * @ORM\Entity(repositoryClass="AppBundle\Entity\VoteRepository")
+ * @UniqueEntity(fields={"video", "user"}, message="You have already voted on this video.")
  */
 class Vote
 {
