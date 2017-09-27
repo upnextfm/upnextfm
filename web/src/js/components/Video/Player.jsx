@@ -53,7 +53,7 @@ class Player extends React.PureComponent {
 
   shouldSeekTo = () => {
     const diff = this.props.player.time - this.provider.getCurrentTime();
-    return diff > 5;
+    return diff > 5 || diff < -5;
   };
 
   handleInterval = () => {
