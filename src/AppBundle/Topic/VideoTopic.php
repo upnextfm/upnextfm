@@ -416,9 +416,10 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       );
     }
 
-    var_dump($event);
+    $videoLog = $this->em->getRepository("AppBundle:VideoLog")
+                ->findByID($event["videoID"]);
 
-    $video = $this->em->getRepository("AppBundle:Video")->findByID($event["videoID"]);
+    $video = $videoLog->getVideo();
 
     $vote = new Vote();
     $vote->setValue(1);
@@ -427,8 +428,6 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
 
     $this->em->persist($vote);
     $this->em->flush();
-
-    // var_dump($vote);
 
     return $this->sendPlaylistToRoom($room);
   }
