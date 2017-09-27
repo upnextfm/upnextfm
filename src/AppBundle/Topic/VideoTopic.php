@@ -415,7 +415,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       );
     }
 
-    $video = $this->em->getRepository("AppBundle:Video")->findByID($item["videoID"]);
+    $video = $this->em->getRepository("AppBundle:Video")->findByID($event["videoID"]);
 
     $vote = new Vote();
     $vote->setValue(1);
