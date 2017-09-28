@@ -41,9 +41,6 @@ class Buttons extends React.PureComponent {
 
     return (
       <div className="up-room-video__buttons">
-        <IconButton onClick={this.handleClickPlay}>
-          <PlayIcon status={player.status} />
-        </IconButton>
         <IconButton onClick={this.handleClickMute}>
           <MuteIcon isMuted={player.isMuted} />
         </IconButton>
