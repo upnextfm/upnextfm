@@ -78,23 +78,37 @@ class UserController extends Controller
   {
     /** @var User $user */
     $user = $this->getUser();
+    $info = $user->getInfo();
     if (!($user instanceof UserInterface)) {
       throw $this->createNotFoundException();
     }
 
+    // Updates to user account information - in order of appearance  
     if ($request->getMethod() === "POST") {
       $values = $request->request->all();
-      $user->setEmail($values["email"]);
-      $user->setEmailCanonical($values["email"]);
 
+      // Password
       if (!empty($values["password"])) {
         $user->setPlainPassword($values["password"]);
         $this->get("fos_user.user_manager")->updatePassword($user);
       }
 
+      // Email 
+      $user->setEmail($values["email"]);
+      $user->setEmailCanonical($values["email"]);
+
+      // Location 
+      $info->setLocation($values["location"]);
+
+      // Website 
+      $info->setWebsite($values["website"]);
+
+      // Bio Profile 
+      $info->setBio($values["bio"]);
+      
+      // Avatar 
       if ($avatar = $request->files->get("avatar")) {
         $urls = $this->processAvatar($avatar, $user);
-        $info = $user->getInfo();
         $info->setAvatarSm($urls["avatarSm"]);
         $info->setAvatarMd($urls["avatarMd"]);
         $info->setAvatarLg($urls["avatarLg"]);
@@ -102,11 +116,9 @@ class UserController extends Controller
 
       $this->getDoctrine()->getEntityManager()->flush();
       $this->addFlash("success", "Account updated.");
-    }
+    } /* End Request Post */
 
-    return $this->render("AppBundle:user:account.html.twig", [
-      "user" => $user
-    ]);
+    return $this->render("AppBundle:user:account.html.twig", ['user' => $user ]);
   }
 
   /**

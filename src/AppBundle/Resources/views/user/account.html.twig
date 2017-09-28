@@ -16,18 +16,18 @@
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <input id="location" name="location" type="text" class="validate" />
+                <input id="location" name="location" type="text" class="validate" value="{{ user.info.location }}" />
                 <label for="location">Location</label>
             </div>
             <div class="input-field col s6">
-                <input id="website" name="website" type="text" class="validate" />
+                <input id="website" name="website" type="text" class="validate" value="{{ user.info.website }}" />
                 <label for="website">Website</label>
             </div>
             <!-- End second form row -->
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <textarea id="bio" class="up-biotextarea materialize-textarea"></textarea>
+                <textarea id="bio" name="bio" class="up-biotextarea materialize-textarea">{{ user.info.bio }}</textarea>
                 <label for="bio">Bio Profile</label>
             </div>
         </div>
