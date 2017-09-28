@@ -78,7 +78,7 @@ class UserController extends Controller
   {
     /** @var User $user */
     $user = $this->getUser();
-    $info = $user->getInfo();
+    
     if (!($user instanceof UserInterface)) {
       throw $this->createNotFoundException();
     }
@@ -86,7 +86,8 @@ class UserController extends Controller
     // Updates to user account information - in order of appearance  
     if ($request->getMethod() === "POST") {
       $values = $request->request->all();
-
+      $info = $user->getInfo(); // Retrieve UserInfo field from User entity
+      
       // Password
       if (!empty($values["password"])) {
         $user->setPlainPassword($values["password"]);
