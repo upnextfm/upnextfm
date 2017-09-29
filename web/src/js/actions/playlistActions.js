@@ -1,7 +1,6 @@
-import * as types from 'actions/actionTypes';
+import { dispatchPayload } from 'actions/dispatch';
 import { userToggleLoginDialog } from 'actions/userActions';
-import { layoutErrorMessage } from 'actions/layoutActions';
-import { playerTime } from 'actions/playerActions';
+import * as types from 'actions/actionTypes';
 
 /**
  *
@@ -25,45 +24,57 @@ function subscribe(dispatch, getState) {
   return room;
 }
 
+/**
+ * @returns {Function}
+ */
 export function playlistSubscribe() {
   return (dispatch, getState, api) => {
     const room = getState().room;
     if (room.name !== '') {
       api.socket.subscribe(`${types.CHAN_VIDEO}/${room.name}`, (uri, payload) => {
-        switch (payload.cmd) {
-          case types.CMD_VIDEO_VIDEOS:
-            dispatch({
-              type:   types.PLAYLIST_VIDEOS,
-              videos: payload.videos
-            });
-            break;
-          case types.CMD_VIDEO_START:
-            dispatch({
-              type:    types.PLAYLIST_START,
-              start:   payload.start,
-              current: payload.video
-            });
-            break;
-          case types.CMD_VIDEO_STOP:
-            dispatch({
-              type: types.PLAYLIST_STOP
-            });
-            break;
-          case types.CMD_VIDEO_TIME_UPDATE:
-            dispatch(playerTime(payload.time));
-            break;
-          case types.CMD_ERROR:
-            dispatch(layoutErrorMessage(payload.error));
-            break;
-          default:
-
-            break;
+        if (payload.dispatch !== undefined) {
+          dispatchPayload(dispatch, payload);
+        } else {
+          console.error('Invalid payload');
         }
       });
       dispatch({
         type: types.PLAYLIST_SUBSCRIBE
       });
     }
+  };
+}
+
+/**
+ * @param {array} videos
+ * @returns {{type: *, videos: *}}
+ */
+export function playlistVideos(videos) {
+  return {
+    type: types.PLAYLIST_VIDEOS,
+    videos
+  };
+}
+
+/**
+ * @param {number} start
+ * @param {*} current
+ * @returns {{type: *, start: *, current: *}}
+ */
+export function playlistStart(start, current) {
+  return {
+    type: types.PLAYLIST_START,
+    start,
+    current
+  };
+}
+
+/**
+ * @returns {{type: *}}
+ */
+export function playlistStop() {
+  return {
+    type: types.PLAYLIST_STOP
   };
 }
 

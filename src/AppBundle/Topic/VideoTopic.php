@@ -167,33 +167,34 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     foreach ($this->playlist->getAll($room) as $videoLog) {
       $videos[] = $this->serializeVideo($videoLog);
     }
-    if ($videos) {
-      $conn->event($topic->getId(), [
-        "cmd"    => VideoCommands::VIDEOS,
-        "videos" => $videos
-      ]);
-    }
 
+    if ($videos) {
+      $this->dispatchToUser(
+        "playlist:playlistVideos",
+        $videos
+      );
+    }
     $current = $this->playlist->getCurrent($room);
     if ($current) {
       /** @var VideoLog $videoLog */
-      $videoLog = $current["videoLog"];
-      if ($videoLog) {
-        $conn->event($topic->getId(), [
-          "cmd"   => VideoCommands::START,
-          "start" => time() - $current["timeStarted"],
-          "video" => $this->serializeVideo($videoLog)
-        ]);
+      if ($videoLog = $current["videoLog"]) {
+        $this->dispatchToUser(
+          "playlist:playlistStart",
+          time() - $current["timeStarted"],
+          $this->serializeVideo($videoLog)
+        );
       }
     }
+
+    $this->flush($conn, $topic);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+  public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
-    $user = $this->getUser($connection);
+    $user = $this->getUser($conn);
     if (!($user instanceof UserInterface)) {
       $user = null;
     }
@@ -208,7 +209,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       $this->subs[$roomName] = [];
     }
     if (!empty($this->subs[$roomName])) {
-      $client = ["conn" => $connection, "id" => $topic->getId()];
+      $client = ["conn" => $conn, "id" => $topic->getId()];
       $index = array_search($client, $this->subs[$roomName]);
       if (false !== $index) {
         unset($this->subs[$roomName][$index]);
@@ -290,11 +291,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
 
     $parsed = $this->providers->parseURL($event["url"]);
     if (!$parsed) {
-      return $this->connSendError(
-        $conn,
-        $topic,
-        "Invalid URL \"${event['url']}\"."
-      );
+      return $this->dispatchError("Invalid URL \"${event['url']}\".");
     }
 
     if ($parsed["playlist"]) {
@@ -365,24 +362,19 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     array $event
   )
   {
-
     if (empty($event["videoID"])) {
-      return $this->connSendError(
-        $conn,
-        $topic,
-        "Invalid command."
-      );
+      return $this->dispatchError("Invalid command.");
     }
 
     $result = $this->playlist->removeByID($room, $event["videoID"]);
     usleep(500);
     if (is_array($result)) {
       $videoLog = $result["videoLog"];
-      $this->sendToRoom($room, [
-        "cmd"   => VideoCommands::START,
-        "video" => $this->serializeVideo($videoLog),
-        "start" => 0
-      ]);
+      $this->dispatchToRoom(
+        "playlist:playlistStart",
+        0,
+        $this->serializeVideo($videoLog)
+      )->flush($conn, $topic);
     }
 
     return $this->sendPlaylistToRoom($room);
@@ -407,20 +399,14 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     array $event
   )
   {
-
     if (empty($event["videoID"])) {
-      return $this->connSendError(
-        $conn,
-        $topic,
-        "Invalid video ID in the handleUpvote method."
-      );
+      return $this->dispatchError("Invalid video ID in the handleUpvote method.");
     }
 
     $video = $this->em->getRepository("AppBundle:VideoLog")
-                ->findByID($event["videoID"])->getVideo();
-
+      ->findByID($event["videoID"])->getVideo();
     $hasVoted = $this->em->getRepository("AppBundle:Vote")
-                  ->hasVoted($user, $video);
+      ->hasVoted($user, $video);
 
     if (!$hasVoted) {
       $vote = new Vote();
@@ -429,7 +415,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       $vote->setUser($user);
 
       $this->em->persist($vote);
-      $this->em->flush();      
+      $this->em->flush();
     } else {
       var_dump("You have already voted on this video!");
     }
@@ -455,13 +441,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     array $event
   )
   {
-
     if (empty($event["videoID"])) {
-      return $this->connSendError(
-        $conn,
-        $topic,
-        "Invalid command."
-      );
+      return $this->dispatchError("Invalid command.");
     }
 
     $this->playlist->playNext($room, $event["videoID"]);
@@ -496,40 +477,25 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
             $timeFinishes  = $current["timeStarted"] + $videoSecs;
             $timeRemaining = $timeFinishes - time();
 
-            $this->logger->debug(sprintf(
-              'Current for room "%s" is "%s" with time remaining %s.',
-              $roomName,
-              $videoLog->getVideo()->getTitle(),
-              $timeRemaining
-            ));
-
             if ($timeRemaining <= 0) {
               if ($current = $this->playlist->popToCurrent($room)) {
                 $videoLog = $current["videoLog"];
-                $this->logger->info(sprintf(
-                  'Current set to "%s" for room "%s".',
-                  $videoLog->getVideo()->getTitle(),
-                  $roomName
-                ));
-
-                $this->sendToRoom($room, [
-                  "cmd"   => VideoCommands::START,
-                  "video" => $this->serializeVideo($videoLog),
-                  "start" => 0
-                ]);
+                $this->dispatchToRoom(
+                  "playlist:playlistStart",
+                  0,
+                  $this->serializeVideo($videoLog)
+                );
                 $this->sendPlaylistToRoom($room);
               } else {
                 $this->playlist->clearCurrent($room);
-                $this->sendToRoom($room, [
-                  "cmd" => VideoCommands::STOP
-                ]);
+                $this->dispatchToRoom("playlist:playlistStop");
                 $this->sendPlaylistToRoom($room);
               }
             } else {
-              $this->sendToRoom($room, [
-                "cmd"  => VideoCommands::TIME_UPDATE,
-                "time" => $videoSecs - $timeRemaining
-              ]);
+              $this->dispatchToRoom(
+                "player:playerTime",
+                $videoSecs - $timeRemaining
+              );
             }
           } else {
             if ($logs = $this->rngmod->findByRoom($room, 3)) {
@@ -542,6 +508,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
 
             $this->sendPlaylistToRoom($room);
           }
+
+          $this->flush($this->subs[$roomName], $topic);
         }
       }
     );
@@ -553,9 +521,9 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       function () use ($topic) {
         $item = $this->redis->lpop("playlist:append");
         if ($item) {
-          $item = json_decode($item, true);
-          $user = $this->em->getRepository("AppBundle:User")->findByUsername($item["username"]);
-          $room = $this->em->getRepository("AppBundle:Room")->findByName($item["roomName"]);
+          $item  = json_decode($item, true);
+          $user  = $this->em->getRepository("AppBundle:User")->findByUsername($item["username"]);
+          $room  = $this->em->getRepository("AppBundle:Room")->findByName($item["roomName"]);
           $video = $this->em->getRepository("AppBundle:Video")->findByID($item["videoID"]);
 
           /** @var VideoLog $videoLog */
@@ -613,20 +581,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
 
   /**
    * @param Room $room
-   * @param mixed $msg
-   */
-  private function sendToRoom(Room $room, $msg)
-  {
-    $roomName = $room->getName();
-    foreach ($this->subs[$roomName] as $client) {
-      $client["conn"]->event($client["id"], $msg);
-    }
-  }
-
-  /**
-   * @param Room $room
    * @param bool $playOnEmpty
-   * @return bool
+   * @return $this
    */
   private function sendPlaylistToRoom(Room $room, $playOnEmpty = true)
   {
@@ -634,11 +590,11 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       if (!$this->playlist->getCurrent($room)) {
         if ($current = $this->playlist->popToCurrent($room)) {
           $videoLog = $current["videoLog"];
-          $this->sendToRoom($room, [
-            "cmd"   => VideoCommands::START,
-            "video" => $this->serializeVideo($videoLog),
-            "start" => 0
-          ]);
+          $this->dispatchToRoom(
+            "playlist:playlistStart",
+            0,
+            $this->serializeVideo($videoLog)
+          );
         }
       }
     }
@@ -647,11 +603,11 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     foreach ($this->playlist->getAll($room) as $videoLog) {
       $videos[] = $this->serializeVideo($videoLog);
     }
-    $this->sendToRoom($room, [
-      "cmd"    => VideoCommands::VIDEOS,
-      "videos" => $videos
-    ]);
+    $this->dispatchToRoom(
+      "playlist:playlistVideos",
+      $videos
+    );
 
-    return true;
+    return $this->flush($this->subs[$room->getName()]);
   }
 }

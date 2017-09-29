@@ -1,42 +1,6 @@
-import * as types from 'actions/actionTypes';
+import { dispatchPayload } from 'actions/dispatch';
 import { layoutSwitchActiveChat, layoutErrorMessage } from 'actions/layoutActions';
-
-/**
- * @param {Function} dispatch
- * @param {{cmd: string}} payload
- * @param {*} state
- * @returns {*}
- */
-function dispatchSocketPayload(dispatch, payload, state) {
-  switch (payload.cmd) {
-    case types.CMD_ERROR:
-      dispatch(layoutErrorMessage(payload.error));
-      break;
-    case types.CMD_LOAD:
-      return dispatch({
-        type:         types.PMS_LOAD,
-        to:           payload.to,
-        conversation: payload.conversation
-      });
-    case types.CMD_RECEIVE:
-      return dispatch({
-        type:    types.PMS_RECEIVE,
-        message: payload.message
-      });
-    case types.CMD_SENT:
-      if (state.pms.isSending) {
-        dispatch(layoutSwitchActiveChat(payload.message.to));
-      }
-      return dispatch({
-        type:    types.PMS_SENT,
-        message: payload.message
-      });
-    default:
-      return console.error(`Invalid command ${payload.cmd}`);
-  }
-
-  return true;
-}
+import * as types from 'actions/actionTypes';
 
 /**
  * @returns {Function}
@@ -51,7 +15,11 @@ export function pmsSubscribe() {
       type: types.PMS_SUBSCRIBED
     });
     api.socket.subscribe(types.CHAN_PMS, (uri, payload) => {
-      dispatchSocketPayload(dispatch, payload, getState());
+      if (payload.dispatch !== undefined) {
+        dispatchPayload(dispatch, payload);
+      } else {
+        console.error('Invalid payload');
+      }
     });
   };
 }
@@ -80,6 +48,19 @@ export function pmsNumNewMessages(username, numNewMessages) {
 }
 
 /**
+ * @param {string} to
+ * @param {array} conversation
+ * @returns {{type: *, to: *, conversation: *}}
+ */
+export function pmsLoad(to, conversation) {
+  return {
+    type: types.PMS_LOAD,
+    to,
+    conversation
+  };
+}
+
+/**
  * @param {string} username
  * @returns {Function}
  */
@@ -92,6 +73,34 @@ export function pmsLoadConversation(username) {
     api.socket.publish(types.CHAN_PMS, {
       cmd: types.CMD_LOAD,
       username
+    });
+  };
+}
+
+/**
+ * @param {*} message
+ * @returns {{type: *, message: *}}
+ */
+export function pmsReceive(message) {
+  console.log(message);
+  return {
+    type: types.PMS_RECEIVE,
+    message
+  };
+}
+
+/**
+ * @param {*} message
+ * @returns {Function}
+ */
+export function pmsSent(message) {
+  return (dispatch, getState) => {
+    if (getState().pms.isSending) {
+      dispatch(layoutSwitchActiveChat(message.to));
+    }
+    return dispatch({
+      type: types.PMS_SENT,
+      message
     });
   };
 }

@@ -106,6 +106,9 @@
   },
   "settings": {
     "import/resolver": {
+      "node": {
+        "paths": ["web/src/js"]
+      },
       "babel-module": {  }
     },
     "import/extensions": [".js", ".jsx"],

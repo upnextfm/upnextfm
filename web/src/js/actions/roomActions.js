@@ -1,94 +1,11 @@
-import * as types from './actionTypes';
-import { usersRepoAdd, usersRepoAddMulti, usersRepoRemove } from 'actions/usersActions';
-import { userRoles } from 'actions/userActions';
+import { dispatchPayload } from 'actions/dispatch';
 import { layoutToggleLoginDialog } from 'actions/layoutActions';
 import { playlistSubscribe } from 'actions/playlistActions';
 import { pmsSend } from 'actions/pmsActions';
-import { settingsAll, settingsRoom, settingsUser } from 'actions/settingsActions';
-import { dispatchPayload } from 'actions/dispatch';
+import { settingsRoom, settingsUser } from 'actions/settingsActions';
+import * as types from './actionTypes';
 
-let noticeID     = 0;
 let pingInterval = null;
-
-function nextNoticeID() {
-  noticeID += 1;
-  return noticeID;
-}
-
-/**
- * @param {Function} dispatch
- * @param {*} payload
- * @param {Function} getState
- * @returns {*}
- */
-function dispatchSocketPayload(dispatch, getState, payload) {
-  switch (payload.cmd) {
-    case types.CMD_JOINED:
-      dispatch(usersRepoAdd(payload.user));
-      dispatch({
-        type: types.ROOM_JOINED,
-        user: payload.user
-      });
-      if (getState().user.username !== payload.user.username) {
-        dispatch(roomMessage({
-          type:    'notice',
-          id:      nextNoticeID(),
-          date:    new Date(),
-          message: `${payload.user.username} joined the room.`
-        }));
-      } else {
-        dispatch(roomMessage({
-          type:    'joinMessage',
-          id:      nextNoticeID(),
-          date:    new Date(),
-          message: getState().settings.room.joinMessage
-        }));
-      }
-      break;
-    case types.CMD_PARTED:
-      dispatch({
-        type:     types.ROOM_PARTED,
-        username: payload.username
-      });
-      dispatch(roomMessage({
-        type:    'notice',
-        id:      nextNoticeID(),
-        date:    new Date(),
-        message: `${payload.username} left the room.`
-      }));
-      break;
-    case types.CMD_ROLES:
-      dispatch(userRoles(payload.roles));
-      break;
-    case types.CMD_REPO_USERS:
-      dispatch(usersRepoAddMulti(payload.users));
-      break;
-    case types.CMD_USERS:
-      dispatch(roomUsers(payload.users));
-      break;
-    case types.CMD_MESSAGES:
-      dispatch(roomMessages(payload.messages));
-      break;
-    case types.CMD_SETTINGS:
-      dispatch(settingsAll(payload.settings));
-      break;
-    case types.CMD_SEND:
-      dispatch(roomMessage(payload.message));
-      if (!getState().layout.isWindowFocused) {
-        dispatch(roomIncrNumNewMessages());
-      }
-      break;
-    case types.CMD_ME:
-      dispatch(roomMessage(payload.message));
-      if (!getState().layout.isWindowFocused) {
-        dispatch(roomIncrNumNewMessages());
-      }
-      break;
-    default:
-      console.error('Unknown cmd', payload.cmd);
-      break;
-  }
-}
 
 /**
  * Handles the /pm command
@@ -168,24 +85,26 @@ export function roomSaveSettings(settings, type) {
     const room = getState().room;
     if (room.name !== '') {
       if (!getState().user.isAuthenticated) {
-        dispatch(layoutToggleLoginDialog());
-      } else {
-        api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-          cmd: types.CMD_SAVE_SETTINGS,
-          type,
-          settings
-        });
-        switch (type) {
-          case 'user':
-            return dispatch(settingsUser(settings));
-          case 'room':
-            return dispatch(settingsRoom(settings));
-          default:
-            console.log(`Invalid settings type "${type}".`);
-            break;
-        }
+        return dispatch(layoutToggleLoginDialog());
+      }
+
+      api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
+        cmd: types.CMD_SAVE_SETTINGS,
+        type,
+        settings
+      });
+      switch (type) {
+        case 'user':
+          return dispatch(settingsUser(settings));
+        case 'room':
+          return dispatch(settingsRoom(settings));
+        default:
+          console.log(`Invalid settings type "${type}".`);
+          break;
       }
     }
+
+    return true;
   };
 }
 
@@ -245,14 +164,18 @@ export function roomMessages(messages) {
 }
 
 /**
- *
- * @param {Array} message
- * @returns {{type: *, message: *}}
+ * @param {*} message
+ * @returns {Function}
  */
 export function roomMessage(message) {
-  return {
-    type: types.ROOM_MESSAGE,
-    message
+  return (dispatch, getState) => {
+    dispatch({
+      type: types.ROOM_MESSAGE,
+      message
+    });
+    if (!getState().layout.isWindowFocused) {
+      dispatch(roomIncrNumNewMessages());
+    }
   };
 }
 
@@ -292,7 +215,29 @@ export function roomLeave() {
 }
 
 /**
- * @returns {{type: string}}
+ * @param {*} user
+ * @returns {{type: ROOM_JOINED, user: *}}
+ */
+export function roomJoined(user) {
+  return {
+    type: types.ROOM_JOINED,
+    user
+  };
+}
+
+/**
+ * @param {string} username
+ * @returns {{type: ROOM_PARTED, username: *}}
+ */
+export function roomParted(username) {
+  return {
+    type: types.ROOM_PARTED,
+    username
+  };
+}
+
+/**
+ * @returns {{type: ROOM_RESET_NUM_NEW_MESSAGES}}
  */
 export function roomResetNumNewMessages() {
   return {
@@ -301,7 +246,7 @@ export function roomResetNumNewMessages() {
 }
 
 /**
- * @returns {{type: string}}
+ * @returns {{type: ROOM_INCR_NUM_NEW_MESSAGES}}
  */
 export function roomIncrNumNewMessages() {
   return {
@@ -335,7 +280,7 @@ export function roomJoin(name) {
       if (payload.dispatch !== undefined) {
         dispatchPayload(dispatch, payload);
       } else {
-        dispatchSocketPayload(dispatch, getState, payload);
+        console.error('Invalid payload');
       }
     });
   };

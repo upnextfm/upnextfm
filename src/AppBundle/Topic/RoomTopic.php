@@ -16,9 +16,9 @@ use Ratchet\Wamp\WampConnection;
 class RoomTopic extends AbstractTopic
 {
   /**
-   * @var array
+   * @var int
    */
-  protected $toDispatch = [];
+  protected $noticeID = 0;
 
   /**
    * {@inheritdoc}
@@ -78,37 +78,60 @@ class RoomTopic extends AbstractTopic
         }
       }
 
-      $conn->event($topic->getId(), [
-        "cmd"      => RoomCommands::SETTINGS,
-        "settings" => [
-          "user" => $this->serializeUserSettings($settings),
-          "site" => $this->container->getParameter("app_site_settings"),
-          "room" => $this->serializeRoomSettings($room->getSettings())
-        ]
-      ]);
-      $conn->event($topic->getId(), [
-        "cmd"      => RoomCommands::MESSAGES,
-        "messages" => array_reverse($this->serializeMessages($messages))
-      ]);
-      $conn->event($topic->getId(), [
-        "cmd"   => RoomCommands::REPO_USERS,
-        "users" => $repoUsers
-      ]);
-      $conn->event($topic->getId(), [
-        "cmd"   => RoomCommands::USERS,
-        "users" => $users
+      $this->dispatchToUser("settings:settingsAll", [
+        "site" => $this->container->getParameter("app_site_settings"),
+        "user" => $this->serializeUserSettings($settings),
+        "room" => $this->serializeRoomSettings($room->getSettings())
       ]);
 
+      $this->dispatchToUser(
+        "room:roomMessages",
+        array_reverse($this->serializeMessages($messages))
+      );
+      $this->dispatchToUser(
+        "users:usersRepoAddMulti",
+        $repoUsers
+      );
+      $this->dispatchToUser(
+        "room:roomUsers",
+        $users
+      );
+
       if ($user !== null) {
-        $conn->event($topic->getId(), [
-          "cmd"   => RoomCommands::ROLES,
-          "roles" => $user->getRoles()
-        ]);
-        $topic->broadcast([
-          "cmd"  => RoomCommands::JOINED,
-          "user" => $this->serializeUser($user)
-        ]);
+        $serializedUser = $this->serializeUser($user);
+        $this->dispatchToRoom(
+          "users:usersRepoAdd",
+          $serializedUser
+        );
+        $this->dispatchToRoom(
+          "room:roomJoined",
+          $serializedUser
+        );
+        $this->dispatchToUser(
+          "user:userRoles",
+          $user->getRoles()
+        );
+        $this->dispatchToUser(
+          "room:roomMessage",
+          [
+            "type"    => "joinMessage",
+            "id"      => $this->nextNoticeID(),
+            "date"    => new \DateTime(),
+            "message" => $room->getSettings()->getJoinMessage()
+          ]
+        );
+        $this->dispatchToRoomOnly(
+          "room:roomMessage",
+          [
+            "type"    => "notice",
+            "id"      => $this->nextNoticeID(),
+            "date"    => new \DateTime(),
+            "message" => sprintf("%s joined the room", $user->getUsername())
+          ]
+        );
       }
+
+      $this->flush($conn, $topic);
     } catch (Exception $e) {
       $this->handleError($e);
     }
@@ -117,52 +140,33 @@ class RoomTopic extends AbstractTopic
   /**
    * {@inheritdoc}
    */
-  public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+  public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
     try {
-      $user = $this->getUser($connection);
+      $user = $this->getUser($conn);
       if (!($user instanceof UserInterface)) {
         return;
       }
       $room = $this->getRoom($request->getAttributes()->get("room"), $user);
       $this->roomStorage->removeUser($room, $user);
-      $topic->broadcast([
-        "cmd"      => RoomCommands::PARTED,
-        "username" => $user->getUsername()
-      ]);
+
+      $this->dispatchToRoom(
+        "room:roomParted",
+        $user->getUsername()
+      );
+      $this->dispatchToRoomOnly(
+        "room:roomMessage",
+        [
+          "type"    => "notice",
+          "id"      => $this->nextNoticeID(),
+          "date"    => new \DateTime(),
+          "message" => sprintf("%s left the room", $user->getUsername())
+        ]
+      );
+      $this->flush($conn, $topic);
     } catch (Exception $e) {
       $this->handleError($e);
     }
-  }
-
-  /**
-   * @param string $action
-   * @return $this
-   */
-  protected function dispatchAction($action)
-  {
-    $args   = func_get_args();
-    $action = array_shift($args);
-    $this->toDispatch[] = ["action" => $action, "args" => $args];
-
-    return $this;
-  }
-
-  /**
-   * @param ConnectionInterface|WampConnection $conn
-   * @param Topic $topic
-   * @return $this
-   */
-  protected function flush($conn, $topic)
-  {
-    if ($this->toDispatch) {
-      $conn->event($topic->getId(), [
-        "dispatch" => $this->toDispatch
-      ]);
-    }
-    $this->toDispatch = [];
-
-    return $this;
   }
 
   /**
@@ -185,7 +189,7 @@ class RoomTopic extends AbstractTopic
         $clientStorage = $this->container->get("app.ws.storage.driver");
         $clientStorage->lifeTime($conn->resourceId, 86400);
 
-        return $this->dispatchAction("room:pong", time())
+        return $this->dispatchToUser("room:pong", time())
           ->flush($conn, $topic);
       }
 
@@ -242,7 +246,6 @@ class RoomTopic extends AbstractTopic
     array $event
   )
   {
-
     $message = $this->sanitizeMessage($event["message"]);
     if (empty($message)) {
       return;
@@ -252,10 +255,12 @@ class RoomTopic extends AbstractTopic
     $chatLog = new ChatLog($room, $user, $message);
     $chatLog = $this->em->merge($chatLog);
     $this->em->flush();
-    $topic->broadcast([
-      "cmd"     => RoomCommands::SEND,
-      "message" => $this->serializeMessage($chatLog)
-    ]);
+
+    // Dispatch.
+    $this->dispatchToRoom(
+      "room:roomMessage",
+      $this->serializeMessage($chatLog)
+    )->flush($conn, $topic);
   }
 
   /**
@@ -275,7 +280,6 @@ class RoomTopic extends AbstractTopic
     array $event
   )
   {
-
     $message = $this->sanitizeMessage($event["message"]);
     if (empty($message)) {
       return;
@@ -285,10 +289,12 @@ class RoomTopic extends AbstractTopic
     $chatLog = new ChatLog($room, $user, $message);
     $chatLog = $this->em->merge($chatLog);
     $this->em->flush();
-    $topic->broadcast([
-      "cmd"     => RoomCommands::ME,
-      "message" => $this->serializeMessage($chatLog, "me")
-    ]);
+
+    // Dispatch.
+    $this->dispatchToRoom(
+      "room:roomMessage",
+      $this->serializeMessage($chatLog, "me")
+    )->flush($conn, $topic);
   }
 
   /**
@@ -364,5 +370,14 @@ class RoomTopic extends AbstractTopic
 
     $roomSettings->setJoinMessage($settings["joinMessage"]);
     $this->em->flush();
+  }
+
+  /**
+   * @return int
+   */
+  private function nextNoticeID()
+  {
+    $this->noticeID++;
+    return $this->noticeID;
   }
 }

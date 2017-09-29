@@ -1,4 +1,4 @@
-import * as pmActions from 'actions/pmsActions';
+import * as pmsActions from 'actions/pmsActions';
 import * as usersActions from 'actions/usersActions';
 import * as userActions from 'actions/userActions';
 import * as roomActions from 'actions/roomActions';
@@ -10,7 +10,7 @@ import * as settingsActions from 'actions/settingsActions';
 import * as searchActions from 'actions/searchActions';
 
 const actions = {
-  pm:       pmActions,
+  pms:      pmsActions,
   users:    usersActions,
   user:     userActions,
   room:     roomActions,
