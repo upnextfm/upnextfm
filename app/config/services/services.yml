@@ -1,6 +1,8 @@
 parameters:
     api.request_listener.class: AppBundle\EventListener\RequestListener
     api.controller_response_listener.class: AppBundle\EventListener\ControllerResponseListener
+    api.event_listener.socket.room.class: AppBundle\EventListener\Socket\RoomListener
+    api.event_subscriber.socket.class: AppBundle\EventListener\Socket\SocketSubscriber
     api.exception_listener.class: AppBundle\EventListener\ExceptionListener
     app.events.user_action_subscriber.class: AppBundle\EventListener\UserEventSubscriber
     app.playlist.rngmod.class: AppBundle\Playlist\RngMod
@@ -88,6 +90,26 @@ services:
         - "@app.service.thumbs"
       tags:
         - { name: kernel.event_subscriber }
+
+    ## ########################################################################
+    ## Socket Room Listener
+    ## ########################################################################
+    api.event_listener.socket.room:
+        class: "%api.event_listener.socket.room.class%"
+        arguments:
+          - "@event_dispatcher"
+          - "@doctrine.orm.default_entity_manager"
+          - "@monolog.logger"
+
+    ## ########################################################################
+    ## Socket Subscriber
+    ## ########################################################################
+    api.event_subscriber.socket:
+        class: "%api.event_subscriber.socket.class%"
+        calls:
+          - [setRoomListener, ["@api.event_listener.socket.room"]]
+        tags:
+          - { name: kernel.event_subscriber }
 
     ## ########################################################################
     ## YouTube Service

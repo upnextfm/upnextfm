@@ -1,11 +1,41 @@
 import { dispatchPayload } from 'actions/dispatch';
+import { settingsRoom, settingsUser } from 'actions/settingsActions';
 import { layoutToggleLoginDialog } from 'actions/layoutActions';
 import { playlistSubscribe } from 'actions/playlistActions';
 import { pmsSend } from 'actions/pmsActions';
-import { settingsRoom, settingsUser } from 'actions/settingsActions';
 import * as types from './actionTypes';
 
 let pingInterval = null;
+const commands = {
+  '/send': handleCommandSend,
+  '/pm':   handleCommandPM,
+  '/me':   handleCommandMe
+};
+
+/**
+ * Handles the /send command
+ *
+ * @param {string} msg
+ * @param {Function} dispatch
+ * @param {Function} getState
+ * @param {*} api
+ */
+function handleCommandSend(msg, dispatch, getState, api) {
+  const room = getState().room;
+  if (room.name !== '') {
+    if (!getState().user.isAuthenticated) {
+      dispatch(layoutToggleLoginDialog());
+    } else {
+      const textColor = getState().settings.user.textColor;
+      const message   = `[${textColor}]${msg}[/#]`;
+      api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
+        dispatch: [
+          { action: 'send', args: [message] }
+        ]
+      });
+    }
+  }
+}
 
 /**
  * Handles the /pm command
@@ -24,56 +54,56 @@ function handleCommandPM(msg, dispatch) {
 /**
  * Handles the /me command
  *
- * @param {string} msg
+ * @param {string} message
  * @param {Function} dispatch
  * @param {Function} getState
  * @param {*} api
  */
-function handleCommandMe(msg, dispatch, getState, api) {
+function handleCommandMe(message, dispatch, getState, api) {
   const room = getState().room;
   if (room.name !== '') {
     if (!getState().user.isAuthenticated) {
       dispatch(layoutToggleLoginDialog());
     } else {
       api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-        cmd:     types.CMD_ME,
-        date:    (new Date()).toString(),
-        message: msg
+        dispatch: [
+          { action: 'me', args: [message] }
+        ]
       });
     }
   }
 }
 
 /**
- * Handles the /send command
- *
- * @param {string} msg
- * @param {Function} dispatch
- * @param {Function} getState
- * @param {*} api
+ * @param {string} name
+ * @returns {Function}
  */
-function handleCommandSend(msg, dispatch, getState, api) {
-  const room = getState().room;
-  if (room.name !== '') {
-    if (!getState().user.isAuthenticated) {
-      dispatch(layoutToggleLoginDialog());
-    } else {
-      const textColor = getState().settings.user.textColor;
-      api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-        cmd:       types.CMD_SEND,
-        date:      (new Date()).toString(),
-        textColor: getState().settings.user.textColor,
-        message:   `[${textColor}]${msg}[/#]`
-      });
-    }
-  }
-}
+export function roomJoin(name) {
+  return (dispatch, getState, api) => {
+    dispatch(roomLeave());
+    dispatch({
+      type: types.ROOM_NAME,
+      name
+    });
+    dispatch(playlistSubscribe());
 
-const commands = {
-  '/send': handleCommandSend,
-  '/pm':   handleCommandPM,
-  '/me':   handleCommandMe
-};
+    const interval = getState().settings.socket.pingInterval;
+    const pingHandler = () => {
+      dispatch(ping());
+      api.socket.publish(`${types.CHAN_ROOM}/${name}`, 'ping');
+    };
+    pingHandler();
+    pingInterval = setInterval(pingHandler, interval);
+
+    api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
+      if (payload.dispatch !== undefined) {
+        dispatchPayload(dispatch, payload);
+      } else {
+        console.error('Invalid payload');
+      }
+    });
+  };
+}
 
 /**
  * @param {*} settings
@@ -89,10 +119,11 @@ export function roomSaveSettings(settings, type) {
       }
 
       api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-        cmd: types.CMD_SAVE_SETTINGS,
-        type,
-        settings
+        dispatch: [
+          { action: 'saveSettings', args: [settings, type] }
+        ]
       });
+
       switch (type) {
         case 'user':
           return dispatch(settingsUser(settings));
@@ -251,38 +282,6 @@ export function roomResetNumNewMessages() {
 export function roomIncrNumNewMessages() {
   return {
     type: types.ROOM_INCR_NUM_NEW_MESSAGES
-  };
-}
-
-/**
- *
- * @param {string} name
- * @returns {Function}
- */
-export function roomJoin(name) {
-  return (dispatch, getState, api) => {
-    dispatch(roomLeave());
-    dispatch({
-      type: types.ROOM_NAME,
-      name
-    });
-    dispatch(playlistSubscribe());
-
-    const interval = getState().settings.socket.pingInterval;
-    const pingHandler = () => {
-      dispatch(ping());
-      api.socket.publish(`${types.CHAN_ROOM}/${name}`, 'ping');
-    };
-    pingHandler();
-    pingInterval = setInterval(pingHandler, interval);
-
-    api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
-      if (payload.dispatch !== undefined) {
-        dispatchPayload(dispatch, payload);
-      } else {
-        console.error('Invalid payload');
-      }
-    });
   };
 }
 

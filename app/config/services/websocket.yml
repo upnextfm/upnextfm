@@ -65,6 +65,7 @@ services:
           - [setRoomStorage, ["@app.ws.storage.room"]]
         tags:
           - { name: gos_web_socket.topic }
+          - { name: kernel.event_subscriber }
 
     ## ########################################################################
     ## Websocket Private Message Topic

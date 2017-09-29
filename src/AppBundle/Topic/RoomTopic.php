@@ -6,14 +6,18 @@ use AppBundle\Entity\Room;
 use AppBundle\Entity\RoomSettings;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserSettings;
+use AppBundle\EventListener\Socket\RoomRequestEvent;
+use AppBundle\EventListener\Socket\SocketEvents;
+use AppBundle\EventListener\Socket\RoomResponseEvent;
 use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use Exception;
 use Ratchet\Wamp\WampConnection;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class RoomTopic extends AbstractTopic
+class RoomTopic extends AbstractTopic implements EventSubscriberInterface
 {
   /**
    * @var int
@@ -21,11 +25,44 @@ class RoomTopic extends AbstractTopic
   protected $noticeID = 0;
 
   /**
+   * @var array
+   */
+  protected $subs = [];
+
+  /**
+   * @var Topic[]
+   */
+  protected $rooms = [];
+
+  /**
    * {@inheritdoc}
    */
   public function getName()
   {
     return "room.topic";
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubscribedEvents()
+  {
+    return [
+      SocketEvents::ROOM_RESPONSE => "onRoomResponse"
+    ];
+  }
+
+  /**
+   * @param RoomResponseEvent $event
+   */
+  public function onRoomResponse(RoomResponseEvent $event)
+  {
+    $topic = $this->rooms[$event->getRoom()->getName()];
+    $topic->broadcast([
+      "dispatch" => [
+        ["action" => $event->getAction(), "args" => $event->getArgs()]
+      ]
+    ]);
   }
 
   /**
@@ -45,6 +82,21 @@ class RoomTopic extends AbstractTopic
       if ($user) {
         $this->roomStorage->addUser($room, $user);
       }
+
+      // Save the client connection and room index.
+      $client = ["conn" => $conn, "topic" => $topic];
+      $roomName = $room->getName();
+      if (!isset($this->subs[$roomName])) {
+        $this->subs[$roomName] = [];
+      }
+      if (!empty($this->subs[$roomName])) {
+        $index = array_search($client, $this->subs[$roomName]);
+        if (false !== $index) {
+          unset($this->subs[$roomName][$index]);
+        }
+      }
+      $this->subs[$roomName][] = $client;
+      $this->rooms[$roomName] = $topic;
 
       $repo = $this->em->getRepository("AppBundle:ChatLog");
       $messages = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
@@ -150,6 +202,23 @@ class RoomTopic extends AbstractTopic
       $room = $this->getRoom($request->getAttributes()->get("room"), $user);
       $this->roomStorage->removeUser($room, $user);
 
+      // Remove the client connection and room index.
+      $roomName = $room->getName();
+      if (!isset($this->subs[$roomName])) {
+        $this->subs[$roomName] = [];
+      }
+      if (!empty($this->subs[$roomName])) {
+        $client = ["conn" => $conn, "topic" => $topic];
+        $index = array_search($client, $this->subs[$roomName]);
+        if (false !== $index) {
+          unset($this->subs[$roomName][$index]);
+          if (count($this->subs[$roomName]) === 0) {
+            unset($this->subs[$roomName]);
+            unset($this->rooms[$roomName]);
+          }
+        }
+      }
+
       $this->dispatchToRoom(
         "room:roomParted",
         $user->getUsername()
@@ -183,193 +252,34 @@ class RoomTopic extends AbstractTopic
     array $eligible
   )
   {
-
     try {
       if (is_string($event) && $event === "ping") {
         $clientStorage = $this->container->get("app.ws.storage.driver");
         $clientStorage->lifeTime($conn->resourceId, 86400);
-
         return $this->dispatchToUser("room:pong", time())
           ->flush($conn, $topic);
       }
 
-      $this->logger->info("Got command " . $event["cmd"], $event);
-
-      if (empty($event["cmd"])) {
-        $this->logger->error("cmd not set.", $event);
-        return true;
+      if (!isset($event["dispatch"])) {
+        return $this->logger->error("Invalid payload.", $event);
       }
-
       $user = $this->getUser($conn);
       if (!($user instanceof UserInterface)) {
-        $this->logger->error("User not found.", $event);
-        return true;
+        return $this->logger->error("User not found.", $event);
       }
       $room = $this->getRoom($req->getAttributes()->get("room"), $user);
       if (!$room || $room->getIsDeleted()) {
-        $this->logger->error("Room not found.", $event);
-        return true;
+        return $this->logger->error("Room not found.", $event);
       }
 
-      switch ($event["cmd"]) {
-        case RoomCommands::SEND:
-          $this->handleSend($conn, $topic, $req, $room, $user, $event);
-          break;
-        case RoomCommands::ME:
-          $this->handleMe($conn, $topic, $req, $room, $user, $event);
-          break;
-        case RoomCommands::SAVE_SETTINGS:
-          $this->handleSaveSettings($conn, $topic, $req, $room, $user, $event);
-          break;
-      }
+      // @see AppBundle\EventListener\Socket\SocketSubscriber
+      return $this->eventDispatcher->dispatch(
+        SocketEvents::ROOM_REQUEST,
+        new RoomRequestEvent($room, $user, $event)
+      );
     } catch (Exception $e) {
-      $this->handleError($e);
+      return $this->handleError($e);
     }
-
-    return true;
-  }
-
-  /**
-   * @param ConnectionInterface $conn
-   * @param Topic $topic
-   * @param WampRequest $req
-   * @param Room $room
-   * @param UserInterface|User $user
-   * @param array $event
-   */
-  protected function handleSend(
-    ConnectionInterface $conn,
-    Topic $topic,
-    WampRequest $req,
-    Room $room,
-    UserInterface $user,
-    array $event
-  )
-  {
-    $message = $this->sanitizeMessage($event["message"]);
-    if (empty($message)) {
-      return;
-    }
-
-    /** @var ChatLog $chatLog */
-    $chatLog = new ChatLog($room, $user, $message);
-    $chatLog = $this->em->merge($chatLog);
-    $this->em->flush();
-
-    // Dispatch.
-    $this->dispatchToRoom(
-      "room:roomMessage",
-      $this->serializeMessage($chatLog)
-    )->flush($conn, $topic);
-  }
-
-  /**
-   * @param ConnectionInterface $conn
-   * @param Topic $topic
-   * @param WampRequest $req
-   * @param Room $room
-   * @param UserInterface|User $user
-   * @param array $event
-   */
-  protected function handleMe(
-    ConnectionInterface $conn,
-    Topic $topic,
-    WampRequest $req,
-    Room $room,
-    UserInterface $user,
-    array $event
-  )
-  {
-    $message = $this->sanitizeMessage($event["message"]);
-    if (empty($message)) {
-      return;
-    }
-
-    /** @var ChatLog $chatLog */
-    $chatLog = new ChatLog($room, $user, $message);
-    $chatLog = $this->em->merge($chatLog);
-    $this->em->flush();
-
-    // Dispatch.
-    $this->dispatchToRoom(
-      "room:roomMessage",
-      $this->serializeMessage($chatLog, "me")
-    )->flush($conn, $topic);
-  }
-
-  /**
-   * @param ConnectionInterface $conn
-   * @param Topic $topic
-   * @param WampRequest $req
-   * @param Room $room
-   * @param UserInterface|User $user
-   * @param array $event
-   */
-  protected function handleSaveSettings(
-    ConnectionInterface $conn,
-    Topic $topic,
-    WampRequest $req,
-    Room $room,
-    UserInterface $user,
-    array $event
-  )
-  {
-    if (!isset($event["settings"])) {
-      $event["settings"] = [];
-    }
-    switch($event["type"]) {
-      case "user":
-        $this->saveUserSettings($user, $event["settings"]);
-        break;
-      case "room":
-        $this->saveRoomSettings($room, $event["settings"]);
-        break;
-    }
-  }
-
-  /**
-   * @param UserInterface|User $user
-   * @param array $settings
-   */
-  private function saveUserSettings(UserInterface $user, array $settings)
-  {
-    $settings["showNotices"] = isset($settings["showNotices"])
-      ? $settings["showNotices"]
-      : true;
-    $settings["textColor"] = isset($settings["textColor"])
-      ? $settings["textColor"]
-      : "#FFFFFF";
-
-    $userSettings = $user->getSettings();
-    if (!$userSettings) {
-      $userSettings = new UserSettings();
-      $userSettings->setUser($user);
-      $user->setSettings($userSettings);
-    }
-    $userSettings->setShowNotices($settings["showNotices"]);
-    $userSettings->setTextColor($settings["textColor"]);
-    $this->em->flush();
-  }
-
-  /**
-   * @param Room $room
-   * @param array $settings
-   */
-  private function saveRoomSettings(Room $room, array $settings)
-  {
-    $settings["joinMessage"] = isset($settings["joinMessage"])
-      ? $settings["joinMessage"]
-      : "";
-
-    $roomSettings = $room->getSettings();
-    if (!$roomSettings) {
-      $roomSettings = new RoomSettings();
-      $roomSettings->setRoom($room);
-      $room->setSettings($roomSettings);
-    }
-
-    $roomSettings->setJoinMessage($settings["joinMessage"]);
-    $this->em->flush();
   }
 
   /**
