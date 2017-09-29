@@ -16,6 +16,11 @@ use Ratchet\Wamp\WampConnection;
 class RoomTopic extends AbstractTopic
 {
   /**
+   * @var array
+   */
+  protected $toDispatch = [];
+
+  /**
    * {@inheritdoc}
    */
   public function getName()
@@ -131,6 +136,36 @@ class RoomTopic extends AbstractTopic
   }
 
   /**
+   * @param string $action
+   * @return $this
+   */
+  protected function dispatchAction($action)
+  {
+    $args   = func_get_args();
+    $action = array_shift($args);
+    $this->toDispatch[] = ["action" => $action, "args" => $args];
+
+    return $this;
+  }
+
+  /**
+   * @param ConnectionInterface|WampConnection $conn
+   * @param Topic $topic
+   * @return $this
+   */
+  protected function flush($conn, $topic)
+  {
+    if ($this->toDispatch) {
+      $conn->event($topic->getId(), [
+        "dispatch" => $this->toDispatch
+      ]);
+    }
+    $this->toDispatch = [];
+
+    return $this;
+  }
+
+  /**
    * {@inheritdoc}
    *
    * @param ConnectionInterface|WampConnection $conn
@@ -149,7 +184,9 @@ class RoomTopic extends AbstractTopic
       if (is_string($event) && $event === "ping") {
         $clientStorage = $this->container->get("app.ws.storage.driver");
         $clientStorage->lifeTime($conn->resourceId, 86400);
-        return $conn->event($topic->getId(), "pong");
+
+        return $this->dispatchAction("room:pong", time())
+          ->flush($conn, $topic);
       }
 
       $this->logger->info("Got command " . $event["cmd"], $event);

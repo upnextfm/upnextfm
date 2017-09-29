@@ -26,6 +26,8 @@ export const LAYOUT_COLS                        = 'LAYOUT_COLS';
 export const LAYOUT_ERROR_MESSAGE               = 'LAYOUT_ERROR_MESSAGE';
 export const LAYOUT_WINDOW_FOCUS                = 'LAYOUT_WINDOW_FOCUS';
 
+export const ROOM_PING                   = 'ROOM_PING';
+export const ROOM_PONG                   = 'ROOM_PONG';
 export const ROOM_JOINED                 = 'ROOM_JOINED';
 export const ROOM_PARTED                 = 'ROOM_PARTED';
 export const ROOM_NAME                   = 'ROOM_NAME';

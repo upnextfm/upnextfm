@@ -5,6 +5,7 @@ import { layoutToggleLoginDialog } from 'actions/layoutActions';
 import { playlistSubscribe } from 'actions/playlistActions';
 import { pmsSend } from 'actions/pmsActions';
 import { settingsAll, settingsRoom, settingsUser } from 'actions/settingsActions';
+import { dispatchPayload } from 'actions/dispatch';
 
 let noticeID     = 0;
 let pingInterval = null;
@@ -321,15 +322,41 @@ export function roomJoin(name) {
       name
     });
     dispatch(playlistSubscribe());
-    pingInterval = setInterval(() => {
+
+    const interval = getState().settings.socket.pingInterval;
+    const pingHandler = () => {
+      dispatch(ping());
       api.socket.publish(`${types.CHAN_ROOM}/${name}`, 'ping');
-    }, getState().settings.socket.pingInterval);
+    };
+    pingHandler();
+    pingInterval = setInterval(pingHandler, interval);
 
     api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
-      if (payload === 'pong') {
-        return;
+      if (payload.dispatch !== undefined) {
+        dispatchPayload(dispatch, payload);
+      } else {
+        dispatchSocketPayload(dispatch, getState, payload);
       }
-      dispatchSocketPayload(dispatch, getState, payload);
     });
+  };
+}
+
+/**
+ * @returns {{type: ROOM_PING}}
+ */
+export function ping() {
+  return {
+    type: types.ROOM_PING
+  };
+}
+
+/**
+ * @param {number} time
+ * @returns {{type: ROOM_PONG, time: *}}
+ */
+export function pong(time) {
+  return {
+    type: types.ROOM_PONG,
+    time
   };
 }

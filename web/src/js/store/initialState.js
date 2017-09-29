@@ -47,6 +47,8 @@ export default {
   room: {
     name:           '',
     numNewMessages: 0,
+    lastPingTime:   new Date(),
+    pingTime:       0,
     users:          [],
     messages:       []
   },

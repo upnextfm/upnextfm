@@ -129,6 +129,11 @@ class NavDrawer extends React.PureComponent {
         <List disablePadding>
           {aboutListItems}
         </List>
+        <List disablePadding>
+          <ListItem className="up-room-ping">
+            Ping Time: {this.props.pingTime} ms
+          </ListItem>
+        </List>
       </div>
     );
   }
@@ -168,7 +173,10 @@ class NavDrawer extends React.PureComponent {
 }
 
 function mapStateToProps(state) {
-  return Object.assign({}, { layout: state.layout });
+  return {
+    layout:   Object.assign({}, state.layout),
+    pingTime: state.room.pingTime
+  };
 }
 
 export default connect(mapStateToProps)(NavDrawer);

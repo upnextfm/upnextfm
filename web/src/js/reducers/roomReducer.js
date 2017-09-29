@@ -94,6 +94,19 @@ function message(state, action) {
 }
 
 /**
+ * Handles a pong response from the server
+ *
+ * @param {*} state
+ * @returns {{pingTime: number}}
+ */
+function pong(state) {
+  return {
+    ...state,
+    pingTime: (new Date()) - state.lastPingTime
+  };
+}
+
+/**
  * Rooms reducer
  *
  * state = {
@@ -129,6 +142,13 @@ export default function roomReducer(state = initialState.room, action = {}) {
         ...state,
         numNewMessages: 0
       };
+    case types.ROOM_PING:
+      return {
+        ...state,
+        lastPingTime: new Date()
+      };
+    case types.ROOM_PONG:
+      return pong(state, action);
     case types.ROOM_JOINED:
       return joined(state, action);
     case types.ROOM_PARTED:
