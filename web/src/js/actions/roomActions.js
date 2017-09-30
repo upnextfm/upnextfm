@@ -13,6 +13,14 @@ const commands = {
 };
 
 /**
+ * @param {string} roomName
+ * @returns {string}
+ */
+function roomChannel(roomName) {
+  return `${types.CHAN_ROOM}/${roomName}`;
+}
+
+/**
  * Handles the /send command
  *
  * @param {string} msg
@@ -27,12 +35,9 @@ function handleCommandSend(msg, dispatch, getState, api) {
       dispatch(layoutToggleLoginDialog());
     } else {
       const textColor = getState().settings.user.textColor;
-      const message   = `[${textColor}]${msg}[/#]`;
-      api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-        dispatch: [
-          { action: 'send', args: [message] }
-        ]
-      });
+      api.socket.dispatch(roomChannel(room.name), 'send', [
+        `[${textColor}]${msg}[/#]`
+      ]);
     }
   }
 }
@@ -65,11 +70,9 @@ function handleCommandMe(message, dispatch, getState, api) {
     if (!getState().user.isAuthenticated) {
       dispatch(layoutToggleLoginDialog());
     } else {
-      api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-        dispatch: [
-          { action: 'me', args: [message] }
-        ]
-      });
+      api.socket.dispatch(roomChannel(room.name), 'me', [
+        message
+      ]);
     }
   }
 }
@@ -90,12 +93,12 @@ export function roomJoin(name) {
     const interval = getState().settings.socket.pingInterval;
     const pingHandler = () => {
       dispatch(ping());
-      api.socket.publish(`${types.CHAN_ROOM}/${name}`, 'ping');
+      api.socket.publish(roomChannel(name), 'ping');
     };
     pingHandler();
     pingInterval = setInterval(pingHandler, interval);
 
-    api.socket.subscribe(`${types.CHAN_ROOM}/${name}`, (uri, payload) => {
+    api.socket.subscribe(roomChannel(name), (uri, payload) => {
       if (payload.dispatch !== undefined) {
         dispatchPayload(dispatch, payload);
       } else {
@@ -118,11 +121,10 @@ export function roomSaveSettings(settings, type) {
         return dispatch(layoutToggleLoginDialog());
       }
 
-      api.socket.publish(`${types.CHAN_ROOM}/${room.name}`, {
-        dispatch: [
-          { action: 'saveSettings', args: [settings, type] }
-        ]
-      });
+      api.socket.dispatch(roomChannel(room.name), 'saveSettings', [
+        settings,
+        type
+      ]);
 
       switch (type) {
         case 'user':
@@ -130,7 +132,7 @@ export function roomSaveSettings(settings, type) {
         case 'room':
           return dispatch(settingsRoom(settings));
         default:
-          console.log(`Invalid settings type "${type}".`);
+          return console.log(`Invalid settings type "${type}".`);
           break;
       }
     }
@@ -234,7 +236,7 @@ export function roomLeave() {
         type: types.ROOM_NAME,
         name: ''
       });
-      api.socket.unsubscribe(`${types.CHAN_ROOM}/${room.name}`)
+      api.socket.unsubscribe(roomChannel(room.name))
         .catch((err) => {
           console.info(err);
         });

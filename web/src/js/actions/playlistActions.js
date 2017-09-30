@@ -3,6 +3,14 @@ import { userToggleLoginDialog } from 'actions/userActions';
 import * as types from 'actions/actionTypes';
 
 /**
+ * @param {string} roomName
+ * @returns {string}
+ */
+function videoChannel(roomName) {
+  return `${types.CHAN_VIDEO}/${roomName}`;
+}
+
+/**
  *
  * @param {Function} dispatch
  * @param {Function} getState
@@ -31,7 +39,7 @@ export function playlistSubscribe() {
   return (dispatch, getState, api) => {
     const room = getState().room;
     if (room.name !== '') {
-      api.socket.subscribe(`${types.CHAN_VIDEO}/${room.name}`, (uri, payload) => {
+      api.socket.subscribe(videoChannel(room.name), (uri, payload) => {
         if (payload.dispatch !== undefined) {
           dispatchPayload(dispatch, payload);
         } else {
@@ -87,10 +95,9 @@ export function playlistAppend(url) {
   return (dispatch, getState, api) => { // eslint-disable-line
     const room = subscribe(dispatch, getState);
     if (room && room.name !== '') {
-      api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
-        cmd: types.CMD_VIDEO_APPEND,
+      api.socket.dispatch(videoChannel(room.name), 'append', [
         url
-      });
+      ]);
     }
   };
 }
@@ -100,13 +107,12 @@ export function playlistAppend(url) {
  * @returns {Function}
  */
 export function playlistRemove(videoID) {
-  return (dispatch, getState, api) => { // eslint-disable-line
+  return (dispatch, getState, api) => {
     const room = subscribe(dispatch, getState);
     if (room && room.name !== '') {
-      api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
-        cmd: types.CMD_VIDEO_REMOVE,
+      api.socket.dispatch(videoChannel(room.name), 'remove', [
         videoID
-      });
+      ]);
     }
   };
 }
@@ -119,10 +125,10 @@ export function playlistUpvote(videoID) {
   return (dispatch, getState, api) => { // eslint-disable-line
     const room = subscribe(dispatch, getState);
     if (room && room.name !== '') {
-      api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
-        cmd: types.CMD_VIDEO_UPVOTE,
-        videoID
-      });
+      api.socket.dispatch(videoChannel(room.name), 'vote', [
+        videoID,
+        1 // or -1 to down vote
+      ]);
     }
   };
 }
@@ -135,10 +141,9 @@ export function playlistPlayNext(videoID) {
   return (dispatch, getState, api) => { // eslint-disable-line
     const room = subscribe(dispatch, getState);
     if (room && room.name !== '') {
-      api.socket.publish(`${types.CHAN_VIDEO}/${room.name}`, {
-        cmd: types.CMD_VIDEO_PLAYNEXT,
+      api.socket.dispatch(videoChannel(room.name), 'playNext', [
         videoID
-      });
+      ]);
     }
   };
 }

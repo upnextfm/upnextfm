@@ -69,12 +69,9 @@ export function pmsLoadConversation(username) {
     if (!getState().user.isAuthenticated) {
       return;
     }
-
-    api.socket.publish(types.CHAN_PMS, {
-      dispatch: [
-        { action: 'load', args: [username] }
-      ]
-    });
+    api.socket.dispatch(types.CHAN_PMS, 'load', [
+      username
+    ]);
   };
 }
 
@@ -83,7 +80,6 @@ export function pmsLoadConversation(username) {
  * @returns {{type: *, message: *}}
  */
 export function pmsReceive(message) {
-  console.log(message);
   return {
     type: types.PMS_RECEIVE,
     message
@@ -123,12 +119,11 @@ export function pmsSend(to, message) {
       return;
     }
 
-    dispatch(pmsSending(true));
     const textColor = getState().settings.user.textColor;
-    api.socket.publish(types.CHAN_PMS, {
-      dispatch: [
-        { action: 'send', args: [to, `[${textColor}]${message}[/#]`] }
-      ]
-    });
+    dispatch(pmsSending(true));
+    api.socket.dispatch(types.CHAN_PMS, 'send', [
+      to,
+      `[${textColor}]${message}[/#]`
+    ]);
   };
 }

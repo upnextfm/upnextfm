@@ -94,6 +94,7 @@ services:
           - [setVideoRepository, ["@=service('doctrine').getRepository('AppBundle:Video')"]]
         tags:
           - { name: gos_web_socket.topic }
+          - { name: kernel.event_subscriber }
 
     ## ########################################################################
     ## Video Periodic

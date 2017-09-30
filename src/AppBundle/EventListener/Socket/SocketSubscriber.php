@@ -6,6 +6,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SocketSubscriber implements EventSubscriberInterface
 {
   /**
+   * @var VideoListener
+   */
+  protected $videoListener;
+
+  /**
    * @var RoomListener
    */
   protected $roomListener;
@@ -14,6 +19,16 @@ class SocketSubscriber implements EventSubscriberInterface
    * @var PMListener
    */
   protected $pmListener;
+
+  /**
+   * @param VideoListener $videoListener
+   * @return $this
+   */
+  public function setVideoListener(VideoListener $videoListener)
+  {
+    $this->videoListener = $videoListener;
+    return $this;
+  }
 
   /**
    * @param RoomListener $roomListener
@@ -41,9 +56,27 @@ class SocketSubscriber implements EventSubscriberInterface
   public static function getSubscribedEvents()
   {
     return [
-      SocketEvents::ROOM_REQUEST => "onRoomRequest",
-      SocketEvents::PM_REQUEST   => "onPMRequest"
+      SocketEvents::VIDEO_REQUEST => "onVideoRequest",
+      SocketEvents::ROOM_REQUEST  => "onRoomRequest",
+      SocketEvents::PM_REQUEST    => "onPMRequest"
     ];
+  }
+
+  /**
+   * @param VideoRequestEvent $event
+   */
+  public function onVideoRequest(VideoRequestEvent $event)
+  {
+    $payload = $event->getPayload();
+    $user    = $event->getUser();
+    $room    = $event->getRoom();
+
+    foreach($payload["dispatch"] as $action) {
+      $method = ucwords($action["action"]);
+      $method = "on${method}";
+      $args   = array_merge([$user, $room], $action["args"]);
+      call_user_func_array([$this->videoListener, $method], $args);
+    }
   }
 
   /**

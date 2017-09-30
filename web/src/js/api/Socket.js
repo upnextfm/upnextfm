@@ -108,6 +108,20 @@ class Socket {
   };
 
   /**
+   * @param {string} chan
+   * @param {string} action
+   * @param {array} [args]
+   * @returns {Promise}
+   */
+  dispatch = (chan, action, args = []) => {
+    return this.publish(chan, {
+      dispatch: [
+        { action, args }
+      ]
+    });
+  };
+
+  /**
    *
    * @param {string} type
    * @param {Function} listener

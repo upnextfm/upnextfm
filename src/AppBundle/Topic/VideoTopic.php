@@ -9,9 +9,11 @@ use AppBundle\Entity\VideoRepository;
 use AppBundle\Entity\Vote;
 use AppBundle\EventListener\Event\PlayedVideoEvent;
 use AppBundle\EventListener\Event\UserEvents;
+use AppBundle\EventListener\Socket\PlaylistResponseEvent;
+use AppBundle\EventListener\Socket\SocketEvents;
+use AppBundle\EventListener\Socket\VideoRequestEvent;
 use AppBundle\Playlist\ProvidersInterface;
 use AppBundle\Playlist\RngMod;
-use AppBundle\Service\VideoInfo;
 use AppBundle\Service\VideoService;
 use AppBundle\Storage\PlaylistStorage;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
@@ -20,9 +22,10 @@ use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerTrait;
 use Predis\Client as Redis;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
+class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, EventSubscriberInterface
 {
   use TopicPeriodicTimerTrait;
 
@@ -32,7 +35,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   protected $subs = [];
 
   /**
-   * @var Room[]
+   * @var Topic[]
    */
   protected $rooms = [];
 
@@ -72,6 +75,16 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
   public function getName()
   {
     return "video.topic";
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubscribedEvents()
+  {
+    return [
+      SocketEvents::PLAYLIST_RESPONSE => "onPlaylistResponse"
+    ];
   }
 
   /**
@@ -161,7 +174,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       }
     }
     $this->subs[$roomName][] = $client;
-    $this->rooms[$roomName] = $room;
+    $this->rooms[$roomName]  = $topic;
 
     $videos = [];
     foreach ($this->playlist->getAll($room) as $videoLog) {
@@ -233,222 +246,35 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
     array $eligible
   )
   {
-
-    try {
-      $event = array_map("trim", $event);
-      if (empty($event["cmd"])) {
-        $this->logger->error("cmd not set.", $event);
-        return;
-      }
-      $user = $this->getUser($conn);
-      if (!($user instanceof UserInterface)) {
-        $this->logger->error("User not found.", $event);
-        return;
-      }
-      $room = $this->getRoom($req->getAttributes()->get("room"), $user);
-      if (!$room || $room->getIsDeleted()) {
-        $this->logger->error("Room not found.", $event);
-        return;
-      }
-
-      switch ($event["cmd"]) {
-        case VideoCommands::UPVOTE:
-          $this->handleUpvote($conn, $topic, $req, $room, $user, $event);
-          break;
-        case VideoCommands::APPEND:
-          $this->handleAppend($conn, $topic, $req, $room, $user, $event);
-          break;
-        case VideoCommands::REMOVE:
-          $this->handleRemove($conn, $topic, $req, $room, $user, $event);
-          break;
-        case VideoCommands::PLAYNEXT:
-          $this->handlePlayNext($conn, $topic, $req, $room, $user, $event);
-          break;
-      }
-    } catch (\Exception $e) {
-      $this->logger->error($e->getMessage());
+    $user = $this->getUser($conn);
+    if (!($user instanceof UserInterface)) {
+      return $this->logger->error("User not found.", $event);
     }
+    $room = $this->getRoom($req->getAttributes()->get("room"), $user);
+    if (!$room || $room->getIsDeleted()) {
+      return $this->logger->error("Room not found.", $event);
+    }
+
+    // @see AppBundle\EventListener\Socket\SocketSubscriber
+    return $this->eventDispatcher->dispatch(
+      SocketEvents::VIDEO_REQUEST,
+      new VideoRequestEvent($room, $user, $event)
+    );
   }
 
   /**
-   * @param ConnectionInterface $conn
-   * @param Topic $topic
-   * @param WampRequest $req
-   * @param Room $room
-   * @param UserInterface|User $user
-   * @param array $event
-   * @return mixed|void
+   * @param PlaylistResponseEvent $event
    */
-  protected function handleAppend(
-    ConnectionInterface $conn,
-    Topic $topic,
-    WampRequest $req,
-    Room $room,
-    UserInterface $user,
-    array $event
-  )
+  public function onPlaylistResponse(PlaylistResponseEvent $event)
   {
-
-    $parsed = $this->providers->parseURL($event["url"]);
-    if (!$parsed) {
-      return $this->dispatchError("Invalid URL \"${event['url']}\".");
+    $topic = $this->rooms[$event->getRoom()->getName()];
+    if ($topic) {
+      $topic->broadcast([
+        "dispatch" => [
+          ["action" => $event->getAction(), "args" => $event->getArgs()]
+        ]
+      ]);
     }
-
-    if ($parsed["playlist"]) {
-      $codenames = $this->videoService->getPlaylist($parsed["codename"], $parsed["provider"]);
-      foreach ($codenames as $codename) {
-        $video = $this->getOrCreateVideo(
-          $room,
-          $user,
-          $codename,
-          $parsed["provider"]
-        );
-        if ($video) {
-          /** @var VideoLog $videoLog */
-          $video->setDateLastPlayed(new \DateTime());
-          $video->incrNumPlays();
-          $videoLog = new VideoLog($video, $room, $user);
-          $videoLog = $this->em->merge($videoLog);
-          $this->em->flush();
-
-          $this->playlist->append($videoLog);
-          $event = new PlayedVideoEvent($user, $room, $video);
-          $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
-        }
-      }
-      usleep(500);
-    } else {
-      $video = $this->getOrCreateVideo(
-        $room,
-        $user,
-        $parsed["codename"],
-        $parsed["provider"]
-      );
-      if (!$video) {
-        return true;
-      }
-
-      /** @var VideoLog $videoLog */
-      $video->setDateLastPlayed(new \DateTime());
-      $video->incrNumPlays();
-      $videoLog = new VideoLog($video, $room, $user);
-      $videoLog = $this->em->merge($videoLog);
-      $this->em->flush();
-
-      $this->playlist->append($videoLog);
-      $event = new PlayedVideoEvent($user, $room, $video);
-      $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
-      usleep(500);
-    }
-
-    return $this->sendPlaylistToRoom($room);
-  }
-
-  /**
-   * @param ConnectionInterface $conn
-   * @param Topic $topic
-   * @param WampRequest $req
-   * @param Room $room
-   * @param UserInterface|User $user
-   * @param array $event
-   * @return mixed|void
-   */
-  protected function handleRemove(
-    ConnectionInterface $conn,
-    Topic $topic,
-    WampRequest $req,
-    Room $room,
-    UserInterface $user,
-    array $event
-  )
-  {
-    if (empty($event["videoID"])) {
-      return $this->dispatchError("Invalid command.");
-    }
-
-    $result = $this->playlist->removeByID($room, $event["videoID"]);
-    usleep(500);
-    if (is_array($result)) {
-      $videoLog = $result["videoLog"];
-      $this->dispatchToRoom(
-        "playlist:playlistStart",
-        0,
-        $this->serializeVideo($videoLog)
-      )->flush($conn, $topic);
-    }
-
-    return $this->sendPlaylistToRoom($room);
-  }
-
-
-  /**
-   * @param ConnectionInterface $conn
-   * @param Topic $topic
-   * @param WampRequest $req
-   * @param Room $room
-   * @param UserInterface|User $user
-   * @param array $event
-   * @return mixed|void
-   */
-  protected function handleUpvote(
-    ConnectionInterface $conn,
-    Topic $topic,
-    WampRequest $req,
-    Room $room,
-    UserInterface $user,
-    array $event
-  )
-  {
-    if (empty($event["videoID"])) {
-      return $this->dispatchError("Invalid video ID in the handleUpvote method.");
-    }
-
-    $video = $this->em->getRepository("AppBundle:VideoLog")
-      ->findByID($event["videoID"])->getVideo();
-    $hasVoted = $this->em->getRepository("AppBundle:Vote")
-      ->hasVoted($user, $video);
-
-    if (!$hasVoted) {
-      $vote = new Vote();
-      $vote->setValue(1);
-      $vote->setVideo($video);
-      $vote->setUser($user);
-
-      $this->em->persist($vote);
-      $this->em->flush();
-    } else {
-      var_dump("You have already voted on this video!");
-    }
-
-    return $this->sendPlaylistToRoom($room);
-  }
-
-  /**
-   * @param ConnectionInterface $conn
-   * @param Topic $topic
-   * @param WampRequest $req
-   * @param Room $room
-   * @param UserInterface|User $user
-   * @param array $event
-   * @return mixed|void
-   */
-  protected function handlePlayNext(
-    ConnectionInterface $conn,
-    Topic $topic,
-    WampRequest $req,
-    Room $room,
-    UserInterface $user,
-    array $event
-  )
-  {
-    if (empty($event["videoID"])) {
-      return $this->dispatchError("Invalid command.");
-    }
-
-    $this->playlist->playNext($room, $event["videoID"]);
-    usleep(500);
-
-    return $this->sendPlaylistToRoom($room);
   }
 
   /**
@@ -465,7 +291,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
       function () use ($topic) {
 
         /** @var VideoLog $videoLog */
-        foreach ($this->rooms as $roomName => $room) {
+        foreach ($this->rooms as $roomName => $topic) {
+          $room = $this->em->getRepository("AppBundle:Room")->findByName($roomName);
           $current = $this->playlist->getCurrent($room);
           if (!$current) {
             $current = $this->playlist->popToCurrent($room);
@@ -542,41 +369,6 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface
         }
       }
     );
-  }
-
-  /**
-   * @param Room $room
-   * @param UserInterface|User $user
-   * @param string $codename
-   * @param string $provider
-   * @return Video|null
-   */
-  private function getOrCreateVideo(Room $room, UserInterface $user, $codename, $provider)
-  {
-    $video = $this->videoRepo->findByCodename($codename, $provider);
-    if (!$video) {
-      $info = $this->videoService->getInfo($codename, $provider);
-      if (!$info) {
-        return null;
-      }
-
-      $video = new Video();
-      $video->setCodename($info->getCodename());
-      $video->setProvider($info->getProvider());
-      $video->setCreatedByUser($user);
-      $video->setCreatedInRoom($room);
-      $video->setTitle($info->getTitle());
-      $video->setSeconds($info->getSeconds());
-      $video->setPermalink($info->getPermalink());
-      $video->setThumbColor($info->getThumbColor());
-      $video->setThumbSm($info->getThumbnail("sm"));
-      $video->setThumbMd($info->getThumbnail("md"));
-      $video->setThumbLg($info->getThumbnail("lg"));
-      $video->setNumPlays(0);
-      $this->em->persist($video);
-    }
-
-    return $video;
   }
 
   /**
