@@ -3,7 +3,7 @@ parameters:
     app.ws.storage.room.class:      AppBundle\Storage\RoomStorage
     app.ws.storage.playlist.class:  AppBundle\Storage\PlaylistStorage
     app.ws.topic.room.class:        AppBundle\Topic\RoomTopic
-    app.ws.topic.pms.class:         AppBundle\Topic\PrivateMessageTopic
+    app.ws.topic.pms.class:         AppBundle\Topic\PMTopic
     app.ws.topic.video.class:       AppBundle\Topic\VideoTopic
     app.ws.periodic.video.class:    AppBundle\Periodic\VideoPeriodic
     app.ws.periodic.doctrine.class: AppBundle\Periodic\DoctrinePeriodic
@@ -77,6 +77,7 @@ services:
           - [setRoomStorage, ["@app.ws.storage.room"]]
         tags:
           - { name: gos_web_socket.topic }
+          - { name: kernel.event_subscriber }
 
     ## ########################################################################
     ## Websocket Video Topic

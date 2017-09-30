@@ -71,8 +71,9 @@ export function pmsLoadConversation(username) {
     }
 
     api.socket.publish(types.CHAN_PMS, {
-      cmd: types.CMD_LOAD,
-      username
+      dispatch: [
+        { action: 'load', args: [username] }
+      ]
     });
   };
 }
@@ -125,11 +126,9 @@ export function pmsSend(to, message) {
     dispatch(pmsSending(true));
     const textColor = getState().settings.user.textColor;
     api.socket.publish(types.CHAN_PMS, {
-      cmd:     types.CMD_SEND,
-      message: {
-        to,
-        message: `[${textColor}]${message}[/#]`
-      }
+      dispatch: [
+        { action: 'send', args: [to, `[${textColor}]${message}[/#]`] }
+      ]
     });
   };
 }

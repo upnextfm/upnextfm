@@ -8,7 +8,7 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\UserSettings;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class RoomListener extends AbstractListener
+class RoomListener extends AbstractChatListener
 {
   /**
    * @param UserInterface $user
@@ -124,30 +124,5 @@ class RoomListener extends AbstractListener
     $this->em->flush();
 
     return $chatLog;
-  }
-
-  /**
-   * @param string $message
-   * @return string
-   */
-  protected function sanitizeMessage($message)
-  {
-    return trim(htmlspecialchars($message));
-  }
-
-  /**
-   * @param ChatLog $message
-   * @param string $type
-   * @return array
-   */
-  protected function serializeMessage(ChatLog $message, $type = "message")
-  {
-    return [
-      "type"    => $type,
-      "id"      => $message->getId(),
-      "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
-      "from"    => $message->getUser()->getUsername(),
-      "message" => $message->getMessage()
-    ];
   }
 }

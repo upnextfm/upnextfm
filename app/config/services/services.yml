@@ -2,6 +2,7 @@ parameters:
     api.request_listener.class: AppBundle\EventListener\RequestListener
     api.controller_response_listener.class: AppBundle\EventListener\ControllerResponseListener
     api.event_listener.socket.room.class: AppBundle\EventListener\Socket\RoomListener
+    api.event_listener.socket.pm.class: AppBundle\EventListener\Socket\PMListener
     api.event_subscriber.socket.class: AppBundle\EventListener\Socket\SocketSubscriber
     api.exception_listener.class: AppBundle\EventListener\ExceptionListener
     app.events.user_action_subscriber.class: AppBundle\EventListener\UserEventSubscriber
@@ -102,12 +103,23 @@ services:
           - "@monolog.logger"
 
     ## ########################################################################
+    ## Socket PM Listener
+    ## ########################################################################
+    api.event_listener.socket.pm:
+        class: "%api.event_listener.socket.pm.class%"
+        arguments:
+          - "@event_dispatcher"
+          - "@doctrine.orm.default_entity_manager"
+          - "@monolog.logger"
+
+    ## ########################################################################
     ## Socket Subscriber
     ## ########################################################################
     api.event_subscriber.socket:
         class: "%api.event_subscriber.socket.class%"
         calls:
           - [setRoomListener, ["@api.event_listener.socket.room"]]
+          - [setPMListener, ["@api.event_listener.socket.pm"]]
         tags:
           - { name: kernel.event_subscriber }
 
