@@ -26,7 +26,7 @@ class RoomListener extends AbstractChatListener
     }
 
     $event = new RoomResponseEvent($room, "room:roomMessage", [
-      $this->getChatLog($room, $user, $message)
+      $this->serializeMessage($this->getChatLog($room, $user, $message))
     ]);
     $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
   }
@@ -44,7 +44,7 @@ class RoomListener extends AbstractChatListener
     }
 
     $event = new RoomResponseEvent($room, "room:roomMessage", [
-      $this->getChatLog($room, $user, $message)
+      $this->serializeMessage($this->getChatLog($room, $user, $message))
     ]);
     $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
   }

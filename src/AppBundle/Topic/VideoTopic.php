@@ -1,7 +1,6 @@
 <?php
 namespace AppBundle\Topic;
 
-
 use AppBundle\Entity\Room;
 use AppBundle\Entity\User;
 use AppBundle\EventListener\Socket\PlaylistResponseEvent;
