@@ -30,7 +30,7 @@ class VideoRequestEvent extends Event
    * @param UserInterface|User $user
    * @param array $payload
    */
-  public function __construct(Room $room, UserInterface $user, array $payload)
+  public function __construct(Room $room, UserInterface $user = null, array $payload = [])
   {
     $this->room    = $room;
     $this->user    = $user;

@@ -5,7 +5,7 @@ use AppBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class PMResponseEvent extends Event
+class UserResponseEvent extends Event
 {
   /**
    * @var User|UserInterface

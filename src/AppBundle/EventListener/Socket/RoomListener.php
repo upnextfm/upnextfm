@@ -8,6 +8,9 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\UserSettings;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Handles client side events related to the room topic.
+ */
 class RoomListener extends AbstractChatListener
 {
   /**
@@ -22,9 +25,8 @@ class RoomListener extends AbstractChatListener
       return;
     }
 
-    $chatLog = $this->getChatLog($room, $user, $message);
-    $event   = new RoomResponseEvent($room, "room:roomMessage", [
-      $this->serializeMessage($chatLog)
+    $event = new RoomResponseEvent($room, "room:roomMessage", [
+      $this->getChatLog($room, $user, $message)
     ]);
     $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
   }
@@ -41,9 +43,8 @@ class RoomListener extends AbstractChatListener
       return;
     }
 
-    $chatLog = $this->getChatLog($room, $user, $message);
-    $event   = new RoomResponseEvent($room, "room:roomMessage", [
-      $this->serializeMessage($chatLog, "me")
+    $event = new RoomResponseEvent($room, "room:roomMessage", [
+      $this->getChatLog($room, $user, $message)
     ]);
     $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
   }

@@ -15,6 +15,9 @@ use AppBundle\Playlist\RngMod;
 use AppBundle\Service\VideoService;
 use AppBundle\Storage\PlaylistStorage;
 
+/**
+ * Handles client side events related to the video topic.
+ */
 class VideoListener extends AbstractListener
 {
   /**
@@ -93,12 +96,12 @@ class VideoListener extends AbstractListener
   }
 
   /**
-   * @param UserInterface $user
    * @param Room $room
+   * @param UserInterface $user
    * @param string $url
    * @return VideoListener|bool
    */
-  public function onAppend(UserInterface $user, Room $room, $url)
+  public function onAppend(Room $room, UserInterface $user, $url)
   {
     $parsed = $this->providers->parseURL($url);
     if (!$parsed) {
@@ -156,12 +159,12 @@ class VideoListener extends AbstractListener
   }
 
   /**
-   * @param UserInterface $user
    * @param Room $room
+   * @param UserInterface $user
    * @param int $videoID
    * @return VideoListener|void
    */
-  public function onRemove(UserInterface $user, Room $room, $videoID)
+  public function onRemove(Room $room, UserInterface $user, $videoID)
   {
     if (empty($videoID)) {
       return $this->logger->error("Invalid videoID.");
@@ -181,12 +184,12 @@ class VideoListener extends AbstractListener
   }
 
   /**
-   * @param UserInterface $user
    * @param Room $room
+   * @param UserInterface $user
    * @param $videoID
    * @return VideoListener|void
    */
-  public function onPlayNext(UserInterface $user, Room $room, $videoID)
+  public function onPlayNext(Room $room, UserInterface $user, $videoID)
   {
     if (empty($videoID)) {
       return $this->logger->error("Invalid videoID.");
@@ -199,12 +202,12 @@ class VideoListener extends AbstractListener
   }
 
   /**
-   * @param UserInterface|User $user
    * @param Room $room
+   * @param UserInterface|User $user
    * @param int $videoID
    * @param int $value
    */
-  public function onVote(UserInterface $user, Room $room, $videoID, $value)
+  public function onVote(Room $room, UserInterface $user, $videoID, $value)
   {
     if (empty($videoID)) {
       return $this->logger->error("Invalid videoID.");
@@ -228,6 +231,114 @@ class VideoListener extends AbstractListener
       $this->em->flush();
     } else {
       var_dump("You have already voted on this video!");
+    }
+  }
+
+  /**
+   * @param Room $room
+   * @param UserInterface|null $user
+   */
+  public function onSendPlaylistToRoom(Room $room, UserInterface $user = null)
+  {
+    $this->sendPlaylistToRoom($room);
+  }
+
+  /**
+   * @param Room $room
+   * @param UserInterface $user
+   */
+  public function onSendPlaylistToUser(Room $room, UserInterface $user)
+  {
+    $videos = [];
+    foreach ($this->playlist->getAll($room) as $videoLog) {
+      $videos[] = $this->serializeVideo($videoLog);
+    }
+    if ($videos) {
+      $this->eventDispatcher->dispatch(
+        SocketEvents::USER_PLAYLIST_RESPONSE,
+        new UserResponseEvent($user, "playlist:playlistVideos", [
+          $videos
+        ])
+      );
+    }
+  }
+
+  /**
+   * @param Room $room
+   * @param UserInterface $user
+   */
+  public function onSendCurrentToUser(Room $room, UserInterface $user)
+  {
+    $current = $this->playlist->getCurrent($room);
+    if ($current) {
+      /** @var VideoLog $videoLog */
+      if ($videoLog = $current["videoLog"]) {
+        $this->eventDispatcher->dispatch(
+          SocketEvents::USER_PLAYLIST_RESPONSE,
+          new UserResponseEvent($user, "playlist:playlistStart", [
+            time() - $current["timeStarted"],
+            $this->serializeVideo($videoLog)
+          ])
+        );
+      }
+    }
+  }
+
+  /**
+   * @param Room $room
+   * @param UserInterface|null $user
+   */
+  public function onPeriodicPlaylistUpdate(Room $room, UserInterface $user = null)
+  {
+    $current = $this->playlist->getCurrent($room);
+    if (!$current) {
+      $current = $this->playlist->popToCurrent($room);
+    }
+
+    if ($current) {
+      /** @var VideoLog $videoLog */
+      $videoLog      = $current["videoLog"];
+      $videoSecs     = $videoLog->getVideo()->getSeconds();
+      $timeFinishes  = $current["timeStarted"] + $videoSecs;
+      $timeRemaining = $timeFinishes - time();
+
+      if ($timeRemaining <= 0) {
+        if ($current = $this->playlist->popToCurrent($room)) {
+          $videoLog = $current["videoLog"];
+          $this->eventDispatcher->dispatch(
+            SocketEvents::PLAYLIST_RESPONSE,
+            new PlaylistResponseEvent($room, "playlist:playlistStart", [
+              0,
+              $this->serializeVideo($videoLog)
+            ])
+          );
+          $this->sendPlaylistToRoom($room);
+        } else {
+          $this->playlist->clearCurrent($room);
+          $this->eventDispatcher->dispatch(
+            SocketEvents::PLAYLIST_RESPONSE,
+            new PlaylistResponseEvent($room, "playlist:playlistStop", [])
+          );
+          $this->sendPlaylistToRoom($room);
+        }
+      } else {
+        $this->eventDispatcher->dispatch(
+          SocketEvents::PLAYLIST_RESPONSE,
+          new PlaylistResponseEvent($room, "player:playerTime", [
+            $videoSecs - $timeRemaining
+          ])
+        );
+      }
+    } else {
+      if ($logs = $this->rngmod->findByRoom($room, 3)) {
+        foreach ($logs as $videoLog) {
+          $this->playlist->append($videoLog);
+          $event = new PlayedVideoEvent($videoLog->getUser(), $room, $videoLog->getVideo());
+          $this->eventDispatcher->dispatch(UserEvents::PLAYED_VIDEO, $event);
+        }
+      }
+
+      $this->sendPlaylistToRoom($room);
     }
   }
 

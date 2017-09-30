@@ -5,6 +5,9 @@ use AppBundle\Entity\PrivateMessage;
 use AppBundle\Entity\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Handles client side events related to the private message topic.
+ */
 class PMListener extends AbstractChatListener
 {
   /**

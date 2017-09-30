@@ -9,6 +9,7 @@ use AppBundle\Entity\UserSettings;
 use AppBundle\EventListener\Socket\RoomRequestEvent;
 use AppBundle\EventListener\Socket\SocketEvents;
 use AppBundle\EventListener\Socket\RoomResponseEvent;
+use AppBundle\EventListener\Socket\UserResponseEvent;
 use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
@@ -48,7 +49,8 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
   public static function getSubscribedEvents()
   {
     return [
-      SocketEvents::ROOM_RESPONSE => "onRoomResponse"
+      SocketEvents::ROOM_RESPONSE => "onRoomResponse",
+      SocketEvents::USER_RESPONSE => "onUserResponse"
     ];
   }
 
@@ -60,28 +62,22 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
   public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
     /** @var User $user */
-    $user = $this->getUser($conn);
+    $user     = $this->getUser($conn);
+    $username = null;
     if (!($user instanceof UserInterface)) {
+      $username = $user;
       $user = null;
+    } else {
+      $username = $user->getUsername();
     }
-    $room = $this->getRoom($request->getAttributes()->get("room"), $user);
+
+    $room     = $this->getRoom($request->getAttributes()->get("room"), $user);
+    $roomName = $room->getName();
     if ($user) {
       $this->roomStorage->addUser($room, $user);
     }
 
-    // Save the client connection and room index.
-    $client = ["conn" => $conn, "topic" => $topic];
-    $roomName = $room->getName();
-    if (!isset($this->subs[$roomName])) {
-      $this->subs[$roomName] = [];
-    }
-    if (!empty($this->subs[$roomName])) {
-      $index = array_search($client, $this->subs[$roomName]);
-      if (false !== $index) {
-        unset($this->subs[$roomName][$index]);
-      }
-    }
-    $this->subs[$roomName][] = $client;
+    $this->subs[$username]  = ["conn" => $conn, "topic" => $topic];
     $this->rooms[$roomName] = $topic;
 
     $repo = $this->em->getRepository("AppBundle:ChatLog");
@@ -116,56 +112,78 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
       }
     }
 
-    $this->dispatchToUser("settings:settingsAll", [
-      "site" => $this->container->getParameter("app_site_settings"),
-      "user" => $this->serializeUserSettings($settings),
-      "room" => $this->serializeRoomSettings($room->getSettings())
-    ]);
+    $this->eventDispatcher->dispatch(
+      SocketEvents::USER_RESPONSE,
+      new UserResponseEvent($user, "settings:settingsAll", [
+        [
+          "site" => $this->container->getParameter("app_site_settings"),
+          "user" => $this->serializeUserSettings($settings),
+          "room" => $this->serializeRoomSettings($room->getSettings())
+        ]
+      ])
+    );
 
-    $this->dispatchToUser(
-      "room:roomMessages",
-      array_reverse($this->serializeMessages($messages))
+    $this->eventDispatcher->dispatch(
+      SocketEvents::USER_RESPONSE,
+      new UserResponseEvent($user, "room:roomMessages", [
+        array_reverse($this->serializeMessages($messages))
+      ])
     );
-    $this->dispatchToUser(
-      "users:usersRepoAddMulti",
-      $repoUsers
+    $this->eventDispatcher->dispatch(
+      SocketEvents::USER_RESPONSE,
+      new UserResponseEvent($user, "users:usersRepoAddMulti", [
+        $repoUsers
+      ])
     );
-    $this->dispatchToUser(
-      "room:roomUsers",
-      $users
+    $this->eventDispatcher->dispatch(
+      SocketEvents::USER_RESPONSE,
+      new UserResponseEvent($user, "room:roomUsers", [
+        $users
+      ])
     );
 
     if ($user !== null) {
       $serializedUser = $this->serializeUser($user);
-      $this->dispatchToRoom(
-        "users:usersRepoAdd",
-        $serializedUser
+      $this->eventDispatcher->dispatch(
+        SocketEvents::ROOM_RESPONSE,
+        new RoomResponseEvent($room, "users:usersRepoAdd", [
+          $serializedUser
+        ])
       );
-      $this->dispatchToRoom(
-        "room:roomJoined",
-        $serializedUser
+      $this->eventDispatcher->dispatch(
+        SocketEvents::ROOM_RESPONSE,
+        new RoomResponseEvent($room, "room:roomJoined", [
+          $serializedUser
+        ])
       );
-      $this->dispatchToUser(
-        "user:userRoles",
-        $user->getRoles()
+
+      $this->eventDispatcher->dispatch(
+        SocketEvents::USER_RESPONSE,
+        new UserResponseEvent($user, "user:userRoles", [
+          $user->getRoles()
+        ])
       );
-      $this->dispatchToUser(
-        "room:roomMessage",
-        [
-          "type"    => "joinMessage",
-          "id"      => $this->nextNoticeID(),
-          "date"    => new \DateTime(),
-          "message" => $room->getSettings()->getJoinMessage()
-        ]
+      $this->eventDispatcher->dispatch(
+        SocketEvents::USER_RESPONSE,
+        new UserResponseEvent($user, "room:roomMessage", [
+          [
+            "type"    => "joinMessage",
+            "id"      => $this->nextNoticeID(),
+            "date"    => new \DateTime(),
+            "message" => $room->getSettings()->getJoinMessage()
+          ]
+        ])
       );
-      $this->dispatchToRoomOnly(
-        "room:roomMessage",
-        [
-          "type"    => "notice",
-          "id"      => $this->nextNoticeID(),
-          "date"    => new \DateTime(),
-          "message" => sprintf("%s joined the room", $user->getUsername())
-        ]
+      $this->eventDispatcher->dispatch(
+        SocketEvents::USER_RESPONSE,
+        new UserResponseEvent($user, "room:roomMessage", [
+          [
+            "type"    => "notice",
+            "id"      => $this->nextNoticeID(),
+            "date"    => new \DateTime(),
+            "message" => sprintf("%s joined the room", $user->getUsername())
+          ]
+        ])
       );
     }
 
@@ -177,48 +195,36 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
    */
   public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
-    try {
-      $user = $this->getUser($conn);
-      if (!($user instanceof UserInterface)) {
-        return;
-      }
-      $room = $this->getRoom($request->getAttributes()->get("room"), $user);
-      $this->roomStorage->removeUser($room, $user);
+    $user     = $this->getUser($conn);
+    $username = null;
+    if (!($user instanceof UserInterface)) {
+      $username = $user;
+      $user     = null;
+    } else {
+      $username = $user->getUsername();
+    }
+    unset($this->subs[$username]);
 
-      // Remove the client connection and room index.
-      $roomName = $room->getName();
-      if (!isset($this->subs[$roomName])) {
-        $this->subs[$roomName] = [];
-      }
-      if (!empty($this->subs[$roomName])) {
-        $client = ["conn" => $conn, "topic" => $topic];
-        $index = array_search($client, $this->subs[$roomName]);
-        if (false !== $index) {
-          unset($this->subs[$roomName][$index]);
-          if (count($this->subs[$roomName]) === 0) {
-            unset($this->subs[$roomName]);
-            unset($this->rooms[$roomName]);
-          }
-        }
-      }
+    $room = $this->getRoom($request->getAttributes()->get("room"), $user);
+    $this->roomStorage->removeUser($room, $user);
 
-      $this->dispatchToRoom(
-        "room:roomParted",
+    $this->eventDispatcher->dispatch(
+      SocketEvents::ROOM_RESPONSE,
+      new RoomResponseEvent($room, "room:roomParted", [
         $user->getUsername()
-      );
-      $this->dispatchToRoomOnly(
-        "room:roomMessage",
+      ])
+    );
+    $this->eventDispatcher->dispatch(
+      SocketEvents::ROOM_RESPONSE,
+      new RoomResponseEvent($room, "room:roomMessage", [
         [
           "type"    => "notice",
           "id"      => $this->nextNoticeID(),
           "date"    => new \DateTime(),
           "message" => sprintf("%s left the room", $user->getUsername())
         ]
-      );
-      $this->flush($conn, $topic);
-    } catch (Exception $e) {
-      $this->handleError($e);
-    }
+      ])
+    );
   }
 
   /**
@@ -230,34 +236,31 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
     ConnectionInterface $conn,
     Topic $topic,
     WampRequest $req,
-    $event,
+    $payload,
     array $exclude,
     array $eligible
   )
   {
-    if (is_string($event) && $event === "ping") {
+    if (is_string($payload) && $payload === "ping") {
       $clientStorage = $this->container->get("app.ws.storage.driver");
       $clientStorage->lifeTime($conn->resourceId, 86400);
       return $this->dispatchToUser("room:pong", time())
         ->flush($conn, $topic);
     }
 
-    if (!isset($event["dispatch"])) {
-      return $this->logger->error("Invalid payload.", $event);
-    }
     $user = $this->getUser($conn);
     if (!($user instanceof UserInterface)) {
-      return $this->logger->error("User not found.", $event);
+      return $this->logger->error("User not found.", $payload);
     }
     $room = $this->getRoom($req->getAttributes()->get("room"), $user);
     if (!$room || $room->getIsDeleted()) {
-      return $this->logger->error("Room not found.", $event);
+      return $this->logger->error("Room not found.", $payload);
     }
 
     // @see AppBundle\EventListener\Socket\SocketSubscriber
     return $this->eventDispatcher->dispatch(
       SocketEvents::ROOM_REQUEST,
-      new RoomRequestEvent($room, $user, $event)
+      new RoomRequestEvent($room, $user, $payload)
     );
   }
 
@@ -272,6 +275,25 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
         ["action" => $event->getAction(), "args" => $event->getArgs()]
       ]
     ]);
+  }
+
+  /**
+   * @param UserResponseEvent $event
+   */
+  public function onUserResponse(UserResponseEvent $event)
+  {
+    $username = $event->getUser()->getUsername();
+    if ($package = $this->subs[$username]) {
+      /** @var ConnectionInterface $conn */
+      /** @var Topic $topic */
+      $conn  = $package["conn"];
+      $topic = $package["topic"];
+      $conn->event($topic->getId(), [
+        "dispatch" => [
+          ["action" => $event->getAction(), "args" => $event->getArgs()]
+        ]
+      ]);
+    }
   }
 
   /**

@@ -1,10 +1,16 @@
 <?php
 namespace AppBundle\EventListener\Socket;
 
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Dispatches client side events to backend listeners.
+ */
 class SocketSubscriber implements EventSubscriberInterface
 {
+  use LoggerAwareTrait;
+
   /**
    * @var VideoListener
    */
@@ -68,15 +74,10 @@ class SocketSubscriber implements EventSubscriberInterface
   public function onVideoRequest(VideoRequestEvent $event)
   {
     $payload = $event->getPayload();
-    $user    = $event->getUser();
-    $room    = $event->getRoom();
-
-    foreach($payload["dispatch"] as $action) {
-      $method = ucwords($action["action"]);
-      $method = "on${method}";
-      $args   = array_merge([$user, $room], $action["args"]);
-      call_user_func_array([$this->videoListener, $method], $args);
-    }
+    $this->dispatchEvent($this->videoListener, $payload, [
+      $event->getRoom(),
+      $event->getUser()
+    ]);
   }
 
   /**
@@ -87,15 +88,10 @@ class SocketSubscriber implements EventSubscriberInterface
   public function onRoomRequest(RoomRequestEvent $event)
   {
     $payload = $event->getPayload();
-    $user    = $event->getUser();
-    $room    = $event->getRoom();
-
-    foreach($payload["dispatch"] as $action) {
-      $method = ucwords($action["action"]);
-      $method = "on${method}";
-      $args   = array_merge([$user, $room], $action["args"]);
-      call_user_func_array([$this->roomListener, $method], $args);
-    }
+    $this->dispatchEvent($this->roomListener, $payload, [
+      $event->getUser(),
+      $event->getRoom()
+    ]);
   }
 
   /**
@@ -106,13 +102,36 @@ class SocketSubscriber implements EventSubscriberInterface
   public function onPMRequest(PMRequestEvent $event)
   {
     $payload = $event->getPayload();
-    $user    = $event->getUser();
+    $this->dispatchEvent($this->pmListener, $payload, [
+      $event->getUser()
+    ]);
+  }
+
+  /**
+   * @param AbstractListener $listener
+   * @param string $payload
+   * @param array $args
+   */
+  private function dispatchEvent($listener, $payload, array $args)
+  {
+    if (!isset($payload["dispatch"])) {
+      throw new \RuntimeException("Invalid payload contains no 'dispatch' property.");
+    }
 
     foreach($payload["dispatch"] as $action) {
       $method = ucwords($action["action"]);
       $method = "on${method}";
-      $args   = array_merge([$user], $action["args"]);
-      call_user_func_array([$this->pmListener, $method], $args);
+      if (!method_exists($listener, $method)) {
+        throw new \RuntimeException(sprintf(
+          'Method "%s" not found on listener.',
+          $method
+        ));
+      }
+
+      call_user_func_array(
+        [$listener, $method],
+        array_merge($args, $action["args"])
+      );
     }
   }
 }

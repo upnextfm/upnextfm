@@ -85,13 +85,6 @@ services:
     app.ws.topic.video:
         class: "%app.ws.topic.video.class%"
         parent: app.ws.topic.parent
-        calls:
-          - [setPlaylistStorage, ["@app.ws.storage.playlist"]]
-          - [setRngMod, ["@app.playlist.rngmod"]]
-          - [setProviders, ["@app.playlist.providers"]]
-          - [setVideoService, ["@app.service.video"]]
-          - [setRedis, ["@snc_redis.video"]]
-          - [setVideoRepository, ["@=service('doctrine').getRepository('AppBundle:Video')"]]
         tags:
           - { name: gos_web_socket.topic }
           - { name: kernel.event_subscriber }

@@ -135,6 +135,7 @@ services:
     api.event_subscriber.socket:
         class: "%api.event_subscriber.socket.class%"
         calls:
+          - [setLogger, ["@monolog.logger"]]
           - [setVideoListener, ["@api.event_listener.socket.video"]]
           - [setRoomListener, ["@api.event_listener.socket.room"]]
           - [setPMListener, ["@api.event_listener.socket.pm"]]

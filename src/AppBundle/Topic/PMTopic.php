@@ -72,20 +72,20 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
   /**
    * {@inheritdoc}
    */
-  public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $event, array $exclude, array $eligible)
+  public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $payload, array $exclude, array $eligible)
   {
-    if (!isset($event["dispatch"])) {
-      return $this->logger->error("Invalid payload.", $event);
+    if (!isset($payload["dispatch"])) {
+      return $this->logger->error("Invalid payload.", $payload);
     }
     $user = $this->getUser($conn);
     if (!($user instanceof UserInterface)) {
-      return $this->logger->error("User not found.", $event);
+      return $this->logger->error("User not found.", $payload);
     }
 
     // @see AppBundle\EventListener\Socket\SocketSubscriber
     return $this->eventDispatcher->dispatch(
       SocketEvents::PM_REQUEST,
-      new PMRequestEvent($user, $event)
+      new PMRequestEvent($user, $payload)
     );
   }
 
