@@ -66,7 +66,7 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
     $username = null;
     if (!($user instanceof UserInterface)) {
       $username = $user;
-      $user = null;
+      $user     = new User($username);
     } else {
       $username = $user->getUsername();
     }
@@ -122,7 +122,6 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
         ]
       ])
     );
-
     $this->eventDispatcher->dispatch(
       SocketEvents::USER_RESPONSE,
       new UserResponseEvent($user, "room:roomMessages", [

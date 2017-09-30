@@ -3,6 +3,7 @@ namespace AppBundle\Topic;
 
 
 use AppBundle\Entity\Room;
+use AppBundle\Entity\User;
 use AppBundle\EventListener\Socket\PlaylistResponseEvent;
 use AppBundle\EventListener\Socket\SocketEvents;
 use AppBundle\EventListener\Socket\UserResponseEvent;
@@ -57,7 +58,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
     $username = null;
     if (!($user instanceof UserInterface)) {
       $username = $user;
-      $user = null;
+      $user     = new User($username);;
     } else {
       $username = $user->getUsername();
     }
@@ -72,24 +73,22 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
     $this->subs[$username]  = ["conn" => $conn, "topic" => $topic];
     $this->rooms[$roomName] = $topic;
 
-    if ($user) {
-      $this->eventDispatcher->dispatch(
-        SocketEvents::VIDEO_REQUEST,
-        new VideoRequestEvent($room, $user, [
-          "dispatch" => [
-            ["action" => "sendPlaylistToUser", "args" => []]
-          ]
-        ])
-      );
-      $this->eventDispatcher->dispatch(
-        SocketEvents::VIDEO_REQUEST,
-        new VideoRequestEvent($room, $user, [
-          "dispatch" => [
-            ["action" => "sendCurrentToUser", "args" => []]
-          ]
-        ])
-      );
-    }
+    $this->eventDispatcher->dispatch(
+      SocketEvents::VIDEO_REQUEST,
+      new VideoRequestEvent($room, $user, [
+        "dispatch" => [
+          ["action" => "sendPlaylistToUser", "args" => []]
+        ]
+      ])
+    );
+    $this->eventDispatcher->dispatch(
+      SocketEvents::VIDEO_REQUEST,
+      new VideoRequestEvent($room, $user, [
+        "dispatch" => [
+          ["action" => "sendCurrentToUser", "args" => []]
+        ]
+      ])
+    );
   }
 
   /**

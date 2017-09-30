@@ -32,10 +32,14 @@ class User extends BaseUser
 
     /**
      * Constructor
+     *
+     * @param string $username
      */
-    public function __construct()
+    public function __construct($username = "")
     {
         parent::__construct();
+        $this->setUsername($username);
+        $this->setUsernameCanonical($username);
         $this->info = new UserInfo();
     }
 
