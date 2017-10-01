@@ -18,7 +18,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
   use TopicPeriodicTimerTrait;
 
   /**
-   * @var array
+   * @var Subscriber[]
    */
   protected $subs = [];
 
@@ -60,7 +60,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
       return;
     }
 
-    $this->subs[$username]  = ["conn" => $conn, "topic" => $topic];
+    $this->subs[$username]  = new Subscriber($conn, $topic);
     $this->rooms[$roomName] = $topic;
 
     $this->eventDispatcher->dispatch(
@@ -129,11 +129,9 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
   public function onUserPlaylistResponse(UserResponseEvent $event)
   {
     $username = $event->getUser()->getUsername();
-    if ($package = $this->subs[$username]) {
-      /** @var ConnectionInterface $conn */
-      /** @var Topic $topic */
-      $conn  = $package["conn"];
-      $topic = $package["topic"];
+    if ($subscriber = $this->subs[$username]) {
+      $conn  = $subscriber->getConnection();
+      $topic = $subscriber->getTopic();
       $conn->event($topic->getId(), [
         "dispatch" => [
           ["action" => $event->getAction(), "args" => $event->getArgs()]

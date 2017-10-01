@@ -1,9 +1,8 @@
 <?php
 namespace AppBundle\Topic;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use AppBundle\Entity\ChatLog;
-use AppBundle\Entity\Room;
-use AppBundle\Entity\RoomSettings;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserSettings;
 use AppBundle\EventListener\Socket\RoomActions;
@@ -14,13 +13,10 @@ use AppBundle\EventListener\Socket\RoomResponseEvent;
 use AppBundle\EventListener\Socket\UserActions;
 use AppBundle\EventListener\Socket\UserResponseEvent;
 use AppBundle\EventListener\Socket\UsersActions;
-use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
-use Ratchet\Wamp\Topic;
-use Exception;
 use Ratchet\Wamp\WampConnection;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Ratchet\Wamp\Topic;
 
 class RoomTopic extends AbstractTopic implements EventSubscriberInterface
 {
@@ -30,7 +26,7 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
   protected $noticeID = 0;
 
   /**
-   * @var array
+   * @var Subscriber[]
    */
   protected $subs = [];
 
@@ -72,7 +68,7 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
     $roomName = $room->getName();
 
     $this->roomStorage->addUser($room, $user);
-    $this->subs[$username]  = ["conn" => $conn, "topic" => $topic];
+    $this->subs[$username]  = new Subscriber($conn, $topic);
     $this->rooms[$roomName] = $topic;
 
     $repo      = $this->em->getRepository("AppBundle:ChatLog");
@@ -235,11 +231,9 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
   public function onUserResponse(UserResponseEvent $event)
   {
     $username = $event->getUser()->getUsername();
-    if ($package = $this->subs[$username]) {
-      /** @var ConnectionInterface $conn */
-      /** @var Topic $topic */
-      $conn  = $package["conn"];
-      $topic = $package["topic"];
+    if ($subscriber = $this->subs[$username]) {
+      $conn  = $subscriber->getConnection();
+      $topic = $subscriber->getTopic();
       $conn->event($topic->getId(), [
         "dispatch" => [
           ["action" => $event->getAction(), "args" => $event->getArgs()]

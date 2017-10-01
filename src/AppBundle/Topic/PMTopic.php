@@ -1,23 +1,21 @@
 <?php
 namespace AppBundle\Topic;
 
-use AppBundle\Entity\PrivateMessage;
-use AppBundle\Entity\User;
-use AppBundle\EventListener\Socket\PMRequestEvent;
-use AppBundle\EventListener\Socket\PMResponseEvent;
-use AppBundle\EventListener\Socket\RoomRequestEvent;
-use AppBundle\EventListener\Socket\SocketEvents;
-use Gos\Bundle\WebSocketBundle\Router\WampRequest;
-use Ratchet\ConnectionInterface;
-use Ratchet\Wamp\Topic;
-use Ratchet\Wamp\WampConnection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use AppBundle\EventListener\Socket\PMRequestEvent;
+use AppBundle\EventListener\Socket\PMResponseEvent;
+use AppBundle\EventListener\Socket\SocketEvents;
+use Gos\Bundle\WebSocketBundle\Router\WampRequest;
+use AppBundle\Entity\User;
+use Ratchet\Wamp\WampConnection;
+use Ratchet\ConnectionInterface;
+use Ratchet\Wamp\Topic;
 
 class PMTopic extends AbstractTopic implements EventSubscriberInterface
 {
   /**
-   * @var array
+   * @var Subscriber[]
    */
   private $users = [];
 
@@ -53,7 +51,7 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
       if (isset($this->users[$username])) {
         unset($this->users[$username]);
       }
-      $this->users[$username] = ["conn" => $conn, "topic" => $topic];
+      $this->users[$username] = new Subscriber($conn, $topic);
     }
   }
 
@@ -94,25 +92,16 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
    */
   public function onPMResponse(PMResponseEvent $event)
   {
-    /** @var ConnectionInterface|WampConnection $conn */
-    /** @var Topic $topic */
-
     $toUser     = $event->getUser();
     $toUsername = $toUser->getUsername();
     if (isset($this->users[$toUsername])) {
-      $conn  = $this->users[$toUsername]["conn"];
-      $topic = $this->users[$toUsername]["topic"];
+      $conn  = $this->users[$toUsername]->getConnection();
+      $topic = $this->users[$toUsername]->getTopic();
       $conn->event($topic->getId(), [
         "dispatch" => [
           ["action" => $event->getAction(), "args" => $event->getArgs()]
         ]
       ]);
     }
-
-    /*    $toUserConn = $this->clientManipulator->findByUsername($topic, $toUser->getUsername());
-        if (!$toUserConn) {
-          $this->logger->debug("To user is not online.", $event);
-          return true;
-        }*/
   }
 }
