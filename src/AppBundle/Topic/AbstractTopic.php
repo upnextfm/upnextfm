@@ -8,6 +8,9 @@ use AppBundle\Entity\UserSettings;
 use AppBundle\Entity\VideoLog;
 use AppBundle\EventListener\Event\CreatedRoomEvent;
 use AppBundle\EventListener\Event\UserEvents;
+use AppBundle\EventListener\Socket\RoomResponseEvent;
+use AppBundle\EventListener\Socket\SocketEvents;
+use AppBundle\EventListener\Socket\UserResponseEvent;
 use AppBundle\Storage\RoomStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
@@ -122,38 +125,6 @@ abstract class AbstractTopic implements TopicInterface
   }
 
   /**
-   * This will receive any Subscription requests for this topic.
-   *
-   * @param ConnectionInterface|WampConnection $conn
-   * @param Topic $topic
-   * @param WampRequest $request
-   * @return void
-   */
-  public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
-  {
-    /*    $topic->broadcast([
-          'cmd' => Commands::JOIN,
-          'msg' => $connection->resourceId . " has joined " . $topic->getId()
-        ]);*/
-  }
-
-  /**
-   * This will receive any UnSubscription requests for this topic.
-   *
-   * @param ConnectionInterface|WampConnection $conn
-   * @param Topic $topic
-   * @param WampRequest $request
-   * @return void
-   */
-  public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
-  {
-    /*    $topic->broadcast([
-          'cmd' => Commands::LEAVE,
-          'msg' => $connection->resourceId . " has left " . $topic->getId()
-        ]);*/
-  }
-
-  /**
    * Authenticates the user
    *
    * @param ConnectionInterface $connection
@@ -176,11 +147,10 @@ abstract class AbstractTopic implements TopicInterface
   }
 
   /**
-   * @param ConnectionInterface|User $connection
-   * @param array $event
-   * @return UserInterface
+   * @param ConnectionInterface $connection
+   * @return User|UserInterface
    */
-  protected function getUser(ConnectionInterface $connection, array $event = [])
+  protected function getUser(ConnectionInterface $connection)
   {
     $user = $this->clientManipulator->getClient($connection);
     if ($user instanceof UserInterface) {
@@ -189,6 +159,8 @@ abstract class AbstractTopic implements TopicInterface
         $user = $this->em->getRepository("AppBundle:User")
           ->findByUsername($user->getUsername());
       }
+    } else {
+      $user = new User($user, true);
     }
 
     return $user;
@@ -223,6 +195,34 @@ abstract class AbstractTopic implements TopicInterface
     }
 
     return $room;
+  }
+
+  /**
+   * @param User $user
+   * @param string $action
+   * @param array $args
+   * @return UserResponseEvent
+   */
+  protected function dispatchToUser(User $user, $action, array $args = [])
+  {
+    return $this->eventDispatcher->dispatch(
+      SocketEvents::USER_RESPONSE,
+      new UserResponseEvent($user, $action, $args)
+    );
+  }
+
+  /**
+   * @param Room $room
+   * @param string $action
+   * @param array $args
+   * @return RoomResponseEvent
+   */
+  protected function dispatchToRoom(Room $room, $action, array $args = [])
+  {
+    return $this->eventDispatcher->dispatch(
+      SocketEvents::ROOM_RESPONSE,
+      new RoomResponseEvent($room, $action, $args)
+    );
   }
 
   /**
@@ -268,27 +268,6 @@ abstract class AbstractTopic implements TopicInterface
   }
 
   /**
-   * @param VideoLog $videoLog
-   * @return array
-   */
-  protected function serializeVideo(VideoLog $videoLog)
-  {
-    $video = $videoLog->getVideo();
-
-    return [
-      "id"        => $videoLog->getId(),
-      "codename"  => $video->getCodename(),
-      "provider"  => $video->getProvider(),
-      "permalink" => $video->getPermalink(),
-      "thumbnail" => $video->getThumbSm(),
-      "title"     => $video->getTitle(),
-      "seconds"   => $video->getSeconds(),
-      "playedBy"  => $videoLog->getUser()->getUsername(),
-      "createdBy" => $video->getCreatedByUser()->getUsername()
-    ];
-  }
-
-  /**
    * @param ChatLog $message
    * @param string $type
    * @return array
@@ -319,31 +298,6 @@ abstract class AbstractTopic implements TopicInterface
   }
 
   /**
-   * @param PrivateMessage $pm
-   * @return array
-   */
-  protected function serializePrivateMessage(PrivateMessage $pm)
-  {
-    return [
-      "id"      => $pm->getId(),
-      "type"    => "message",
-      "to"      => $pm->getToUser()->getUsername(),
-      "from"    => $pm->getFromUser()->getUsername(),
-      "date"    => $pm->getDateCreated()->format("D M d Y H:i:s O"),
-      "message" => $pm->getMessage()
-    ];
-  }
-
-  /**
-   * @param string $message
-   * @return string
-   */
-  protected function sanitizeMessage($message)
-  {
-    return trim(htmlspecialchars($message));
-  }
-
-  /**
    * @return bool
    * @throws \Doctrine\ORM\ORMException
    */
@@ -371,148 +325,5 @@ abstract class AbstractTopic implements TopicInterface
         $this->reopenEntityManager();
       }
     }
-  }
-
-  /**
-   * @param string $error
-   * @return mixed
-   */
-  protected function dispatchError($error)
-  {
-    $this->dispatchToUser(
-      "layout:layoutErrorMessage",
-      $error
-    );
-  }
-
-  /**
-   * @param string $action
-   * @return $this
-   */
-  protected function dispatchToUser($action)
-  {
-    $args   = func_get_args();
-    $action = array_shift($args);
-    $this->toDispatch["user"][] = ["action" => $action, "args" => $args];
-
-    return $this;
-  }
-
-  /**
-   * @param ConnectionInterface|WampConnection $conn
-   * @param string $action
-   * @return $this
-   */
-  protected function dispatch(ConnectionInterface $conn, $action)
-  {
-    $args      = func_get_args();
-    $conn      = array_shift($args);
-    $action    = array_shift($args);
-    $sessionID = $conn->WAMP->sessionId;
-
-    if (!isset($this->toDispatch["session"][$sessionID])) {
-      $this->toDispatch["session"][$sessionID] = [
-        "actions" => [],
-        "conn"    => $conn
-      ];
-    }
-    $this->toDispatch["session"][$sessionID]["actions"][] = [
-      "action" => $action,
-      "args"   => $args
-    ];
-
-    return $this;
-  }
-
-  /**
-   * @param string $action
-   * @return $this
-   */
-  protected function dispatchToRoom($action)
-  {
-    $args   = func_get_args();
-    $action = array_shift($args);
-    $this->toDispatch["room"][] = ["action" => $action, "args" => $args];
-
-    return $this;
-  }
-
-  /**
-   * @param string $action
-   * @return $this
-   */
-  protected function dispatchToRoomOnly($action)
-  {
-    $args   = func_get_args();
-    $action = array_shift($args);
-    $this->toDispatch["roomOnly"][] = ["action" => $action, "args" => $args];
-
-    return $this;
-  }
-
-  /**
-   * @param ConnectionInterface|WampConnection|array $conn
-   * @param Topic $topic
-   * @return $this
-   */
-  protected function flush($conn, $topic = null)
-  {
-    if ($this->toDispatch["user"]) {
-      $conn->event($topic->getId(), [
-        "dispatch" => $this->toDispatch["user"]
-      ]);
-    }
-
-    if ($this->toDispatch["session"]) {
-      foreach($this->toDispatch["session"] as $sessionID => $body) {
-        $body["conn"]->event($topic->getId(), [
-          "dispatch" => $body["actions"]
-        ]);
-      }
-    }
-
-    if ($this->toDispatch["room"]) {
-      if (is_array($conn)) {
-        foreach ($conn as $client) {
-          $client["conn"]->event($client["id"], [
-            "dispatch" => $this->toDispatch["user"]
-          ]);
-        }
-      } else {
-        $topic->broadcast([
-          "dispatch" => $this->toDispatch["room"]
-        ]);
-      }
-    }
-
-    if ($this->toDispatch["roomOnly"]) {
-      if (is_array($conn)) {
-        foreach ($conn as $client) {
-          if ($client["id"] === $topic->getId()) {
-            continue;
-          }
-          $client["conn"]->event($client["id"], [
-            "dispatch" => $this->toDispatch["user"]
-          ]);
-        }
-      } else {
-        $topic->broadcast([
-          "dispatch" => $this->toDispatch["roomOnly"]
-        ], [$topic->getId()]);
-      }
-    }
-
-    if (self::DEBUGGING) {
-      //dump($this->toDispatch);
-    }
-
-    $this->toDispatch = [
-      "user"     => [],
-      "session"  => [],
-      "room"     => [],
-      "roomOnly" => []
-    ];
-
-    return $this;
   }
 }

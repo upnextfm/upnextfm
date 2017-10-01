@@ -89,6 +89,13 @@ export function roomJoin(name) {
       name
     });
     dispatch(playlistSubscribe());
+    api.socket.subscribe(roomChannel(name), (uri, payload) => {
+      if (payload.dispatch !== undefined) {
+        dispatchPayload(dispatch, payload);
+      } else {
+        console.error('Invalid payload');
+      }
+    });
 
     const interval = getState().settings.socket.pingInterval;
     const pingHandler = () => {
@@ -97,14 +104,6 @@ export function roomJoin(name) {
     };
     pingHandler();
     pingInterval = setInterval(pingHandler, interval);
-
-    api.socket.subscribe(roomChannel(name), (uri, payload) => {
-      if (payload.dispatch !== undefined) {
-        dispatchPayload(dispatch, payload);
-      } else {
-        console.error('Invalid payload');
-      }
-    });
   };
 }
 

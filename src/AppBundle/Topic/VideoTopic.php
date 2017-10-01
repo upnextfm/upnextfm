@@ -2,7 +2,6 @@
 namespace AppBundle\Topic;
 
 use AppBundle\Entity\Room;
-use AppBundle\Entity\User;
 use AppBundle\EventListener\Socket\PlaylistResponseEvent;
 use AppBundle\EventListener\Socket\SocketEvents;
 use AppBundle\EventListener\Socket\UserResponseEvent;
@@ -11,7 +10,6 @@ use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerInterface;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 
@@ -54,14 +52,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
   public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
     $user     = $this->getUser($conn);
-    $username = null;
-    if (!($user instanceof UserInterface)) {
-      $username = $user;
-      $user     = new User($username);;
-    } else {
-      $username = $user->getUsername();
-    }
-
+    $username = $user->getUsername();
     $room     = $this->getRoom($request->getAttributes()->get("room"), $user);
     $roomName = $room->getName();
     if (!$room) {
@@ -95,15 +86,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
    */
   public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
-    $user     = $this->getUser($conn);
-    $username = null;
-    if (!($user instanceof UserInterface)) {
-      $username = $user;
-      $user = null;
-    } else {
-      $username = $user->getUsername();
-    }
-    unset($this->subs[$username]);
+    $user = $this->getUser($conn);
+    unset($this->subs[$user->getUsername()]);
   }
 
   /**
@@ -112,9 +96,6 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
   public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $payload, array $ex, array $el)
   {
     $user = $this->getUser($conn);
-    if (!($user instanceof UserInterface)) {
-      return $this->logger->error("User not found.", $payload);
-    }
     $room = $this->getRoom($req->getAttributes()->get("room"), $user);
     if (!$room || $room->getIsDeleted()) {
       return $this->logger->error("Room not found.", $payload);
