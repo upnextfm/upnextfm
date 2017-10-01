@@ -48,6 +48,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
 
   /**
    * {@inheritdoc}
+   *
+   * @incoming
    */
   public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
@@ -83,6 +85,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
 
   /**
    * {@inheritdoc}
+   *
+   * @incoming
    */
   public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
@@ -92,6 +96,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
 
   /**
    * {@inheritdoc}
+   *
+   * @incoming
    */
   public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $payload, array $ex, array $el)
   {
@@ -109,6 +115,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
   }
 
   /**
+   * @outgoing
    * @param PlaylistResponseEvent $event
    */
   public function onPlaylistResponse(PlaylistResponseEvent $event)
@@ -124,6 +131,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
   }
 
   /**
+   * @outgoing
    * @param UserResponseEvent $event
    */
   public function onUserPlaylistResponse(UserResponseEvent $event)
@@ -142,7 +150,6 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
 
   /**
    * @param Topic $topic
-   *
    * @return mixed
    */
   public function registerPeriodicTimer(Topic $topic)

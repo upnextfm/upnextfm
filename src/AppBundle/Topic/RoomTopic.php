@@ -57,6 +57,7 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
   /**
    * {@inheritdoc}
    *
+   * @incoming
    * @param ConnectionInterface|WampConnection $conn
    */
   public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
@@ -152,6 +153,8 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
 
   /**
    * {@inheritdoc}
+   *
+   * @incoming
    */
   public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
@@ -180,16 +183,10 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
   /**
    * {@inheritdoc}
    *
+   * @incoming
    * @param ConnectionInterface|WampConnection $conn
    */
-  public function onPublish(
-    ConnectionInterface $conn,
-    Topic $topic,
-    WampRequest $req,
-    $payload,
-    array $exclude,
-    array $eligible
-  )
+  public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $payload, array $ex, array $el)
   {
     $user = $this->getUser($conn);
     $room = $this->getRoom($req->getAttributes()->get("room"), $user);
@@ -213,6 +210,7 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
   }
 
   /**
+   * @outgoing
    * @param RoomResponseEvent $event
    */
   public function onRoomResponse(RoomResponseEvent $event)
@@ -226,6 +224,7 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
   }
 
   /**
+   * @outgoing
    * @param UserResponseEvent $event
    */
   public function onUserResponse(UserResponseEvent $event)

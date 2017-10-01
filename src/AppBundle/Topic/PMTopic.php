@@ -40,6 +40,7 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
   /**
    * {@inheritdoc}
    *
+   * @incoming
    * @param ConnectionInterface|WampConnection $conn
    */
   public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
@@ -57,6 +58,8 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
 
   /**
    * {@inheritdoc}
+   *
+   * @incoming
    */
   public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
@@ -69,8 +72,10 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
 
   /**
    * {@inheritdoc}
+   *
+   * @incoming
    */
-  public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $payload, array $exclude, array $eligible)
+  public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $payload, array $ex, array $el)
   {
     if (!isset($payload["dispatch"])) {
       return $this->logger->error("Invalid payload.", $payload);
@@ -88,6 +93,7 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
   }
 
   /**
+   * @outgoing
    * @param PMResponseEvent $event
    */
   public function onPMResponse(PMResponseEvent $event)
