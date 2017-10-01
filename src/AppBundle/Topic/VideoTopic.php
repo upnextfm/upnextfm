@@ -152,7 +152,7 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
     $roomRepo = $this->em->getRepository("AppBundle:Room");
     $interval = $this->container->getParameter("app_ws_video_time_update_interval");
 
-    $this->periodicTimer->addPeriodicTimer($this, VideoCommands::TIME_UPDATE, $interval, function () use($roomRepo) {
+    $this->periodicTimer->addPeriodicTimer($this, "timeUpdate", $interval, function () use($roomRepo) {
       foreach ($this->rooms as $roomName => $topic) {
         $room = $roomRepo->findByName($roomName);
         $this->eventDispatcher->dispatch(
