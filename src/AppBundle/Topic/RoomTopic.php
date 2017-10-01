@@ -6,10 +6,14 @@ use AppBundle\Entity\Room;
 use AppBundle\Entity\RoomSettings;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserSettings;
+use AppBundle\EventListener\Socket\RoomActions;
 use AppBundle\EventListener\Socket\RoomRequestEvent;
+use AppBundle\EventListener\Socket\SettingsActions;
 use AppBundle\EventListener\Socket\SocketEvents;
 use AppBundle\EventListener\Socket\RoomResponseEvent;
+use AppBundle\EventListener\Socket\UserActions;
 use AppBundle\EventListener\Socket\UserResponseEvent;
+use AppBundle\EventListener\Socket\UsersActions;
 use FOS\UserBundle\Model\UserInterface;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
@@ -103,26 +107,26 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
       }
     }
 
-    $this->dispatchToUser($user, "settings:settingsAll", [
+    $this->dispatchToUser($user, SettingsActions::ALL, [
       [
         "site" => $this->container->getParameter("app_site_settings"),
         "user" => $this->serializeUserSettings($settings),
         "room" => $this->serializeRoomSettings($room->getSettings())
       ]
     ]);
-    $this->dispatchToUser($user, "room:roomMessages", [
+    $this->dispatchToUser($user, RoomActions::MESSAGES, [
       array_reverse($this->serializeMessages($messages))
     ]);
-    $this->dispatchToUser($user, "users:usersRepoAddMulti", [
+    $this->dispatchToUser($user, UsersActions::REPO_ADD_MULTI, [
       $repoUsers
     ]);
-    $this->dispatchToUser($user, "room:roomUsers", [
+    $this->dispatchToUser($user, RoomActions::USERS, [
       $users
     ]);
-    $this->dispatchToUser($user, "user:userRoles", [
+    $this->dispatchToUser($user, UserActions::ROLES, [
       $user->getRoles()
     ]);
-    $this->dispatchToUser($user, "room:roomMessage", [
+    $this->dispatchToUser($user, RoomActions::MESSAGE, [
       [
         "type"    => "joinMessage",
         "id"      => $this->nextNoticeID(),
@@ -133,13 +137,13 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
 
     if (!$user->getIsAnonymous()) {
       $serializedUser = $this->serializeUser($user);
-      $this->dispatchToRoom($room, "users:usersRepoAdd", [
+      $this->dispatchToRoom($room, UsersActions::REPO_ADD, [
         $serializedUser
       ]);
-      $this->dispatchToRoom($room, "room:roomJoined", [
+      $this->dispatchToRoom($room, RoomActions::JOINED, [
         $serializedUser
       ]);
-      $this->dispatchToRoom($room, "room:roomMessage", [
+      $this->dispatchToRoom($room, RoomActions::MESSAGE, [
         [
           "type"    => "notice",
           "id"      => $this->nextNoticeID(),
@@ -163,10 +167,10 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
     $this->roomStorage->removeUser($room, $user);
 
     if (!$user->getIsAnonymous()) {
-      $this->dispatchToRoom($room, "room:roomParted", [
+      $this->dispatchToRoom($room, RoomActions::PARTED, [
         $user->getUsername()
       ]);
-      $this->dispatchToRoom($room, "room:roomMessage", [
+      $this->dispatchToRoom($room, RoomActions::MESSAGE, [
         [
           "type"    => "notice",
           "id"      => $this->nextNoticeID(),
@@ -200,7 +204,7 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
     if (is_string($payload) && $payload === "ping") {
       $clientStorage = $this->container->get("app.ws.storage.driver");
       $clientStorage->lifeTime($conn->resourceId, 86400);
-      return $this->dispatchToUser($user, "room:pong", [
+      return $this->dispatchToUser($user, RoomActions::PONG, [
         time()
       ]);
     }

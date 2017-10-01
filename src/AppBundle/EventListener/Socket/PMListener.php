@@ -29,7 +29,7 @@ class PMListener extends AbstractChatListener
       $conversation[] = $this->serializePrivateMessage($row);
     }
 
-    $event = new PMResponseEvent($user, "pms:pmsLoad", [
+    $event = new PMResponseEvent($user, PMActions::LOAD, [
       $toUser->getUsername(),
       array_reverse($conversation)
     ]);
@@ -72,12 +72,12 @@ class PMListener extends AbstractChatListener
     $this->em->flush();
 
     $message = $this->serializePrivateMessage($pm);
-    $event = new PMResponseEvent($toUser, "pms:pmsReceive", [
+    $event = new PMResponseEvent($toUser, PMActions::RECEIVE, [
       $message
     ]);
     $this->eventDispatcher->dispatch(SocketEvents::PM_RESPONSE, $event);
 
-    $event = new PMResponseEvent($user, "pms:pmsSent", [
+    $event = new PMResponseEvent($user, PMActions::SENT, [
       $message
     ]);
     $this->eventDispatcher->dispatch(SocketEvents::PM_RESPONSE, $event);

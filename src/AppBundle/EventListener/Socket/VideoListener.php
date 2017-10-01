@@ -173,7 +173,7 @@ class VideoListener extends AbstractListener
     $result = $this->playlist->removeByID($room, $videoID);
     if (is_array($result)) {
       $videoLog = $result["videoLog"];
-      $event    = new PlaylistResponseEvent($room, "playlist:playlistVideos", [
+      $event    = new PlaylistResponseEvent($room, PlaylistActions::VIDEOS, [
         0,
         $this->serializeVideo($videoLog)
       ]);
@@ -256,7 +256,7 @@ class VideoListener extends AbstractListener
     if ($videos) {
       $this->eventDispatcher->dispatch(
         SocketEvents::USER_PLAYLIST_RESPONSE,
-        new UserResponseEvent($user, "playlist:playlistVideos", [
+        new UserResponseEvent($user, PlaylistActions::VIDEOS, [
           $videos
         ])
       );
@@ -275,7 +275,7 @@ class VideoListener extends AbstractListener
       if ($videoLog = $current["videoLog"]) {
         $this->eventDispatcher->dispatch(
           SocketEvents::USER_PLAYLIST_RESPONSE,
-          new UserResponseEvent($user, "playlist:playlistStart", [
+          new UserResponseEvent($user, PlaylistActions::START, [
             time() - $current["timeStarted"],
             $this->serializeVideo($videoLog)
           ])
@@ -307,7 +307,7 @@ class VideoListener extends AbstractListener
           $videoLog = $current["videoLog"];
           $this->eventDispatcher->dispatch(
             SocketEvents::PLAYLIST_RESPONSE,
-            new PlaylistResponseEvent($room, "playlist:playlistStart", [
+            new PlaylistResponseEvent($room, PlaylistActions::START, [
               0,
               $this->serializeVideo($videoLog)
             ])
@@ -317,14 +317,14 @@ class VideoListener extends AbstractListener
           $this->playlist->clearCurrent($room);
           $this->eventDispatcher->dispatch(
             SocketEvents::PLAYLIST_RESPONSE,
-            new PlaylistResponseEvent($room, "playlist:playlistStop", [])
+            new PlaylistResponseEvent($room, PlaylistActions::STOP, [])
           );
           $this->sendPlaylistToRoom($room);
         }
       } else {
         $this->eventDispatcher->dispatch(
           SocketEvents::PLAYLIST_RESPONSE,
-          new PlaylistResponseEvent($room, "player:playerTime", [
+          new PlaylistResponseEvent($room, PlaylistActions::TIME, [
             $videoSecs - $timeRemaining
           ])
         );
@@ -353,7 +353,7 @@ class VideoListener extends AbstractListener
       if (!$this->playlist->getCurrent($room)) {
         if ($current = $this->playlist->popToCurrent($room)) {
           $videoLog = $current["videoLog"];
-          $event = new PlaylistResponseEvent($room, "playlist:playlistStart", [
+          $event = new PlaylistResponseEvent($room, PlaylistActions::START, [
             0,
             $this->serializeVideo($videoLog)
           ]);
@@ -366,7 +366,7 @@ class VideoListener extends AbstractListener
     foreach ($this->playlist->getAll($room) as $videoLog) {
       $videos[] = $this->serializeVideo($videoLog);
     }
-    $event = new PlaylistResponseEvent($room, "playlist:playlistVideos", [
+    $event = new PlaylistResponseEvent($room, PlaylistActions::VIDEOS, [
       $videos
     ]);
     $this->eventDispatcher->dispatch(SocketEvents::PLAYLIST_RESPONSE, $event);

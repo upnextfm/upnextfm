@@ -1,12 +1,12 @@
 <?php
 namespace AppBundle\EventListener\Socket;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Entity\ChatLog;
 use AppBundle\Entity\Room;
 use AppBundle\Entity\RoomSettings;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserSettings;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Handles client side events related to the room topic.
@@ -25,7 +25,7 @@ class RoomListener extends AbstractChatListener
       return;
     }
 
-    $event = new RoomResponseEvent($room, "room:roomMessage", [
+    $event = new RoomResponseEvent($room, RoomActions::MESSAGE, [
       $this->serializeMessage($this->getChatLog($room, $user, $message))
     ]);
     $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
@@ -43,7 +43,7 @@ class RoomListener extends AbstractChatListener
       return;
     }
 
-    $event = new RoomResponseEvent($room, "room:roomMessage", [
+    $event = new RoomResponseEvent($room, RoomActions::MESSAGE, [
       $this->serializeMessage($this->getChatLog($room, $user, $message))
     ]);
     $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
