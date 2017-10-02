@@ -13,6 +13,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 
+/**
+ * Dispatches video/playlist related frontend commands to backend event listeners.
+ *
+ * @see AppBundle\EventListener\Socket\VideoListener
+ */
 class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, EventSubscriberInterface
 {
   use TopicPeriodicTimerTrait;
@@ -47,24 +52,65 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
   }
 
   /**
+   * Listens for responses which should be sent to the room playlist
+   *
+   * @outgoing
+   * @param PlaylistResponseEvent $event
+   */
+  public function onPlaylistResponse(PlaylistResponseEvent $event)
+  {
+    $topic = $this->rooms[$event->getRoom()->getName()];
+    if ($topic) {
+      $topic->broadcast([
+        "dispatch" => [
+          ["action" => $event->getAction(), "args" => $event->getArgs()]
+        ]
+      ]);
+    }
+  }
+
+  /**
+   * Listens for responses which should be sent to a specific user
+   *
+   * @outgoing
+   * @param UserResponseEvent $event
+   */
+  public function onUserPlaylistResponse(UserResponseEvent $event)
+  {
+    $username = $event->getUser()->getUsername();
+    if ($subscriber = $this->subs[$username]) {
+      $conn  = $subscriber->getConnection();
+      $topic = $subscriber->getTopic();
+      $conn->event($topic->getId(), [
+        "dispatch" => [
+          ["action" => $event->getAction(), "args" => $event->getArgs()]
+        ]
+      ]);
+    }
+  }
+
+  /**
+   * Called when a user joins the room
+   *
    * {@inheritdoc}
    *
    * @incoming
    */
   public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
-    $user     = $this->getUser($conn);
-    $username = $user->getUsername();
-    $room     = $this->getRoom($request->getAttributes()->get("room"), $user);
-    $roomName = $room->getName();
+    // Save the connection and topic for the user and room, so we can access
+    // them later by username/name.
+    $user = $this->getUser($conn);
+    $room = $this->getRoom($request->getAttributes()->get("room"), $user);
     if (!$room) {
       $this->logger->error("Room not found or created.");
       return;
     }
+    $this->subs[$user->getUsername()]  = new Subscriber($conn, $topic);
+    $this->rooms[$room->getName()] = $topic;
 
-    $this->subs[$username]  = new Subscriber($conn, $topic);
-    $this->rooms[$roomName] = $topic;
-
+    // Dispatch a request to the video listeners to have the room playlist
+    // sent to the connected client.
     $this->eventDispatcher->dispatch(
       SocketEvents::VIDEO_REQUEST,
       new VideoRequestEvent($room, $user, [
@@ -84,17 +130,22 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
   }
 
   /**
+   * Called when a user leaves the room
+   *
    * {@inheritdoc}
    *
    * @incoming
    */
   public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
+    // Remove the user from the list of subscribers.
     $user = $this->getUser($conn);
     unset($this->subs[$user->getUsername()]);
   }
 
   /**
+   * Called when a user sends a command to the room
+   *
    * {@inheritdoc}
    *
    * @incoming
@@ -112,40 +163,6 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
       SocketEvents::VIDEO_REQUEST,
       new VideoRequestEvent($room, $user, $payload)
     );
-  }
-
-  /**
-   * @outgoing
-   * @param PlaylistResponseEvent $event
-   */
-  public function onPlaylistResponse(PlaylistResponseEvent $event)
-  {
-    $topic = $this->rooms[$event->getRoom()->getName()];
-    if ($topic) {
-      $topic->broadcast([
-        "dispatch" => [
-          ["action" => $event->getAction(), "args" => $event->getArgs()]
-        ]
-      ]);
-    }
-  }
-
-  /**
-   * @outgoing
-   * @param UserResponseEvent $event
-   */
-  public function onUserPlaylistResponse(UserResponseEvent $event)
-  {
-    $username = $event->getUser()->getUsername();
-    if ($subscriber = $this->subs[$username]) {
-      $conn  = $subscriber->getConnection();
-      $topic = $subscriber->getTopic();
-      $conn->event($topic->getId(), [
-        "dispatch" => [
-          ["action" => $event->getAction(), "args" => $event->getArgs()]
-        ]
-      ]);
-    }
   }
 
   /**

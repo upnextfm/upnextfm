@@ -7,17 +7,21 @@ use AppBundle\EventListener\Socket\PMRequestEvent;
 use AppBundle\EventListener\Socket\PMResponseEvent;
 use AppBundle\EventListener\Socket\SocketEvents;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
-use AppBundle\Entity\User;
 use Ratchet\Wamp\WampConnection;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 
+/**
+ * Dispatches private message related frontend commands to backend event listeners.
+ *
+ * @see AppBundle\EventListener\Socket\PMListener
+ */
 class PMTopic extends AbstractTopic implements EventSubscriberInterface
 {
   /**
    * @var Subscriber[]
    */
-  private $users = [];
+  private $subs = [];
 
   /**
    * {@inheritdoc}
@@ -38,6 +42,29 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
   }
 
   /**
+   * Listens for responses which should be sent to a specific user
+   *
+   * @outgoing
+   * @param PMResponseEvent $event
+   */
+  public function onPMResponse(PMResponseEvent $event)
+  {
+    $toUser     = $event->getUser();
+    $toUsername = $toUser->getUsername();
+    if (isset($this->subs[$toUsername])) {
+      $conn  = $this->subs[$toUsername]->getConnection();
+      $topic = $this->subs[$toUsername]->getTopic();
+      $conn->event($topic->getId(), [
+        "dispatch" => [
+          ["action" => $event->getAction(), "args" => $event->getArgs()]
+        ]
+      ]);
+    }
+  }
+
+  /**
+   * Called when a user joins the room
+   *
    * {@inheritdoc}
    *
    * @incoming
@@ -45,41 +72,43 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
    */
   public function onSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
-    /** @var User $user */
+    // Save the connection and topic for the user so we can access
+    // them later by username.
     $user = $this->getUser($conn);
     if ($user instanceof UserInterface) {
       $username = $user->getUsername();
-      if (isset($this->users[$username])) {
-        unset($this->users[$username]);
+      if (isset($this->subs[$username])) {
+        unset($this->subs[$username]);
       }
-      $this->users[$username] = new Subscriber($conn, $topic);
+      $this->subs[$username] = new Subscriber($conn, $topic);
     }
   }
 
   /**
+   * Called when a user leaves the room
+   *
    * {@inheritdoc}
    *
    * @incoming
    */
   public function onUnSubscribe(ConnectionInterface $conn, Topic $topic, WampRequest $request)
   {
-    /** @var User $user */
+    // Remove the user from the list of subscribers.
     $user = $this->getUser($conn);
     if ($user instanceof UserInterface) {
-      unset($this->users[$user->getUsername()]);
+      unset($this->subs[$user->getUsername()]);
     }
   }
 
   /**
+   * Called when a user sends a command to the room
+   *
    * {@inheritdoc}
    *
    * @incoming
    */
   public function onPublish(ConnectionInterface $conn, Topic $topic, WampRequest $req, $payload, array $ex, array $el)
   {
-    if (!isset($payload["dispatch"])) {
-      return $this->logger->error("Invalid payload.", $payload);
-    }
     $user = $this->getUser($conn);
     if (!($user instanceof UserInterface)) {
       return $this->logger->error("User not found.", $payload);
@@ -90,24 +119,5 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
       SocketEvents::PM_REQUEST,
       new PMRequestEvent($user, $payload)
     );
-  }
-
-  /**
-   * @outgoing
-   * @param PMResponseEvent $event
-   */
-  public function onPMResponse(PMResponseEvent $event)
-  {
-    $toUser     = $event->getUser();
-    $toUsername = $toUser->getUsername();
-    if (isset($this->users[$toUsername])) {
-      $conn  = $this->users[$toUsername]->getConnection();
-      $topic = $this->users[$toUsername]->getTopic();
-      $conn->event($topic->getId(), [
-        "dispatch" => [
-          ["action" => $event->getAction(), "args" => $event->getArgs()]
-        ]
-      ]);
-    }
   }
 }

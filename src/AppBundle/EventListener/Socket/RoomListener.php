@@ -21,14 +21,12 @@ class RoomListener extends AbstractChatListener
   public function onSend(UserInterface $user, Room $room, $message)
   {
     $message = $this->sanitizeMessage($message);
-    if (empty($message)) {
-      return;
+    if (!empty($message)) {
+      $event = new RoomResponseEvent($room, RoomActions::MESSAGE, [
+        $this->serializeMessage($this->getChatLog($room, $user, $message))
+      ]);
+      $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
     }
-
-    $event = new RoomResponseEvent($room, RoomActions::MESSAGE, [
-      $this->serializeMessage($this->getChatLog($room, $user, $message))
-    ]);
-    $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
   }
 
   /**
@@ -39,14 +37,12 @@ class RoomListener extends AbstractChatListener
   public function onMe(UserInterface $user, Room $room, $message)
   {
     $message = $this->sanitizeMessage($message);
-    if (empty($message)) {
-      return;
+    if (!empty($message)) {
+      $event = new RoomResponseEvent($room, RoomActions::MESSAGE, [
+        $this->serializeMessage($this->getChatLog($room, $user, $message))
+      ]);
+      $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
     }
-
-    $event = new RoomResponseEvent($room, RoomActions::MESSAGE, [
-      $this->serializeMessage($this->getChatLog($room, $user, $message))
-    ]);
-    $this->eventDispatcher->dispatch(SocketEvents::ROOM_RESPONSE, $event);
   }
 
   /**
@@ -118,7 +114,7 @@ class RoomListener extends AbstractChatListener
    * @param string $message
    * @return ChatLog
    */
-  protected function getChatLog($room, $user, $message)
+  private function getChatLog(Room $room, UserInterface $user, $message)
   {
     $chatLog = new ChatLog($room, $user, $message);
     $chatLog = $this->em->merge($chatLog);
