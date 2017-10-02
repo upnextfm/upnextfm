@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Topic;
 
+use AppBundle\Entity\UserSettings;
 use AppBundle\Service\ThumbsService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -118,12 +119,12 @@ abstract class AbstractTopic implements TopicInterface
       $username = $user->getUsername();
       if ($username) {
         $user = $this->userRepository->findByUsername($user->getUsername());
-        if (!$user) {
-          $user = new User("anon", true);
-        }
       }
     } else {
       $user = new User($user, true);
+    }
+    if (!$user->getSettings()) {
+      $user->setSettings(new UserSettings());
     }
 
     return $user;
