@@ -50,8 +50,14 @@ services:
     ## ########################################################################
     app.ws.topic.parent:
         arguments:
-          - "@service_container"
-          - "@?monolog.logger.websocket"
+          - "@app.service.thumbs"
+          - "@event_dispatcher"
+          - "@gos_web_socket.websocket.client_manipulator"
+          - "@monolog.logger"
+        calls:
+          - [setRoomRepository, ["@=service('doctrine').getRepository('AppBundle:Room')"]]
+          - [setUserRepository, ["@=service('doctrine').getRepository('AppBundle:User')"]]
+          - [setChatLogRepository, ["@=service('doctrine').getRepository('AppBundle:ChatLog')"]]
         abstract: true
         private: true
 
@@ -62,7 +68,9 @@ services:
         class: "%app.ws.topic.room.class%"
         parent: app.ws.topic.parent
         calls:
+          - [setSiteSettings, ["%app_site_settings%"]]
           - [setRoomStorage, ["@app.ws.storage.room"]]
+          - [setClientStorage, ["@app.ws.storage.driver"]]
         tags:
           - { name: gos_web_socket.topic }
           - { name: kernel.event_subscriber }
@@ -73,8 +81,6 @@ services:
     app.ws.topic.pms:
         class: "%app.ws.topic.pms.class%"
         parent: app.ws.topic.parent
-        calls:
-          - [setRoomStorage, ["@app.ws.storage.room"]]
         tags:
           - { name: gos_web_socket.topic }
           - { name: kernel.event_subscriber }

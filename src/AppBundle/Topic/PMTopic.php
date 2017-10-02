@@ -46,20 +46,27 @@ class PMTopic extends AbstractTopic implements EventSubscriberInterface
    *
    * @outgoing
    * @param PMResponseEvent $event
+   * @return WampConnection|void
    */
   public function onPMResponse(PMResponseEvent $event)
   {
-    $toUser     = $event->getUser();
-    $toUsername = $toUser->getUsername();
-    if (isset($this->subs[$toUsername])) {
-      $conn  = $this->subs[$toUsername]->getConnection();
-      $topic = $this->subs[$toUsername]->getTopic();
-      $conn->event($topic->getId(), [
+    $username = $event->getUser()->getUsername();
+    if (!isset($this->subs[$username])) {
+      return $this->logger->error(sprintf(
+        'User "%s" not subscribed to private messages.',
+        $username
+      ));
+    }
+
+    $subscriber = $this->subs[$username];
+    return $subscriber->getConnection()->event(
+      $subscriber->getTopic()->getId(),
+      [
         "dispatch" => [
           ["action" => $event->getAction(), "args" => $event->getArgs()]
         ]
-      ]);
-    }
+      ]
+    );
   }
 
   /**

@@ -1,6 +1,9 @@
 <?php
 namespace AppBundle\Topic;
 
+
+use AppBundle\Storage\SocketPredisDriver;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use AppBundle\EventListener\Socket\RoomActions;
 use AppBundle\EventListener\Socket\RoomRequestEvent;
@@ -10,6 +13,10 @@ use AppBundle\EventListener\Socket\RoomResponseEvent;
 use AppBundle\EventListener\Socket\UserActions;
 use AppBundle\EventListener\Socket\UserResponseEvent;
 use AppBundle\EventListener\Socket\UsersActions;
+use AppBundle\Entity\RoomSettings;
+use AppBundle\Entity\User;
+use AppBundle\Entity\UserSettings;
+use AppBundle\Storage\RoomStorage;
 use AppBundle\Entity\ChatLog;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Ratchet\ConnectionInterface;
@@ -29,6 +36,11 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
   protected $noticeID = 0;
 
   /**
+   * @var array
+   */
+  protected $siteSettings = [];
+
+  /**
    * @var Subscriber[]
    */
   protected $subs = [];
@@ -37,6 +49,46 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
    * @var Topic[]
    */
   protected $rooms = [];
+
+  /**
+   * @var RoomStorage
+   */
+  protected $roomStorage;
+
+  /**
+   * @var SocketPredisDriver
+   */
+  protected $clientStorage;
+
+  /**
+   * @param array $siteSettings
+   * @return $this
+   */
+  public function setSiteSettings(array $siteSettings)
+  {
+    $this->siteSettings = $siteSettings;
+    return $this;
+  }
+
+  /**
+   * @param RoomStorage $roomStorage
+   * @return $this
+   */
+  public function setRoomStorage(RoomStorage $roomStorage)
+  {
+    $this->roomStorage = $roomStorage;
+    return $this;
+  }
+
+  /**
+   * @param SocketPredisDriver $clientStorage
+   * @return $this
+   */
+  public function setClientStorage(SocketPredisDriver $clientStorage)
+  {
+    $this->clientStorage = $clientStorage;
+    return $this;
+  }
 
   /**
    * {@inheritdoc}
@@ -62,11 +114,19 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
    *
    * @outgoing
    * @param RoomResponseEvent $event
+   * @return Topic|void
    */
   public function onRoomResponse(RoomResponseEvent $event)
   {
-    $topic = $this->rooms[$event->getRoom()->getName()];
-    $topic->broadcast([
+    $roomName = $event->getRoom()->getName();
+    if (!isset($this->rooms[$roomName])) {
+      return $this->logger->error(sprintf(
+        'Room "%s" does not exist.',
+        $roomName
+      ));
+    }
+
+    return $this->rooms[$roomName]->broadcast([
       "dispatch" => [
         ["action" => $event->getAction(), "args" => $event->getArgs()]
       ]
@@ -78,19 +138,27 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
    *
    * @outgoing
    * @param UserResponseEvent $event
+   * @return WampConnection|void
    */
   public function onUserResponse(UserResponseEvent $event)
   {
     $username = $event->getUser()->getUsername();
-    if ($subscriber = $this->subs[$username]) {
-      $conn  = $subscriber->getConnection();
-      $topic = $subscriber->getTopic();
-      $conn->event($topic->getId(), [
+    if (!isset($this->subs[$username])) {
+      return $this->logger->error(sprintf(
+        'User "%s" not subscribed to room.',
+        $username
+      ));
+    }
+
+    $subscriber = $this->subs[$username];
+    return $subscriber->getConnection()->event(
+      $subscriber->getTopic()->getId(),
+      [
         "dispatch" => [
           ["action" => $event->getAction(), "args" => $event->getArgs()]
         ]
-      ]);
-    }
+      ]
+    );
   }
 
   /**
@@ -117,7 +185,7 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
     ]);
     $this->dispatchToUser($user, SettingsActions::ALL, [
       [
-        "site" => $this->container->getParameter("app_site_settings"),
+        "site" => $this->siteSettings,
         "user" => $this->serializeUserSettings($user->getSettings()),
         "room" => $this->serializeRoomSettings($room->getSettings())
       ]
@@ -129,8 +197,8 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
     $users     = [];
     $repoFound = [];
     $repoUsers = [];
-    $repo      = $this->em->getRepository("AppBundle:ChatLog");
-    $messages  = $repo->findRecent($room, $this->getParameter("app_room_recent_messages_count"));
+    $messages  = $this->chatLogRepository->findRecent($room, 100);
+
     foreach ($messages as $message) {
       $u = $message->getUser();
       if ($u && !in_array($u->getUsername(), $repoFound)) {
@@ -239,8 +307,7 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
     }
 
     if (is_string($payload) && $payload === "ping") {
-      $clientStorage = $this->container->get("app.ws.storage.driver");
-      $clientStorage->lifeTime($conn->resourceId, 86400);
+      $this->clientStorage->lifeTime($conn->resourceId, 86400);
       return $this->dispatchToUser($user, RoomActions::PONG, [
         time()
       ]);
@@ -251,5 +318,77 @@ class RoomTopic extends AbstractTopic implements EventSubscriberInterface
       SocketEvents::ROOM_REQUEST,
       new RoomRequestEvent($room, $user, $payload)
     );
+  }
+
+  /**
+   * @param ChatLog $message
+   * @param string $type
+   * @return array
+   */
+  protected function serializeMessage(ChatLog $message, $type = "message")
+  {
+    return [
+      "type"    => $type,
+      "id"      => $message->getId(),
+      "date"    => $message->getDateCreated()->format("D M d Y H:i:s O"),
+      "from"    => $message->getUser()->getUsername(),
+      "message" => $message->getMessage()
+    ];
+  }
+
+  /**
+   * @param ChatLog[] $messages
+   * @return array
+   */
+  protected function serializeMessages($messages)
+  {
+    $serialized = [];
+    foreach ($messages as $message) {
+      $serialized[] = $this->serializeMessage($message);
+    }
+
+    return $serialized;
+  }
+
+  /**
+   * @param RoomSettings $settings
+   * @return array
+   */
+  protected function serializeRoomSettings(RoomSettings $settings)
+  {
+    return [
+      "isPublic"    => $settings->isPublic(),
+      "joinMessage" => $settings->getJoinMessage(),
+      "thumbSm"     => $settings->getThumbSm(),
+      "thumbMd"     => $settings->getThumbMd(),
+      "thumbLg"     => $settings->getThumbLg()
+    ];
+  }
+
+  /**
+   * @param UserSettings $settings
+   * @return array
+   */
+  protected function serializeUserSettings(UserSettings $settings)
+  {
+    return [
+      "showNotices" => $settings->getShowNotices(),
+      "textColor"   => $settings->getTextColor()
+    ];
+  }
+
+  /**
+   * @param UserInterface|User $user
+   * @return array
+   */
+  protected function serializeUser(UserInterface $user)
+  {
+    $username = $user->getUsername();
+    return [
+      "username" => $username,
+      "avatar"   => $user->getInfo()->getAvatarSm(),
+      "profile"  => "https://upnext.fm/u/${username}",
+      "roles"    => $user->getRoles()
+    ];
   }
 }

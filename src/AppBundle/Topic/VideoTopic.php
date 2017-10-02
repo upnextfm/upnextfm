@@ -1,7 +1,6 @@
 <?php
 namespace AppBundle\Topic;
 
-use AppBundle\Entity\Room;
 use AppBundle\EventListener\Socket\PlaylistResponseEvent;
 use AppBundle\EventListener\Socket\SocketEvents;
 use AppBundle\EventListener\Socket\UserResponseEvent;
@@ -56,17 +55,23 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
    *
    * @outgoing
    * @param PlaylistResponseEvent $event
+   * @return Topic|void
    */
   public function onPlaylistResponse(PlaylistResponseEvent $event)
   {
-    $topic = $this->rooms[$event->getRoom()->getName()];
-    if ($topic) {
-      $topic->broadcast([
-        "dispatch" => [
-          ["action" => $event->getAction(), "args" => $event->getArgs()]
-        ]
-      ]);
+    $roomName = $event->getRoom()->getName();
+    if (!isset($this->rooms[$roomName])) {
+      return $this->logger->error(sprintf(
+        'Room "%s" does not exist.',
+        $roomName
+      ));
     }
+
+    return $this->rooms[$roomName]->broadcast([
+      "dispatch" => [
+        ["action" => $event->getAction(), "args" => $event->getArgs()]
+      ]
+    ]);
   }
 
   /**
@@ -74,19 +79,27 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
    *
    * @outgoing
    * @param UserResponseEvent $event
+   * @return \Ratchet\Wamp\WampConnection|void
    */
   public function onUserPlaylistResponse(UserResponseEvent $event)
   {
     $username = $event->getUser()->getUsername();
-    if ($subscriber = $this->subs[$username]) {
-      $conn  = $subscriber->getConnection();
-      $topic = $subscriber->getTopic();
-      $conn->event($topic->getId(), [
+    if (!isset($this->subs[$username])) {
+      return $this->logger->error(sprintf(
+        'User "%s" not subscribed to videos.',
+        $username
+      ));
+    }
+
+    $subscriber = $this->subs[$username];
+    return $subscriber->getConnection()->event(
+      $subscriber->getTopic()->getId(),
+      [
         "dispatch" => [
           ["action" => $event->getAction(), "args" => $event->getArgs()]
         ]
-      ]);
-    }
+      ]
+    );
   }
 
   /**
@@ -102,12 +115,8 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
     // them later by username/name.
     $user = $this->getUser($conn);
     $room = $this->getRoom($request->getAttributes()->get("room"), $user);
-    if (!$room) {
-      $this->logger->error("Room not found or created.");
-      return;
-    }
-    $this->subs[$user->getUsername()]  = new Subscriber($conn, $topic);
-    $this->rooms[$room->getName()] = $topic;
+    $this->rooms[$room->getName()]    = $topic;
+    $this->subs[$user->getUsername()] = new Subscriber($conn, $topic);
 
     // Dispatch a request to the video listeners to have the room playlist
     // sent to the connected client.
@@ -171,12 +180,9 @@ class VideoTopic extends AbstractTopic implements TopicPeriodicTimerInterface, E
    */
   public function registerPeriodicTimer(Topic $topic)
   {
-    $roomRepo = $this->em->getRepository("AppBundle:Room");
-    $interval = $this->container->getParameter("app_ws_video_time_update_interval");
-
-    $this->periodicTimer->addPeriodicTimer($this, "timeUpdate", $interval, function () use($roomRepo) {
+    $this->periodicTimer->addPeriodicTimer($this, "timeUpdate", 5, function () {
       foreach ($this->rooms as $roomName => $topic) {
-        $room = $roomRepo->findByName($roomName);
+        $room = $this->roomRepository->findByName($roomName);
         $this->eventDispatcher->dispatch(
           SocketEvents::VIDEO_REQUEST,
           new VideoRequestEvent($room, null, [
