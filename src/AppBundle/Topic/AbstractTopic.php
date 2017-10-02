@@ -118,6 +118,9 @@ abstract class AbstractTopic implements TopicInterface
       $username = $user->getUsername();
       if ($username) {
         $user = $this->userRepository->findByUsername($user->getUsername());
+        if (!$user) {
+          $user = new User("anon", true);
+        }
       }
     } else {
       $user = new User($user, true);
