@@ -20,21 +20,15 @@ class ChartController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
 
-    	$videosRaw = $em->getRepository('AppBundle:Video')
-    						->findVideosWithVotes(500);
+    	$videosWithVoteCount = $em->getRepository('AppBundle:Video')
+    						->findVideosWithVotes();
 
-    	foreach ($videosRaw as $video) {
-    		$netUpVotes = 0;
+        $videos = [];
 
-    		foreach ($video->getVotes() as $vote) {
-    			if ($vote->getValue() === 1) {
-    				$netUpVotes++;
-    			} else if ($vote->getValue() === -1) {
-    				$netUpVotes--;
-    			}
-    		}
+    	foreach ($videosWithVoteCount as $videoWithVoteCount) {
+    		$netUpVotes = $videoWithVoteCount[1];
 
-    		$videos[] = new ValueDecorator($video, [
+    		$videos[] = new ValueDecorator($videoWithVoteCount[0], [
     			"voteCount" => $netUpVotes
     		]);
     	}
@@ -47,7 +41,7 @@ class ChartController extends Controller
     		}
     	});
 
-    	// die(var_dump($videos));
+        $videos = array_slice($videos, 0, 400);
 
 	    return $this->render("AppBundle:chart:upvoted.html.twig", [
 	      "videos" => $videos

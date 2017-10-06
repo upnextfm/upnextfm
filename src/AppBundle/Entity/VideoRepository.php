@@ -32,11 +32,13 @@ class VideoRepository extends AbstractRepository
     /**
      * @return Video[]
      */
-    public function findVideosWithVotes($limit)
+    public function findVideosWithVotes($limit = null)
     {
         return $this->createQueryBuilder("vd")
             ->leftJoin("AppBundle:Vote", "vt", "with", "vt.video = vd")
-            ->setMaxResults($limit)
+            ->addSelect("SUM(vt.value)")
+            ->having("SUM(vt.value) > 5")
+            ->groupBy("vd.id")
             ->getQuery()
             ->execute();
     }
