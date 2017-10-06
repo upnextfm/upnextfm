@@ -26,7 +26,7 @@ class ChartController extends Controller
         $videos = [];
 
     	foreach ($videosWithVoteCount as $videoWithVoteCount) {
-    		$netUpVotes = $videoWithVoteCount[1];
+    		$netUpVotes = $videoWithVoteCount["voteCount"];
 
     		$videos[] = new ValueDecorator($videoWithVoteCount[0], [
     			"voteCount" => $netUpVotes

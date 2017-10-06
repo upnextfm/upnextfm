@@ -36,8 +36,8 @@ class VideoRepository extends AbstractRepository
     {
         return $this->createQueryBuilder("vd")
             ->leftJoin("AppBundle:Vote", "vt", "with", "vt.video = vd")
-            ->addSelect("SUM(vt.value)")
-            ->having("SUM(vt.value) > 5")
+            ->addSelect("SUM(vt.value) as voteCount")
+            ->having("voteCount > 5")
             ->groupBy("vd.id")
             ->getQuery()
             ->execute();
