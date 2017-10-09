@@ -162,4 +162,21 @@ class UserController extends Controller
 
     return $avatarURLs;
   }
+  
+  /**
+   * @Route("/users", name="users")
+   *
+   * @param Request $request
+   * @return Response
+   */
+   public function userAction(Request $request)
+   {
+     $em = $this->getDoctrine()->getManager();
+     $users = []; // For User retrieval
+     $users = $em->getRepository("AppBundle:User")->findAll();
+     return $this->render("AppBundle:user:users.html.twig", [
+       "users" => $users
+     ]);
+   }
+
 }

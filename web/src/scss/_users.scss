@@ -1,0 +1,36 @@
+@import "vars";
+@import "mixins";
+
+/* CSS for Users page */
+
+.up-profile-name {
+    color: $color-fg;
+    padding: 0;
+    margin: 5px 0 5px 0;
+    text-shadow: none;
+    font-size: 20px;
+}
+
+.up-profile-info {
+    padding: 10px !important;
+    color: $color-fg;
+    margin: 10px 0 10px 0;
+    
+}
+
+.up-profile-info:hover {
+    background-color: $color-secondary;
+}
+
+.up-profile-inline {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.up-users-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+}

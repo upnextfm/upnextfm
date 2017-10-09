@@ -1,0 +1,28 @@
+{% extends "AppBundle::base.html.twig" %} {% block title %}Users{% endblock %} {% block body %}
+<div class="container">
+    <h2 class="center-align up-page-title flow-text">
+        Users
+    </h2> {% include "AppBundle:_layout:flash-messages.html.twig" %}
+
+    <div id="user-list">
+        <!-- Batches Profile-Info into rows -->
+        {% for user in users|sort %} {% endfor %} {% for batch in users | batch(4) %}
+        <div class="row">
+            {% for user in batch %}
+            <div class="col s6 m6 l3 up-profile-info up-profile-inline">
+                <a href="/u/{{user.username}}">
+                    <img src="{{user.info.avatarMd}}" class="up-users-avatar">
+                </a>
+                <div>
+                    <h1 class="up-profile-name">
+                        {{user.username}}
+                    </h1>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- End Row -->
+        {% endfor %}
+    </div>
+    <!-- End Container -->
+    {% endblock %}
