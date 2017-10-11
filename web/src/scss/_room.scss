@@ -272,7 +272,7 @@ $height-avatar-collapsed: auto;
 .up-room-video__container {
   height: 0;
   @include media-sm {
-    width: calc(((100vh - #{$nav-height} - 5px - 48px) / 2) * 1.77);
+    width: calc((((100vh - #{$nav-height}) / 2) - 5px - 48px) * 1.78);
     height: calc(100% - 5px - 48px);
     padding-bottom: 0;
   } 
