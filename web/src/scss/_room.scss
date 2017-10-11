@@ -1,6 +1,7 @@
 @import "vars";
 @import "mixins";
 
+
 $width-panel-users: 20%;
 $width-panel-users-collapsed: 56px;
 $width-avatar: 40px;
@@ -16,8 +17,14 @@ $height-avatar-collapsed: auto;
   flex-flow: row;
   height: calc(100% - #{$nav-height});
 
-// fix for small width desktop layout issues i'm not supposed to commit
-//  @include media-sm {flex-flow:column;}
+  @include media-sm {
+    flex-flow: column-reverse;
+  }
+}
+.up-room > div {
+  @include media-sm {
+    max-height: 50%;
+  }
 }
 
 /******************************************************************************
@@ -34,6 +41,9 @@ $height-avatar-collapsed: auto;
   height: 100%;
   display: flex;
   flex-direction: column;
+  @include media-sm {
+    flex-direction: row;
+  }
   //padding-right: $padding-std;
 
   //@include media-xs {
@@ -261,6 +271,11 @@ $height-avatar-collapsed: auto;
  *****************************************************************************/
 .up-room-video__container {
   height: 0;
+  @include media-sm {
+    width: calc(((100vh - #{$nav-height} - 5px - 48px) / 2) * 1.77);
+    height: calc(100% - 5px - 48px);
+    padding-bottom: 0;
+  } 
   position: relative;
   padding-bottom: 56.25%;
   background-color: #000;
