@@ -275,12 +275,18 @@ $height-avatar-collapsed: auto;
     width: calc((((100vh - #{$nav-height}) / 2) - 5px - 48px) * 1.78);
     height: calc(100% - 5px - 48px);
     padding-bottom: 0;
+    max-width: 100%;
   } 
   position: relative;
   padding-bottom: 56.25%;
   background-color: #000;
 }
 
+.up-room-video__player-container {
+  @include media-sm {
+    max-width: 60vw;
+  }
+}
 .up-room-video__player {
   top: 0;
   left: 0;
@@ -309,7 +315,7 @@ $height-avatar-collapsed: auto;
 .up-room-playlist {
   margin: 0 !important;
   padding: 0 !important;
-  min-height: 16em;
+  //min-height: 16em;
   flex-grow: 1;
   display: flex;
   flex-direction: column;

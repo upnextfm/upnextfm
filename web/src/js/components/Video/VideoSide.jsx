@@ -17,7 +17,7 @@ class VideoSide extends React.Component {
 
     return (
       <div className="up-room-side__video">
-        <div>
+        <div className="up-room-video__player-container">
           <Player video={playlist.current} />
           <Progress />
           <Buttons />
