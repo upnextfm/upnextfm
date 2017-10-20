@@ -92,7 +92,7 @@ class Nav extends React.PureComponent {
               </span>
             )}
           </Hidden>
-          <Hidden mdUp>
+          <Hidden smUp>
             <div className="up-nav__video-controls">
               <IconButton onClick={this.handleClickPlay}>
                 <PlayIcon status={video.status} />
