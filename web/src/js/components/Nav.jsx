@@ -75,7 +75,7 @@ class Nav extends React.PureComponent {
           <a href="/" className="up-brand">
             <img src="/images/logo-brand.png" alt="Logo" />
           </a>
-          <Hidden mdDown>
+          <Hidden xsDown>
             {user.isAuthenticated
             ? (
               <Button className="up-btn-login" onClick={this.handleClickLogin}>
