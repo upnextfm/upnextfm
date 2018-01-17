@@ -20,15 +20,15 @@ class UserController extends Controller
    public function favoritesAction($username, $page = 1)
    {
      $user = $this->findUserOrThrow($username);
- 
+
      $limit = 30;
      $offset = ($page - 1) * 30;
- 
+
      $em = $this->getDoctrine()->getManager();
      $repo = $em->getRepository("AppBundle:Favorite");
      $favorites = $repo->findByUser($user, $limit, $offset);
      $favoritesCount = $repo->countByUser($user);
- 
+
      $pages = ceil($favoritesCount / $limit);
      $minPage = $page - 4;
      $maxPage = $page + 4;
@@ -38,7 +38,7 @@ class UserController extends Controller
      if ($maxPage > $pages) {
        $maxPage = $pages;
      }
- 
+
      return $this->render("AppBundle:user:favorites.html.twig", [
        "user"           => $user,
        "favorites"      => $favorites,
@@ -61,8 +61,8 @@ class UserController extends Controller
   public function indexAction(Request $request, $username, $page = 1)
   {
     $user = $this->findUserOrThrow($username);
-    $limit = 25; // Limit of number of records retrieved 
-    $offset = ($page - 1) * 25; // Calculation for the range of records retrieved 
+    $limit = 25; // Limit of number of records retrieved
+    $offset = ($page - 1) * 25; // Calculation for the range of records retrieved
 
     $em = $this->getDoctrine()->getManager();
     $repo = $em->getRepository("AppBundle:UserEvent");
@@ -70,13 +70,13 @@ class UserController extends Controller
     $eventsCount = sizeOf($repo->findAllByUser($user));
 
     $currentPage = $page;
-    $pages = ceil($eventsCount / $limit); // Number of pages to render in pagination 
-    
+    $pages = ceil($eventsCount / $limit); // Number of pages to render in pagination
+
     // Sets minimum and maximum page
     $minPage = $page - 3;
     $maxPage = $page + 3;
 
-    // Prevents pages going under 1 
+    // Prevents pages going under 1
     if ($minPage < 1) {
       $minPage = 1;
     }
@@ -86,7 +86,7 @@ class UserController extends Controller
     }
     // dump($request->isXmlHttpRequest());
     // die();
-    if ($request->isXmlHttpRequest()) {       
+    if ($request->isXmlHttpRequest()) {
       return $this->render('AppBundle:user:index_list.html.twig', [
           "user"           => $user,
           "events"         => $events,
@@ -96,7 +96,7 @@ class UserController extends Controller
       ]);
      } // End if
 
-     // User enters profile page explicitly 
+     // User enters profile page explicitly
     else {
       return $this->render('AppBundle:user:index.html.twig', [
         "user"           => $user,
@@ -119,36 +119,36 @@ class UserController extends Controller
   {
     /** @var User $user */
     $user = $this->getUser();
-    
+
     if (!($user instanceof UserInterface)) {
       throw $this->createNotFoundException();
     }
 
-    // Updates to user account information - in order of appearance  
+    // Updates to user account information - in order of appearance
     if ($request->getMethod() === "POST") {
       $values = $request->request->all();
       $info = $user->getInfo(); // Retrieve UserInfo field from User entity
-      
+
       // Password
       if (!empty($values["password"])) {
         $user->setPlainPassword($values["password"]);
         $this->get("fos_user.user_manager")->updatePassword($user);
       }
 
-      // Email 
+      // Email
       $user->setEmail($values["email"]);
       $user->setEmailCanonical($values["email"]);
 
-      // Location 
+      // Location
       $info->setLocation($values["location"]);
 
-      // Website 
+      // Website
       $info->setWebsite($values["website"]);
 
-      // Bio Profile 
+      // Bio Profile
       $info->setBio($values["bio"]);
-      
-      // Avatar 
+
+      // Avatar
       if ($avatar = $request->files->get("avatar")) {
         $urls = $this->processAvatar($avatar, $user);
         $info->setAvatarSm($urls["avatarSm"]);
@@ -203,7 +203,7 @@ class UserController extends Controller
 
     return $avatarURLs;
   }
-  
+
   /**
    * @Route("/users", name="users")
    *

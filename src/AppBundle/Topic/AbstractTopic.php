@@ -3,7 +3,6 @@ namespace AppBundle\Topic;
 
 use AppBundle\Entity\UserSettings;
 use AppBundle\Service\ThumbsService;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Entity\ChatLogRepository;
