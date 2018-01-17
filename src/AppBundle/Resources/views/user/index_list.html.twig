@@ -1,0 +1,13 @@
+<!-- Code snippet to replace the page content by means of AJAX. --> 
+
+<!-- Imports -->
+{% import "AppBundle::macros.html.twig" as macros %} 
+
+<!-- Cards -->
+{% for event in events %} 
+    {{ macros.eventCard(event) }} 
+{% endfor %}
+
+<!-- Pagination at the bottom of page content -->
+{{ macros.paginationUser('profile', user.username, currentPage, minPage, maxPage) }}
+
