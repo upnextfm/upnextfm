@@ -37,3 +37,31 @@
 .up-profile__timeline {
 	padding-top: $padding-std * 2;
 }
+
+.up-profile__tabs {
+	background-color: $color-bg;
+
+	/* Underline beneath the tabs */
+	.indicator { 
+		background-color: $color-primary !important; 
+	}
+
+	/* Individual tabs */
+	.up-profile__tab {
+		a.active {
+			color: $color-primary !important;
+		}
+	}
+}
+
+.up-profile__container {
+	margin-top: 50px;
+}
+
+.up-profile__content {
+	margin-top: 1rem;
+}
+
+.wait {
+    cursor: wait;
+}

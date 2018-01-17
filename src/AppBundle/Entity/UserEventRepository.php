@@ -34,4 +34,18 @@ class UserEventRepository extends AbstractRepository
         ->getQuery()
         ->execute();
     }
+
+    public function findAllByUser(User $user, $offset = 0)
+    {
+        return $this->createQueryBuilder("ue")
+        ->where("ue.user = :user")
+        ->setParameter("user", $user)
+        ->orderBy("ue.id", "desc")
+        ->setFirstResult($offset)
+        ->getQuery()
+        ->execute();
+    }
+
+
+
 }

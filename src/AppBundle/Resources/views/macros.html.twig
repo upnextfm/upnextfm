@@ -72,6 +72,39 @@
     </div>
 {% endmacro %}
 
+{% macro favoriteVideoCard(favorite) %}
+<div class="card horizontal up-event-card up-event-card--played-video" data-event-id="{{ favorite.id }}">
+        <div class="card-image" aria-hidden="true">
+            <a href="{{ favorite.getVideo.permalink }}">
+                <img
+                    src="{{ favorite.getVideo.thumbMd }}"
+                    sizes="128px"
+                    srcset="
+                        {{ favorite.getVideo.thumbSm }} 120w,
+                        {{ favorite.getVideo.thumbMd }} 320w,
+                        {{ favorite.getVideo.thumbLg }} 480w
+                    "
+                />
+            </a>
+        </div>
+        <div class="card-content">
+            <div class="card-title">
+                <a href="{{ favorite.getVideo.permalink }}">
+                    {{ favorite.getVideo.title }}
+                </a>
+            </div>
+             <small class="truncate">
+                Played {{ favorite.getDateCreated|ago }}
+                in <a href="{{ path("room", {name: 'lobby'}) }}">
+                    /r/lobby
+                </a>
+            </small> 
+        </div>
+    </div>
+{% endmacro %}
+
+
+
 {% macro chatLog(log) %}
     <li>
         {{ log.user.username }}

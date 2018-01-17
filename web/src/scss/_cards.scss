@@ -48,6 +48,10 @@
   .card-content {
     padding: ($padding-std * 2) 24px;
   }
+
+  .card-content:hover {
+    background-color: $color-secondary-light;
+  }
 }
 
 .up-room-card {

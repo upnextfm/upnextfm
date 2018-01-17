@@ -1,16 +1,68 @@
-{% import "AppBundle::macros.html.twig" as macros %}
-{% extends "AppBundle::base.html.twig" %}
-{% block title %}Favorites{% endblock %}
-{% block body %}
-    <div class="center-align up-pagination-container" style="margin-bottom: 6px; margin-top: 12px;">
-        {{ macros.paginationUser('favorites', user.username, currentPage, minPage, maxPage) }}
-    </div>
+{% import "AppBundle::macros.html.twig" as macros %} {% extends "AppBundle::base.html.twig" %} {% block title %}{{ user.username
+}}{% endblock %} {% block body %}
+<div class="container up-profile__container">
     <div class="row">
-        {% for favorite in favorites %}
-            {{ macros.videoCard(favorite, 2) }}
-        {% endfor %}
+        <div class="col s12 m6">
+            <div class="up-profile__bio">
+                <div class="up-profile__bio__user"> <img class="up-avatar" src="{{ user.info.avatarLg }}" />
+                    <div class="up-username truncate"> {{ user.username }} </div>
+                </div>
+                <div class="up-profile__bio__text"> {{ user.info.bio }} </div>
+            </div>
+        </div>
+        
+        <div class="col s12 m6" id="up-profile__tab__container"> <!-- up-profile__tab__container used as a handler -->
+            <ul class="tabs tabs-fixed-width up-profile__tabs">
+                <li class="tab col s3 up-profile__tab"><a target="_self" href="/u/{{user.username}}">Played</a></li>
+                <li class="tab col s3 up-profile__tab"><a target="_self" class="active" href="/u/{{user.username}}/favorites">Favorites</a></li>
+                <li class="tab col s3 up-profile__tab"><a href="#liked">Liked</a></li>
+                <li class="tab col s3 up-profile__tab"><a href="#disliked">Disliked</a></li>
+            </ul>
+            <!-- End Tab Window -->
+            <div class="up-profile__content center-align">
+                <div id="played" class="col s12">
+
+                </div>
+                <div id="favorites" class="col s12">
+                    {% for favorite in favorites %} {{ macros.favoriteVideoCard(favorite) }} {% endfor %}
+                    <!-- This section needs to be inside a macro -->
+                    {{ macros.paginationUser('profile', user.username, currentPage, minPage, maxPage) }}
+                </div>
+                <div id="liked" class="col s12"></div>
+                <div id="disliked" class="col s12"></div>
+            </div>
+
+        </div>
     </div>
-    <div class="center-align up-pagination-container">
-        {{ macros.paginationUser('favorites', user.username, currentPage, minPage, maxPage) }}
-    </div>
+</div>
+{% endblock %} {% block javascripts %} {{ parent() }}
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        // If < 1 2 3 ... > list is clicked
+        $(document).on("click", '.pagination li a', {}, function (e) {    
+            e.preventDefault();
+            var url = $(this).attr("href");
+            console.log(url);
+            var myRequest = new Request(url); // Create request
+            var myHeaders = new Headers();
+            var myInit = { method: 'GET', headers: myHeaders }; // Set request parameters
+            myHeaders.append("X-Requested-With", "XMLHttpRequest"); 
+            fetch(myRequest, myInit).then(function(resp){
+                if(resp.status == '200') {
+                    resp.text().then(function(text){
+                    $('#favorites').html(text);
+                    }); // End resp handling
+                }
+                
+                else {
+                    resp.text().then(function(text){
+                        console.log(text);
+                    });
+                }
+           }); // End fetch
+           
+        }); // End listener
+    }); // End document.ready
+</script>
 {% endblock %}

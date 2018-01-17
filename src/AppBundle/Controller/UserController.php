@@ -10,63 +10,104 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends Controller
 {
-  /**
-   * @Route("/u/{username}", name="profile")
-   *
-   * @param string $username
-   * @return Response
-   */
-  public function indexAction($username)
-  {
-    $em = $this->getDoctrine()->getManager();
-    $user = $this->findUserOrThrow($username);
-    $events = $em->getRepository("AppBundle:UserEvent")
-      ->findByUser($user, 25);
-
-    return $this->render("AppBundle:user:index.html.twig", [
-      "user"   => $user,
-      "events" => $events
-    ]);
-  }
-
-  /**
-   * @Route("/u/{username}/favorites/{page}", name="favorites", defaults={"page" = 1})
+   /**
+   * @Route("/u/{username}/favorites/{page}", name="favorites", defaults={"page" = 1} )
    *
    * @param string $username
    * @param int $page
    * @return Response
    */
-  public function favoritesAction($username, $page = 1)
+   public function favoritesAction($username, $page = 1)
+   {
+     $user = $this->findUserOrThrow($username);
+ 
+     $limit = 30;
+     $offset = ($page - 1) * 30;
+ 
+     $em = $this->getDoctrine()->getManager();
+     $repo = $em->getRepository("AppBundle:Favorite");
+     $favorites = $repo->findByUser($user, $limit, $offset);
+     $favoritesCount = $repo->countByUser($user);
+ 
+     $pages = ceil($favoritesCount / $limit);
+     $minPage = $page - 4;
+     $maxPage = $page + 4;
+     if ($minPage < 1) {
+       $minPage = 1;
+     }
+     if ($maxPage > $pages) {
+       $maxPage = $pages;
+     }
+ 
+     return $this->render("AppBundle:user:favorites.html.twig", [
+       "user"           => $user,
+       "favorites"      => $favorites,
+       "favoritesCount" => $favoritesCount,
+       "currentPage"    => $page,
+       "minPage"        => $minPage,
+       "maxPage"        => $maxPage
+     ]);
+   }
+
+
+  /**
+   * @Route("/u/{username}/{page}", name="profile", defaults={"page"= 1})
+   *
+   * @param Request $request
+   * @param string $username
+   * @param int $page
+   * @return Response
+   */
+  public function indexAction(Request $request, $username, $page = 1)
   {
     $user = $this->findUserOrThrow($username);
-
-    $limit = 30;
-    $offset = ($page - 1) * 30;
+    $limit = 25; // Limit of number of records retrieved 
+    $offset = ($page - 1) * 25; // Calculation for the range of records retrieved 
 
     $em = $this->getDoctrine()->getManager();
-    $repo = $em->getRepository("AppBundle:Favorite");
-    $favorites = $repo->findByUser($user, $limit, $offset);
-    $favoritesCount = $repo->countByUser($user);
+    $repo = $em->getRepository("AppBundle:UserEvent");
+    $events = $repo->findByUser($user, $limit, $offset); // retrieves users recently played videos
+    $eventsCount = sizeOf($repo->findAllByUser($user));
 
-    $pages = ceil($favoritesCount / $limit);
-    $minPage = $page - 4;
-    $maxPage = $page + 4;
+    $currentPage = $page;
+    $pages = ceil($eventsCount / $limit); // Number of pages to render in pagination 
+    
+    // Sets minimum and maximum page
+    $minPage = $page - 3;
+    $maxPage = $page + 3;
+
+    // Prevents pages going under 1 
     if ($minPage < 1) {
       $minPage = 1;
     }
+
     if ($maxPage > $pages) {
       $maxPage = $pages;
     }
+    // dump($request->isXmlHttpRequest());
+    // die();
+    if ($request->isXmlHttpRequest()) {       
+      return $this->render('AppBundle:user:index_list.html.twig', [
+          "user"           => $user,
+          "events"         => $events,
+          "currentPage"    => $page,
+          "minPage"        => $minPage,
+          "maxPage"        => $maxPage
+      ]);
+     } // End if
 
-    return $this->render("AppBundle:user:favorites.html.twig", [
-      "user"           => $user,
-      "favorites"      => $favorites,
-      "favoritesCount" => $favoritesCount,
-      "currentPage"    => $page,
-      "minPage"        => $minPage,
-      "maxPage"        => $maxPage
+     // User enters profile page explicitly 
+    else {
+      return $this->render('AppBundle:user:index.html.twig', [
+        "user"           => $user,
+        "events"         => $events,
+        "currentPage"    => $page,
+        "minPage"        => $minPage,
+        "maxPage"        => $maxPage
     ]);
-  }
+    }
+
+  } // End indexAction
 
   /**
    * @Route("/account", name="account")
