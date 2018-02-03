@@ -205,7 +205,8 @@ export function roomMessage(message) {
       type: types.ROOM_MESSAGE,
       message
     });
-    if (!getState().layout.isWindowFocused) {
+    
+    if (!getState().layout.isWindowFocused && message.type !== 'notice') {
       dispatch(roomIncrNumNewMessages());
     }
   };
