@@ -26,7 +26,7 @@
                 <div id="favorites" class="col s12">
                     {% for favorite in favorites %} {{ macros.favoriteVideoCard(favorite) }} {% endfor %}
                     <!-- This section needs to be inside a macro -->
-                    {{ macros.paginationUser('profile', user.username, currentPage, minPage, maxPage) }}
+                    {{ macros.paginationUser('favorites', user.username, currentPage, minPage, maxPage) }}
                 </div>
                 <div id="liked" class="col s12"></div>
                 <div id="disliked" class="col s12"></div>
@@ -43,7 +43,6 @@
         $(document).on("click", '.pagination li a', {}, function (e) {    
             e.preventDefault();
             var url = $(this).attr("href");
-            console.log(url);
             var myRequest = new Request(url); // Create request
             var myHeaders = new Headers();
             var myInit = { method: 'GET', headers: myHeaders }; // Set request parameters

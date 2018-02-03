@@ -13,11 +13,12 @@ class UserController extends Controller
    /**
    * @Route("/u/{username}/favorites/{page}", name="favorites", defaults={"page" = 1} )
    *
+   * @param Request request
    * @param string $username
    * @param int $page
    * @return Response
    */
-   public function favoritesAction($username, $page = 1)
+   public function favoritesAction(Request $request, $username, $page = 1)
    {
      $user = $this->findUserOrThrow($username);
 
@@ -39,6 +40,18 @@ class UserController extends Controller
        $maxPage = $pages;
      }
 
+     // Ajax response to user clicking paginated list
+     if ($request->isXmlHttpRequest()) {
+      return $this->render('AppBundle:user:favorites_list.html.twig', [
+          "user"           => $user,
+          "favorites"      => $favorites,
+          "currentPage"    => $page,
+          "minPage"        => $minPage,
+          "maxPage"        => $maxPage
+      ]);
+     } // End if
+
+     else {
      return $this->render("AppBundle:user:favorites.html.twig", [
        "user"           => $user,
        "favorites"      => $favorites,
@@ -47,6 +60,8 @@ class UserController extends Controller
        "minPage"        => $minPage,
        "maxPage"        => $maxPage
      ]);
+     }
+
    }
 
 
@@ -84,8 +99,8 @@ class UserController extends Controller
     if ($maxPage > $pages) {
       $maxPage = $pages;
     }
-    // dump($request->isXmlHttpRequest());
-    // die();
+
+    // Ajax response to user clicking paginated list
     if ($request->isXmlHttpRequest()) {
       return $this->render('AppBundle:user:index_list.html.twig', [
           "user"           => $user,

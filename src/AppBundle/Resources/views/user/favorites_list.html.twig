@@ -1,0 +1,13 @@
+<!-- Code snippet to replace the page content in User Profile Favorites by means of AJAX. --> 
+
+<!-- Imports -->
+{% import "AppBundle::macros.html.twig" as macros %} 
+
+<!-- Favorites Cards -->
+{% for favorite in favorites %} 
+    {{ macros.favoriteVideoCard(favorite) }} 
+{% endfor %}
+
+<!-- Pagination at the bottom of page content -->
+{{ macros.paginationUser('favorites', user.username, currentPage, minPage, maxPage) }}
+
